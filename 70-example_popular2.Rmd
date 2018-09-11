@@ -1,0 +1,379 @@
+# Hox, chap 2. - Classroom Popularity
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)
+library(haven)        # read in SPSS dataset
+library(furniture)    # nice table1() descriptives
+library(stargazer)    # display nice tables: summary & regression
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(RColorBrewer) # nice color palettes for plots
+library(gridExtra)    # place ggplots together as one plot
+library(psych)        # contains some useful functions, like headTail
+library(car)          # Companion to Applied Regression
+library(nlme)         # non-linear mixed-effects models
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(lmerTest)     # Tests on lmer objects
+library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
+```
+
+
+
+## Background
+
+The text **"Multilevel Analysis: Techniques and Applications, Third Edition"** [@hox2017] has a companion [website](https://multilevel-analysis.sites.uu.nl/) which includes links to all the data files used throughout the book (housed on the [book's GitHub repository](https://github.com/MultiLevelAnalysis)).
+
+> From **Appendix E**:  
+
+The popularity data in **popular2.sav** are simulated data for **2000 pupils in 100 schools**. The purpose is to offer a very simple example for multilevel regression analysis.  The main outcome variable is the **pupil popularity**, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil.  Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: **pupil popularity** as rated by their teacher, on a scale from 1-10.  The explanatory variables are **pupil gender** (boy=0, girl=1), **pupil extraversion** (10-point scale) and **teacher experience** in years.  The popularity data have been generated to be a 'nice' well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.*
+
+
+```{r}
+raw <- haven::read_sav("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav") %>% 
+  haven::as_factor()             # retain the labels from SPSS --> factor
+
+tibble::glimpse(raw) 
+```
+
+### Unique Identifiers
+
+We will restrict ourselves to a few of the variables and create a distinct identifier variable for each student.
+
+```{r}
+pop <- raw %>%   
+  dplyr::mutate(id = paste(class, pupil,
+                           sep = "_") %>%   # create a unique id for each student (char)
+                  factor()) %>%             # declare id is a factor
+  dplyr::select(id, pupil:popteach)         # reduce the variables included
+
+tibble::glimpse(pop)
+```
+
+
+### Scope out the structure and variables  
+
+Its a good idea to visually inspect the first few lines in the datast to get a sense of how it is organized.
+
+```{r}
+pop %>%  
+  psych::headTail(top = 25, bottom = 5) %>% 
+  pander::pander()
+```
+
+Visual inspection reveals that most of the variables are measurements at level 1 and apply to specific pupils (`extrav`, `sex`, `popular`, and `popteach`), while the teacher's years of experiene is a level 2 variable since it applies to the entire `class`.  Notice how the `texp` variable is identical for all pupils in the same class.  This is call **Disaggregated** data.
+
+
+## Exploratory Data Analysis
+
+### Summarize Descriptive Statistics
+
+Most posters, journal articles, and reports start with a table of descriptive statistics.  Since it tends to come first, this type of table is often refered to as *Table 1*.  The `stargazer()` function can be used to create such a table, but only for the entire dataset [@R-stargazer].  I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.
+
+```{r, results='asis'}
+pop %>% 
+  dplyr::select(-id) %>% 
+  data.frame() %>% 
+  stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
+                       header = FALSE,
+                       type = "html")
+```
+
+
+
+### Summarize Descriptive Statistics  - `furniture` 
+
+Tyson Barrett's  **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics.  Full documentation can be accessed by executing `?furniture::table1`.    
+
+```{r, results='asis'}
+pop %>% 
+  table1("Pupil's Extraversion (10 pt)"  = extrav, 
+         "Teacher's Experience (years)"  = texp, 
+         "Popularity, Sociometric Score" = popular, 
+         "Popularity, Teacher Evaluated" = popteach,
+         splitby    = ~ sex,                                     # var to divide sample by
+         test       = TRUE,                                      # test groups different?
+         output     = "html",                                    # output for latex
+         align      = c("l", "r", "r", "r"),                     # column alignment
+         caption    = "Compare genders on four main variables")  # title
+```
+
+
+
+### Visualizations of Raw Data
+
+For a first look, its useful to plot all the data points on a single scatterplot as displayed in Figure \@ref(fig:scatter).  Due to ganularity in the rating scale, many points end up being plotted on top of each other (*overplotted*), so its a good idea to use `geom_count()` rather than `geom_point()` so the size of the dot can convey the number of points at that location [@R-ggplot2].
+
+```{r scatter, fig.cap="Disaggregate: pupil level only with extraversion treated as an continuous measure."}
+# Disaggregate: pupil (level 1) only, ignore level 2's existance
+# Extraversion treated: continuous measure
+pop %>% 
+  ggplot() +
+  aes(x = extrav,                                # x-axis variable
+      y = popular) +                             # y-axis variable
+  geom_count() +                                 # POINTS w/ SIZE = COUNT
+  geom_smooth(method = "lm") +                   # linear regression line
+  theme_bw() +                                   # white background  
+  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+       y    = "Popularity, Sociometric Score",   # y-axis label
+       size = "Count") +                         # legend key's title  
+  theme(legend.position = c(0.9, 0.2),                          # key at
+        legend.background = element_rect(color = "black")) +    # key box 
+  scale_x_continuous(breaks = seq(from = 0, to = 10, by = 1)) + # x-ticks
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2))   # y-ticks
+```
+
+
+
+When the degree of overplotting as high as it is in Figure \@ref(fig:scatter), it can be useful to represent the data with density contours as seen in Figure \@ref(fig:scatter2d).  I've chosen to leave the points displayed in this redition, but color them much lighter so that they are present, but do not detract from the pattern of association.
+
+```{r scatter2d, fig.cap="Disaggregate: pupil level only with extraversion treated as an continuous measure."}
+# visualize all the data - another way
+pop %>% 
+  ggplot() +
+  aes(x = extrav,                                # x-axis variable
+      y = popular) +                             # y-axis variable
+  geom_count(color = "gray") +                   # POINTS w/ SIZE = COUNT
+  geom_density2d() +                             # DENSITY CURVES 
+  geom_smooth(method = "lm", color = "red") +    # linear regression line
+  theme_bw() +                                   # white background  
+  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+       y    = "Popularity, Sociometric Score") + # y-axis label 
+  guides(size = FALSE)  +                        # don't include a legend
+  scale_x_continuous(breaks = seq(from = 0, to = 10, by = 1)) + # x-ticks
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2))   # y-ticks
+```
+
+
+
+
+The argument could be made that the extraversion score should be treated as an ordinal factor instead of as a truely continuous scale since the only valid values are the whole number 1 through 10 and there is no assurance that these category assignments represent a true ratio measurement scale.  However, we must keep in mind that this was an observational study, ans as such, the number of pupils assignment each level of extraversion is not equal.
+
+```{r, results='asis'}
+# count the number of pupils in assigned each Extraversion value, 1:10
+table <- pop %>% 
+  group_by(extrav) %>% 
+  summarise(count = n_distinct(id),
+            percent  = 100 * count / 2000) 
+
+table %>% 
+  stargazer(summary  = FALSE,
+            rownames = FALSE,
+            header   = FALSE,
+            type     = "html",
+            title    = "Distribution of extraversion in pupils")
+```
+
+
+
+Figure \@ref(fig:boxes) displays the same data as Figure \@ref(fig:scatter), but uses boxplots for the distribution of scores at each level of extraversion.  On one extreme, the lowest extraversion score possible was a value of "one", but only `r table[1, "count"] %>% unlist` pupils or `r table[1, "percent"] %>% unlist`% of the 2000 pupils recieved this value.  On the other extreme, the middle value of "five" was applied to `r table[5, "count"] %>% unlist` pupils or a wopping `r table[5, "percent"] %>% unlist`%. The option `varwidth=TRUE` in the `geom_boxplot()` function helps reflect such unbalanced sample sizes by allowing the width of the boxes to be proportional to the square-roots of the number of observations each box represents.
+
+```{r boxes, fig.cap="Disaggregate: pupil level only with extraversion treated as an ordinal factor.  The width of the boxes are proportional to the square-roots of the number of observations each box represents."}
+# Disaggregate: pupil (level 1) only, ignore level 2's existance
+# Extraversion treated: ordinal factor
+ggplot(pop,                             # dataset's name
+       aes(x    = factor(extrav),       # x-axis values - make factor!
+           y    = popular,              # y-axis values
+           fill = factor(extrav))) +    # makes seperate boxes
+  geom_boxplot(varwidth = TRUE) +       # draw boxplots instead of points
+  theme_bw() +                          # white background  
+  guides(fill = FALSE)  +               # don't include a legend
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2)) +  # y-ticks
+  labs(x = "Extraversion (10 pt scale)",                    # x-axis label
+       y = "Popularity, Sociometric Score") +               # y-axis label
+  scale_fill_brewer(palette = "Spectral", direction = 1)    # select color
+```
+
+
+
+Up to this point, all investigation of this dataset has been only at the pupil level and any nesting or clustering within classes has been ignored.  Plotting is a good was to start to get an idea of the class-to-class variability.  
+
+```{r scatter3x3, fig.cap="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  First nice classes shown."}
+# compare the first 9 classrooms becuase all of there are too many at once
+pop %>% 
+  dplyr::filter(class <= 9) %>%                  # select ONLY NINE classes
+  ggplot(aes(x = extrav,                         # x-axis values
+             y = popular)) +                     # y-axis values
+  geom_count() +                                 # POINTS w/ SIZE = COUNT
+  geom_smooth(method = "lm", color = "red") +    # linear regression line
+  theme_bw() +                                   # white background  
+  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+       y    = "Popularity, Sociometric Score",   # y-axis label
+       size = "Count") +                         # legend key's title  
+  guides(size = FALSE)  +                        # don't include a legend
+  scale_x_continuous(breaks = seq(from = 0, to = 10, by = 3)) + # x-ticks
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 3)) + # y-ticks
+  facet_wrap(~ class, 
+             labeller = label_both) +
+  theme(strip.background = element_rect(colour = NA, 
+                                        fill   = NA))
+```
+
+
+
+
+
+```{r scatter3x3b, fig.cap="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  A set of nine classes was chosen to show a sampling of variability.  The facet labels are not shown as the identification number probably would not be advisable for a general publication."}
+# select specific classes by number for illustration purposes
+pop %>% 
+  dplyr::filter(class %in% c(15, 25, 33, 
+                             35, 51, 64, 
+                             76, 94, 100)) %>% 
+  ggplot(aes(x = extrav,                         # x-axis values
+             y = popular)) +                     # y-axis values
+  geom_count() +                                 # POINTS w/ SIZE = COUNT
+  geom_smooth(method = "lm", color = "red") +    # linear regression line
+  theme_bw() +                                   # white background  
+  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+       y    = "Popularity, Sociometric Score",   # y-axis label
+       size = "Count") +                         # legend key's title  
+  guides(size = FALSE)  +                        # don't include a legend
+  scale_x_continuous(breaks = seq(from = 0, to = 10, by = 3)) + # x-ticks
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 3)) + # y-ticks
+  facet_wrap(~ class)  +
+  theme(strip.background = element_blank(),
+        strip.text       = element_blank())
+```
+
+
+
+
+```{r classLMs, fig.cap="Spaghetti plot of seperate, independent linear models for each of the 100 classes."}
+# compare all 100 classrooms via linear model for each
+ggplot(pop,
+       aes(x     = extrav,                      # x-axis values
+           y     = popular,                     # y-axis values
+           group = class)) +                     # GROUPs for LINES
+  geom_smooth(method = "lm",                     # linear regression line
+              color  = "gray40",
+              size   = 0.4,
+              se     = FALSE) + 
+  theme_bw() +                                   # white background  
+  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+       y    = "Popularity, Sociometric Score") + # y-axis label
+  scale_x_continuous(breaks = seq(from = 0, to = 10, by = 2)) + # x-ticks
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2))   # y-ticks
+```
+
+
+```{block type='rmdlink', echo=TRUE}
+A helpful resource for choosing colors to use in plots: [R color cheatsheet](https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/colorPaletteCheatsheet.pdf)
+```
+
+
+
+
+```{r classLMs3x2, fig.cap="Spaghetti plot of seperate, independent linear models for each of the 100 classes.  Seperate panels are used to untangle the 'hairball' in the previous figure.  The columns are seperated by the pupils' gender and the rows by the teacher's experince in years."}
+# compare all 100 classrooms via independent linear models
+pop %>% 
+  dplyr::mutate(texp3 = cut(pop$texp, 
+                            breaks = c(0, 10, 18, 30)) %>% 
+                  factor(labels = c("< 10 yrs", 
+                                    "10 - 18 yrs", 
+                                    "> 18 yrs"))) %>% 
+  ggplot(aes(x     = extrav,                     # x-axis values
+             y     = popular,                    # y-axis values
+             group = class)) +                   # GROUPs for LINES
+  geom_smooth(aes(color = sex),
+              size   = 0.3,
+              method = "lm",                     # linear regression line
+              se     = FALSE) + 
+  theme_bw() +                                   # white background  
+  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+       y    = "Popularity, Sociometric Score") + # y-axis label
+  guides(color = FALSE) +                        # don't include a legend
+  scale_x_continuous(breaks = seq(from = 0, to = 10, by = 3)) + # x-ticks
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 3)) + # y-ticks
+  scale_color_manual(values = c("dodgerblue", "maroon1")) +
+  facet_grid(texp3 ~ sex) 
+```
+
+
+
+
+
+```{block type='rmdlink', echo=TRUE}
+R markdown is a user friendly, simplified language that allows for more complex formating utilizing standard $\LaTeX$ code.  A great resource for learning how to many common tasks in $\LaTeX$ is the [Share\LaTeX website](www.sharelatex.com).  
+
+Specific mathematical equation documentation may be found on the [Mathematical  Expressions](https://www.sharelatex.com/learn/Mathematical_expressions) subpage.
+
+There are also many websites that offer Point-n-click interfaces to build $\LaTeX$ equations, including:
+[Host Math](http://www.hostmath.com/), 
+[Code Cogs](https://www.codecogs.com/latex/eqneditor.php), 
+[LaTeX 4 Technics](https://www.latex4technics.com/), and
+[Sci-Weavers](http://www.sciweavers.org/free-online-latex-equation-editor)
+```
+
+
+
+## Multilevel Regression Analysis
+
+### The Intercept Only Model
+
+@hox2017 labeled this as "$M_0$" on page 12:
+
+Level 1 Model Equation (pupil $i$)    
+
+$$
+Y_{ij} = B_{0} + e_{ij}
+\tag{Hox Eq 2.6}
+$$
+
+Level 2 Model Equation (class $j$)    
+
+$$
+B_{0} = \gamma_{00} + u_{0j}
+\tag{Hox Eq 2.7}
+$$
+
+Multilevel Model Equation       
+$$ 
+POP_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
+\tag{M0: intercept only}
+$$
+
+
+Parameters:
+
+* Fixed Effects   
+
+$$
+intercept \longrightarrow \gamma_{00}
+$$
+
+
+* Random Effects  
+
+$$
+\begin{align*} 
+class (intercept) \longrightarrow \sigma^2_{u0}  & = var[u_{0j}] \\
+error -or- residual \longrightarrow \sigma^2_{e}   & = var[e_{ij}] \\
+covariance        \longrightarrow \sigma^2_{u0e} & = cov[u_{0j}, e_{ij}] 
+\end{align*}
+$$
+
+
+
+
+
+
+```{r, echo=TRUE}
+pop_lmer_0 <- lmer(popular ~ 1 + (1|class), 
+                 data   = pop)
+summary(pop_lmer_0)
+```
+
+
+
+
+The entire population of all students in all classes has a grand-average of `5.07786` and the individual classes have popularity average vary around that.
+
+

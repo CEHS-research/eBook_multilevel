@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
+  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="EQM_v1_cover.png" />
+  <meta property="og:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="github-repo" content="cehs-research/eBook_wrangle" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  
+  <meta name="twitter:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="twitter:image" content="EQM_v1_cover.png" />
+
+<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="index.html">
+<link rel="next" href="references.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Vol. 5: Multilevel Models</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#blocked-notes"><i class="fa fa-check"></i>Blocked Notes</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-output"><i class="fa fa-check"></i>Code and Output</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#the-authors"><i class="fa fa-check"></i>The Authors</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#why-choose-r"><i class="fa fa-check"></i>Why choose R ?</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fyi"><i class="fa fa-check"></i>FYI</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="example.html"><a href="example.html"><i class="fa fa-check"></i><b>1</b> Example</a><ul>
+<li class="chapter" data-level="1.1" data-path="example.html"><a href="example.html#the-popular2-dataset"><i class="fa fa-check"></i><b>1.1</b> The <code>popular2</code> Dataset</a><ul>
+<li class="chapter" data-level="1.1.1" data-path="example.html"><a href="example.html#unique-identifiers"><i class="fa fa-check"></i><b>1.1.1</b> Unique Identifiers</a></li>
+<li class="chapter" data-level="1.1.2" data-path="example.html"><a href="example.html#scope-out-the-structure-and-variables"><i class="fa fa-check"></i><b>1.1.2</b> Scope out the structure and variables</a></li>
+<li class="chapter" data-level="1.1.3" data-path="example.html"><a href="example.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>1.1.3</b> Exploratory Data Analysis</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="example" class="section level1">
+<h1><span class="header-section-number">1</span> Example</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></code></pre></div>
+<pre><code>## furniture 1.7.9: learn more at tysonbarrett.com</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span></code></pre></div>
+<pre><code>## 
+## Please cite as:</code></pre>
+<pre><code>##  Hlavac, Marek (2018). stargazer: Well-Formatted Regression and Summary Statistics Tables.</code></pre>
+<pre><code>##  R package version 5.2.2. https://CRAN.R-project.org/package=stargazer</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></code></pre></div>
+<pre><code>## Version:  1.36.23
+## Date:     2017-03-03
+## Author:   Philip Leifeld (University of Glasgow)
+## 
+## Please cite the JSS article in your publications -- see citation(&quot;texreg&quot;).</code></pre>
+<pre><code>## 
+## Attaching package: &#39;texreg&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     extract</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RColorBrewer) <span class="co"># nice color palettes for plots</span>
+<span class="kw">library</span>(gridExtra)    <span class="co"># place ggplots together as one plot</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;gridExtra&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     combine</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;psych&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:furniture&#39;:
+## 
+##     tableF</code></pre>
+<pre><code>## The following objects are masked from &#39;package:ggplot2&#39;:
+## 
+##     %+%, alpha</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(car)          <span class="co"># Companion to Applied Regression</span></code></pre></div>
+<pre><code>## Loading required package: carData</code></pre>
+<pre><code>## 
+## Attaching package: &#39;car&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:psych&#39;:
+## 
+##     logit</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     recode</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     some</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(nlme)         <span class="co"># non-linear mixed-effects models</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;nlme&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:dplyr&#39;:
+## 
+##     collapse</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></code></pre></div>
+<pre><code>## Loading required package: Matrix</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:tidyr&#39;:
+## 
+##     expand</code></pre>
+<pre><code>## 
+## Attaching package: &#39;lme4&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:nlme&#39;:
+## 
+##     lmList</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lmerTest)     <span class="co"># Tests on lmer objects</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;lmerTest&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:lme4&#39;:
+## 
+##     lmer</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     step</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for nlme &amp; lmer4</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;HLMdiag&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:stats&#39;:
+## 
+##     covratio</code></pre>
+<div id="the-popular2-dataset" class="section level2">
+<h2><span class="header-section-number">1.1</span> The <code>popular2</code> Dataset</h2>
+<p>The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edition”</strong> <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span> has a companion <a href="https://multilevel-analysis.sites.uu.nl/">website</a> which includes links to all the data files used throughout the book (housed on the <a href="https://github.com/MultiLevelAnalysis">book’s GitHub repository</a>.</p>
+<p>From <strong>Appendix E</strong>:</p>
+<blockquote>
+<p>The popularity data in <strong>popular2.sav</strong> are simulated data for <strong>2000 pupils in 100 schools</strong>. The purpose is to offer a very simple example for multilevel regression analysis. The main outcome variable is the <strong>pupil popularity</strong>, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil. Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: <strong>pupil popularity</strong> as rated by their teacher, on a scale from 1-10. The explanatory variables are <strong>pupil gender</strong> (boy=0, girl=1), <strong>pupil extraversion</strong> (10-point scale) and <strong>teacher experience</strong> in years. The popularity data have been generated to be a ‘nice’ well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.*</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span>
+
+tibble<span class="op">::</span><span class="kw">glimpse</span>(raw) </code></pre></div>
+<pre><code>## Observations: 2,000
+## Variables: 15
+## $ pupil     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1...
+## $ class     &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+## $ extrav    &lt;dbl&gt; 5, 7, 4, 3, 5, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 6, 4, 4...
+## $ sex       &lt;fct&gt; girl, boy, girl, girl, girl, boy, boy, boy, boy, boy...
+## $ texp      &lt;dbl&gt; 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, ...
+## $ popular   &lt;dbl&gt; 6.3, 4.9, 5.3, 4.7, 6.0, 4.7, 5.9, 4.2, 5.2, 3.9, 5....
+## $ popteach  &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3...
+## $ Zextrav   &lt;dbl&gt; -0.1703149, 1.4140098, -0.9624772, -1.7546396, -0.17...
+## $ Zsex      &lt;dbl&gt; 0.9888125, -1.0108084, 0.9888125, 0.9888125, 0.98881...
+## $ Ztexp     &lt;dbl&gt; 1.48615283, 1.48615283, 1.48615283, 1.48615283, 1.48...
+## $ Zpopular  &lt;dbl&gt; 0.88501327, -0.12762911, 0.16169729, -0.27229230, 0....
+## $ Zpopteach &lt;dbl&gt; 0.66905609, -0.04308451, 0.66905609, -0.04308451, 0....
+## $ Cextrav   &lt;dbl&gt; -0.215, 1.785, -1.215, -2.215, -0.215, -1.215, -0.21...
+## $ Ctexp     &lt;dbl&gt; 9.737, 9.737, 9.737, 9.737, 9.737, 9.737, 9.737, 9.7...
+## $ Csex      &lt;dbl&gt; 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0...</code></pre>
+<div id="unique-identifiers" class="section level3">
+<h3><span class="header-section-number">1.1.1</span> Unique Identifiers</h3>
+<p>We will restrict ourselves to a few of the variables and create a distinct identifier variable for each student.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop &lt;-<span class="st"> </span>raw <span class="op">%&gt;%</span><span class="st">   </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">paste</span>(class, 
+                           pupil,
+                           <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># create a unique id for each student (char)</span>
+<span class="st">                  </span><span class="kw">factor</span>()) <span class="op">%&gt;%</span><span class="st">             </span><span class="co"># declare id is a factor</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, pupil<span class="op">:</span>popteach)         <span class="co"># reduce the variables included</span>
+
+tibble<span class="op">::</span><span class="kw">glimpse</span>(pop)</code></pre></div>
+<pre><code>## Observations: 2,000
+## Variables: 8
+## $ id       &lt;fct&gt; 1_1, 1_2, 1_3, 1_4, 1_5, 1_6, 1_7, 1_8, 1_9, 1_10, 1_...
+## $ pupil    &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16...
+## $ class    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+## $ extrav   &lt;dbl&gt; 5, 7, 4, 3, 5, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 6, 4, 4,...
+## $ sex      &lt;fct&gt; girl, boy, girl, girl, girl, boy, boy, boy, boy, boy,...
+## $ texp     &lt;dbl&gt; 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 2...
+## $ popular  &lt;dbl&gt; 6.3, 4.9, 5.3, 4.7, 6.0, 4.7, 5.9, 4.2, 5.2, 3.9, 5.7...
+## $ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3,...</code></pre>
+</div>
+<div id="scope-out-the-structure-and-variables" class="section level3">
+<h3><span class="header-section-number">1.1.2</span> Scope out the structure and variables</h3>
+<p>Its a good idea to visually inspect the first few lines in the datast to get a sense of how it is organized.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop <span class="op">%&gt;%</span><span class="st">  </span>
+<span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>(<span class="dt">top =</span> <span class="dv">25</span>, <span class="dt">bottom =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>()</code></pre></div>
+<table style="width:94%;">
+<colgroup>
+<col width="12%" />
+<col width="11%" />
+<col width="11%" />
+<col width="12%" />
+<col width="9%" />
+<col width="9%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">id</th>
+<th align="center">pupil</th>
+<th align="center">class</th>
+<th align="center">extrav</th>
+<th align="center">sex</th>
+<th align="center">texp</th>
+<th align="center">popular</th>
+<th align="center">popteach</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1_1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">6.3</td>
+<td align="center">6</td>
+</tr>
+<tr class="even">
+<td align="center">1_2</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">7</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">4.9</td>
+<td align="center">5</td>
+</tr>
+<tr class="odd">
+<td align="center">1_3</td>
+<td align="center">3</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">5.3</td>
+<td align="center">6</td>
+</tr>
+<tr class="even">
+<td align="center">1_4</td>
+<td align="center">4</td>
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">4.7</td>
+<td align="center">5</td>
+</tr>
+<tr class="odd">
+<td align="center">1_5</td>
+<td align="center">5</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">6</td>
+<td align="center">6</td>
+</tr>
+<tr class="even">
+<td align="center">1_6</td>
+<td align="center">6</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">4.7</td>
+<td align="center">5</td>
+</tr>
+<tr class="odd">
+<td align="center">1_7</td>
+<td align="center">7</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">5.9</td>
+<td align="center">5</td>
+</tr>
+<tr class="even">
+<td align="center">1_8</td>
+<td align="center">8</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">4.2</td>
+<td align="center">5</td>
+</tr>
+<tr class="odd">
+<td align="center">1_9</td>
+<td align="center">9</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">5.2</td>
+<td align="center">5</td>
+</tr>
+<tr class="even">
+<td align="center">1_10</td>
+<td align="center">10</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">3.9</td>
+<td align="center">3</td>
+</tr>
+<tr class="odd">
+<td align="center">1_11</td>
+<td align="center">11</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">5.7</td>
+<td align="center">5</td>
+</tr>
+<tr class="even">
+<td align="center">1_12</td>
+<td align="center">12</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">4.8</td>
+<td align="center">5</td>
+</tr>
+<tr class="odd">
+<td align="center">1_13</td>
+<td align="center">13</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">5</td>
+<td align="center">5</td>
+</tr>
+<tr class="even">
+<td align="center">1_14</td>
+<td align="center">14</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">5.5</td>
+<td align="center">6</td>
+</tr>
+<tr class="odd">
+<td align="center">1_15</td>
+<td align="center">15</td>
+<td align="center">1</td>
+<td align="center">5</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">6</td>
+<td align="center">5</td>
+</tr>
+<tr class="even">
+<td align="center">1_16</td>
+<td align="center">16</td>
+<td align="center">1</td>
+<td align="center">6</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">5.7</td>
+<td align="center">5</td>
+</tr>
+<tr class="odd">
+<td align="center">1_17</td>
+<td align="center">17</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">3.2</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center">1_18</td>
+<td align="center">18</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">3.1</td>
+<td align="center">3</td>
+</tr>
+<tr class="odd">
+<td align="center">1_19</td>
+<td align="center">19</td>
+<td align="center">1</td>
+<td align="center">7</td>
+<td align="center">girl</td>
+<td align="center">24</td>
+<td align="center">6.6</td>
+<td align="center">7</td>
+</tr>
+<tr class="even">
+<td align="center">1_20</td>
+<td align="center">20</td>
+<td align="center">1</td>
+<td align="center">4</td>
+<td align="center">boy</td>
+<td align="center">24</td>
+<td align="center">4.8</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center">2_1</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">8</td>
+<td align="center">girl</td>
+<td align="center">14</td>
+<td align="center">6.4</td>
+<td align="center">6</td>
+</tr>
+<tr class="even">
+<td align="center">2_2</td>
+<td align="center">2</td>
+<td align="center">2</td>
+<td align="center">4</td>
+<td align="center">boy</td>
+<td align="center">14</td>
+<td align="center">2.4</td>
+<td align="center">3</td>
+</tr>
+<tr class="odd">
+<td align="center">2_3</td>
+<td align="center">3</td>
+<td align="center">2</td>
+<td align="center">6</td>
+<td align="center">boy</td>
+<td align="center">14</td>
+<td align="center">3.7</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center">2_4</td>
+<td align="center">4</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">girl</td>
+<td align="center">14</td>
+<td align="center">4.4</td>
+<td align="center">4</td>
+</tr>
+<tr class="odd">
+<td align="center">2_5</td>
+<td align="center">5</td>
+<td align="center">2</td>
+<td align="center">5</td>
+<td align="center">girl</td>
+<td align="center">14</td>
+<td align="center">4.3</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center">NA</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">NA</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+<tr class="odd">
+<td align="center">100_16</td>
+<td align="center">16</td>
+<td align="center">100</td>
+<td align="center">4</td>
+<td align="center">girl</td>
+<td align="center">7</td>
+<td align="center">4.3</td>
+<td align="center">5</td>
+</tr>
+<tr class="even">
+<td align="center">100_17</td>
+<td align="center">17</td>
+<td align="center">100</td>
+<td align="center">4</td>
+<td align="center">boy</td>
+<td align="center">7</td>
+<td align="center">2.6</td>
+<td align="center">2</td>
+</tr>
+<tr class="odd">
+<td align="center">100_18</td>
+<td align="center">18</td>
+<td align="center">100</td>
+<td align="center">8</td>
+<td align="center">girl</td>
+<td align="center">7</td>
+<td align="center">6.7</td>
+<td align="center">7</td>
+</tr>
+<tr class="even">
+<td align="center">100_19</td>
+<td align="center">19</td>
+<td align="center">100</td>
+<td align="center">5</td>
+<td align="center">boy</td>
+<td align="center">7</td>
+<td align="center">2.9</td>
+<td align="center">3</td>
+</tr>
+<tr class="odd">
+<td align="center">100_20</td>
+<td align="center">20</td>
+<td align="center">100</td>
+<td align="center">9</td>
+<td align="center">boy</td>
+<td align="center">7</td>
+<td align="center">5.3</td>
+<td align="center">5</td>
+</tr>
+</tbody>
+</table>
+<p>Visual inspection reveals that most of the variables are measurements at level 1 and apply to specific pupils (<code>extrav</code>, <code>sex</code>, <code>popular</code>, and <code>popteach</code>), while the teacher’s years of experiene is a level 2 variable since it applies to the entire <code>class</code>. Notice how the <code>texp</code> variable is identical for all pupils in the same class. This is call <strong>Disaggregated</strong> data.</p>
+</div>
+<div id="exploratory-data-analysis" class="section level3">
+<h3><span class="header-section-number">1.1.3</span> Exploratory Data Analysis</h3>
+<div id="summarize-descriptive-statistics" class="section level4">
+<h4><span class="header-section-number">1.1.3.1</span> Summarize Descriptive Statistics</h4>
+<p>Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as <em>Table 1</em>. The <code>stargazer()</code> function can be used to create such a table, but only for the entire dataset <span class="citation">(Hlavac <a href="references.html#ref-R-stargazer">2018</a>)</span>. I haven’t been able to find a way to get it to summarize subsamples and compare them in the standard format.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>id) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>stargazer<span class="op">::</span><span class="kw">stargazer</span>(<span class="dt">title  =</span> <span class="st">&quot;Descriptive statistics, aggregate over entire sample&quot;</span>,
+                       <span class="dt">header =</span> <span class="ot">FALSE</span>,
+                       <span class="dt">type =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<table style="text-align:center">
+<caption>
+<strong>Descriptive statistics, aggregate over entire sample</strong>
+</caption>
+<tr>
+<td colspan="8" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Statistic
+</td>
+<td>
+N
+</td>
+<td>
+Mean
+</td>
+<td>
+St. Dev.
+</td>
+<td>
+Min
+</td>
+<td>
+Pctl(25)
+</td>
+<td>
+Pctl(75)
+</td>
+<td>
+Max
+</td>
+</tr>
+<tr>
+<td colspan="8" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+pupil
+</td>
+<td>
+2,000
+</td>
+<td>
+10.649
+</td>
+<td>
+5.968
+</td>
+<td>
+1
+</td>
+<td>
+6
+</td>
+<td>
+16
+</td>
+<td>
+26
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+class
+</td>
+<td>
+2,000
+</td>
+<td>
+50.370
+</td>
+<td>
+29.078
+</td>
+<td>
+1
+</td>
+<td>
+25
+</td>
+<td>
+76
+</td>
+<td>
+100
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+extrav
+</td>
+<td>
+2,000
+</td>
+<td>
+5.215
+</td>
+<td>
+1.262
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+6
+</td>
+<td>
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+texp
+</td>
+<td>
+2,000
+</td>
+<td>
+14.263
+</td>
+<td>
+6.552
+</td>
+<td>
+2
+</td>
+<td>
+8
+</td>
+<td>
+20
+</td>
+<td>
+25
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+popular
+</td>
+<td>
+2,000
+</td>
+<td>
+5.076
+</td>
+<td>
+1.383
+</td>
+<td>
+0.000
+</td>
+<td>
+4.100
+</td>
+<td>
+6.000
+</td>
+<td>
+9.500
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+popteach
+</td>
+<td>
+2,000
+</td>
+<td>
+5.061
+</td>
+<td>
+1.404
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+6
+</td>
+<td>
+10
+</td>
+</tr>
+<tr>
+<td colspan="8" style="border-bottom: 1px solid black">
+</td>
+</tr>
+</table>
+</div>
+<div id="summarize-descriptive-statistics---furniture" class="section level4">
+<h4><span class="header-section-number">1.1.3.2</span> Summarize Descriptive Statistics - <code>furniture</code></h4>
+<p>Tyson Barrett’s <strong>furniture</strong> package includes the extremely useful function <code>table1()</code> which simplifies the common task of creating a stratified, comparative table of descriptive statistics. Full documentation can be accessed by executing <code>?furniture::table1</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">table1</span>(<span class="st">&quot;Pupil&#39;s Extraversion (10 pt)&quot;</span>  =<span class="st"> </span>extrav, 
+         <span class="st">&quot;Teacher&#39;s Experience (years)&quot;</span>  =<span class="st"> </span>texp, 
+         <span class="st">&quot;Popularity, Sociometric Score&quot;</span> =<span class="st"> </span>popular, 
+         <span class="st">&quot;Popularity, Teacher Evaluated&quot;</span> =<span class="st"> </span>popteach,
+         <span class="dt">splitby    =</span> <span class="op">~</span><span class="st"> </span>sex,                                     <span class="co"># var to divide sample by</span>
+         <span class="dt">test       =</span> <span class="ot">TRUE</span>,                                      <span class="co"># test groups different?</span>
+         <span class="dt">output     =</span> <span class="st">&quot;html&quot;</span>,                                    <span class="co"># output for latex</span>
+         <span class="dt">align      =</span> <span class="kw">c</span>(<span class="st">&quot;l&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;r&quot;</span>),                     <span class="co"># column alignment</span>
+         <span class="dt">caption    =</span> <span class="st">&quot;Compare genders on four main variables&quot;</span>)  <span class="co"># title</span></code></pre></div>
+<table>
+<caption>
+<span id="tab:unnamed-chunk-16">Table 1.1: </span>Compare genders on four main variables
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+boy
+</th>
+<th style="text-align:right;">
+girl
+</th>
+<th style="text-align:right;">
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+n = 989
+</td>
+<td style="text-align:right;">
+n = 1011
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Pupil.s.Extraversion..10.pt.
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+&lt;.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+5.1 (1.2)
+</td>
+<td style="text-align:right;">
+5.3 (1.3)
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Teacher.s.Experience..years.
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+0.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+13.8 (6.3)
+</td>
+<td style="text-align:right;">
+14.7 (6.8)
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Popularity..Sociometric.Score
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+&lt;.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+4.3 (1.1)
+</td>
+<td style="text-align:right;">
+5.9 (1.1)
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Popularity..Teacher.Evaluated
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+&lt;.001
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+4.3 (1.2)
+</td>
+<td style="text-align:right;">
+5.8 (1.2)
+</td>
+<td style="text-align:right;">
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="visualizations-of-raw-data" class="section level4">
+<h4><span class="header-section-number">1.1.3.3</span> Visualizations of Raw Data</h4>
+<p>For a first look, its useful to plot all the data points on a single scatterplot as displayed in Figure . Due to ganularity in the rating scale, many points end up being plotted on top of each other (<em>overplotted</em>), so its a good idea to use <code>geom_count()</code> rather than <code>geom_point()</code> so the size of the dot can convey the number of points at that location <span class="citation">(Wickham et al. <a href="references.html#ref-R-ggplot2">2018</a>)</span>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Disaggregate: pupil (level 1) only, ignore level 2&#39;s existance</span>
+<span class="co"># Extraversion treated: continuous measure</span>
+pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,                                <span class="co"># x-axis variable</span>
+      <span class="dt">y =</span> popular) <span class="op">+</span><span class="st">                             </span><span class="co"># y-axis variable</span>
+<span class="st">  </span><span class="kw">geom_count</span>() <span class="op">+</span><span class="st">                                 </span><span class="co"># POINTS w/ SIZE = COUNT</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="op">+</span><span class="st">                   </span><span class="co"># linear regression line</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st">                                   </span><span class="co"># white background  </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x    =</span> <span class="st">&quot;Extraversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span>
+       <span class="dt">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>,   <span class="co"># y-axis label</span>
+       <span class="dt">size =</span> <span class="st">&quot;Count&quot;</span>) <span class="op">+</span><span class="st">                         </span><span class="co"># legend key&#39;s title  </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.9</span>, <span class="fl">0.2</span>),                          <span class="co"># key at</span>
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="op">+</span><span class="st">    </span><span class="co"># key box </span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">1</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># x-ticks</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-17"></span>
+<img src="eBook_install_files/figure-html/unnamed-chunk-17-1.png" alt="Disaggregate: pupil level only with extraversion treated as an continuous measure.  \label{fig:scatter}" width="672" />
+<p class="caption">
+Figure 1.1: Disaggregate: pupil level only with extraversion treated as an continuous measure. 
+</p>
+</div>
+<p>When the degree of overplotting as high as it is in Figure , it can be useful to represent the data with density contours as seen in Figure . I’ve chosen to leave the points displayed in this redition, but color them much lighter so that they are present, but do not detract from the pattern of association.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># visualize all the data - another way</span>
+pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,                                <span class="co"># x-axis variable</span>
+      <span class="dt">y =</span> popular) <span class="op">+</span><span class="st">                             </span><span class="co"># y-axis variable</span>
+<span class="st">  </span><span class="kw">geom_count</span>(<span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="op">+</span><span class="st">                   </span><span class="co"># POINTS w/ SIZE = COUNT</span>
+<span class="st">  </span><span class="kw">geom_density2d</span>() <span class="op">+</span><span class="st">                             </span><span class="co"># DENSITY CURVES </span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span><span class="st">    </span><span class="co"># linear regression line</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st">                                   </span><span class="co"># white background  </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x    =</span> <span class="st">&quot;Extraversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span>
+       <span class="dt">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># y-axis label </span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">size =</span> <span class="ot">FALSE</span>)  <span class="op">+</span><span class="st">                        </span><span class="co"># don&#39;t include a legend</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">1</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># x-ticks</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-18"></span>
+<img src="eBook_install_files/figure-html/unnamed-chunk-18-1.png" alt="Disaggregate: pupil level only with extraversion treated as an continuous measure.  \label{fig:scatter2d}" width="672" />
+<p class="caption">
+Figure 1.2: Disaggregate: pupil level only with extraversion treated as an continuous measure. 
+</p>
+</div>
+<p>The argument could be made that the extraversion score should be treated as an ordinal factor instead of as a truely continuous scale since the only valid values are the whole number 1 through 10 and there is no assurance that these category assignments represent a true ratio measurement scale. However, we must keep in mind that this was an observational study, ans as such, the number of pupils assignment each level of extraversion is not equal.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># count the number of pupils in assigned each Extraversion value, 1:10</span>
+table &lt;-<span class="st"> </span>pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(extrav) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">n_distinct</span>(id),
+            <span class="dt">percent  =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span>count <span class="op">/</span><span class="st"> </span><span class="dv">2000</span>) 
+
+table <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">stargazer</span>(<span class="dt">summary  =</span> <span class="ot">FALSE</span>,
+            <span class="dt">rownames =</span> <span class="ot">FALSE</span>,
+            <span class="dt">header   =</span> <span class="ot">FALSE</span>,
+            <span class="dt">type     =</span> <span class="st">&quot;html&quot;</span>,
+            <span class="dt">title    =</span> <span class="st">&quot;Distribution of extraversion in pupils&quot;</span>)</code></pre></div>
+<table style="text-align:center">
+<caption>
+<strong>Distribution of extraversion in pupils</strong>
+</caption>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+extrav
+</td>
+<td>
+count
+</td>
+<td>
+percent
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+1
+</td>
+<td>
+3
+</td>
+<td>
+0.15
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+2
+</td>
+<td>
+13
+</td>
+<td>
+0.65
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+3
+</td>
+<td>
+119
+</td>
+<td>
+5.95
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+4
+</td>
+<td>
+423
+</td>
+<td>
+21.15
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+5
+</td>
+<td>
+688
+</td>
+<td>
+34.4
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+6
+</td>
+<td>
+478
+</td>
+<td>
+23.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+7
+</td>
+<td>
+194
+</td>
+<td>
+9.7
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+8
+</td>
+<td>
+58
+</td>
+<td>
+2.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+9
+</td>
+<td>
+18
+</td>
+<td>
+0.9
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+10
+</td>
+<td>
+6
+</td>
+<td>
+0.3
+</td>
+</tr>
+<tr>
+<td colspan="3" style="border-bottom: 1px solid black">
+</td>
+</tr>
+</table>
+<p>Figure  displays the same data as Figure , but uses boxplots for the distribution of scores at each level of extraversion. On one extreme, the lowest extraversion score possible was a value of “one”, but only 3 pupils or 0.15% of the 2000 pupils recieved this value. On the other extreme, the middle value of “five” was applied to 688 pupils or a wopping 34.4%. The option <code>varwidth=TRUE</code> in the <code>geom_boxplot()</code> function helps reflect such unbalanced sample sizes by allowing the width of the boxes to be proportional to the square-roots of the number of observations each box represents.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Disaggregate: pupil (level 1) only, ignore level 2&#39;s existance</span>
+<span class="co"># Extraversion treated: ordinal factor</span>
+<span class="kw">ggplot</span>(pop,                             <span class="co"># dataset&#39;s name</span>
+       <span class="kw">aes</span>(<span class="dt">x    =</span> <span class="kw">factor</span>(extrav),       <span class="co"># x-axis values - make factor!</span>
+           <span class="dt">y    =</span> popular,              <span class="co"># y-axis values</span>
+           <span class="dt">fill =</span> <span class="kw">factor</span>(extrav))) <span class="op">+</span><span class="st">    </span><span class="co"># makes seperate boxes</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>(<span class="dt">varwidth =</span> <span class="ot">TRUE</span>) <span class="op">+</span><span class="st">       </span><span class="co"># draw boxplots instead of points</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st">                          </span><span class="co"># white background  </span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">fill =</span> <span class="ot">FALSE</span>)  <span class="op">+</span><span class="st">               </span><span class="co"># don&#39;t include a legend</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span><span class="st">  </span><span class="co"># y-ticks</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Extraversion (10 pt scale)&quot;</span>,                    <span class="co"># x-axis label</span>
+       <span class="dt">y =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>) <span class="op">+</span><span class="st">               </span><span class="co"># y-axis label</span>
+<span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Spectral&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>)    <span class="co"># select color</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-20"></span>
+<img src="eBook_install_files/figure-html/unnamed-chunk-20-1.png" alt="Disaggregate: pupil level only with extraversion treated as an ordinal factor.  The width of the boxes are proportional to the square-roots of the number of observations each box represents. \label{fig:boxes}" width="672" />
+<p class="caption">
+Figure 1.3: Disaggregate: pupil level only with extraversion treated as an ordinal factor. The width of the boxes are proportional to the square-roots of the number of observations each box represents. 
+</p>
+</div>
+<p>Up to this point, all investigation of this dataset has been only at the pupil level and any nesting or clustering within classes has been ignored. Plotting is a good was to start to get an idea of the class-to-class variability.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compare the first 9 classrooms becuase all of there are too many at once</span>
+pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(class <span class="op">&lt;=</span><span class="st"> </span><span class="dv">9</span>) <span class="op">%&gt;%</span><span class="st">                  </span><span class="co"># select ONLY NINE classes</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> extrav,                         <span class="co"># x-axis values</span>
+             <span class="dt">y =</span> popular)) <span class="op">+</span><span class="st">                     </span><span class="co"># y-axis values</span>
+<span class="st">  </span><span class="kw">geom_count</span>() <span class="op">+</span><span class="st">                                 </span><span class="co"># POINTS w/ SIZE = COUNT</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span><span class="st">    </span><span class="co"># linear regression line</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st">                                   </span><span class="co"># white background  </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x    =</span> <span class="st">&quot;Extraversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span>
+       <span class="dt">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>,   <span class="co"># y-axis label</span>
+       <span class="dt">size =</span> <span class="st">&quot;Count&quot;</span>) <span class="op">+</span><span class="st">                         </span><span class="co"># legend key&#39;s title  </span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">size =</span> <span class="ot">FALSE</span>)  <span class="op">+</span><span class="st">                        </span><span class="co"># don&#39;t include a legend</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">3</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># x-ticks</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">3</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># y-ticks</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>class, 
+             <span class="dt">labeller =</span> label_both) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_rect</span>(<span class="dt">colour =</span> <span class="ot">NA</span>, 
+                                        <span class="dt">fill   =</span> <span class="ot">NA</span>))</code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-21"></span>
+<img src="eBook_install_files/figure-html/unnamed-chunk-21-1.png" alt="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  First nice classes shown. \label{fig:scatter3x3}" width="672" />
+<p class="caption">
+Figure 1.4: Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class. First nice classes shown. 
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># select specific classes by number for illustration purposes</span>
+pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(class <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">25</span>, <span class="dv">33</span>, 
+                             <span class="dv">35</span>, <span class="dv">51</span>, <span class="dv">64</span>, 
+                             <span class="dv">76</span>, <span class="dv">94</span>, <span class="dv">100</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> extrav,                         <span class="co"># x-axis values</span>
+             <span class="dt">y =</span> popular)) <span class="op">+</span><span class="st">                     </span><span class="co"># y-axis values</span>
+<span class="st">  </span><span class="kw">geom_count</span>() <span class="op">+</span><span class="st">                                 </span><span class="co"># POINTS w/ SIZE = COUNT</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span><span class="st">    </span><span class="co"># linear regression line</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st">                                   </span><span class="co"># white background  </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x    =</span> <span class="st">&quot;Extraversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span>
+       <span class="dt">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>,   <span class="co"># y-axis label</span>
+       <span class="dt">size =</span> <span class="st">&quot;Count&quot;</span>) <span class="op">+</span><span class="st">                         </span><span class="co"># legend key&#39;s title  </span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">size =</span> <span class="ot">FALSE</span>)  <span class="op">+</span><span class="st">                        </span><span class="co"># don&#39;t include a legend</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">3</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># x-ticks</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">3</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># y-ticks</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>class)  <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">strip.text       =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-22"></span>
+<img src="eBook_install_files/figure-html/unnamed-chunk-22-1.png" alt="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  A set of nine classes was chosen to show a sampling of variability.  The facet labels are not shown as the identification number probably would not be advisable for a general publication. \label{fig:scatter3x3b}" width="672" />
+<p class="caption">
+Figure 1.5: Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class. A set of nine classes was chosen to show a sampling of variability. The facet labels are not shown as the identification number probably would not be advisable for a general publication. 
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compare all 100 classrooms via linear model for each</span>
+<span class="kw">ggplot</span>(pop,
+       <span class="kw">aes</span>(<span class="dt">x     =</span> extrav,                      <span class="co"># x-axis values</span>
+           <span class="dt">y     =</span> popular,                     <span class="co"># y-axis values</span>
+           <span class="dt">group =</span> class)) <span class="op">+</span><span class="st">                     </span><span class="co"># GROUPs for LINES</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,                     <span class="co"># linear regression line</span>
+              <span class="dt">color  =</span> <span class="st">&quot;gray40&quot;</span>,
+              <span class="dt">size   =</span> <span class="fl">0.4</span>,
+              <span class="dt">se     =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st">                                   </span><span class="co"># white background  </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x    =</span> <span class="st">&quot;Extraversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span>
+       <span class="dt">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># y-axis label</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># x-ticks</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-23"></span>
+<img src="eBook_install_files/figure-html/unnamed-chunk-23-1.png" alt="Spaghetti plot of seperate, independent linear models for each of the 100 classes. \label{fig:classLMs}" width="672" />
+<p class="caption">
+Figure 1.6: Spaghetti plot of seperate, independent linear models for each of the 100 classes. 
+</p>
+</div>
+<p>A helpful resource for choosing colors to use in plots: <a href="https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/colorPaletteCheatsheet.pdf">R color cheatsheet</a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compare all 100 classrooms via independent linear models</span>
+pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">texp3 =</span> <span class="kw">cut</span>(pop<span class="op">$</span>texp, 
+                            <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">18</span>, <span class="dv">30</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;&lt; 10 yrs&quot;</span>, 
+                                    <span class="st">&quot;10 - 18 yrs&quot;</span>, 
+                                    <span class="st">&quot;&gt; 18 yrs&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x     =</span> extrav,                     <span class="co"># x-axis values</span>
+             <span class="dt">y     =</span> popular,                    <span class="co"># y-axis values</span>
+             <span class="dt">group =</span> class)) <span class="op">+</span><span class="st">                   </span><span class="co"># GROUPs for LINES</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> sex),
+              <span class="dt">size   =</span> <span class="fl">0.3</span>,
+              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,                     <span class="co"># linear regression line</span>
+              <span class="dt">se     =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st">                                   </span><span class="co"># white background  </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x    =</span> <span class="st">&quot;Extraversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span>
+       <span class="dt">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="co"># y-axis label</span>
+<span class="st">  </span><span class="kw">guides</span>(<span class="dt">color =</span> <span class="ot">FALSE</span>) <span class="op">+</span><span class="st">                        </span><span class="co"># don&#39;t include a legend</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">3</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># x-ticks</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">3</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># y-ticks</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodgerblue&quot;</span>, <span class="st">&quot;maroon1&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(texp3 <span class="op">~</span><span class="st"> </span>sex) </code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-24"></span>
+<img src="eBook_install_files/figure-html/unnamed-chunk-24-1.png" alt="Spaghetti plot of seperate, independent linear models for each of the 100 classes.  Seperate panels are used to untangle the 'hairball' in the previous figure.  The columns are seperated by the pupils' gender and the rows by the teacher's experince in years. \label{fig:classLMs3x2}" width="672" />
+<p class="caption">
+Figure 1.7: Spaghetti plot of seperate, independent linear models for each of the 100 classes. Seperate panels are used to untangle the ‘hairball’ in the previous figure. The columns are seperated by the pupils’ gender and the rows by the teacher’s experince in years. 
+</p>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section",
+"toc_depth": 3
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

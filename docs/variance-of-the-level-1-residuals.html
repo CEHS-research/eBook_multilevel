@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="hox-chap-2-classroom-popularity.html">
+<link rel="prev" href="hox-chap-2-classroom-popularity.html">
+<link rel="next" href="use-the-formula-from-page-17.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -121,9 +121,13 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.2.2" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#summarize-descriptive-statistics---furniture"><i class="fa fa-check"></i><b>1.2.2</b> Summarize Descriptive Statistics - <code>furniture</code></a></li>
 <li class="chapter" data-level="1.2.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#visualizations-of-raw-data"><i class="fa fa-check"></i><b>1.2.3</b> Visualizations of Raw Data</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#multilevel-regression-analysis"><i class="fa fa-check"></i><b>1.3</b> Multilevel Regression Analysis</a><ul>
-<li class="chapter" data-level="1.3.1" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#the-intercept-only-model"><i class="fa fa-check"></i><b>1.3.1</b> The Intercept Only Model</a></li>
+<li class="chapter" data-level="1.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#the-intercept-only-model-m0-page-12-hox2017"><i class="fa fa-check"></i><b>1.3</b> The Intercept Only Model: “M0”, page 12 <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></a></li>
+<li class="chapter" data-level="1.4" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#calculate-the-icc"><i class="fa fa-check"></i><b>1.4</b> Calculate the ICC</a></li>
 </ul></li>
+<li class="chapter" data-level="2" data-path="variance-of-the-level-1-residuals.html"><a href="variance-of-the-level-1-residuals.html"><i class="fa fa-check"></i><b>2</b> variance of the level 1 residuals</a></li>
+<li class="chapter" data-level="3" data-path="use-the-formula-from-page-17.html"><a href="use-the-formula-from-page-17.html"><i class="fa fa-check"></i><b>3</b> Use the formula from page 17</a></li>
+<li class="chapter" data-level="4" data-path="add-predictors-to-the-model-m1-page-17.html"><a href="add-predictors-to-the-model-m1-page-17.html"><i class="fa fa-check"></i><b>4</b> Add Predictors to the Model: “M1” (page 17)</a><ul>
+<li class="chapter" data-level="4.1" data-path="add-predictors-to-the-model-m1-page-17.html"><a href="add-predictors-to-the-model-m1-page-17.html#compare-models-m0-and-m1"><i class="fa fa-check"></i><b>4.1</b> Compare Models M0 and M1</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -146,137 +150,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</h1>
-<h4 class="author"><em>Sarah Schwartz &amp; Tyson Barrett</em></h4>
-<h4 class="date"><em>Last updated: 2018-09-11</em></h4>
-</div>
-<div id="welcome" class="section level1 unnumbered">
-<h1>Welcome</h1>
-<p>Backgroup and links to other volumes of this encyclopedia may be found at the <a href="https://cehs-research.github.io/eBooks/">Encyclopedia’s Home Website</a>.</p>
-<div class="figure">
-<img src="images/common/EQM_v5_header.png" />
-
-</div>
-<div id="blocked-notes" class="section level2 unnumbered">
-<h2>Blocked Notes</h2>
-<p>Thoughout all the eBooks in this encyclopedia, several small secitons will be blocked out in the following ways:</p>
-<div class="rmdconstruct">
-<p>
-These blocks denote an area <strong>UNDER CONSTRUCTION</strong>, so check back often. This massive undertaking started during the summer of 2018 and is far from complete. The outline of seven volumes is given above despite any one being complete. Feedback is welcome via either author’s email.
-</p>
-</div>
-<div class="rmdimportant">
-<p>
-These blocks denote something <strong>EXTREMELY IMPORTANT</strong>. Do NOT skip these notes as they will be used very sparingly.
-</p>
-</div>
-<div class="rmddownload">
-<p>
-These blocks denote something to <strong>DOWNLOAD</strong>. This may include software installations, example datasets, or notebook code files.
-</p>
-</div>
-<div class="rmdlightbulb">
-<p>
-These blocks denote something <strong>INTERESTING</strong>. These point out information we found of interest or added value.
-</p>
-</div>
-<div class="rmdlink">
-<p>
-These blocks denote <strong>LINKS</strong> to other websites. This may include instructional video clips, articles, or blog posts. We are all about NOT re-creating the wheel. If somebody else has described or illustrated a topic well, we celebrate it!
-</p>
-</div>
-</div>
-<div id="code-and-output" class="section level2 unnumbered">
-<h2>Code and Output</h2>
-<p>This is how <span class="math inline">\(R\)</span> code is shown:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
-<p>This is what the output of the <span class="math inline">\(R\)</span> code above will look:</p>
-<pre><code>## [1] 2</code></pre>
-</div>
-<div id="the-authors" class="section level2 unnumbered">
-<h2>The Authors</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:center;font-size: 20px;">
-Dr. Sarah Schwartz
-</th>
-<th style="text-align:center;font-size: 20px;">
-Dr. Tyson Barrett
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center;">
-<img src="images/common/Sarah_headshot.jpg" width="300" />
-</td>
-<td style="text-align:center;">
-<img src="images/common/Tyson_headshot.jpg" width="300" />
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-<a href="http://www.sarahschwartzstats.com/">www.SarahSchwartzStats.com</a>
-</td>
-<td style="text-align:center;">
-<a href="http://tysonbarrett.com/">www.TysonBarrett.com</a>
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-<a href="mailto:Sarah.Schwartz@usu.edu">Sarah.Schwartz@usu.edu</a>
-</td>
-<td style="text-align:center;">
-<a href="mailto:Tyson.Barrett@usu.edu">Tyson.Barrett@usu.edu</a>
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-<a href="https://cehs.usu.edu/research/statstudio/index">Statistical Consulting Studio</a>
-</td>
-<td style="text-align:center;">
-<a href="https://cehs.usu.edu/research/dsdu/index">Data Science and Discover Unit</a>
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-<img src="images/common/StatStudioLogo_dark_small.png" width="300" />
-</td>
-<td style="text-align:center;">
-<img src="images/common/dsdu_logo.PNG" width="300" />
-</td>
-</tr>
-</tbody>
-</table>
-<div id="why-choose-r" class="section level3 unnumbered">
-<h3>Why choose R ?</h3>
-<div class="rmdlink">
-<p>
-<strong>Check it out:</strong> an article from Fall 2016… <a href="https://datahowler.wordpress.com/2016/09/10/no-more-excuses-r-is-better-than-spss-for-psychology-undergrads-and-students-agree/">No more excuses: R is better than SPSS for psychology undergrads, and students agree</a>
-</p>
-</div>
-</div>
-<div id="fyi" class="section level3 unnumbered">
-<h3>FYI</h3>
-<p>This entire encyclopedia is written in <span class="math inline">\(R Markdown\)</span>, using <span class="math inline">\(R Studio\)</span> as the text editor and the <code>bookdown</code> package to turn a collection of markdown documents into a coherent whole. The book’s source code is hosted on GitHub. If you notice typos or other issues, feel free to email either of the authors.</p>
-<p>This work is licensed under the <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Attribution-NonCommercial-NoDerivatives 4.0 International</a> License.</p>
-<div class="figure">
-<img src="images/common/Education_Logo_WHITE-02.png" width="300" />
-
-</div>
-
-</div>
-</div>
+<div id="variance-of-the-level-1-residuals" class="section level1">
+<h1><span class="header-section-number">2</span> variance of the level 1 residuals</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sigma2_e &lt;-<span class="st"> </span>pop_lme_<span class="dv">0</span><span class="op">$</span>sigma<span class="op">^</span><span class="dv">2</span>
+sigma2_e</code></pre></div>
+<p>[1] 1.221793</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">.<span class="dv">70</span><span class="op">/</span>(.<span class="dv">70</span><span class="op">+</span><span class="fl">1.22</span>)</code></pre></div>
+<p>[1] 0.3645833</p>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="hox-chap-2-classroom-popularity.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="hox-chap-2-classroom-popularity.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="use-the-formula-from-page-17.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
