@@ -123,6 +123,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="1.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#multilevel-regression-analysis"><i class="fa fa-check"></i><b>1.3</b> Multilevel Regression Analysis</a><ul>
 <li class="chapter" data-level="1.3.1" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#the-intercept-only-model"><i class="fa fa-check"></i><b>1.3.1</b> The Intercept Only Model</a></li>
+<li class="chapter" data-level="1.3.2" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#intraclass-correlation-icc"><i class="fa fa-check"></i><b>1.3.2</b> Intraclass Correlation (ICC)</a></li>
+<li class="chapter" data-level="1.3.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#adding-predictors-to-the-model-m1-page-17"><i class="fa fa-check"></i><b>1.3.3</b> Adding Predictors to the Model: “M1” (page 17)</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -160,7 +162,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(nlme)         <span class="co"># non-linear mixed-effects models</span>
 <span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
 <span class="kw">library</span>(lmerTest)     <span class="co"># Tests on lmer objects</span>
-<span class="kw">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for nlme &amp; lmer4</span></code></pre></div>
+<span class="kw">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for nlme &amp; lmer4</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span></code></pre></div>
 <div id="background" class="section level2">
 <h2><span class="header-section-number">1.1</span> Background</h2>
 <p>The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edition”</strong> <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span> has a companion <a href="https://multilevel-analysis.sites.uu.nl/">website</a> which includes links to all the data files used throughout the book (housed on the <a href="https://github.com/MultiLevelAnalysis">book’s GitHub repository</a>).</p>
@@ -1247,44 +1250,42 @@ There are also many websites that offer Point-n-click interfaces to build <span 
 <h2><span class="header-section-number">1.3</span> Multilevel Regression Analysis</h2>
 <div id="the-intercept-only-model" class="section level3">
 <h3><span class="header-section-number">1.3.1</span> The Intercept Only Model</h3>
-<p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled this as “<span class="math inline">\(M_0\)</span>” on page 12:</p>
-<p>Level 1 Model Equation (pupil <span class="math inline">\(i\)</span>)</p>
+<blockquote>
+<p>“The intercept-only model is useful as a null-model that serves as a benchmark with which other models are compared.” <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>, page 13</p>
+</blockquote>
+<p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled this as “<span class="math inline">\(M_0\)</span>” in chapter 2:</p>
+<p><strong>The Set of Level-Specific Model Equations:</strong></p>
+<p>Level 1 Model Equation <em>(<span class="math inline">\(i^{th}\)</span> pupil in the <span class="math inline">\(j^{th}\)</span> class)</em></p>
 <p><span class="math display">\[
 Y_{ij} = B_{0} + e_{ij}
 \tag{Hox Eq 2.6}
 \]</span></p>
-<p>Level 2 Model Equation (class <span class="math inline">\(j\)</span>)</p>
+<p>Level 2 Model Equation <em>(<span class="math inline">\(j^{th}\)</span> class)</em></p>
 <p><span class="math display">\[
 B_{0} = \gamma_{00} + u_{0j}
 \tag{Hox Eq 2.7}
 \]</span></p>
-<p>Multilevel Model Equation<br />
-<span class="math display">\[ 
+<p><strong>The Single, Multilevel Model Equation:</strong> <span class="math display">\[ 
 POP_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
 \tag{M0: intercept only}
 \]</span></p>
-<p>Parameters:</p>
-<ul>
-<li>Fixed Effects</li>
-</ul>
+<p><strong>Parameters:</strong></p>
+<p>Fixed Effects</p>
 <p><span class="math display">\[
 intercept \longrightarrow \gamma_{00}
 \]</span></p>
-<ul>
-<li>Random Effects</li>
-</ul>
+<p>Random Effects</p>
 <p><span class="math display">\[
 \begin{align*} 
-class (intercept) \longrightarrow \sigma^2_{u0}  &amp; = var[u_{0j}] \\
+class (intercept) \longrightarrow \sigma^2_{u_0}  &amp; = var[u_{0j}] \\
 error -or- residual \longrightarrow \sigma^2_{e}   &amp; = var[e_{ij}] \\
-covariance        \longrightarrow \sigma^2_{u0e} &amp; = cov[u_{0j}, e_{ij}] 
 \end{align*}
 \]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class), 
-                 <span class="dt">data   =</span> pop)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_<span class="dv">0</span> &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class), 
+                         <span class="dt">data   =</span> pop)
+
 <span class="kw">summary</span>(pop_lmer_<span class="dv">0</span>)</code></pre></div>
-<pre><code>Linear mixed model fit by REML. t-tests use Satterthwaite&#39;s method [
-lmerModLmerTest]
+<pre><code>Linear mixed model fit by REML [&#39;lmerMod&#39;]
 Formula: popular ~ 1 + (1 | class)
    Data: pop
 
@@ -1301,11 +1302,433 @@ Random effects:
 Number of obs: 2000, groups:  class, 100
 
 Fixed effects:
-            Estimate Std. Error       df t value Pr(&gt;|t|)    
-(Intercept)  5.07786    0.08739 98.90976    58.1   &lt;2e-16 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
-<p>The entire population of all students in all classes has a grand-average of <code>5.07786</code> and the individual classes have popularity average vary around that.</p>
+            Estimate Std. Error t value
+(Intercept)  5.07786    0.08739    58.1</code></pre>
+<p>The entire population of all students in all classes has a grand-average of 5.0779 and the individual classes have popularity averages that vary around that.</p>
+</div>
+<div id="intraclass-correlation-icc" class="section level3">
+<h3><span class="header-section-number">1.3.2</span> Intraclass Correlation (ICC)</h3>
+<p>Although the Null model above does not explain any variance in the dependent variable <em>(popularity)</em>, since there are no independent variables, it does decompose (i.e. divide up) the variance into two pieces. We can compute the amount of total variance in popularity that is attribute to the clustering of students in classes verses the residual variance.</p>
+<p><span class="math display">\[
+\rho = \frac{\sigma^2_{u0}}{\sigma^2_{u0}+\sigma^2_{e}}
+\tag{Hox Eq 2.9}
+\]</span></p>
+<blockquote>
+<p>Note: the <code>VarCorr()</code> function in the <code>lme4</code> package returns the standard deviations, not the variances (<span class="math inline">\(var = SD^2\)</span>) for a model fit via the <code>lme4::lmer()</code> function. The <code>summary()</code> function reports both the variances and the stadard deviations.</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lme4<span class="op">::</span><span class="kw">VarCorr</span>(pop_lmer_<span class="dv">0</span>)</code></pre></div>
+<pre><code> Groups   Name        Std.Dev.
+ class    (Intercept) 0.83792 
+ Residual             1.10535 </code></pre>
+<p><span class="math display">\[
+\sigma^2_{u0} = 0.83792^2 = 0.7021\\
+\sigma^2_{e}  = 1.10535^2 = 1.2218\\
+\]</span></p>
+<p>Calculate the ICC by hand:</p>
+<p><span class="math display">\[
+\rho = \frac{\sigma^2_{u0}}
+            {\sigma^2_{u0}+\sigma^2_{e}} 
+     = \frac{0.7021}
+            {0.7021+1.2218} 
+     = \frac{0.7021}
+            {1.9239}
+     = 0.3649358
+\]</span></p>
+<p>Calculate the ICC with the <code>icc()</code> fucntion in the <code>sjstats</code> package:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(pop_lmer_<span class="dv">0</span>)</code></pre></div>
+<pre><code>
+Linear mixed model
+
+Family : gaussian (identity)
+Formula: popular ~ 1 + (1 | class)
+
+  ICC (class): 0.3649</code></pre>
+<blockquote>
+<p>Interpretation: 36.5% of the variance of the popularity scores is at the group level, which is very high for social science data.</p>
+</blockquote>
+<div class="rmdimportant">
+<p>
+The ICC should be based on a Null (intercept only) model fit via REML (restricted maximum likelihood) estimation. This is the default for the ‘lme4::lmer()’ function. In chapter 2, <span class="citation"><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span></span> presents the numbers based on fitting the model via ML (maximum likelihood) estimation and thus does not match the presentation above exactly <em>(not just rounding error)</em>. This is probably because: (1) estimation methods (REML &amp; ML) are not discussed until chapter 3 and (2) due to the Null model also being used for model fit comparisons in Table 2.1 on the top of page 14.
+</p>
+</div>
+</div>
+<div id="adding-predictors-to-the-model-m1-page-17" class="section level3">
+<h3><span class="header-section-number">1.3.3</span> Adding Predictors to the Model: “M1” (page 17)</h3>
+<p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled this as “<span class="math inline">\(M_1\)</span>” in chapter 2:</p>
+<p><strong>The Set of Level-Specific Model Equations:</strong></p>
+<p>Level 1 Model Equation <em>(<span class="math inline">\(i^{th}\)</span> pupil in the <span class="math inline">\(j^{th}\)</span> class)</em></p>
+<ul>
+<li><span class="math inline">\(GEN\)</span> = pupils’s gender</li>
+<li><span class="math inline">\(EXT\)</span> = pupil’s extraversion</li>
+</ul>
+<p><span class="math display">\[
+POP_{ij} = \beta_{0j} + \beta_{1j} GEN_{ij} + \beta_{2j} EXT_{ij} + e_{ij}
+\]</span></p>
+<p>Level 2 Model Equation <em>(<span class="math inline">\(j^{th}\)</span> class)</em></p>
+<ul>
+<li><span class="math inline">\(YRS\)</span> = teacher’s experience</li>
+</ul>
+<p><em>no cross level interactions</em></p>
+<p><span class="math display">\[
+\begin{align*} 
+\beta_{0j} &amp; = \gamma_{00} + \gamma_{01} YRS{j} + u_{0j} \\
+\beta_{1j} &amp; = \gamma_{10} +  u_{1j} \\
+\beta_{2j} &amp; = \gamma_{20} +  u_{2j} 
+\end{align*}
+\]</span></p>
+<p><strong>The Single, Multilevel Model Equation:</strong></p>
+<p><span class="math display">\[
+POP_{ij} = \gamma_{00} + \gamma_{10} GEN_{ij} + \gamma_{20} EXT_{ij} + \gamma_{01} YRS_j +
+          u_{0j} + u_{1j}  + u_{2j}  + e_{ij} 
+\tag{M1: with predictors}
+\]</span></p>
+<p><strong>Parameters:</strong></p>
+<p>Fixed Effects</p>
+<p><span class="math display">\[ 
+\begin{align*} 
+intercept  \longrightarrow &amp; \gamma_{00}\\
+pupil \; gender     \longrightarrow &amp; \gamma_{10}\\
+pupil \; extravert  \longrightarrow &amp; \gamma_{20}\\
+teacher \; experience \longrightarrow &amp; \gamma_{01}
+\end{align*}
+\]</span></p>
+<p>Random Effects</p>
+<p><em>ignore covariances for now</em></p>
+<p><span class="math display">\[ 
+\begin{align*} 
+class (intercept)   \longrightarrow \sigma^2_{u_0 }   &amp; = var[u_{0j}] \\
+pupil \; gender     \longrightarrow \sigma^2_{u_1}    &amp; = var[u_{1j}] \\
+pupil \; extravert  \longrightarrow \sigma^2_{u_2}    &amp; = var[u_{2j}] \\
+error -or- residual \longrightarrow \sigma^2_{e}      &amp; = var[e_{ij}] 
+\end{align*}
+\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, 
+             <span class="dt">data   =</span> pop)
+
+pop_lmer_0_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class), 
+                         <span class="dt">data   =</span> pop,
+                         <span class="dt">REML   =</span> <span class="ot">FALSE</span>)
+
+
+pop_lmer_1_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>texp <span class="op">+</span><span class="st"> </span>(sex <span class="op">+</span><span class="st"> </span>extrav<span class="op">|</span>class), 
+                         <span class="dt">data   =</span> pop,
+                         <span class="dt">REML   =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p>Reproduce Table 2.1 on the top of page 14 <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lm, 
+                       pop_lmer_0_ml, 
+                       pop_lmer_1_ml),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Single-level&quot;</span>, 
+                                         <span class="st">&quot;M0: int only&quot;</span>, 
+                                         <span class="st">&quot;M1: w pred&quot;</span>))</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+Statistical models
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Single-level</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M0: int only</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M1: w pred</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+5.08<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.08<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.75<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.03)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.09)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.20)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+sexgirl
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+1.25<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.04)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+extrav
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.45<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.02)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+texp
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.09<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.01)
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+R<sup style="vertical-align: 0px;">2</sup>
+</td>
+<td style="border-top: 1px solid black;">
+0.00
+</td>
+<td style="border-top: 1px solid black;">
+</td>
+<td style="border-top: 1px solid black;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Adj. R<sup style="vertical-align: 0px;">2</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.00
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+RMSE
+</td>
+<td style="padding-right: 12px; border: none;">
+1.38
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+AIC
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+6333.47
+</td>
+<td style="padding-right: 12px; border: none;">
+4834.53
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+6350.27
+</td>
+<td style="padding-right: 12px; border: none;">
+4896.14
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-3163.73
+</td>
+<td style="padding-right: 12px; border: none;">
+-2406.27
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: class
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: class (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.69
+</td>
+<td style="padding-right: 12px; border: none;">
+1.30
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: Residual
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+1.22
+</td>
+<td style="padding-right: 12px; border: none;">
+0.55
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: class sexgirl
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: class extrav
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: class (Intercept) sexgirl
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.03
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: class (Intercept) extrav
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.18
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Cov: class sexgirl extrav
+</td>
+<td style="border-bottom: 2px solid black;">
+</td>
+<td style="border-bottom: 2px solid black;">
+</td>
+<td style="border-bottom: 2px solid black;">
+0.00
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="5">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
 
 </div>
 </div>

@@ -24,6 +24,7 @@ library(nlme)         # non-linear mixed-effects models
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(lmerTest)     # Tests on lmer objects
 library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
+library(sjstats)      # ICC calculations
 ```
 
 
@@ -318,45 +319,48 @@ There are also many websites that offer Point-n-click interfaces to build $\LaTe
 
 ### The Intercept Only Model
 
-@hox2017 labeled this as "$M_0$" on page 12:
+> "The intercept-only model is useful as a null-model that serves as a benchmark with which other models are compared." @hox2017, page 13
 
-Level 1 Model Equation (pupil $i$)    
+@hox2017 labeled this as "$M_0$" in chapter 2:
+
+**The Set of Level-Specific Model Equations:**
+
+Level 1 Model Equation *($i^{th}$ pupil in the $j^{th}$ class)*
 
 $$
 Y_{ij} = B_{0} + e_{ij}
 \tag{Hox Eq 2.6}
 $$
 
-Level 2 Model Equation (class $j$)    
+Level 2 Model Equation *($j^{th}$ class)*    
 
 $$
 B_{0} = \gamma_{00} + u_{0j}
 \tag{Hox Eq 2.7}
 $$
 
-Multilevel Model Equation       
+**The Single, Multilevel Model Equation:**
 $$ 
 POP_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
 \tag{M0: intercept only}
 $$
 
 
-Parameters:
+**Parameters:**
 
-* Fixed Effects   
+Fixed Effects  
 
 $$
 intercept \longrightarrow \gamma_{00}
 $$
 
 
-* Random Effects  
+Random Effects  
 
 $$
 \begin{align*} 
-class (intercept) \longrightarrow \sigma^2_{u0}  & = var[u_{0j}] \\
+class (intercept) \longrightarrow \sigma^2_{u_0}  & = var[u_{0j}] \\
 error -or- residual \longrightarrow \sigma^2_{e}   & = var[e_{ij}] \\
-covariance        \longrightarrow \sigma^2_{u0e} & = cov[u_{0j}, e_{ij}] 
 \end{align*}
 $$
 
@@ -365,15 +369,157 @@ $$
 
 
 
-```{r, echo=TRUE}
-pop_lmer_0 <- lmer(popular ~ 1 + (1|class), 
-                 data   = pop)
+```{r}
+pop_lmer_0 <- lme4::lmer(popular ~ 1 + (1|class), 
+                         data   = pop)
+
 summary(pop_lmer_0)
 ```
 
 
+The entire population of all students in all classes has a grand-average of `r pop_lmer_0 %>% fixef() %>% round(4)` and the individual classes have popularity averages that vary around that.
 
 
-The entire population of all students in all classes has a grand-average of `5.07786` and the individual classes have popularity average vary around that.
+### Intraclass Correlation (ICC)
 
+Although the Null model above does not explain any variance in the dependent variable *(popularity)*, since there are no independent variables, it does decompose (i.e. divide up) the variance into two pieces.  We can compute the amount of total variance in popularity that is attribute to the clustering of students in classes verses the residual variance.
+
+$$
+\rho = \frac{\sigma^2_{u0}}{\sigma^2_{u0}+\sigma^2_{e}}
+\tag{Hox Eq 2.9}
+$$
+
+
+> Note: the `VarCorr()` function in the `lme4` package returns the standard deviations, not the variances ($var = SD^2$) for a model fit via the `lme4::lmer()` function.  The `summary()` function reports both the variances and the stadard deviations.
+
+```{r}
+lme4::VarCorr(pop_lmer_0)
+```
+
+$$
+\sigma^2_{u0} = 0.83792^2 = 0.7021\\
+\sigma^2_{e}  = 1.10535^2 = 1.2218\\
+$$
+
+Calculate the ICC by hand:
+
+$$
+\rho = \frac{\sigma^2_{u0}}
+            {\sigma^2_{u0}+\sigma^2_{e}} 
+     = \frac{0.7021}
+            {0.7021+1.2218} 
+     = \frac{0.7021}
+            {1.9239}
+     = 0.3649358
+$$
+
+
+Calculate the ICC with the `icc()` fucntion in the `sjstats` package:
+
+```{r}
+sjstats::icc(pop_lmer_0)
+```
+
+> Interpretation: 36.5% of the variance of the popularity scores is at the group level, which is very high for social science data.  
+
+
+```{block type='rmdimportant', echo=TRUE}
+The ICC should be based on a Null (intercept only) model fit via REML (restricted maximum likelihood) estimation.  This is the default for the 'lme4::lmer()' function.  In chapter 2, @hox2017 presents the numbers based on fitting the model via ML (maximum likelihood) estimation and thus does not match the presentation above exactly *(not just rounding error)*.  This is probably because: (1) estimation methods (REML & ML) are not discussed until chapter 3 and (2) due to the Null model also being used for model fit comparisons in Table 2.1 on the top of page 14.
+```
+
+
+### Adding Predictors to the Model: "M1" (page 17)
+
+@hox2017 labeled this as "$M_1$" in chapter 2:
+
+**The Set of Level-Specific Model Equations:**
+
+Level 1 Model Equation *($i^{th}$ pupil in the $j^{th}$ class)*
+
+* $GEN$ = pupils's gender
+* $EXT$ = pupil's extraversion
+  
+$$
+POP_{ij} = \beta_{0j} + \beta_{1j} GEN_{ij} + \beta_{2j} EXT_{ij} + e_{ij}
+$$
+
+Level 2 Model Equation *($j^{th}$ class)*
+
+* $YRS$ = teacher's experience
+
+*no cross level interactions*    
+
+$$
+\begin{align*} 
+\beta_{0j} & = \gamma_{00} + \gamma_{01} YRS{j} + u_{0j} \\
+\beta_{1j} & = \gamma_{10} +  u_{1j} \\
+\beta_{2j} & = \gamma_{20} +  u_{2j} 
+\end{align*}
+$$
+
+
+**The Single, Multilevel Model Equation:**
+
+$$
+POP_{ij} = \gamma_{00} + \gamma_{10} GEN_{ij} + \gamma_{20} EXT_{ij} + \gamma_{01} YRS_j +
+          u_{0j} + u_{1j}  + u_{2j}  + e_{ij} 
+\tag{M1: with predictors}
+$$
+
+**Parameters:**
+
+Fixed Effects  
+
+$$ 
+\begin{align*} 
+intercept  \longrightarrow & \gamma_{00}\\
+pupil \; gender     \longrightarrow & \gamma_{10}\\
+pupil \; extravert  \longrightarrow & \gamma_{20}\\
+teacher \; experience \longrightarrow & \gamma_{01}
+\end{align*}
+$$
+
+Random Effects  
+
+*ignore covariances for now*  
+
+$$ 
+\begin{align*} 
+class (intercept)   \longrightarrow \sigma^2_{u_0 }   & = var[u_{0j}] \\
+pupil \; gender     \longrightarrow \sigma^2_{u_1}    & = var[u_{1j}] \\
+pupil \; extravert  \longrightarrow \sigma^2_{u_2}    & = var[u_{2j}] \\
+error -or- residual \longrightarrow \sigma^2_{e}      & = var[e_{ij}] 
+\end{align*}
+$$
+
+
+
+
+
+  
+
+  
+```{r, echo=TRUE}
+pop_lm <- lm(popular ~ 1, 
+             data   = pop)
+
+pop_lmer_0_ml <- lme4::lmer(popular ~ 1 + (1|class), 
+                         data   = pop,
+                         REML   = FALSE)
+
+
+pop_lmer_1_ml <- lme4::lmer(popular ~ sex + extrav + texp + (sex + extrav|class), 
+                         data   = pop,
+                         REML   = FALSE)
+```
+Reproduce Table 2.1 on the top of page 14 [@hox2017]
+
+```{r, results='asis'}
+texreg::htmlreg(list(pop_lm, 
+                       pop_lmer_0_ml, 
+                       pop_lmer_1_ml),
+                  custom.model.names = c("Single-level", 
+                                         "M0: int only", 
+                                         "M1: w pred"))
+```
 
