@@ -1301,20 +1301,52 @@ There are also many websites that offer Point-n-click interfaces to build <span 
 <h2><span class="header-section-number">1.4</span> Single-level Regression Analysis</h2>
 <div id="generic-model-notation" class="section level3">
 <h3><span class="header-section-number">1.4.1</span> Generic Model Notation</h3>
-<p><strong>Generic Level 1 Regression Equation</strong></p>
-<p>Since we are ignoring clustering, there is only one level, the pupils (Level 1)</p>
-<p><span class="math display">\[
-Y_{ij} = \beta_{0} + \beta_{1} X_{1ij} + \beta_{2} X_{2ij}  + e_{ij} 
+<p>Since we are don’t have or are ignoring clustering, there is only one level.</p>
+<div class="genericEq">
+<p>
+<strong>Single-Level Regression Equation - Generic</strong> <span class="math display"><span class="math display">\[
+\overbrace{Y_{ij}}^{\text{outcome}} = 
+         \underbrace{\beta_{0}}_{\text{fixed intercept}} + 
+         \underbrace{\beta_{1}}_{\text{fixed slope for } X_1} \overbrace{X_{1ij}}^{\text{predictor 1}} + 
+         \underbrace{\beta_{2}}_{\text{fixed slope for } X_2} \overbrace{X_{2ij}}^{\text{predictor 2}} + 
+         \underbrace{e_{ij}}_{\text{random residuals}} 
 \tag{Hox Eq 2.1}
-\]</span></p>
-<p>Parameters to Estimate:</p>
-<ul>
-<li><span class="math inline">\(\beta_0\)</span> = intercept</li>
-<li><span class="math inline">\(\beta_1\)</span> = regression coefficient <em>(regression slope)</em> for the first predictor, <span class="math inline">\(X_1\)</span></li>
-<li><p><span class="math inline">\(\beta_2\)</span> = regression coefficient <em>(regression slope)</em> for the second predictor, <span class="math inline">\(X_2\)</span></p></li>
-<li><p><span class="math inline">\(var(e_{ij})\)</span> = variance of the residuals <em>(residual variance)</em></p></li>
-</ul>
-<p>Assumptions to Check:</p>
+\]</span></span>
+</p>
+</div>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th align="left">Parameter of Interest</th>
+<th>Estimates This</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Intercept</td>
+<td><span class="math inline">\(\beta_{0}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Slope of <span class="math inline">\(X_1\)</span></td>
+<td><span class="math inline">\(\beta_{1}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Slope of <span class="math inline">\(X_2\)</span></td>
+<td><span class="math inline">\(\beta_{2}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Residual Variance <span class="math inline">\(var[e_{ij}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{e}\)</span></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Assumptions to Check</strong></p>
 <ul>
 <li>The <span class="math inline">\(e_{ij}\)</span>’s follow a normal distribution with a mean of <span class="math inline">\(0\)</span></li>
 <li>The <span class="math inline">\(e_{ij}\)</span>’s have a constant variance <em>(homoscedasticity)</em></li>
@@ -1322,15 +1354,36 @@ Y_{ij} = \beta_{0} + \beta_{1} X_{1ij} + \beta_{2} X_{2ij}  + e_{ij}
 </div>
 <div id="intercept-only-or-null-model" class="section level3">
 <h3><span class="header-section-number">1.4.2</span> Intercept-only or Null Model</h3>
-<p>Predictors: none!</p>
-<p><span class="math display">\[
-POP_{ij} = \beta_{0} + e_{ij}
-\]</span></p>
-<p>Parameters to be Estimated:</p>
-<ul>
-<li><span class="math inline">\(\beta_0\)</span> = grand average</li>
-<li><span class="math inline">\(\sigma_e^2 = var(e_{ij})\)</span> = residual variance</li>
-</ul>
+<p>In a Null or Empty model, no predictors are included</p>
+<div class="genericEq">
+<p>
+<strong>Single-Level Regression Equation - Null Model</strong> <span class="math display"><span class="math display">\[
+POP_{ij} = \overbrace{\beta_{0}}^{intercept} + \underbrace{e_{ij}}_{\text{residuals}}
+\]</span></span>
+</p>
+</div>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th align="left">Parameter of Interest</th>
+<th>Estimates This</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Intercept, Grand Mean</td>
+<td><span class="math inline">\(\beta_{0}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Residual Variance <span class="math inline">\(var[e_{ij}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{e}\)</span></td>
+</tr>
+</tbody>
+</table>
 <p><strong>Fit the model</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lm_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, 
                <span class="dt">data =</span> data_pop) </code></pre></div>

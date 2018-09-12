@@ -337,31 +337,41 @@ Indicators:
     
     
 
-    
+
 
 ## Single-level Regression Analysis
 
 ### Generic Model Notation
 
-**Generic Level 1 Regression Equation** 
 
-Since we are ignoring clustering, there is only one level, the pupils (Level 1)
 
+Since we are don't have or are ignoring clustering, there is only one level.
+
+```{block type='genericEq', echo=TRUE}
+**Single-Level Regression Equation - Generic** 
 $$
-Y_{ij} = \beta_{0} + \beta_{1} X_{1ij} + \beta_{2} X_{2ij}  + e_{ij} 
+\overbrace{Y_{ij}}^{\text{outcome}} = 
+         \underbrace{\beta_{0}}_{\text{fixed intercept}} + 
+         \underbrace{\beta_{1}}_{\text{fixed slope for } X_1} \overbrace{X_{1ij}}^{\text{predictor 1}} + 
+         \underbrace{\beta_{2}}_{\text{fixed slope for } X_2} \overbrace{X_{2ij}}^{\text{predictor 2}} + 
+         \underbrace{e_{ij}}_{\text{random residuals}} 
 \tag{Hox Eq 2.1}
 $$
-
-Parameters to Estimate:    
-
-* $\beta_0$ = intercept
-* $\beta_1$ = regression coefficient *(regression slope)* for the first predictor, $X_1$
-* $\beta_2$ = regression coefficient *(regression slope)* for the second predictor, $X_2$    
-
-* $var(e_{ij})$ = variance of the residuals *(residual variance)*
+```
 
 
-Assumptions to Check:    
+**Parameters**
+
+|  Type  | Parameter of Interest           | Estimates This |
+|--------|:--------------------------------|----------------|
+| Fixed  | Intercept                       | $\beta_{0}$    |
+| Fixed  | Slope of $X_1$                  | $\beta_{1}$    |
+| Fixed  | Slope of $X_2$                  | $\beta_{2}$    |
+| Random | Residual Variance $var[e_{ij}]$ | $\sigma^2_{e}$ |
+
+
+
+**Assumptions to Check**
 
 * The $e_{ij}$'s follow a normal distribution with a mean of $0$
 * The $e_{ij}$'s have a constant variance *(homoscedasticity)* 
@@ -371,18 +381,23 @@ Assumptions to Check:
 ### Intercept-only or Null Model
 
 
-Predictors: none!
+In a Null or Empty model, no predictors are included
 
-
+```{block type='genericEq', echo=TRUE}
+**Single-Level Regression Equation - Null Model**
 $$
-POP_{ij} = \beta_{0} + e_{ij}
+POP_{ij} = \overbrace{\beta_{0}}^{intercept} + \underbrace{e_{ij}}_{\text{residuals}}
 $$
+```
+
+**Parameters**
+
+|  Type  | Parameter of Interest           | Estimates This |
+|--------|:--------------------------------|----------------|
+| Fixed  | Intercept, Grand Mean           | $\beta_{0}$    |
+| Random | Residual Variance $var[e_{ij}]$ | $\sigma^2_{e}$ |
 
 
-Parameters to be Estimated:    
-
-* $\beta_0$ = grand average
-* $\sigma_e^2 = var(e_{ij})$  = residual variance
 
 
 **Fit the model**
