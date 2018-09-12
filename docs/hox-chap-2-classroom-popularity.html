@@ -121,10 +121,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.2.2" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#summarize-descriptive-statistics---furniture"><i class="fa fa-check"></i><b>1.2.2</b> Summarize Descriptive Statistics - <code>furniture</code></a></li>
 <li class="chapter" data-level="1.2.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#visualizations-of-raw-data"><i class="fa fa-check"></i><b>1.2.3</b> Visualizations of Raw Data</a></li>
 </ul></li>
-<li class="chapter" data-level="1.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#multilevel-regression-analysis"><i class="fa fa-check"></i><b>1.3</b> Multilevel Regression Analysis</a><ul>
-<li class="chapter" data-level="1.3.1" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#the-intercept-only-model"><i class="fa fa-check"></i><b>1.3.1</b> The Intercept Only Model</a></li>
-<li class="chapter" data-level="1.3.2" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#intraclass-correlation-icc"><i class="fa fa-check"></i><b>1.3.2</b> Intraclass Correlation (ICC)</a></li>
-<li class="chapter" data-level="1.3.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#adding-predictors-to-the-model-m1-page-17"><i class="fa fa-check"></i><b>1.3.3</b> Adding Predictors to the Model: “M1” (page 17)</a></li>
+<li class="chapter" data-level="1.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#notation-for-the-data"><i class="fa fa-check"></i><b>1.3</b> Notation for the Data</a></li>
+<li class="chapter" data-level="1.4" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#single-level-regression-analysis"><i class="fa fa-check"></i><b>1.4</b> Single-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#generic-model-notation"><i class="fa fa-check"></i><b>1.4.1</b> Generic Model Notation</a></li>
+<li class="chapter" data-level="1.4.2" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#intercept-only-or-null-model"><i class="fa fa-check"></i><b>1.4.2</b> Intercept-only or Null Model</a></li>
+<li class="chapter" data-level="1.4.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#add-predictors-to-the-model"><i class="fa fa-check"></i><b>1.4.3</b> Add Predictors to the Model</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#multi-level-regression-analysis"><i class="fa fa-check"></i><b>1.5</b> Multi-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#generic-model-notation-1"><i class="fa fa-check"></i><b>1.5.1</b> Generic Model Notation</a></li>
+<li class="chapter" data-level="1.5.2" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#intercept-only-or-null-model-1"><i class="fa fa-check"></i><b>1.5.2</b> Intercept-only or Null Model</a></li>
+<li class="chapter" data-level="1.5.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#intraclass-correlation-icc"><i class="fa fa-check"></i><b>1.5.3</b> Intraclass Correlation (ICC)</a></li>
+<li class="chapter" data-level="1.5.4" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#add-predictors-to-the-model-1"><i class="fa fa-check"></i><b>1.5.4</b> Add Predictors to the Model</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -163,7 +170,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
 <span class="kw">library</span>(lmerTest)     <span class="co"># Tests on lmer objects</span>
 <span class="kw">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for nlme &amp; lmer4</span>
-<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span></code></pre></div>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(optimx)       <span class="co"># Different optimizers to solve mlm&#39;s</span></code></pre></div>
 <div id="background" class="section level2">
 <h2><span class="header-section-number">1.1</span> Background</h2>
 <p>The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edition”</strong> <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span> has a companion <a href="https://multilevel-analysis.sites.uu.nl/">website</a> which includes links to all the data files used throughout the book (housed on the <a href="https://github.com/MultiLevelAnalysis">book’s GitHub repository</a>).</p>
@@ -171,37 +179,21 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>From <strong>Appendix E</strong>:</p>
 </blockquote>
 <p>The popularity data in <strong>popular2.sav</strong> are simulated data for <strong>2000 pupils in 100 schools</strong>. The purpose is to offer a very simple example for multilevel regression analysis. The main outcome variable is the <strong>pupil popularity</strong>, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil. Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: <strong>pupil popularity</strong> as rated by their teacher, on a scale from 1-10. The explanatory variables are <strong>pupil gender</strong> (boy=0, girl=1), <strong>pupil extraversion</strong> (10-point scale) and <strong>teacher experience</strong> in years. The popularity data have been generated to be a ‘nice’ well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.*</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span>
 
 tibble<span class="op">::</span><span class="kw">glimpse</span>(raw) </code></pre></div>
-<pre><code>Observations: 2,000
-Variables: 15
-$ pupil     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1...
-$ class     &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
-$ extrav    &lt;dbl&gt; 5, 7, 4, 3, 5, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 6, 4, 4...
-$ sex       &lt;fct&gt; girl, boy, girl, girl, girl, boy, boy, boy, boy, boy...
-$ texp      &lt;dbl&gt; 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, ...
-$ popular   &lt;dbl&gt; 6.3, 4.9, 5.3, 4.7, 6.0, 4.7, 5.9, 4.2, 5.2, 3.9, 5....
-$ popteach  &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3...
-$ Zextrav   &lt;dbl&gt; -0.1703149, 1.4140098, -0.9624772, -1.7546396, -0.17...
-$ Zsex      &lt;dbl&gt; 0.9888125, -1.0108084, 0.9888125, 0.9888125, 0.98881...
-$ Ztexp     &lt;dbl&gt; 1.48615283, 1.48615283, 1.48615283, 1.48615283, 1.48...
-$ Zpopular  &lt;dbl&gt; 0.88501327, -0.12762911, 0.16169729, -0.27229230, 0....
-$ Zpopteach &lt;dbl&gt; 0.66905609, -0.04308451, 0.66905609, -0.04308451, 0....
-$ Cextrav   &lt;dbl&gt; -0.215, 1.785, -1.215, -2.215, -0.215, -1.215, -0.21...
-$ Ctexp     &lt;dbl&gt; 9.737, 9.737, 9.737, 9.737, 9.737, 9.737, 9.737, 9.7...
-$ Csex      &lt;dbl&gt; 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0...</code></pre>
+<pre><code>function (length = 0L)  </code></pre>
 <div id="unique-identifiers" class="section level3">
 <h3><span class="header-section-number">1.1.1</span> Unique Identifiers</h3>
 <p>We will restrict ourselves to a few of the variables and create a distinct identifier variable for each student.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop &lt;-<span class="st"> </span>raw <span class="op">%&gt;%</span><span class="st">   </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st">   </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">paste</span>(class, pupil,
                            <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># create a unique id for each student (char)</span>
 <span class="st">                  </span><span class="kw">factor</span>()) <span class="op">%&gt;%</span><span class="st">             </span><span class="co"># declare id is a factor</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, pupil<span class="op">:</span>popteach)         <span class="co"># reduce the variables included</span>
 
-tibble<span class="op">::</span><span class="kw">glimpse</span>(pop)</code></pre></div>
+tibble<span class="op">::</span><span class="kw">glimpse</span>(data_pop)</code></pre></div>
 <pre><code>Observations: 2,000
 Variables: 8
 $ id       &lt;fct&gt; 1_1, 1_2, 1_3, 1_4, 1_5, 1_6, 1_7, 1_8, 1_9, 1_10, 1_...
@@ -216,7 +208,7 @@ $ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3,...<
 <div id="scope-out-the-structure-and-variables" class="section level3">
 <h3><span class="header-section-number">1.1.2</span> Scope out the structure and variables</h3>
 <p>Its a good idea to visually inspect the first few lines in the datast to get a sense of how it is organized.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop <span class="op">%&gt;%</span><span class="st">  </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st">  </span>
 <span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>(<span class="dt">top =</span> <span class="dv">25</span>, <span class="dt">bottom =</span> <span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>()</code></pre></div>
 <table style="width:94%;">
@@ -563,7 +555,7 @@ $ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3,...<
 <div id="summarize-descriptive-statistics" class="section level3">
 <h3><span class="header-section-number">1.2.1</span> Summarize Descriptive Statistics</h3>
 <p>Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as <em>Table 1</em>. The <code>stargazer()</code> function can be used to create such a table, but only for the entire dataset <span class="citation">(Hlavac <a href="references.html#ref-R-stargazer">2018</a>)</span>. I haven’t been able to find a way to get it to summarize subsamples and compare them in the standard format.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>id) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>stargazer<span class="op">::</span><span class="kw">stargazer</span>(<span class="dt">title  =</span> <span class="st">&quot;Descriptive statistics, aggregate over entire sample&quot;</span>,
@@ -772,7 +764,7 @@ popteach
 <div id="summarize-descriptive-statistics---furniture" class="section level3">
 <h3><span class="header-section-number">1.2.2</span> Summarize Descriptive Statistics - <code>furniture</code></h3>
 <p>Tyson Barrett’s <strong>furniture</strong> package includes the extremely useful function <code>table1()</code> which simplifies the common task of creating a stratified, comparative table of descriptive statistics. Full documentation can be accessed by executing <code>?furniture::table1</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">table1</span>(<span class="st">&quot;Pupil&#39;s Extraversion (10 pt)&quot;</span>  =<span class="st"> </span>extrav, 
          <span class="st">&quot;Teacher&#39;s Experience (years)&quot;</span>  =<span class="st"> </span>texp, 
          <span class="st">&quot;Popularity, Sociometric Score&quot;</span> =<span class="st"> </span>popular, 
@@ -918,7 +910,7 @@ Popularity..Teacher.Evaluated
 <p>For a first look, its useful to plot all the data points on a single scatterplot as displayed in Figure <a href="hox-chap-2-classroom-popularity.html#fig:scatter">1.1</a>. Due to ganularity in the rating scale, many points end up being plotted on top of each other (<em>overplotted</em>), so its a good idea to use <code>geom_count()</code> rather than <code>geom_point()</code> so the size of the dot can convey the number of points at that location <span class="citation">(Wickham et al. <a href="references.html#ref-R-ggplot2">2018</a>)</span>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Disaggregate: pupil (level 1) only, ignore level 2&#39;s existance</span>
 <span class="co"># Extraversion treated: continuous measure</span>
-pop <span class="op">%&gt;%</span><span class="st"> </span>
+data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,                                <span class="co"># x-axis variable</span>
       <span class="dt">y =</span> popular) <span class="op">+</span><span class="st">                             </span><span class="co"># y-axis variable</span>
@@ -940,7 +932,7 @@ Figure 1.1: Disaggregate: pupil level only with extraversion treated as an conti
 </div>
 <p>When the degree of overplotting as high as it is in Figure <a href="hox-chap-2-classroom-popularity.html#fig:scatter">1.1</a>, it can be useful to represent the data with density contours as seen in Figure <a href="hox-chap-2-classroom-popularity.html#fig:scatter2d">1.2</a>. I’ve chosen to leave the points displayed in this redition, but color them much lighter so that they are present, but do not detract from the pattern of association.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># visualize all the data - another way</span>
-pop <span class="op">%&gt;%</span><span class="st"> </span>
+data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,                                <span class="co"># x-axis variable</span>
       <span class="dt">y =</span> popular) <span class="op">+</span><span class="st">                             </span><span class="co"># y-axis variable</span>
@@ -961,7 +953,7 @@ Figure 1.2: Disaggregate: pupil level only with extraversion treated as an conti
 </div>
 <p>The argument could be made that the extraversion score should be treated as an ordinal factor instead of as a truely continuous scale since the only valid values are the whole number 1 through 10 and there is no assurance that these category assignments represent a true ratio measurement scale. However, we must keep in mind that this was an observational study, ans as such, the number of pupils assignment each level of extraversion is not equal.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># count the number of pupils in assigned each Extraversion value, 1:10</span>
-table &lt;-<span class="st"> </span>pop <span class="op">%&gt;%</span><span class="st"> </span>
+table &lt;-<span class="st"> </span>data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">group_by</span>(extrav) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">n_distinct</span>(id),
             <span class="dt">percent  =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span>count <span class="op">/</span><span class="st"> </span><span class="dv">2000</span>) 
@@ -1113,7 +1105,7 @@ percent
 <p>Figure <a href="hox-chap-2-classroom-popularity.html#fig:boxes">1.3</a> displays the same data as Figure <a href="hox-chap-2-classroom-popularity.html#fig:scatter">1.1</a>, but uses boxplots for the distribution of scores at each level of extraversion. On one extreme, the lowest extraversion score possible was a value of “one”, but only 3 pupils or 0.15% of the 2000 pupils recieved this value. On the other extreme, the middle value of “five” was applied to 688 pupils or a wopping 34.4%. The option <code>varwidth=TRUE</code> in the <code>geom_boxplot()</code> function helps reflect such unbalanced sample sizes by allowing the width of the boxes to be proportional to the square-roots of the number of observations each box represents.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Disaggregate: pupil (level 1) only, ignore level 2&#39;s existance</span>
 <span class="co"># Extraversion treated: ordinal factor</span>
-<span class="kw">ggplot</span>(pop,                             <span class="co"># dataset&#39;s name</span>
+<span class="kw">ggplot</span>(data_pop,                        <span class="co"># dataset&#39;s name</span>
        <span class="kw">aes</span>(<span class="dt">x    =</span> <span class="kw">factor</span>(extrav),       <span class="co"># x-axis values - make factor!</span>
            <span class="dt">y    =</span> popular,              <span class="co"># y-axis values</span>
            <span class="dt">fill =</span> <span class="kw">factor</span>(extrav))) <span class="op">+</span><span class="st">    </span><span class="co"># makes seperate boxes</span>
@@ -1132,7 +1124,7 @@ Figure 1.3: Disaggregate: pupil level only with extraversion treated as an ordin
 </div>
 <p>Up to this point, all investigation of this dataset has been only at the pupil level and any nesting or clustering within classes has been ignored. Plotting is a good was to start to get an idea of the class-to-class variability.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compare the first 9 classrooms becuase all of there are too many at once</span>
-pop <span class="op">%&gt;%</span><span class="st"> </span>
+data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(class <span class="op">&lt;=</span><span class="st"> </span><span class="dv">9</span>) <span class="op">%&gt;%</span><span class="st">                  </span><span class="co"># select ONLY NINE classes</span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> extrav,                         <span class="co"># x-axis values</span>
              <span class="dt">y =</span> popular)) <span class="op">+</span><span class="st">                     </span><span class="co"># y-axis values</span>
@@ -1156,7 +1148,7 @@ Figure 1.4: Illustration of the degree of class level variability in the associa
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># select specific classes by number for illustration purposes</span>
-pop <span class="op">%&gt;%</span><span class="st"> </span>
+data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(class <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">15</span>, <span class="dv">25</span>, <span class="dv">33</span>, 
                              <span class="dv">35</span>, <span class="dv">51</span>, <span class="dv">64</span>, 
                              <span class="dv">76</span>, <span class="dv">94</span>, <span class="dv">100</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -1181,7 +1173,7 @@ Figure 1.5: Illustration of the degree of class level variability in the associa
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compare all 100 classrooms via linear model for each</span>
-<span class="kw">ggplot</span>(pop,
+<span class="kw">ggplot</span>(data_pop,
        <span class="kw">aes</span>(<span class="dt">x     =</span> extrav,                      <span class="co"># x-axis values</span>
            <span class="dt">y     =</span> popular,                     <span class="co"># y-axis values</span>
            <span class="dt">group =</span> class)) <span class="op">+</span><span class="st">                     </span><span class="co"># GROUPs for LINES</span>
@@ -1206,8 +1198,8 @@ A helpful resource for choosing colors to use in plots: <a href="https://www.nce
 </p>
 </div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># compare all 100 classrooms via independent linear models</span>
-pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">texp3 =</span> <span class="kw">cut</span>(pop<span class="op">$</span>texp, 
+data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">texp3 =</span> <span class="kw">cut</span>(texp, 
                             <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">18</span>, <span class="dv">30</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;&lt; 10 yrs&quot;</span>, 
                                     <span class="st">&quot;10 - 18 yrs&quot;</span>, 
@@ -1246,28 +1238,416 @@ There are also many websites that offer Point-n-click interfaces to build <span 
 </div>
 </div>
 </div>
-<div id="multilevel-regression-analysis" class="section level2">
-<h2><span class="header-section-number">1.3</span> Multilevel Regression Analysis</h2>
-<div id="the-intercept-only-model" class="section level3">
-<h3><span class="header-section-number">1.3.1</span> The Intercept Only Model</h3>
+<div id="notation-for-the-data" class="section level2">
+<h2><span class="header-section-number">1.3</span> Notation for the Data</h2>
+<p>Sample Sizes:</p>
+<ul>
+<li><span class="math inline">\(n_j\)</span> = number of pupils in class <span class="math inline">\(j\)</span></li>
+<li><span class="math inline">\(N\)</span> = number of classes</li>
+</ul>
+<p>Indicators:</p>
+<ul>
+<li><span class="math inline">\(i \in (1, 2, \dots, n_j)\)</span> = index for pupil number</li>
+<li><span class="math inline">\(j \in (1, 2, \dots, N)\)</span> = index for class number</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Type of Variable</th>
+<th>Name in Data</th>
+<th>Name in EQ</th>
+<th>Symbol</th>
+<th>pupil <span class="math inline">\(i\)</span> in class <span class="math inline">\(j\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Outcome (Dependent)</td>
+<td><code>popular</code></td>
+<td><span class="math inline">\(POP\)</span></td>
+<td><span class="math inline">\(Y\)</span></td>
+<td><span class="math inline">\(Y_{ij}\)</span></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Predictor (Independent)</td>
+<td><code>sex</code></td>
+<td><span class="math inline">\(GEN\)</span></td>
+<td><span class="math inline">\(X_1\)</span></td>
+<td><span class="math inline">\(X_{1ij}\)</span></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>Predictor (Independent)</td>
+<td><code>extrav</code></td>
+<td><span class="math inline">\(EXT\)</span></td>
+<td><span class="math inline">\(X_2\)</span></td>
+<td><span class="math inline">\(X_{2ij}\)</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Predictor (Independent)</td>
+<td><code>texp</code></td>
+<td><span class="math inline">\(YRS\)</span></td>
+<td><span class="math inline">\(Z\)</span></td>
+<td><span class="math inline">\(Z_j\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="single-level-regression-analysis" class="section level2">
+<h2><span class="header-section-number">1.4</span> Single-level Regression Analysis</h2>
+<div id="generic-model-notation" class="section level3">
+<h3><span class="header-section-number">1.4.1</span> Generic Model Notation</h3>
+<p><strong>Generic Level 1 Regression Equation</strong></p>
+<p>Since we are ignoring clustering, there is only one level, the pupils (Level 1)</p>
+<p><span class="math display">\[
+Y_{ij} = \beta_{0} + \beta_{1} X_{1ij} + \beta_{2} X_{2ij}  + e_{ij} 
+\tag{Hox Eq 2.1}
+\]</span></p>
+<p>Parameters to Estimate:</p>
+<ul>
+<li><span class="math inline">\(\beta_0\)</span> = intercept</li>
+<li><span class="math inline">\(\beta_1\)</span> = regression coefficient <em>(regression slope)</em> for the first predictor, <span class="math inline">\(X_1\)</span></li>
+<li><p><span class="math inline">\(\beta_2\)</span> = regression coefficient <em>(regression slope)</em> for the second predictor, <span class="math inline">\(X_2\)</span></p></li>
+<li><p><span class="math inline">\(var(e_{ij})\)</span> = variance of the residuals <em>(residual variance)</em></p></li>
+</ul>
+<p>Assumptions to Check:</p>
+<ul>
+<li>The <span class="math inline">\(e_{ij}\)</span>’s follow a normal distribution with a mean of <span class="math inline">\(0\)</span></li>
+<li>The <span class="math inline">\(e_{ij}\)</span>’s have a constant variance <em>(homoscedasticity)</em></li>
+</ul>
+</div>
+<div id="intercept-only-or-null-model" class="section level3">
+<h3><span class="header-section-number">1.4.2</span> Intercept-only or Null Model</h3>
+<p>Predictors: none!</p>
+<p><span class="math display">\[
+POP_{ij} = \beta_{0} + e_{ij}
+\]</span></p>
+<p>Parameters to be Estimated:</p>
+<ul>
+<li><span class="math inline">\(\beta_0\)</span> = grand average</li>
+<li><span class="math inline">\(\sigma_e^2 = var(e_{ij})\)</span> = residual variance</li>
+</ul>
+<p><strong>Fit the model</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lm_<span class="dv">0</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, 
+               <span class="dt">data =</span> data_pop) </code></pre></div>
+<p><strong>View the summary information</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(pop_lm_<span class="dv">0</span>)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = popular ~ 1, data = data_pop)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-5.0765 -0.9765  0.0235  0.9236  4.4235 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  5.07645    0.03091   164.2   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.383 on 1999 degrees of freedom</code></pre>
 <blockquote>
-<p>“The intercept-only model is useful as a null-model that serves as a benchmark with which other models are compared.” <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>, page 13</p>
+<p><span class="math inline">\(\hat{\beta_0}\)</span> = 5.08 is the grand mean</p>
 </blockquote>
-<p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled this as “<span class="math inline">\(M_0\)</span>” in chapter 2:</p>
+<p><strong>Extract the residual variance</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sigma</span>(pop_lm_<span class="dv">0</span>)    <span class="co"># standard deviation of the residuals</span></code></pre></div>
+<pre><code>[1] 1.382522</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sigma</span>(pop_lm_<span class="dv">0</span>)<span class="op">^</span><span class="dv">2</span>  <span class="co"># variance of the residuals</span></code></pre></div>
+<pre><code>[1] 1.911366</code></pre>
+<blockquote>
+<p><span class="math inline">\(\hat{\sigma_e^2}\)</span> = 1.9114 is residual variance (<code>RMSE</code> is sigma)</p>
+</blockquote>
+<p><strong>Assess model fit</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(pop_lm_<span class="dv">0</span>)<span class="op">$</span>r.squared</code></pre></div>
+<pre><code>[1] 0</code></pre>
+<blockquote>
+<p><span class="math inline">\(R^2\)</span> = 0 is the proportion of variance in popularity that is explained by the grand mean alone.</p>
+</blockquote>
+<p><strong>Interpretation</strong></p>
+<blockquote>
+<p>The grand average popularity of all pupils in all the classes is 5.08, and there is strong evidence that it is statistically significantly different than zero, <span class="math inline">\(p&lt;.0001\)</span>. The mean alone accounts for none of the variance in popularity. The residual variance is the same as the total variance in popularity, 1.9114.</p>
+</blockquote>
+<p>Just to make sure…</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(data_pop<span class="op">$</span>popular)</code></pre></div>
+<pre><code>[1] 5.07645</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(data_pop<span class="op">$</span>popular)</code></pre></div>
+<pre><code>[1] 1.911366</code></pre>
+</div>
+<div id="add-predictors-to-the-model" class="section level3">
+<h3><span class="header-section-number">1.4.3</span> Add Predictors to the Model</h3>
+<p>Predictors at the Pupil Level:</p>
+<ul>
+<li><span class="math inline">\(X_1 = GEN\)</span> = pupils’s gender, <em>(girl vs. boy)</em></li>
+<li><span class="math inline">\(X_2 = EXT\)</span> = pupil’s extraversion, <em>(scale: 1-10)</em></li>
+</ul>
+<p><span class="math display">\[
+POP_{ij} = \beta_{0} + \beta_{1} GEN_{ij} + \beta_{2} EXT_{ij}  + e_{ij}
+\tag{Hox Eq 2.2}
+\]</span></p>
+<p>Parameters to be Estimated:</p>
+<ul>
+<li><span class="math inline">\(\beta_0\)</span> = mean for pupils with <span class="math inline">\(GEN =\)</span> <code>boy</code> <em>(the reference category)</em> and <span class="math inline">\(EXT = 0\)</span> <em>(not even a possible score)</em></li>
+<li><span class="math inline">\(\beta_1\)</span> = mean difference in <span class="math inline">\(POP\)</span> for girls vs. boys with the same <span class="math inline">\(EXT\)</span> score</li>
+<li><span class="math inline">\(\beta_2\)</span> = mean difference in <span class="math inline">\(POP\)</span> for a 1-point higher <span class="math inline">\(EXT\)</span> but the same gender</li>
+<li><span class="math inline">\(\sigma_e^2 = var(e_{ij})\)</span> = residual variance</li>
+</ul>
+<p><strong>Fit the model</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lm_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(popular <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>extrav, 
+               <span class="dt">data =</span> data_pop) </code></pre></div>
+<p><strong>View the summary information</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(pop_lm_<span class="dv">1</span>)</code></pre></div>
+<pre><code>
+Call:
+lm(formula = popular ~ sex + extrav, data = data_pop)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.2527 -0.6652 -0.0454  0.7422  3.0473 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  2.78954    0.10355   26.94   &lt;2e-16 ***
+sexgirl      1.50508    0.04836   31.12   &lt;2e-16 ***
+extrav       0.29263    0.01916   15.28   &lt;2e-16 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 1.077 on 1997 degrees of freedom
+Multiple R-squared:  0.3938,    Adjusted R-squared:  0.3932 
+F-statistic: 648.6 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
+<blockquote>
+<p><span class="math inline">\(\hat{\beta_0}\)</span> = 2.79 is the extrapolated mean for boys with an extroversion score of 0.<br />
+<span class="math inline">\(\hat{\beta_1}\)</span> = 1.51 is the mean difference between girls and boys with the same extroversion score.<br />
+<span class="math inline">\(\hat{\beta_2}\)</span> = 0.29 is the mean difference for pupils of the same gender that differ in extroversion by one point.</p>
+</blockquote>
+<p><strong>Extract the residual variance</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sigma</span>(pop_lm_<span class="dv">1</span>)    <span class="co"># standard deviation of the residuals</span></code></pre></div>
+<pre><code>[1] 1.076985</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sigma</span>(pop_lm_<span class="dv">1</span>)<span class="op">^</span><span class="dv">2</span>  <span class="co"># variance of the residuals</span></code></pre></div>
+<pre><code>[1] 1.159898</code></pre>
+<blockquote>
+<p><span class="math inline">\(\hat{\sigma_e^2}\)</span> = 1.1599 is residual variance (<code>RMSE</code> is sigma)</p>
+</blockquote>
+<p><strong>Assess model fit</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(pop_lm_<span class="dv">1</span>)<span class="op">$</span>r.squared</code></pre></div>
+<pre><code>[1] 0.393765</code></pre>
+<blockquote>
+<p><span class="math inline">\(R^2\)</span> = 0.394 is the proportion of variance in popularity that is explained by tha pupils gender and extroversion score.</p>
+</blockquote>
+<p><strong>Interpretation</strong></p>
+<blockquote>
+<p>On average, girls were rated 1.51 points more popular than boys with the same extroversion score, <span class="math inline">\(p&lt;.0001\)</span>. One point higher extroversion scores were associated with 0.29 points higher popularity, within each gender, <span class="math inline">\(p&lt;.0001\)</span>. Together, these two factors account for 39.38% of the variance in populartiy.</p>
+</blockquote>
+<p>Table to compare the two models:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lm_<span class="dv">0</span>, pop_lm_<span class="dv">1</span>),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Null Model&quot;</span>,
+                                       <span class="st">&quot;With Predictors&quot;</span>),
+                <span class="dt">caption =</span> <span class="st">&quot;Single Level Models&quot;</span>,
+                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+Single Level Models
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Null Model</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>With Predictors</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+5.0764 (0.0309)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+2.7895 (0.1036)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+sexgirl
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+1.5051 (0.0484)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+extrav
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.2926 (0.0192)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+R<sup style="vertical-align: 0px;">2</sup>
+</td>
+<td style="border-top: 1px solid black;">
+0.0000
+</td>
+<td style="border-top: 1px solid black;">
+0.3938
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Adj. R<sup style="vertical-align: 0px;">2</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0000
+</td>
+<td style="padding-right: 12px; border: none;">
+0.3932
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+RMSE
+</td>
+<td style="border-bottom: 2px solid black;">
+1.3825
+</td>
+<td style="border-bottom: 2px solid black;">
+1.0770
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="4">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="multi-level-regression-analysis" class="section level2">
+<h2><span class="header-section-number">1.5</span> Multi-level Regression Analysis</h2>
+<div id="generic-model-notation-1" class="section level3">
+<h3><span class="header-section-number">1.5.1</span> Generic Model Notation</h3>
+<p><strong>Generic Level 1 Regression Equation</strong></p>
+<p>Continue taking into account fixed slopes for two Level 1 variables, <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>. <span class="math display">\[
+Y_{ij} = \beta_{0j} + \beta_{1j} X_{1ij} + \beta_{2j} X_{2ij}  + e_{ij} 
+\tag{Hox Eq 2.1}
+\]</span></p>
+<p><strong>Generic Level 2 Regression Equations</strong></p>
+<p>Now we take clustering into account and include random intercepts (<span class="math inline">\(\beta_{0j}\)</span>) and slopes (<span class="math inline">\(\beta_{1j}, \beta_{2j}\)</span>), as well as including a single Level 2 variable, <span class="math inline">\(Z\)</span> that is predictive fo the random inntercetps and slopes.</p>
+<p>Random Intercepts Equation: <span class="math display">\[
+\beta_{0j} = \gamma_{00} + \gamma_{01} Z_{j} + u_{0j} 
+\tag{Hox Eq 2.3}
+\]</span></p>
+<p>Random Slopes Equations: <span class="math display">\[
+\beta_{1j} = \gamma_{10} + \gamma_{11} Z_{j} + u_{1j} \\
+\beta_{2j} = \gamma_{20} + \gamma_{21} Z_{j} + u_{2j} 
+\tag{Hox Eq 2.4}
+\]</span></p>
+<p><strong>Generic Multilevel Regression Equation</strong></p>
+<p>Start with Level 1 equation (2.1) and allow the <span class="math inline">\(\beta\)</span>’s to be varry for each class. <span class="math display">\[
+Y_{ij} = \underbrace{\beta_{0j}}_{Random \; Intercept} + 
+         \underbrace{\beta_{1j}}_{Random \; Slope \; for \; X_1} X_{1ij} + 
+         \underbrace{\beta_{2j}}_{Random \; Slope \; for \; X_2} X_{2ij} + e_{ij} 
+\]</span></p>
+<p>Plug in the level 2 equations (2.3 and 2.4) into the level 1 equation (2.1) to make the combined equation. <span class="math display">\[
+Y_{ij} = \overbrace{(\gamma_{00} + \gamma_{01} Z_{j} + u_{0j})}^{\beta_{0j}} + 
+         \overbrace{(\gamma_{10} + \gamma_{11} Z_{j} + u_{1j})}^{\beta_{1j}} X_{1ij} + 
+         \overbrace{(\gamma_{20} + \gamma_{21} Z_{j} + u_{2j})}^{\beta_{2j}} X_{2ij} + e_{ij} 
+\]</span></p>
+<p>Use the distributive property of multiplication to get rid of the parentheses. <span class="math display">\[
+Y_{ij} = \overbrace{\gamma_{00}         +  \gamma_{01} Z_{j}         + u_{0j}}^{\beta_{0j}} + 
+         \overbrace{\gamma_{10} X_{1ij} +  \gamma_{11} Z_{j} X_{1ij} + u_{1j} X_{1ij}}^{\beta_{1j} \times X_{1ij}}  +
+         \overbrace{\gamma_{20} X_{2ij} + \gamma_{21} Z_{j} X_{2ij} + u_{2j} X_{2ij}}^{\beta_{2j} \times X_{2ij}}  +
+         e_{ij} 
+\]</span></p>
+<p>Collect ‘like-terms’ (i.e. get the <span class="math inline">\(\gamma\)</span>’s together and the <span class="math inline">\(u\)</span>’s together)</p>
+<p><span class="math display">\[
+\begin{align*} 
+Y_{ij} =&amp;  \overbrace{\gamma_{00} + 
+                      \gamma_{10} X_{1ij} + 
+                      \gamma_{20} X_{2ij} + 
+                      \gamma_{01} Z_{j} + 
+                      \gamma_{11} Z_{j} X_{1ij} +  
+                      \gamma_{21} Z_{j} X_{2ij}}^{FIXED \; i.e. \; deterministic \; part} + \\
+        &amp; \underbrace{u_{0j} + u_{1j} X_{1ij} + u_{2j} X_{2ij} + e_{ij} }_{RANDOM \; i.e. \; stochastic \; part}
+\end{align*} 
+\tag{Hox Eq 2.5}
+\]</span></p>
+<p>Parameters to Estimate:</p>
+<ul>
+<li><span class="math inline">\(\gamma_{00}\)</span> = fixed intercept</li>
+<li><span class="math inline">\(\gamma_{10}\)</span> = fixed slope for the first level 1 predictor, <span class="math inline">\(X_1\)</span></li>
+<li><span class="math inline">\(\gamma_{20}\)</span> = fixed slope for the second level 1 predictor, <span class="math inline">\(X_2\)</span><br />
+</li>
+<li><p><span class="math inline">\(\gamma_{01}\)</span> = fixed slope for the only level 2 predictor, <span class="math inline">\(Z\)</span></p></li>
+<li><span class="math inline">\(\gamma_{11}\)</span> = cross-level interaction, <span class="math inline">\(X_1 \times Z\)</span></li>
+<li><p><span class="math inline">\(\gamma_{21}\)</span> = cross-level interaction, <span class="math inline">\(X_2 \times Z\)</span></p></li>
+<li><span class="math inline">\(var(u_{0j})\)</span> = variance of random intercepts</li>
+<li><span class="math inline">\(var(u_{1j})\)</span> = variance of random slope of the first level 1 predictor, <span class="math inline">\(X_1\)</span></li>
+<li><p><span class="math inline">\(var(u_{2j})\)</span> = variance of random slope of the second level 1 predictor, <span class="math inline">\(X_2\)</span></p></li>
+<li><span class="math inline">\(cov(u_{0j},u_{1j})\)</span> = covariance between the random intercetps and random effect of <span class="math inline">\(X_1\)</span></li>
+<li><span class="math inline">\(cov(u_{0j},u_{2j})\)</span> = covariance between the random intercetps and random effect of <span class="math inline">\(X_2\)</span></li>
+<li><p><span class="math inline">\(cov(u_{1j},u_{2j})\)</span> = covariance between the random effect of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span></p></li>
+<li><p><span class="math inline">\(var(e_{ij})\)</span> = variance of the residuals <em>(residual variance)</em></p></li>
+</ul>
+<p>Assumptions to Check:</p>
+<ul>
+<li>The <span class="math inline">\(e_{ij}\)</span>’s follow a normal distribution with a mean of <span class="math inline">\(0\)</span></li>
+<li>The <span class="math inline">\(e_{ij}\)</span>’s have a constant variance <em>(homoscedasticity)</em></li>
+</ul>
+<div class="rmdimportant">
+<p>
+The <span class="math inline"><span class="math inline">\(u_{1j}\)</span></span> and <span class="math inline"><span class="math inline">\(u_{2j}\)</span></span> terms allow for <strong>heteroscedasticity</strong> by fitting different error terms for different values of <span class="math inline"><span class="math inline">\(X_1\)</span></span> and <span class="math inline"><span class="math inline">\(X_2\)</span></span>. The HOV assumption is that AFTER accounting for this, the remaining residuals are HOV.
+</p>
+</div>
+</div>
+<div id="intercept-only-or-null-model-1" class="section level3">
+<h3><span class="header-section-number">1.5.2</span> Intercept-only or Null Model</h3>
+<div class="rmdlightbulb">
+<p>
+“The intercept-only model is useful as a null-model that serves as a benchmark with which other models are compared.” <span class="citation"><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span></span>, page 13
+</p>
+</div>
 <p><strong>The Set of Level-Specific Model Equations:</strong></p>
 <p>Level 1 Model Equation <em>(<span class="math inline">\(i^{th}\)</span> pupil in the <span class="math inline">\(j^{th}\)</span> class)</em></p>
 <p><span class="math display">\[
-Y_{ij} = B_{0} + e_{ij}
+Y_{ij} = \beta_{0j} + e_{ij}
 \tag{Hox Eq 2.6}
 \]</span></p>
 <p>Level 2 Model Equation <em>(<span class="math inline">\(j^{th}\)</span> class)</em></p>
-<p><span class="math display">\[
-B_{0} = \gamma_{00} + u_{0j}
+<p>Random Intercepts Only: <span class="math display">\[
+\beta_{0j} = \gamma_{00} + u_{0j}
 \tag{Hox Eq 2.7}
 \]</span></p>
 <p><strong>The Single, Multilevel Model Equation:</strong> <span class="math display">\[ 
-POP_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
-\tag{M0: intercept only}
+Y_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
+\tag{Hox 2.8}
 \]</span></p>
 <p><strong>Parameters:</strong></p>
 <p>Fixed Effects</p>
@@ -1278,16 +1658,30 @@ intercept \longrightarrow \gamma_{00}
 <p><span class="math display">\[
 \begin{align*} 
 class (intercept) \longrightarrow \sigma^2_{u_0}  &amp; = var[u_{0j}] \\
-error -or- residual \longrightarrow \sigma^2_{e}   &amp; = var[e_{ij}] \\
+residual \longrightarrow \sigma^2_{e}   &amp; = var[e_{ij}] \\
 \end{align*}
 \]</span></p>
+<blockquote>
+<p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled the Null model for this dataset “<span class="math inline">\(M_0\)</span>” in chapter 2:</p>
+</blockquote>
+<p>Predictors: none!</p>
+<p><span class="math display">\[ 
+POP_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
+\tag{M0: intercept only}
+\]</span></p>
+<p>Parameters to be Estimated:</p>
+<ul>
+<li><span class="math inline">\(\gamma_{00}\)</span> = intercept</li>
+<li><span class="math inline">\(\sigma^2_{u_0}\)</span> = var(u_{0j}) = variance between classes</li>
+<li><span class="math inline">\(\sigma_e^2 = var(e_{ij})\)</span> = residual variance</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_<span class="dv">0</span> &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class), 
-                         <span class="dt">data   =</span> pop)
+                         <span class="dt">data =</span> data_pop)
 
 <span class="kw">summary</span>(pop_lmer_<span class="dv">0</span>)</code></pre></div>
 <pre><code>Linear mixed model fit by REML [&#39;lmerMod&#39;]
 Formula: popular ~ 1 + (1 | class)
-   Data: pop
+   Data: data_pop
 
 REML criterion at convergence: 6330.5
 
@@ -1307,15 +1701,17 @@ Fixed effects:
 <p>The entire population of all students in all classes has a grand-average of 5.0779 and the individual classes have popularity averages that vary around that.</p>
 </div>
 <div id="intraclass-correlation-icc" class="section level3">
-<h3><span class="header-section-number">1.3.2</span> Intraclass Correlation (ICC)</h3>
+<h3><span class="header-section-number">1.5.3</span> Intraclass Correlation (ICC)</h3>
 <p>Although the Null model above does not explain any variance in the dependent variable <em>(popularity)</em>, since there are no independent variables, it does decompose (i.e. divide up) the variance into two pieces. We can compute the amount of total variance in popularity that is attribute to the clustering of students in classes verses the residual variance.</p>
 <p><span class="math display">\[
 \rho = \frac{\sigma^2_{u0}}{\sigma^2_{u0}+\sigma^2_{e}}
 \tag{Hox Eq 2.9}
 \]</span></p>
-<blockquote>
-<p>Note: the <code>VarCorr()</code> function in the <code>lme4</code> package returns the standard deviations, not the variances (<span class="math inline">\(var = SD^2\)</span>) for a model fit via the <code>lme4::lmer()</code> function. The <code>summary()</code> function reports both the variances and the stadard deviations.</p>
-</blockquote>
+<div class="rmdlightbulb">
+<p>
+The <code>VarCorr()</code> function in the <code>lme4</code> package returns the standard deviations, not the variances (<span class="math inline"><span class="math inline">\(var = SD^2\)</span></span>) for a model fit via the <code>lme4::lmer()</code> function. The <code>summary()</code> function reports both the variances and the stadard deviations.
+</p>
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lme4<span class="op">::</span><span class="kw">VarCorr</span>(pop_lmer_<span class="dv">0</span>)</code></pre></div>
 <pre><code> Groups   Name        Std.Dev.
  class    (Intercept) 0.83792 
@@ -1352,23 +1748,27 @@ The ICC should be based on a Null (intercept only) model fit via REML (restricte
 </p>
 </div>
 </div>
-<div id="adding-predictors-to-the-model-m1-page-17" class="section level3">
-<h3><span class="header-section-number">1.3.3</span> Adding Predictors to the Model: “M1” (page 17)</h3>
-<p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled this as “<span class="math inline">\(M_1\)</span>” in chapter 2:</p>
+<div id="add-predictors-to-the-model-1" class="section level3">
+<h3><span class="header-section-number">1.5.4</span> Add Predictors to the Model</h3>
+<blockquote>
+<p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled this as “<span class="math inline">\(M_1\)</span>” in chapter 2 for their Table 2.1 on page 14, but adjusted it for Tables 2.2 &amp; 2.3 on pages 15 and 17.</p>
+</blockquote>
+<p>Predictors at the Pupil Level:</p>
+<ul>
+<li><span class="math inline">\(X_1 = GEN\)</span> = pupils’s gender, <em>(girl vs. boy)</em></li>
+<li><span class="math inline">\(X_2 = EXT\)</span> = pupil’s extraversion, <em>(scale: 1-10 points)</em></li>
+</ul>
+<p>Predictors at the Class Level:</p>
+<ul>
+<li><span class="math inline">\(Z = YRS\)</span> = teacher’s experience <em>(range of 2-25 years)</em></li>
+</ul>
 <p><strong>The Set of Level-Specific Model Equations:</strong></p>
 <p>Level 1 Model Equation <em>(<span class="math inline">\(i^{th}\)</span> pupil in the <span class="math inline">\(j^{th}\)</span> class)</em></p>
-<ul>
-<li><span class="math inline">\(GEN\)</span> = pupils’s gender</li>
-<li><span class="math inline">\(EXT\)</span> = pupil’s extraversion</li>
-</ul>
 <p><span class="math display">\[
 POP_{ij} = \beta_{0j} + \beta_{1j} GEN_{ij} + \beta_{2j} EXT_{ij} + e_{ij}
 \]</span></p>
 <p>Level 2 Model Equation <em>(<span class="math inline">\(j^{th}\)</span> class)</em></p>
-<ul>
-<li><span class="math inline">\(YRS\)</span> = teacher’s experience</li>
-</ul>
-<p><em>no cross level interactions</em></p>
+<p><strong>Include a random intercepts and slopes (<span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>), but NO cross level interactions</strong></p>
 <p><span class="math display">\[
 \begin{align*} 
 \beta_{0j} &amp; = \gamma_{00} + \gamma_{01} YRS{j} + u_{0j} \\
@@ -1392,38 +1792,47 @@ pupil \; extravert  \longrightarrow &amp; \gamma_{20}\\
 teacher \; experience \longrightarrow &amp; \gamma_{01}
 \end{align*}
 \]</span></p>
-<p>Random Effects</p>
-<p><em>ignore covariances for now</em></p>
+<p>Random Effects <em>(ignore covariances for now)</em></p>
 <p><span class="math display">\[ 
 \begin{align*} 
-class (intercept)   \longrightarrow \sigma^2_{u_0 }   &amp; = var[u_{0j}] \\
-pupil \; gender     \longrightarrow \sigma^2_{u_1}    &amp; = var[u_{1j}] \\
-pupil \; extravert  \longrightarrow \sigma^2_{u_2}    &amp; = var[u_{2j}] \\
-error -or- residual \longrightarrow \sigma^2_{e}      &amp; = var[e_{ij}] 
+intercept                            \longrightarrow \sigma^2_{u_0 }   &amp; = var[u_{0j}] \\
+slope \; for \; pupil \; gender      \longrightarrow \sigma^2_{u_1}    &amp; = var[u_{1j}] \\
+slope \; for \; pupil \; extravert   \longrightarrow \sigma^2_{u_2}    &amp; = var[u_{2j}] \\
+residual                             \longrightarrow \sigma^2_{e}      &amp; = var[e_{ij}] 
 \end{align*}
 \]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lm &lt;-<span class="st"> </span><span class="kw">lm</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span>, 
-             <span class="dt">data   =</span> pop)
-
-pop_lmer_0_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class), 
-                         <span class="dt">data   =</span> pop,
-                         <span class="dt">REML   =</span> <span class="ot">FALSE</span>)
+<div class="rmdlink">
+<p>
+Troubleshooting <code>lme4</code> Linear Mixed-Effects Models <a href="https://rdrr.io/cran/lme4/man/troubleshooting.html">website</a>. This website attempts to summarize some of the common problems with fitting lmer models and how to troubleshoot them.
+</p>
+<p>
+This is a helpful <a href="https://stats.stackexchange.com/questions/242109/model-failed-to-converge-warning-in-lmer">post on Stack Exchange</a> regarding using differen t optimizers to get the <code>lme4::lmer()</code> function to converge.
+</p>
+<p>
+Note: Convergence issues MAY signify problems in the model specification.
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_0_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class), 
+                            <span class="dt">data   =</span> data_pop,
+                            <span class="dt">REML   =</span> <span class="ot">FALSE</span>)
 
 
 pop_lmer_1_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>texp <span class="op">+</span><span class="st"> </span>(sex <span class="op">+</span><span class="st"> </span>extrav<span class="op">|</span>class), 
-                         <span class="dt">data   =</span> pop,
-                         <span class="dt">REML   =</span> <span class="ot">FALSE</span>)</code></pre></div>
+                            <span class="dt">data   =</span> data_pop,
+                            <span class="dt">REML   =</span> <span class="ot">FALSE</span>,
+                            <span class="dt">control =</span> <span class="kw">lmerControl</span>(<span class="dt">optimizer =</span><span class="st">&quot;Nelder_Mead&quot;</span>))</code></pre></div>
 <p>Reproduce Table 2.1 on the top of page 14 <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lm, 
-                       pop_lmer_0_ml, 
-                       pop_lmer_1_ml),
-                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Single-level&quot;</span>, 
-                                         <span class="st">&quot;M0: int only&quot;</span>, 
-                                         <span class="st">&quot;M1: w pred&quot;</span>))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lm_<span class="dv">0</span>, 
+                     pop_lmer_0_ml, 
+                     pop_lmer_1_ml),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Single-level&quot;</span>, 
+                                       <span class="st">&quot;M0: int only&quot;</span>, 
+                                       <span class="st">&quot;M1: w pred&quot;</span>),
+                <span class="dt">caption =</span> <span class="st">&quot;Hox Table 2.1 on the top of page 14&quot;</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">
-Statistical models
+Hox Table 2.1 on the top of page 14
 </caption>
 <tr>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
@@ -1450,7 +1859,7 @@ Statistical models
 5.08<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.75<sup style="vertical-align: 0px;">***</sup>
+0.76<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -1595,7 +2004,7 @@ AIC
 6333.47
 </td>
 <td style="padding-right: 12px; border: none;">
-4834.53
+4833.29
 </td>
 </tr>
 <tr>
@@ -1608,7 +2017,7 @@ BIC
 6350.27
 </td>
 <td style="padding-right: 12px; border: none;">
-4896.14
+4894.90
 </td>
 </tr>
 <tr>
@@ -1621,7 +2030,7 @@ Log Likelihood
 -3163.73
 </td>
 <td style="padding-right: 12px; border: none;">
--2406.27
+-2405.64
 </td>
 </tr>
 <tr>
@@ -1647,7 +2056,7 @@ Var: class (Intercept)
 0.69
 </td>
 <td style="padding-right: 12px; border: none;">
-1.30
+1.32
 </td>
 </tr>
 <tr>
@@ -1696,7 +2105,7 @@ Cov: class (Intercept) sexgirl
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.03
+-0.02
 </td>
 </tr>
 <tr>
@@ -1708,7 +2117,7 @@ Cov: class (Intercept) extrav
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.18
+-0.19
 </td>
 </tr>
 <tr>
@@ -1720,7 +2129,7 @@ Cov: class sexgirl extrav
 <td style="border-bottom: 2px solid black;">
 </td>
 <td style="border-bottom: 2px solid black;">
-0.00
+-0.00
 </td>
 </tr>
 <tr>
