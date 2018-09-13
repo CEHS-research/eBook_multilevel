@@ -350,11 +350,11 @@ Since we are don't have or are ignoring clustering, there is only one level.
 ```{block type='genericEq', echo=TRUE}
 **Single-Level Regression Equation - Generic** 
 $$
-\overbrace{Y_{ij}}^{\text{outcome}} = 
-         \underbrace{\beta_{0}}_{\text{fixed intercept}} + 
-         \underbrace{\beta_{1}}_{\text{fixed slope for } X_1} \overbrace{X_{1ij}}^{\text{predictor 1}} + 
-         \underbrace{\beta_{2}}_{\text{fixed slope for } X_2} \overbrace{X_{2ij}}^{\text{predictor 2}} + 
-         \underbrace{e_{ij}}_{\text{random residuals}} 
+\overbrace{Y_{ij}}^{Outcome} = 
+         \underbrace{\beta_{0}}_{\text{Fixed}\atop\text{intercept}}  + 
+         \underbrace{\beta_{1}}_{\text{Fixed}\atop\text{slope}} \overbrace{X_{1ij}}^{\text{Predictor 1}}  + 
+         \underbrace{\beta_{2}}_{\text{Fixed}\atop\text{slope}} \overbrace{X_{2ij}}^{\text{Predictor 2}} + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
 \tag{Hox Eq 2.1}
 $$
 ```
@@ -365,8 +365,8 @@ $$
 |  Type  | Parameter of Interest           | Estimates This |
 |--------|:--------------------------------|----------------|
 | Fixed  | Intercept                       | $\beta_{0}$    |
-| Fixed  | Slope of $X_1$                  | $\beta_{1}$    |
-| Fixed  | Slope of $X_2$                  | $\beta_{2}$    |
+| Fixed  | Slope or effect of $X_1$        | $\beta_{1}$    |
+| Fixed  | Slope or effect of $X_2$        | $\beta_{2}$    |
 | Random | Residual Variance $var[e_{ij}]$ | $\sigma^2_{e}$ |
 
 
@@ -386,7 +386,9 @@ In a Null or Empty model, no predictors are included
 ```{block type='genericEq', echo=TRUE}
 **Single-Level Regression Equation - Null Model**
 $$
-POP_{ij} = \overbrace{\beta_{0}}^{intercept} + \underbrace{e_{ij}}_{\text{residuals}}
+\overbrace{POP_{ij}}^{Outcome} = 
+         \underbrace{\beta_{0}}_{\text{Fixed}\atop\text{intercept}}  + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
 $$
 ```
 
@@ -394,10 +396,8 @@ $$
 
 |  Type  | Parameter of Interest           | Estimates This |
 |--------|:--------------------------------|----------------|
-| Fixed  | Intercept, Grand Mean           | $\beta_{0}$    |
+| Fixed  | Intercept                       | $\beta_{0}$    |
 | Random | Residual Variance $var[e_{ij}]$ | $\sigma^2_{e}$ |
-
-
 
 
 **Fit the model**
@@ -429,6 +429,7 @@ summary(pop_lm_0)$r.squared
 > $R^2$ = `r 0` is the proportion of variance in popularity that is explained by the grand mean alone.
 
 
+
 **Interpretation**
 
 > The grand average popularity of all pupils in all the classes is `r coef(pop_lm_0) %>% round(2)`, and there is strong evidence that it is statistically significantly different than zero, $p<.0001$.  The mean alone accounts for none of the variance in popularity.  The residual variance is the same as the total variance in popularity, `r sigma(pop_lm_0)^2 %>% round(4)`.
@@ -449,20 +450,27 @@ Predictors at the Pupil Level:
 * $X_1 = GEN$ = pupils's gender, *(girl vs. boy)*
 * $X_2 = EXT$ = pupil's extraversion, *(scale: 1-10)*
 
-
+```{block type='genericEq', echo=TRUE}
+**Single-Level Regression Equation - Generic** 
 $$
-POP_{ij} = \beta_{0} + \beta_{1} GEN_{ij} + \beta_{2} EXT_{ij}  + e_{ij}
-\tag{Hox Eq 2.2}
+\overbrace{POP_{ij}}^{Outcome} = 
+         \underbrace{\beta_{0}}_{\text{Fixed}\atop\text{intercept}}  + 
+         \underbrace{\beta_{1}}_{\text{Fixed}\atop\text{slope}} \overbrace{GEN_{ij}}^{\text{Predictor 1}}  + 
+         \underbrace{\beta_{2}}_{\text{Fixed}\atop\text{slope}} \overbrace{EXT_{ij}}^{\text{Predictor 2}} + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
+\tag{Hox Eq 2.1}
 $$
+```
 
 
-Parameters to be Estimated:    
+**Parameters**
 
-* $\beta_0$ = mean for pupils with $GEN =$ `boy` *(the reference category)* and $EXT = 0$ *(not even a possible score)*
-* $\beta_1$ = mean difference in $POP$ for girls vs. boys with the same $EXT$ score
-* $\beta_2$ = mean difference in $POP$ for a 1-point higher $EXT$ but the same gender
-* $\sigma_e^2 = var(e_{ij})$  = residual variance
-
+|  Type  | Parameter of Interest           | Estimates This |
+|--------|:--------------------------------|----------------|
+| Fixed  | Intercept                       | $\beta_{0}$    |
+| Fixed  | Slope or effect of `sex`        | $\beta_{1}$    |
+| Fixed  | Slope or effect of `extrav`     | $\beta_{2}$    |
+| Random | Residual Variance $var[e_{ij}]$ | $\sigma^2_{e}$ |
 
 
 **Fit the model**
@@ -519,49 +527,80 @@ texreg::htmlreg(list(pop_lm_0, pop_lm_1),
 
 ### Generic Model Notation
 
-**Generic Level 1 Regression Equation** 
+ 
 
 Continue taking into account fixed slopes for two Level 1 variables, $X_1$ and $X_2$.
+
+
+**Level 1 Regression Equation - Generic ** 
 $$
-Y_{ij} = \beta_{0j} + \beta_{1j} X_{1ij} + \beta_{2j} X_{2ij}  + e_{ij} 
+\overbrace{Y_{ij}}^{\text{Level 1}\atop\text{Outcome}} = 
+         \underbrace{\beta_{0j}}_{\text{Level 2}\atop\text{intercept}}  + 
+         \underbrace{\beta_{1j}}_{\text{Level 2}\atop\text{slope} X_1} 
+         \overbrace{X_{1ij}}^{\text{Level 1}\atop\text{Predictor 1}}  + 
+         \underbrace{\beta_{2j}}_{\text{Level 2}\atop\text{slope} X_2} 
+         \overbrace{X_{2ij}}^{\text{Level 1}\atop\text{Predictor 2}}  + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
 \tag{Hox Eq 2.1}
 $$
 
-**Generic Level 2 Regression Equations** 
+
+
+
+ 
 
 Now we take clustering into account and include random intercepts ($\beta_{0j}$) and slopes ($\beta_{1j}, \beta_{2j}$), as well as including a single Level 2 variable, $Z$ that is predictive fo the random inntercetps and slopes.
 
 
-Random Intercepts Equation:
+**Level 2 Regression Equations- Generic ** 
+
+Random Intercepts:
 $$
-\beta_{0j} = \gamma_{00} + \gamma_{01} Z_{j} + u_{0j} 
+\overbrace{\beta_{0j}}^{\text{Level 2}\atop\text{intercept}} = 
+     \underbrace{\gamma_{00}}_{\text{Fixed}\atop\text{intercept}}  + 
+     \underbrace{\gamma_{01}}_{\text{Fixed}\atop\text{slope } Z}
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}}  + 
+     \underbrace{u_{0j}}_{\text{Intercept}\atop\text{residual}} 
 \tag{Hox Eq 2.3}
 $$
 
-Random Slopes Equations:
+
+Random Slopes: for the first predictor
+
 $$
-\beta_{1j} = \gamma_{10} + \gamma_{11} Z_{j} + u_{1j} \\
-\beta_{2j} = \gamma_{20} + \gamma_{21} Z_{j} + u_{2j} 
-\tag{Hox Eq 2.4}
-$$
-
-
-
-**Generic Multilevel Regression Equation** 
-
-Start with Level 1 equation (2.1) and allow the $\beta$'s to be varry for each class.
-$$
-Y_{ij} = \underbrace{\beta_{0j}}_{Random \; Intercept} + 
-         \underbrace{\beta_{1j}}_{Random \; Slope \; for \; X_1} X_{1ij} + 
-         \underbrace{\beta_{2j}}_{Random \; Slope \; for \; X_2} X_{2ij} + e_{ij} 
+\overbrace{\beta_{1j}}^{\text{Level 2}\atop\text{slope}} = 
+     \underbrace{\gamma_{10}}_{\text{Fixed}\atop\text{Slope  } X_1}  + 
+     \underbrace{\gamma_{11}}_{\text{Fixed}\atop X_1 \times Z} 
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}} + 
+     \underbrace{u_{1j}}_{\text{Slope } X_1\atop\text{residual}} 
+\tag{Hox Eq 2.4a}
 $$
 
-Plug in the level 2 equations (2.3 and 2.4) into the level 1 equation (2.1) to make the combined equation.
+Random Slopes: for the second predictor
+
+$$
+\overbrace{\beta_{2j}}^{\text{Level 2}\atop\text{slope}} = 
+     \underbrace{\gamma_{20}}_{\text{Fixed}\atop\text{Slope  } X_2}  + 
+     \underbrace{\gamma_{21}}_{\text{Fixed}\atop X_2 \times Z} 
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}} + 
+     \underbrace{u_{2j}}_{\text{Slope } X_2\atop\text{residual}} 
+\tag{Hox Eq 2.4a}
+$$
+
+
+
+
+
+
+
+
+Start with Level 1 equation (2.1) and allow the $\beta$'s to be varry for each class and plug in the level 2 equations (2.3 and 2.4) into the level 1 equation (2.1) to make the combined equation.
 $$
 Y_{ij} = \overbrace{(\gamma_{00} + \gamma_{01} Z_{j} + u_{0j})}^{\beta_{0j}} + 
          \overbrace{(\gamma_{10} + \gamma_{11} Z_{j} + u_{1j})}^{\beta_{1j}} X_{1ij} + 
          \overbrace{(\gamma_{20} + \gamma_{21} Z_{j} + u_{2j})}^{\beta_{2j}} X_{2ij} + e_{ij} 
 $$
+
 
 Use the distributive property of multiplication to get rid of the parentheses.
 $$
@@ -574,50 +613,43 @@ $$
 
 
 
+
 Collect 'like-terms' (i.e. get the $\gamma$'s together and the $u$'s together)
 
+```{block type='genericEq', echo=TRUE}
+**Combinded, Multilevel Regression Equation - Generic** 
+
 $$
-\begin{align*} 
-Y_{ij} =&  \overbrace{\gamma_{00} + 
+Y_{ij} = \overbrace{\gamma_{00} + 
                       \gamma_{10} X_{1ij} + 
                       \gamma_{20} X_{2ij} + 
                       \gamma_{01} Z_{j} + 
                       \gamma_{11} Z_{j} X_{1ij} +  
-                      \gamma_{21} Z_{j} X_{2ij}}^{FIXED \; i.e. \; deterministic \; part} + \\
-        & \underbrace{u_{0j} + u_{1j} X_{1ij} + u_{2j} X_{2ij} + e_{ij} }_{RANDOM \; i.e. \; stochastic \; part}
-\end{align*} 
-\tag{Hox Eq 2.5}
+                      \gamma_{21} Z_{j} X_{2ij}}^{\text{Fixed part}\atop\text{"Deterministic""}} + \\
+         \underbrace{u_{0j} + u_{1j} X_{1ij} + u_{2j} X_{2ij} + e_{ij} }_{\text{Random part}\atop\text{"Stochastic""}}
+         \tag{Hox Eq 2.5}
 $$
+```
 
 
 
+**Parameters**
 
-Parameters to Estimate:     
-
-* $\gamma_{00}$ = fixed intercept
-* $\gamma_{10}$ = fixed slope for the first level 1 predictor, $X_1$
-* $\gamma_{20}$ = fixed slope for the second level 1 predictor, $X_2$   
-* $\gamma_{01}$ = fixed slope for the only level 2 predictor, $Z$    
-
-* $\gamma_{11}$ = cross-level interaction,  $X_1 \times Z$
-* $\gamma_{21}$ = cross-level interaction, $X_2 \times Z$
-
-* $var(u_{0j})$ = variance of random intercepts
-* $var(u_{1j})$ = variance of random slope of the first level 1 predictor, $X_1$
-* $var(u_{2j})$ = variance of random slope of the second level 1 predictor, $X_2$
-
-* $cov(u_{0j},u_{1j})$ = covariance between the random intercetps and random effect of $X_1$
-* $cov(u_{0j},u_{2j})$ = covariance between the random intercetps and random effect of $X_2$
-* $cov(u_{1j},u_{2j})$ = covariance between the random effect of $X_1$ and $X_2$
-
-* $var(e_{ij})$ = variance of the residuals *(residual variance)*
-
-
-Assumptions to Check:    
-
-* The $e_{ij}$'s follow a normal distribution with a mean of $0$
-* The $e_{ij}$'s have a constant variance *(homoscedasticity)* 
-    
+|  Type  | Parameter of Interest                       | Estimates This |
+|--------|:--------------------------------------------|----------------|
+| Fixed  | Intercept                                   | $\gamma_{00}$  |
+| Fixed  | Main Effect of $X_1$                        | $\gamma_{10}$  |
+| Fixed  | Main Effect of $X_2$                        | $\gamma_{20}$  |
+| Fixed  | Main Effect of $Z$                          | $\gamma_{01}$  |
+| Fixed  | Cross-Level interaction between $X_1$ and $Z$    | $\gamma_{11}$  |
+| Fixed  | Cross-Level interaction between $X_2$ and $Z$    | $\gamma_{21}$  |
+| Random | Variance in random intercepts, $var[u_{0j}]$     | $\sigma^2_{u0}$ | 
+| Random | Variance in random slope of $X_1$, $var[u_{1j}]$ | $\sigma^2_{u1}$ | 
+| Random | Variance in random slope of $X_2$, $var[u_{2j}]$ | $\sigma^2_{u2}$ | 
+| Random | Covariance between random intercepts and random slope of $X_1$, $cov[u_{0j}, u_{1j}]$ | $\sigma^2_{u01}$ |
+| Random | Covariance between random intercepts and random slope of $X_2$, $cov[u_{0j}, u_{2j}]$ | $\sigma^2_{u02}$ |
+| Random | Covariance between random slopes of $X_1$ and $X_2$,  $cov[u_{1j}, u_{2j}]$           | $\sigma^2_{u12}$ | 
+| Random | Residual Variance $var[e_{ij}]$                 | $\sigma^2_{e}$ |    
 
 
 ```{block type='rmdimportant', echo=TRUE}
@@ -635,65 +667,62 @@ The $u_{1j}$ and $u_{2j}$ terms allow for **heteroscedasticity** by fitting diff
 
 
 
-**The Set of Level-Specific Model Equations:**
 
-Level 1 Model Equation *($i^{th}$ pupil in the $j^{th}$ class)*
 
+
+
+**The Set of Level-Specific Model Equations - Generic** (Random Intercepts Only)
+
+Level 1 Model Equation
 $$
 Y_{ij} = \beta_{0j} + e_{ij}
 \tag{Hox Eq 2.6}
 $$
 
-Level 2 Model Equation *($j^{th}$ class)*    
+Level 2 Model Equation    
 
-Random Intercepts Only:
 $$
 \beta_{0j} = \gamma_{00} + u_{0j}
 \tag{Hox Eq 2.7}
 $$
 
 
-**The Single, Multilevel Model Equation:**
+
+
+
+
+```{block type='genericEq', echo=TRUE}
+**Combined, Multilevel Model Equation - Generic,** Random Intercepts Only!
 $$ 
 Y_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
 \tag{Hox 2.8}
 $$
+```
 
 
-**Parameters:**
-
-Fixed Effects  
-
-$$
-intercept \longrightarrow \gamma_{00}
-$$
 
 
-Random Effects  
+**Parameters**
 
-$$
-\begin{align*} 
-class (intercept) \longrightarrow \sigma^2_{u_0}  & = var[u_{0j}] \\
-residual \longrightarrow \sigma^2_{e}   & = var[e_{ij}] \\
-\end{align*}
-$$
+|  Type  | Parameter of Interest                       | Estimates This |
+|--------|:--------------------------------------------|----------------|
+| Fixed  | Intercept                                   | $\gamma_{00}$  |
+| Random | Variance in random intercepts, $var[u_{0j}]$     | $\sigma^2_{u0}$ | 
+| Random | Residual Variance $var[e_{ij}]$                 | $\sigma^2_{e}$ |    
 
 
 
 > @hox2017 labeled the Null model for this dataset "$M_0$" in chapter 2:
 
 Predictors: none!
-
+```{block type='genericEq', echo=TRUE}
 $$ 
 POP_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
 \tag{M0: intercept only}
 $$
+```
 
-Parameters to be Estimated:    
-
-* $\gamma_{00}$ = intercept
-* $\sigma^2_{u_0}$ = var(u_{0j}) = variance between classes
-* $\sigma_e^2 = var(e_{ij})$  = residual variance
+Fit the model to the data.
 
 ```{r}
 pop_lmer_0 <- lme4::lmer(popular ~ 1 + (1|class), 
@@ -710,10 +739,17 @@ The entire population of all students in all classes has a grand-average of `r p
 
 Although the Null model above does not explain any variance in the dependent variable *(popularity)*, since there are no independent variables, it does decompose (i.e. divide up) the variance into two pieces.  We can compute the amount of total variance in popularity that is attribute to the clustering of students in classes verses the residual variance.
 
+
+```{block type='genericEq', echo=TRUE}
+**Intraclass Correlation (ICC) Formula**
 $$
 \rho = \frac{\sigma^2_{u0}}{\sigma^2_{u0}+\sigma^2_{e}}
 \tag{Hox Eq 2.9}
 $$
+
+```
+
+
 
 ```{block type='rmdlightbulb', echo=TRUE}
 The `VarCorr()` function in the `lme4` package returns the standard deviations, not the variances ($var = SD^2$) for a model fit via the `lme4::lmer()` function.  The `summary()` function reports both the variances and the stadard deviations.
@@ -758,7 +794,7 @@ The ICC should be based on a Null (intercept only) model fit via REML (restricte
 
 ### Add Predictors to the Model
 
-> @hox2017 labeled this as "$M_1$" in chapter 2 for their Table 2.1  on page 14, but adjusted it for Tables 2.2 & 2.3 on pages 15 and 17.
+> @hox2017 labeled this as "$M_1$" in chapter 2 for their Table 2.1 (page 14), but adjusted it for Tables 2.2 (page 15) and 2.3 (page 17).
 
 Predictors at the Pupil Level:    
 
@@ -791,45 +827,39 @@ $$
 \end{align*}
 $$
 
-
-**The Single, Multilevel Model Equation:**
-
+```{block type='genericEq', echo=TRUE}
+**Combined, Multilevel Model Equation:**
 $$
 POP_{ij} = \gamma_{00} + \gamma_{10} GEN_{ij} + \gamma_{20} EXT_{ij} + \gamma_{01} YRS_j +
           u_{0j} + u_{1j}  + u_{2j}  + e_{ij} 
 \tag{M1: with predictors}
 $$
+```
 
 
-**Parameters:**
 
-Fixed Effects  
+**Parameters**
 
-$$ 
-\begin{align*} 
-intercept  \longrightarrow & \gamma_{00}\\
-pupil \; gender     \longrightarrow & \gamma_{10}\\
-pupil \; extravert  \longrightarrow & \gamma_{20}\\
-teacher \; experience \longrightarrow & \gamma_{01}
-\end{align*}
-$$
-
-Random Effects  *(ignore covariances for now)*  
-
-$$ 
-\begin{align*} 
-intercept                            \longrightarrow \sigma^2_{u_0 }   & = var[u_{0j}] \\
-slope \; for \; pupil \; gender      \longrightarrow \sigma^2_{u_1}    & = var[u_{1j}] \\
-slope \; for \; pupil \; extravert   \longrightarrow \sigma^2_{u_2}    & = var[u_{2j}] \\
-residual                             \longrightarrow \sigma^2_{e}      & = var[e_{ij}] 
-\end{align*}
-$$
+|  Type  | Parameter of Interest                       | Estimates This |
+|--------|:--------------------------------------------|----------------|
+| Fixed  | Intercept                                   | $\gamma_{00}$  |
+| Fixed  | Main Effect of `sex`                        | $\gamma_{10}$  |
+| Fixed  | Main Effect of `extrav`                        | $\gamma_{20}$  |
+| Fixed  | Main Effect of `texp`                          | $\gamma_{01}$  |
+| Random | Variance in random intercepts, $var[u_{0j}]$     | $\sigma^2_{u0}$ | 
+| Random | Variance in random slope of `sex`, $var[u_{1j}]$ | $\sigma^2_{u1}$ | 
+| Random | Variance in random slope of `extrav`, $var[u_{2j}]$ | $\sigma^2_{u2}$ | 
+| Random | Covariance between random intercepts and random slope of `sex`, $cov[u_{0j}, u_{1j}]$ | $\sigma^2_{u01}$ |
+| Random | Covariance between random intercepts and random slope of `extrav`, $cov[u_{0j}, u_{2j}]$ | $\sigma^2_{u02}$ |
+| Random | Covariance between random slopes of `sex` and `extrav`,  $cov[u_{1j}, u_{2j}]$           | $\sigma^2_{u12}$ | 
+| Random | Residual Variance $var[e_{ij}]$                 | $\sigma^2_{e}$ |    
 
 
-```{block type='rmdlink', echo=TRUE}
-Troubleshooting `lme4` Linear Mixed-Effects Models [website](https://rdrr.io/cran/lme4/man/troubleshooting.html).  This website attempts to summarize some of the common problems with fitting lmer models and how to troubleshoot them.
 
-This is a helpful [post on Stack Exchange](https://stats.stackexchange.com/questions/242109/model-failed-to-converge-warning-in-lmer) regarding using differen t optimizers to get the `lme4::lmer()` function to converge.  
+```{block type='rmdimportant', echo=TRUE}
+Troubleshooting 'lme4' Linear Mixed-Effects Models [website](https://rdrr.io/cran/lme4/man/troubleshooting.html).  This website attempts to summarize some of the common problems with fitting lmer models and how to troubleshoot them.
+
+This is a helpful [post on Stack Exchange](https://stats.stackexchange.com/questions/242109/model-failed-to-converge-warning-in-lmer) regarding using differen t optimizers to get the 'lme4::lmer()' function to converge.  
 
 Note: Convergence issues MAY signify problems in the model specification.
 ```
@@ -847,10 +877,13 @@ pop_lmer_0_ml <- lme4::lmer(popular ~ 1 + (1|class),
 pop_lmer_1_ml <- lme4::lmer(popular ~ sex + extrav + texp + (sex + extrav|class), 
                             data   = data_pop,
                             REML   = FALSE,
-                            control = lmerControl(optimizer ="Nelder_Mead"))
+                            control = lmerControl(optimizer ="Nelder_Mead")) #helps converge
 ```
 
 
+```{r}
+summary(pop_lmer_1_ml)
+```
 
 
 
@@ -865,4 +898,71 @@ texreg::htmlreg(list(pop_lm_0,
                                        "M1: w pred"),
                 caption = "Hox Table 2.1 on the top of page 14")
 ```
+
+
+```{block type='rmdlightbulb', echo=TRUE}
+**Comparing Model Fit**
+
+1. Residual Variance in the Residuals
+
+* In single-level regression, the Root Mean Squared Error (RMSE) is usually reported.  It is the standard deviation of the residuals and is called "Residual standard error" in the R output of `summary()` function applied to an model fit via `lm`.
+* In multi-level regression, residual variance is reported as $\sigma_e^2$.
+
+$$
+{\text{RMSE}}^2 = \sigma_e^2
+$$
+
+
+2. Deviance
+
+* In single-level regression, the model is fit in such a way as to make the sum of the squared residuals as small as possible.  Deviance is the sum of the squared residuals.
+
+* In multi-level regression, the model is fit via a method called 'Maximum Likelihood'.
+
+$$
+\text{Deviance} = -2LL = -2 \times log(likelihood)
+$$
+```
+
+
+
+
+### Revising the MLM specification
+
+In Hox's table 2.1 (page 14) we see that the MLM with predictors ($M_0$) includes a random compondnt with virtually no variance.  This is likely why the model didn't easily converge (a different optimizer was employed).  It makes sence to remove the random component for gender and re fit the model.
+
+
+```{r}
+pop_lmer_1a_ml <- lme4::lmer(popular ~ sex + extrav + texp + (extrav|class), 
+                            data   = data_pop,
+                            REML   = FALSE) 
+pop_lmer_1b_ml <- lme4::lmer(popular ~ sex + extrav + texp + (1 |class), 
+                            data   = data_pop,
+                            REML   = FALSE) 
+```
+
+The middle column below reproduces Hox's Table 2.2 found on the bottom of page 15 [@hox2017]
+
+```{r, results='asis'}
+texreg::screenreg(list(pop_lmer_1_ml, pop_lmer_1a_ml, pop_lmer_1b_ml),
+                custom.model.names = c("M1", "M1a", "M1b"),
+                caption = "Assessing Significance of Random Slopes")
+```
+
+```{r}
+anova(pop_lmer_1_ml, pop_lmer_1a_ml, refit = FALSE)
+```
+
+```{r}
+anova(pop_lmer_1a_ml, pop_lmer_1b_ml, refit = FALSE)
+```
+
+
+
+
+
+
+
+
+
 

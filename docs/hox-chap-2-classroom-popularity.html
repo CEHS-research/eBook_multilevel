@@ -132,6 +132,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="1.5.2" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#intercept-only-or-null-model-1"><i class="fa fa-check"></i><b>1.5.2</b> Intercept-only or Null Model</a></li>
 <li class="chapter" data-level="1.5.3" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#intraclass-correlation-icc"><i class="fa fa-check"></i><b>1.5.3</b> Intraclass Correlation (ICC)</a></li>
 <li class="chapter" data-level="1.5.4" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#add-predictors-to-the-model-1"><i class="fa fa-check"></i><b>1.5.4</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="1.5.5" data-path="hox-chap-2-classroom-popularity.html"><a href="hox-chap-2-classroom-popularity.html#revising-the-mlm-specification"><i class="fa fa-check"></i><b>1.5.5</b> Revising the MLM specification</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -1305,11 +1306,11 @@ There are also many websites that offer Point-n-click interfaces to build <span 
 <div class="genericEq">
 <p>
 <strong>Single-Level Regression Equation - Generic</strong> <span class="math display"><span class="math display">\[
-\overbrace{Y_{ij}}^{\text{outcome}} = 
-         \underbrace{\beta_{0}}_{\text{fixed intercept}} + 
-         \underbrace{\beta_{1}}_{\text{fixed slope for } X_1} \overbrace{X_{1ij}}^{\text{predictor 1}} + 
-         \underbrace{\beta_{2}}_{\text{fixed slope for } X_2} \overbrace{X_{2ij}}^{\text{predictor 2}} + 
-         \underbrace{e_{ij}}_{\text{random residuals}} 
+\overbrace{Y_{ij}}^{Outcome} = 
+         \underbrace{\beta_{0}}_{\text{Fixed}\atop\text{intercept}}  + 
+         \underbrace{\beta_{1}}_{\text{Fixed}\atop\text{slope}} \overbrace{X_{1ij}}^{\text{Predictor 1}}  + 
+         \underbrace{\beta_{2}}_{\text{Fixed}\atop\text{slope}} \overbrace{X_{2ij}}^{\text{Predictor 2}} + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
 \tag{Hox Eq 2.1}
 \]</span></span>
 </p>
@@ -1331,12 +1332,12 @@ There are also many websites that offer Point-n-click interfaces to build <span 
 </tr>
 <tr class="even">
 <td>Fixed</td>
-<td align="left">Slope of <span class="math inline">\(X_1\)</span></td>
+<td align="left">Slope or effect of <span class="math inline">\(X_1\)</span></td>
 <td><span class="math inline">\(\beta_{1}\)</span></td>
 </tr>
 <tr class="odd">
 <td>Fixed</td>
-<td align="left">Slope of <span class="math inline">\(X_2\)</span></td>
+<td align="left">Slope or effect of <span class="math inline">\(X_2\)</span></td>
 <td><span class="math inline">\(\beta_{2}\)</span></td>
 </tr>
 <tr class="even">
@@ -1358,7 +1359,9 @@ There are also many websites that offer Point-n-click interfaces to build <span 
 <div class="genericEq">
 <p>
 <strong>Single-Level Regression Equation - Null Model</strong> <span class="math display"><span class="math display">\[
-POP_{ij} = \overbrace{\beta_{0}}^{intercept} + \underbrace{e_{ij}}_{\text{residuals}}
+\overbrace{POP_{ij}}^{Outcome} = 
+         \underbrace{\beta_{0}}_{\text{Fixed}\atop\text{intercept}}  + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
 \]</span></span>
 </p>
 </div>
@@ -1374,7 +1377,7 @@ POP_{ij} = \overbrace{\beta_{0}}^{intercept} + \underbrace{e_{ij}}_{\text{residu
 <tbody>
 <tr class="odd">
 <td>Fixed</td>
-<td align="left">Intercept, Grand Mean</td>
+<td align="left">Intercept</td>
 <td><span class="math inline">\(\beta_{0}\)</span></td>
 </tr>
 <tr class="even">
@@ -1438,17 +1441,50 @@ Residual standard error: 1.383 on 1999 degrees of freedom</code></pre>
 <li><span class="math inline">\(X_1 = GEN\)</span> = pupils’s gender, <em>(girl vs. boy)</em></li>
 <li><span class="math inline">\(X_2 = EXT\)</span> = pupil’s extraversion, <em>(scale: 1-10)</em></li>
 </ul>
-<p><span class="math display">\[
-POP_{ij} = \beta_{0} + \beta_{1} GEN_{ij} + \beta_{2} EXT_{ij}  + e_{ij}
-\tag{Hox Eq 2.2}
-\]</span></p>
-<p>Parameters to be Estimated:</p>
-<ul>
-<li><span class="math inline">\(\beta_0\)</span> = mean for pupils with <span class="math inline">\(GEN =\)</span> <code>boy</code> <em>(the reference category)</em> and <span class="math inline">\(EXT = 0\)</span> <em>(not even a possible score)</em></li>
-<li><span class="math inline">\(\beta_1\)</span> = mean difference in <span class="math inline">\(POP\)</span> for girls vs. boys with the same <span class="math inline">\(EXT\)</span> score</li>
-<li><span class="math inline">\(\beta_2\)</span> = mean difference in <span class="math inline">\(POP\)</span> for a 1-point higher <span class="math inline">\(EXT\)</span> but the same gender</li>
-<li><span class="math inline">\(\sigma_e^2 = var(e_{ij})\)</span> = residual variance</li>
-</ul>
+<div class="genericEq">
+<p>
+<strong>Single-Level Regression Equation - Generic</strong> <span class="math display"><span class="math display">\[
+\overbrace{POP_{ij}}^{Outcome} = 
+         \underbrace{\beta_{0}}_{\text{Fixed}\atop\text{intercept}}  + 
+         \underbrace{\beta_{1}}_{\text{Fixed}\atop\text{slope}} \overbrace{GEN_{ij}}^{\text{Predictor 1}}  + 
+         \underbrace{\beta_{2}}_{\text{Fixed}\atop\text{slope}} \overbrace{EXT_{ij}}^{\text{Predictor 2}} + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
+\tag{Hox Eq 2.1}
+\]</span></span>
+</p>
+</div>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th align="left">Parameter of Interest</th>
+<th>Estimates This</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Intercept</td>
+<td><span class="math inline">\(\beta_{0}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Slope or effect of <code>sex</code></td>
+<td><span class="math inline">\(\beta_{1}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Slope or effect of <code>extrav</code></td>
+<td><span class="math inline">\(\beta_{2}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Residual Variance <span class="math inline">\(var[e_{ij}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{e}\)</span></td>
+</tr>
+</tbody>
+</table>
 <p><strong>Fit the model</strong></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lm_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(popular <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>extrav, 
                <span class="dt">data =</span> data_pop) </code></pre></div>
@@ -1606,29 +1642,46 @@ RMSE
 <h2><span class="header-section-number">1.5</span> Multi-level Regression Analysis</h2>
 <div id="generic-model-notation-1" class="section level3">
 <h3><span class="header-section-number">1.5.1</span> Generic Model Notation</h3>
-<p><strong>Generic Level 1 Regression Equation</strong></p>
-<p>Continue taking into account fixed slopes for two Level 1 variables, <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>. <span class="math display">\[
-Y_{ij} = \beta_{0j} + \beta_{1j} X_{1ij} + \beta_{2j} X_{2ij}  + e_{ij} 
+<p>Continue taking into account fixed slopes for two Level 1 variables, <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>.</p>
+<p><strong>Level 1 Regression Equation - Generic </strong> <span class="math display">\[
+\overbrace{Y_{ij}}^{\text{Level 1}\atop\text{Outcome}} = 
+         \underbrace{\beta_{0j}}_{\text{Level 2}\atop\text{intercept}}  + 
+         \underbrace{\beta_{1j}}_{\text{Level 2}\atop\text{slope} X_1} 
+         \overbrace{X_{1ij}}^{\text{Level 1}\atop\text{Predictor 1}}  + 
+         \underbrace{\beta_{2j}}_{\text{Level 2}\atop\text{slope} X_2} 
+         \overbrace{X_{2ij}}^{\text{Level 1}\atop\text{Predictor 2}}  + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
 \tag{Hox Eq 2.1}
 \]</span></p>
-<p><strong>Generic Level 2 Regression Equations</strong></p>
 <p>Now we take clustering into account and include random intercepts (<span class="math inline">\(\beta_{0j}\)</span>) and slopes (<span class="math inline">\(\beta_{1j}, \beta_{2j}\)</span>), as well as including a single Level 2 variable, <span class="math inline">\(Z\)</span> that is predictive fo the random inntercetps and slopes.</p>
-<p>Random Intercepts Equation: <span class="math display">\[
-\beta_{0j} = \gamma_{00} + \gamma_{01} Z_{j} + u_{0j} 
+<p><strong>Level 2 Regression Equations- Generic </strong></p>
+<p>Random Intercepts: <span class="math display">\[
+\overbrace{\beta_{0j}}^{\text{Level 2}\atop\text{intercept}} = 
+     \underbrace{\gamma_{00}}_{\text{Fixed}\atop\text{intercept}}  + 
+     \underbrace{\gamma_{01}}_{\text{Fixed}\atop\text{slope } Z}
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}}  + 
+     \underbrace{u_{0j}}_{\text{Intercept}\atop\text{residual}} 
 \tag{Hox Eq 2.3}
 \]</span></p>
-<p>Random Slopes Equations: <span class="math display">\[
-\beta_{1j} = \gamma_{10} + \gamma_{11} Z_{j} + u_{1j} \\
-\beta_{2j} = \gamma_{20} + \gamma_{21} Z_{j} + u_{2j} 
-\tag{Hox Eq 2.4}
+<p>Random Slopes: for the first predictor</p>
+<p><span class="math display">\[
+\overbrace{\beta_{1j}}^{\text{Level 2}\atop\text{slope}} = 
+     \underbrace{\gamma_{10}}_{\text{Fixed}\atop\text{Slope  } X_1}  + 
+     \underbrace{\gamma_{11}}_{\text{Fixed}\atop X_1 \times Z} 
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}} + 
+     \underbrace{u_{1j}}_{\text{Slope } X_1\atop\text{residual}} 
+\tag{Hox Eq 2.4a}
 \]</span></p>
-<p><strong>Generic Multilevel Regression Equation</strong></p>
-<p>Start with Level 1 equation (2.1) and allow the <span class="math inline">\(\beta\)</span>’s to be varry for each class. <span class="math display">\[
-Y_{ij} = \underbrace{\beta_{0j}}_{Random \; Intercept} + 
-         \underbrace{\beta_{1j}}_{Random \; Slope \; for \; X_1} X_{1ij} + 
-         \underbrace{\beta_{2j}}_{Random \; Slope \; for \; X_2} X_{2ij} + e_{ij} 
+<p>Random Slopes: for the second predictor</p>
+<p><span class="math display">\[
+\overbrace{\beta_{2j}}^{\text{Level 2}\atop\text{slope}} = 
+     \underbrace{\gamma_{20}}_{\text{Fixed}\atop\text{Slope  } X_2}  + 
+     \underbrace{\gamma_{21}}_{\text{Fixed}\atop X_2 \times Z} 
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}} + 
+     \underbrace{u_{2j}}_{\text{Slope } X_2\atop\text{residual}} 
+\tag{Hox Eq 2.4a}
 \]</span></p>
-<p>Plug in the level 2 equations (2.3 and 2.4) into the level 1 equation (2.1) to make the combined equation. <span class="math display">\[
+<p>Start with Level 1 equation (2.1) and allow the <span class="math inline">\(\beta\)</span>’s to be varry for each class and plug in the level 2 equations (2.3 and 2.4) into the level 1 equation (2.1) to make the combined equation. <span class="math display">\[
 Y_{ij} = \overbrace{(\gamma_{00} + \gamma_{01} Z_{j} + u_{0j})}^{\beta_{0j}} + 
          \overbrace{(\gamma_{10} + \gamma_{11} Z_{j} + u_{1j})}^{\beta_{1j}} X_{1ij} + 
          \overbrace{(\gamma_{20} + \gamma_{21} Z_{j} + u_{2j})}^{\beta_{2j}} X_{2ij} + e_{ij} 
@@ -1640,40 +1693,105 @@ Y_{ij} = \overbrace{\gamma_{00}         +  \gamma_{01} Z_{j}         + u_{0j}}^{
          e_{ij} 
 \]</span></p>
 <p>Collect ‘like-terms’ (i.e. get the <span class="math inline">\(\gamma\)</span>’s together and the <span class="math inline">\(u\)</span>’s together)</p>
-<p><span class="math display">\[
-\begin{align*} 
-Y_{ij} =&amp;  \overbrace{\gamma_{00} + 
+<div class="genericEq">
+<p>
+<strong>Combinded, Multilevel Regression Equation - Generic</strong>
+</p>
+<p>
+<span class="math display"><span class="math display">\[
+Y_{ij} = \overbrace{\gamma_{00} + 
                       \gamma_{10} X_{1ij} + 
                       \gamma_{20} X_{2ij} + 
                       \gamma_{01} Z_{j} + 
                       \gamma_{11} Z_{j} X_{1ij} +  
-                      \gamma_{21} Z_{j} X_{2ij}}^{FIXED \; i.e. \; deterministic \; part} + \\
-        &amp; \underbrace{u_{0j} + u_{1j} X_{1ij} + u_{2j} X_{2ij} + e_{ij} }_{RANDOM \; i.e. \; stochastic \; part}
-\end{align*} 
-\tag{Hox Eq 2.5}
-\]</span></p>
-<p>Parameters to Estimate:</p>
-<ul>
-<li><span class="math inline">\(\gamma_{00}\)</span> = fixed intercept</li>
-<li><span class="math inline">\(\gamma_{10}\)</span> = fixed slope for the first level 1 predictor, <span class="math inline">\(X_1\)</span></li>
-<li><span class="math inline">\(\gamma_{20}\)</span> = fixed slope for the second level 1 predictor, <span class="math inline">\(X_2\)</span><br />
-</li>
-<li><p><span class="math inline">\(\gamma_{01}\)</span> = fixed slope for the only level 2 predictor, <span class="math inline">\(Z\)</span></p></li>
-<li><span class="math inline">\(\gamma_{11}\)</span> = cross-level interaction, <span class="math inline">\(X_1 \times Z\)</span></li>
-<li><p><span class="math inline">\(\gamma_{21}\)</span> = cross-level interaction, <span class="math inline">\(X_2 \times Z\)</span></p></li>
-<li><span class="math inline">\(var(u_{0j})\)</span> = variance of random intercepts</li>
-<li><span class="math inline">\(var(u_{1j})\)</span> = variance of random slope of the first level 1 predictor, <span class="math inline">\(X_1\)</span></li>
-<li><p><span class="math inline">\(var(u_{2j})\)</span> = variance of random slope of the second level 1 predictor, <span class="math inline">\(X_2\)</span></p></li>
-<li><span class="math inline">\(cov(u_{0j},u_{1j})\)</span> = covariance between the random intercetps and random effect of <span class="math inline">\(X_1\)</span></li>
-<li><span class="math inline">\(cov(u_{0j},u_{2j})\)</span> = covariance between the random intercetps and random effect of <span class="math inline">\(X_2\)</span></li>
-<li><p><span class="math inline">\(cov(u_{1j},u_{2j})\)</span> = covariance between the random effect of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span></p></li>
-<li><p><span class="math inline">\(var(e_{ij})\)</span> = variance of the residuals <em>(residual variance)</em></p></li>
-</ul>
-<p>Assumptions to Check:</p>
-<ul>
-<li>The <span class="math inline">\(e_{ij}\)</span>’s follow a normal distribution with a mean of <span class="math inline">\(0\)</span></li>
-<li>The <span class="math inline">\(e_{ij}\)</span>’s have a constant variance <em>(homoscedasticity)</em></li>
-</ul>
+                      \gamma_{21} Z_{j} X_{2ij}}^{\text{Fixed part}\atop\text{&amp;quot;Deterministic&amp;quot;&amp;quot;}} + \\
+         \underbrace{u_{0j} + u_{1j} X_{1ij} + u_{2j} X_{2ij} + e_{ij} }_{\text{Random part}\atop\text{&amp;quot;Stochastic&amp;quot;&amp;quot;}}
+         \tag{Hox Eq 2.5}
+\]</span></span>
+</p>
+</div>
+<p><strong>Parameters</strong></p>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="63%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th align="left">Parameter of Interest</th>
+<th>Estimates This</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Intercept</td>
+<td><span class="math inline">\(\gamma_{00}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Main Effect of <span class="math inline">\(X_1\)</span></td>
+<td><span class="math inline">\(\gamma_{10}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Main Effect of <span class="math inline">\(X_2\)</span></td>
+<td><span class="math inline">\(\gamma_{20}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Main Effect of <span class="math inline">\(Z\)</span></td>
+<td><span class="math inline">\(\gamma_{01}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Cross-Level interaction between <span class="math inline">\(X_1\)</span> and <span class="math inline">\(Z\)</span></td>
+<td><span class="math inline">\(\gamma_{11}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Cross-Level interaction between <span class="math inline">\(X_2\)</span> and <span class="math inline">\(Z\)</span></td>
+<td><span class="math inline">\(\gamma_{21}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Variance in random intercepts, <span class="math inline">\(var[u_{0j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u0}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Variance in random slope of <span class="math inline">\(X_1\)</span>, <span class="math inline">\(var[u_{1j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u1}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Variance in random slope of <span class="math inline">\(X_2\)</span>, <span class="math inline">\(var[u_{2j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u2}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Covariance between random intercepts and random slope of <span class="math inline">\(X_1\)</span>, <span class="math inline">\(cov[u_{0j}, u_{1j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u01}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Covariance between random intercepts and random slope of <span class="math inline">\(X_2\)</span>, <span class="math inline">\(cov[u_{0j}, u_{2j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u02}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Covariance between random slopes of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>, <span class="math inline">\(cov[u_{1j}, u_{2j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u12}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Residual Variance <span class="math inline">\(var[e_{ij}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{e}\)</span></td>
+</tr>
+</tbody>
+</table>
 <div class="rmdimportant">
 <p>
 The <span class="math inline"><span class="math inline">\(u_{1j}\)</span></span> and <span class="math inline"><span class="math inline">\(u_{2j}\)</span></span> terms allow for <strong>heteroscedasticity</strong> by fitting different error terms for different values of <span class="math inline"><span class="math inline">\(X_1\)</span></span> and <span class="math inline"><span class="math inline">\(X_2\)</span></span>. The HOV assumption is that AFTER accounting for this, the remaining residuals are HOV.
@@ -1687,47 +1805,64 @@ The <span class="math inline"><span class="math inline">\(u_{1j}\)</span></span>
 “The intercept-only model is useful as a null-model that serves as a benchmark with which other models are compared.” <span class="citation"><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span></span>, page 13
 </p>
 </div>
-<p><strong>The Set of Level-Specific Model Equations:</strong></p>
-<p>Level 1 Model Equation <em>(<span class="math inline">\(i^{th}\)</span> pupil in the <span class="math inline">\(j^{th}\)</span> class)</em></p>
-<p><span class="math display">\[
+<p><strong>The Set of Level-Specific Model Equations - Generic</strong> (Random Intercepts Only)</p>
+<p>Level 1 Model Equation <span class="math display">\[
 Y_{ij} = \beta_{0j} + e_{ij}
 \tag{Hox Eq 2.6}
 \]</span></p>
-<p>Level 2 Model Equation <em>(<span class="math inline">\(j^{th}\)</span> class)</em></p>
-<p>Random Intercepts Only: <span class="math display">\[
+<p>Level 2 Model Equation</p>
+<p><span class="math display">\[
 \beta_{0j} = \gamma_{00} + u_{0j}
 \tag{Hox Eq 2.7}
 \]</span></p>
-<p><strong>The Single, Multilevel Model Equation:</strong> <span class="math display">\[ 
+<div class="genericEq">
+<p>
+<strong>Combined, Multilevel Model Equation - Generic,</strong> Random Intercepts Only! <span class="math display"><span class="math display">\[ 
 Y_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
 \tag{Hox 2.8}
-\]</span></p>
-<p><strong>Parameters:</strong></p>
-<p>Fixed Effects</p>
-<p><span class="math display">\[
-intercept \longrightarrow \gamma_{00}
-\]</span></p>
-<p>Random Effects</p>
-<p><span class="math display">\[
-\begin{align*} 
-class (intercept) \longrightarrow \sigma^2_{u_0}  &amp; = var[u_{0j}] \\
-residual \longrightarrow \sigma^2_{e}   &amp; = var[e_{ij}] \\
-\end{align*}
-\]</span></p>
+\]</span></span>
+</p>
+</div>
+<p><strong>Parameters</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th align="left">Parameter of Interest</th>
+<th>Estimates This</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Intercept</td>
+<td><span class="math inline">\(\gamma_{00}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Variance in random intercepts, <span class="math inline">\(var[u_{0j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u0}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Residual Variance <span class="math inline">\(var[e_{ij}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{e}\)</span></td>
+</tr>
+</tbody>
+</table>
 <blockquote>
 <p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled the Null model for this dataset “<span class="math inline">\(M_0\)</span>” in chapter 2:</p>
 </blockquote>
-<p>Predictors: none!</p>
-<p><span class="math display">\[ 
+Predictors: none!
+<div class="genericEq">
+<p>
+<span class="math display"><span class="math display">\[ 
 POP_{ij} = \gamma_{00} + u_{0j} + e_{ij} 
 \tag{M0: intercept only}
-\]</span></p>
-<p>Parameters to be Estimated:</p>
-<ul>
-<li><span class="math inline">\(\gamma_{00}\)</span> = intercept</li>
-<li><span class="math inline">\(\sigma^2_{u_0}\)</span> = var(u_{0j}) = variance between classes</li>
-<li><span class="math inline">\(\sigma_e^2 = var(e_{ij})\)</span> = residual variance</li>
-</ul>
+\]</span></span>
+</p>
+</div>
+<p>Fit the model to the data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_<span class="dv">0</span> &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class), 
                          <span class="dt">data =</span> data_pop)
 
@@ -1756,10 +1891,14 @@ Fixed effects:
 <div id="intraclass-correlation-icc" class="section level3">
 <h3><span class="header-section-number">1.5.3</span> Intraclass Correlation (ICC)</h3>
 <p>Although the Null model above does not explain any variance in the dependent variable <em>(popularity)</em>, since there are no independent variables, it does decompose (i.e. divide up) the variance into two pieces. We can compute the amount of total variance in popularity that is attribute to the clustering of students in classes verses the residual variance.</p>
-<p><span class="math display">\[
+<div class="genericEq">
+<p>
+<strong>Intraclass Correlation (ICC) Formula</strong> <span class="math display"><span class="math display">\[
 \rho = \frac{\sigma^2_{u0}}{\sigma^2_{u0}+\sigma^2_{e}}
 \tag{Hox Eq 2.9}
-\]</span></p>
+\]</span></span>
+</p>
+</div>
 <div class="rmdlightbulb">
 <p>
 The <code>VarCorr()</code> function in the <code>lme4</code> package returns the standard deviations, not the variances (<span class="math inline"><span class="math inline">\(var = SD^2\)</span></span>) for a model fit via the <code>lme4::lmer()</code> function. The <code>summary()</code> function reports both the variances and the stadard deviations.
@@ -1804,7 +1943,7 @@ The ICC should be based on a Null (intercept only) model fit via REML (restricte
 <div id="add-predictors-to-the-model-1" class="section level3">
 <h3><span class="header-section-number">1.5.4</span> Add Predictors to the Model</h3>
 <blockquote>
-<p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled this as “<span class="math inline">\(M_1\)</span>” in chapter 2 for their Table 2.1 on page 14, but adjusted it for Tables 2.2 &amp; 2.3 on pages 15 and 17.</p>
+<p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> labeled this as “<span class="math inline">\(M_1\)</span>” in chapter 2 for their Table 2.1 (page 14), but adjusted it for Tables 2.2 (page 15) and 2.3 (page 17).</p>
 </blockquote>
 <p>Predictors at the Pupil Level:</p>
 <ul>
@@ -1829,37 +1968,93 @@ POP_{ij} = \beta_{0j} + \beta_{1j} GEN_{ij} + \beta_{2j} EXT_{ij} + e_{ij}
 \beta_{2j} &amp; = \gamma_{20} +  u_{2j} 
 \end{align*}
 \]</span></p>
-<p><strong>The Single, Multilevel Model Equation:</strong></p>
-<p><span class="math display">\[
+<div class="genericEq">
+<p>
+<strong>Combined, Multilevel Model Equation:</strong> <span class="math display"><span class="math display">\[
 POP_{ij} = \gamma_{00} + \gamma_{10} GEN_{ij} + \gamma_{20} EXT_{ij} + \gamma_{01} YRS_j +
           u_{0j} + u_{1j}  + u_{2j}  + e_{ij} 
 \tag{M1: with predictors}
-\]</span></p>
-<p><strong>Parameters:</strong></p>
-<p>Fixed Effects</p>
-<p><span class="math display">\[ 
-\begin{align*} 
-intercept  \longrightarrow &amp; \gamma_{00}\\
-pupil \; gender     \longrightarrow &amp; \gamma_{10}\\
-pupil \; extravert  \longrightarrow &amp; \gamma_{20}\\
-teacher \; experience \longrightarrow &amp; \gamma_{01}
-\end{align*}
-\]</span></p>
-<p>Random Effects <em>(ignore covariances for now)</em></p>
-<p><span class="math display">\[ 
-\begin{align*} 
-intercept                            \longrightarrow \sigma^2_{u_0 }   &amp; = var[u_{0j}] \\
-slope \; for \; pupil \; gender      \longrightarrow \sigma^2_{u_1}    &amp; = var[u_{1j}] \\
-slope \; for \; pupil \; extravert   \longrightarrow \sigma^2_{u_2}    &amp; = var[u_{2j}] \\
-residual                             \longrightarrow \sigma^2_{e}      &amp; = var[e_{ij}] 
-\end{align*}
-\]</span></p>
-<div class="rmdlink">
+\]</span></span>
+</p>
+</div>
+<p><strong>Parameters</strong></p>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="63%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th align="left">Parameter of Interest</th>
+<th>Estimates This</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Intercept</td>
+<td><span class="math inline">\(\gamma_{00}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Main Effect of <code>sex</code></td>
+<td><span class="math inline">\(\gamma_{10}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Main Effect of <code>extrav</code></td>
+<td><span class="math inline">\(\gamma_{20}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Main Effect of <code>texp</code></td>
+<td><span class="math inline">\(\gamma_{01}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Variance in random intercepts, <span class="math inline">\(var[u_{0j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u0}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Variance in random slope of <code>sex</code>, <span class="math inline">\(var[u_{1j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u1}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Variance in random slope of <code>extrav</code>, <span class="math inline">\(var[u_{2j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u2}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Covariance between random intercepts and random slope of <code>sex</code>, <span class="math inline">\(cov[u_{0j}, u_{1j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u01}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Covariance between random intercepts and random slope of <code>extrav</code>, <span class="math inline">\(cov[u_{0j}, u_{2j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u02}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Covariance between random slopes of <code>sex</code> and <code>extrav</code>, <span class="math inline">\(cov[u_{1j}, u_{2j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u12}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Residual Variance <span class="math inline">\(var[e_{ij}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{e}\)</span></td>
+</tr>
+</tbody>
+</table>
+<div class="rmdimportant">
 <p>
-Troubleshooting <code>lme4</code> Linear Mixed-Effects Models <a href="https://rdrr.io/cran/lme4/man/troubleshooting.html">website</a>. This website attempts to summarize some of the common problems with fitting lmer models and how to troubleshoot them.
+Troubleshooting ‘lme4’ Linear Mixed-Effects Models <a href="https://rdrr.io/cran/lme4/man/troubleshooting.html">website</a>. This website attempts to summarize some of the common problems with fitting lmer models and how to troubleshoot them.
 </p>
 <p>
-This is a helpful <a href="https://stats.stackexchange.com/questions/242109/model-failed-to-converge-warning-in-lmer">post on Stack Exchange</a> regarding using differen t optimizers to get the <code>lme4::lmer()</code> function to converge.
+This is a helpful <a href="https://stats.stackexchange.com/questions/242109/model-failed-to-converge-warning-in-lmer">post on Stack Exchange</a> regarding using differen t optimizers to get the ‘lme4::lmer()’ function to converge.
 </p>
 <p>
 Note: Convergence issues MAY signify problems in the model specification.
@@ -1873,7 +2068,40 @@ Note: Convergence issues MAY signify problems in the model specification.
 pop_lmer_1_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>texp <span class="op">+</span><span class="st"> </span>(sex <span class="op">+</span><span class="st"> </span>extrav<span class="op">|</span>class), 
                             <span class="dt">data   =</span> data_pop,
                             <span class="dt">REML   =</span> <span class="ot">FALSE</span>,
-                            <span class="dt">control =</span> <span class="kw">lmerControl</span>(<span class="dt">optimizer =</span><span class="st">&quot;Nelder_Mead&quot;</span>))</code></pre></div>
+                            <span class="dt">control =</span> <span class="kw">lmerControl</span>(<span class="dt">optimizer =</span><span class="st">&quot;Nelder_Mead&quot;</span>)) <span class="co">#helps converge</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(pop_lmer_1_ml)</code></pre></div>
+<pre><code>Linear mixed model fit by maximum likelihood  [&#39;lmerMod&#39;]
+Formula: popular ~ sex + extrav + texp + (sex + extrav | class)
+   Data: data_pop
+Control: lmerControl(optimizer = &quot;Nelder_Mead&quot;)
+
+     AIC      BIC   logLik deviance df.resid 
+  4833.3   4894.9  -2405.6   4811.3     1989 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-3.1686 -0.6550 -0.0227  0.6728  2.9571 
+
+Random effects:
+ Groups   Name        Variance Std.Dev. Corr       
+ class    (Intercept) 1.319429 1.14866             
+          sexgirl     0.002389 0.04888  -0.40      
+          extrav      0.034115 0.18470  -0.88 -0.09
+ Residual             0.551144 0.74239             
+Number of obs: 2000, groups:  class, 100
+
+Fixed effects:
+            Estimate Std. Error t value
+(Intercept) 0.760097   0.195930   3.879
+sexgirl     1.251022   0.036921  33.884
+extrav      0.452877   0.024511  18.477
+texp        0.089417   0.008533  10.480
+
+Correlation of Fixed Effects:
+        (Intr) sexgrl extrav
+sexgirl -0.063              
+extrav  -0.720 -0.066       
+texp    -0.683 -0.040  0.090</code></pre>
 <p>Reproduce Table 2.1 on the top of page 14 <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lm_<span class="dv">0</span>, 
                      pop_lmer_0_ml, 
@@ -2191,6 +2419,104 @@ Cov: class sexgirl extrav
 </td>
 </tr>
 </table>
+<div class="rmdlightbulb">
+<p>
+<strong>Comparing Model Fit</strong>
+</p>
+<ol style="list-style-type: decimal">
+<li>
+Residual Variance in the Residuals
+</li>
+</ol>
+<ul>
+<li>
+In single-level regression, the Root Mean Squared Error (RMSE) is usually reported. It is the standard deviation of the residuals and is called “Residual standard error” in the R output of <code>summary()</code> function applied to an model fit via <code>lm</code>.
+</li>
+<li>
+In multi-level regression, residual variance is reported as <span class="math inline"><span class="math inline">\(\sigma_e^2\)</span></span>.
+</li>
+</ul>
+<p>
+<span class="math display"><span class="math display">\[
+{\text{RMSE}}^2 = \sigma_e^2
+\]</span></span>
+</p>
+<ol start="2" style="list-style-type: decimal">
+<li>
+Deviance
+</li>
+</ol>
+<ul>
+<li>
+<p>
+In single-level regression, the model is fit in such a way as to make the sum of the squared residuals as small as possible. Deviance is the sum of the squared residuals.
+</p>
+</li>
+<li>
+<p>
+In multi-level regression, the model is fit via a method called ‘Maximum Likelihood’.
+</p>
+</li>
+</ul>
+<p>
+<span class="math display"><span class="math display">\[
+\text{Deviance} = -2LL = -2 \times log(likelihood)
+\]</span></span>
+</p>
+</div>
+</div>
+<div id="revising-the-mlm-specification" class="section level3">
+<h3><span class="header-section-number">1.5.5</span> Revising the MLM specification</h3>
+<p>In Hox’s table 2.1 (page 14) we see that the MLM with predictors (<span class="math inline">\(M_0\)</span>) includes a random compondnt with virtually no variance. This is likely why the model didn’t easily converge (a different optimizer was employed). It makes sence to remove the random component for gender and re fit the model.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_1a_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>texp <span class="op">+</span><span class="st"> </span>(extrav<span class="op">|</span>class), 
+                            <span class="dt">data   =</span> data_pop,
+                            <span class="dt">REML   =</span> <span class="ot">FALSE</span>) 
+pop_lmer_1b_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>texp <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span>class), 
+                            <span class="dt">data   =</span> data_pop,
+                            <span class="dt">REML   =</span> <span class="ot">FALSE</span>) </code></pre></div>
+<p>The middle column below reproduces Hox’s Table 2.2 found on the bottom of page 15 <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(pop_lmer_1_ml, pop_lmer_1a_ml, pop_lmer_1b_ml),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M1&quot;</span>, <span class="st">&quot;M1a&quot;</span>, <span class="st">&quot;M1b&quot;</span>),
+                <span class="dt">caption =</span> <span class="st">&quot;Assessing Significance of Random Slopes&quot;</span>)</code></pre></div>
+<p>======================================================================== M1 M1a M1b<br />
+———————————————————————— (Intercept) 0.76 *** 0.74 *** 0.81 <strong><em> (0.20) (0.20) (0.17)<br />
+sexgirl 1.25 </em></strong> 1.25 *** 1.25 <strong><em> (0.04) (0.04) (0.04)<br />
+extrav 0.45 </em></strong> 0.45 *** 0.45 <strong><em> (0.02) (0.02) (0.02)<br />
+texp 0.09 </em></strong> 0.09 *** 0.09 <strong><em> (0.01) (0.01) (0.01)<br />
+———————————————————————— AIC 4833.29 4828.81 4874.30<br />
+BIC 4894.90 4873.61 4907.90<br />
+Log Likelihood -2405.64 -2406.40 -2431.15<br />
+Num. obs. 2000 2000 2000<br />
+Num. groups: class 100 100 100<br />
+Var: class (Intercept) 1.32 1.28 0.29<br />
+Var: class sexgirl 0.00<br />
+Var: class extrav 0.03 0.03<br />
+Cov: class (Intercept) sexgirl -0.02<br />
+Cov: class (Intercept) extrav -0.19 -0.18<br />
+Cov: class sexgirl extrav -0.00<br />
+Var: Residual 0.55 0.55 0.59<br />
+======================================================================== </em></strong> p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(pop_lmer_1_ml, pop_lmer_1a_ml, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>Data: data_pop
+Models:
+pop_lmer_1a_ml: popular ~ sex + extrav + texp + (extrav | class)
+pop_lmer_1_ml: popular ~ sex + extrav + texp + (sex + extrav | class)
+               Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+pop_lmer_1a_ml  8 4828.8 4873.6 -2406.4   4812.8                         
+pop_lmer_1_ml  11 4833.3 4894.9 -2405.6   4811.3 1.5208      3     0.6775</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(pop_lmer_1a_ml, pop_lmer_1b_ml, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>Data: data_pop
+Models:
+pop_lmer_1b_ml: popular ~ sex + extrav + texp + (1 | class)
+pop_lmer_1a_ml: popular ~ sex + extrav + texp + (extrav | class)
+               Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+pop_lmer_1b_ml  6 4874.3 4907.9 -2431.2   4862.3                         
+pop_lmer_1a_ml  8 4828.8 4873.6 -2406.4   4812.8 49.489      2  1.794e-11
+                  
+pop_lmer_1b_ml    
+pop_lmer_1a_ml ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 
 </div>
 </div>
