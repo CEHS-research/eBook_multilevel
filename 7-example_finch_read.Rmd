@@ -1,0 +1,1188 @@
+# Intro Centering and Scaling Example: Reading Achievement
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)
+library(haven)        # read in SPSS dataset
+library(furniture)    # nice table1() descriptives
+library(stargazer)    # display nice tables: summary & regression
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(psych)        # contains some useful functions, like headTail
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(sjstats)      # ICC calculations
+library(effects)      # Effects for regression models
+library(optimx)       # Different optimizers to solve mlm's
+```
+
+
+
+<!-- ========================================================= -->
+## Background
+<!-- ========================================================= -->
+
+Finch textbook...
+
+The datasets for this textbook may be downloaded from the website: http://www.mlminr.com/data-sets/.  I was unable to find any documentation on this dataset in the book or online, so I contacted the authors.  There were unable to provide much either, but based on visual inspection designated the class of *factor* to thoes vairables that seem to represent categorical quantities. The labels for gender and class size are relative to the frequencies in the journal article the authors did point me to *(although the samples sizes do not match up)*.
+
+
+Read the SPSS data in with the `haven` package .
+
+```{r}
+data_raw <- haven::read_sav("http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0")
+```
+
+Declare all categorical variables to be factors and apply labels where meaningful.
+
+> Student-specific   
+> * `gender` = Male or Female    
+> * `age` = Age, in months    
+> * `gevocab` = Vocabulary Score    
+> * `geread` = Reading Score    
+
+> Class-specific      
+> * `classsize` = category of class's size    
+
+> School-specific     
+> * `senroll` = school enrollment    
+> * `ses` = school's SES level    
+
+```{r}
+data_achieve <- data_raw %>% 
+  dplyr::mutate_at(vars(id, region, corp, school, class), factor) %>% 
+  dplyr::mutate(gender = gender %>% 
+                  factor(labels = c("Female", "Male"))) %>% 
+  dplyr::mutate(classize = classize %>% 
+                  factor(labels = c("12-17", "18-21", 
+                                    "22-26", ">26"))) %>% 
+  dplyr::select(id, region, corp, school, class,           # Identifiers
+                gender, age, geread, gevocab,              # Pupil-level vars
+                classize,                                  # Class-Level vars
+                senroll, ses)                              # School-level vars
+```
+
+
+
+### Sample Structure    
+
+
+It is obvious that the sample is hiarchical in nature.  The nesting starts with `students` (level 1) nested within `class` (level 2), which are further nested within `school` (level 3), `corp` (level 4), and finally `region` (level 5).  
+
+For this chapter we will only focus on two levels: **students** are the units on which the outcome is measured and **schools** are the units in which they are nested.
+
+The number of ***regions*** = 9:
+
+```{r num_reg}
+num_regions <- data_achieve %>% 
+  dplyr::group_by(region) %>% 
+  dplyr::tally() %>% 
+  nrow()
+
+num_regions
+```
+
+The number of **corps** = 60:
+
+```{r num_corp}
+num_corps <- data_achieve %>% 
+  dplyr::group_by(region, corp) %>% 
+  dplyr::tally() %>% 
+  nrow()
+
+num_corps 
+```
+
+The number of **schools** = 160 
+
+```{r num_school}
+num_schools <- data_achieve %>% 
+  dplyr::group_by(region, corp, school) %>% 
+  dplyr::tally() %>% 
+  nrow()
+
+num_schools
+```
+
+The number of **classes** = 568
+```{r num_class}
+num_classes <- data_achieve %>% 
+  dplyr::group_by(region, corp, school, class) %>% 
+  dplyr::tally() %>% 
+  nrow()
+
+num_classes
+```
+
+The number of **students** = 10320
+
+```{r num_kid}
+num_subjects <- data_achieve %>% nrow
+
+num_subjects
+```
+
+<!-- ========================================================= -->
+## Exploratory Data Analysis
+<!-- ========================================================= -->
+
+### Summarize Descriptive Statistics
+
+#### The `stargazer` package
+
+Most posters, journal articles, and reports start with a table of descriptive statistics.  Since it tends to come first, this type of table is often refered to as Table 1.  The `stargazer()` function can be used to create such a table, but only for the entire dataset.  I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.  Also, it only summarises continuous, not categorical variables.
+
+```{r sumtable0, results='asis'}
+data_achieve %>% 
+  dplyr::select(classize, gender, geread, gevocab, age) %>% 
+  data.frame() %>% 
+  stargazer::stargazer(header = FALSE,
+                      title = "Summary of the numeric variables with `stargazer`",
+                       type = "html")
+```
+
+
+#### The `furniture` package
+
+Tyson Barrett's  **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics.  Full documentation can be accessed by executing `?furniture::table1`.
+
+
+```{r sumtable1, output="asis"}
+# note: the label for the table must be entered above, right after the "r"
+table1(data_achieve,
+       geread, gevocab, age, 
+       var_names = c("Reading Score",  
+                     "Vocabulary Score",
+                     "Age (in months)"),    # override names
+       splitby   = ~ gender,                # var to divide sample by
+       test      = TRUE,                    # test groups different?
+       caption   = "Summary of the numeric variables with `table1`", 
+       output    = "html")
+```
+
+
+### Visualization of Raw Data
+
+
+#### Level One Plots: Disaggregate or ignore higher levels   
+
+
+For a first look, its useful to plot all the data points on a single scatterplot as displayed in the previous plot.  Due to the large sample size, many points end up being plotted on top of or very near each other (*overplotted*).  When this is the case, it can be useful to use  `geom_binhex()` rather than `geom_point()` so the color saturation of the hexigons convey the number of points at that location, as seen in Figure \ref{fig:hexbin}.  
+
+*Note: I had to manually install the package `hexbin` for the `geom_hex()` to run.*
+
+```{r densityHex, fig.cap="Raw Data: Density, Vocab vs. Reading"}
+data_achieve %>% 
+  ggplot() +
+  aes(x = gevocab, 
+      y = geread) +
+  stat_binhex(colour = "grey85", na.rm  = TRUE) +     # outlines
+  scale_fill_gradientn(colors   = c("grey80","navyblue"), # fill color extremes
+                       name     = "Frequency",        # legend title
+                       na.value = NA) +               # color for count = 0
+  theme_bw()
+```
+
+
+#### Multilevel plots: illustrate two nested levels  
+
+Up to this point, all investigation of this dataset has been only at the pupil level and any nesting or clustering within schools has been ignored.  Plotting is a good was to start to get an idea of the school-to-school variability.  This figure displays four handpicked school to illustrate the degreen of school-to-school variability in the **association between vocab and reading** scores.
+
+```{r schoolRegEx, fig.width=6, fig.height=6, fig.cap="Raw Data: Independent Single-Level Regression within each school, a few illustrative cases"}
+data_achieve %>% 
+  dplyr::filter(school %in% c(1321, 6181, 
+                              6197, 6823)) %>%  # choose school numbers
+  ggplot(aes(x = gevocab,
+             y = geread))+
+  geom_count() +             # creates points, size by overplotted number
+  geom_smooth(method = "lm") +     # linear model (OLS) 
+  facet_wrap(~ school) +           # panels by school
+  theme_bw()
+```
+
+Another way to explore the **school-to-school variability** is to plot the linear model fit *independently* to each of the schools.  This next figure displays only the smooth lines without the standard error bands or the raw data in the form of points or hexagons.
+
+```{r schoolRegAll, fig.cap="Raw Data: Independent Single-Level Regression within each school, all schools shown together"}
+data_achieve %>% 
+  ggplot(aes(x = gevocab,
+             y = geread)) +
+  geom_smooth(aes(group = school),
+              method = "lm",
+              se     = FALSE,      # do NOT want the SE bands
+              size   = 0.3) +   
+  geom_smooth(method = "lm",
+              se     = FALSE,
+              color = "red",       # do NOT want the SE bands
+              size   = 2) +        # make the lines thinner
+  theme_bw() 
+```
+
+
+Due to the high number of schools, the figure with all the school's independent linear regression lines resembles a hairball and is hard to deduce much about individual schools.  By using the `facet_grid()` layer, we can seperate the schools out so better see school-to-school variability.  It also allows investigation of  higher level predictors, such as the school's SES (median split with `ntile(var, 2)`) and class size.
+
+
+```{r classRegSep, fig.width=6, fig.height=8, fig.cap="Raw Data: Independent Single-Level Regression within each school, sepearated by school size and school SES"}
+data_achieve %>% 
+  dplyr::mutate(ses2 = ntile(ses, 2) %>%                  # median split
+                  factor(labels = c("SES: Lower Half", 
+                                    "SES: Upper Half"))) %>% 
+  dplyr::mutate(senroll = ntile(senroll, 3) %>% 
+                  factor(labels = c("Enroll: Smallest Third",
+                                    "Enroll: Middle Third",
+                                    "Enroll: Largest Third"))) %>% 
+  ggplot(aes(x       = gevocab,
+             y       = geread,
+             group   = school)) +     # sepearates students into schools
+  geom_smooth(method = "lm",
+              se     = FALSE,         
+              size   = 0.3,
+              color = "black",
+              alpha = .2) +         
+  theme_bw() +
+  facet_grid(senroll ~ ses2)     # makes seperate panels (rows ~ columns)
+```
+
+
+<!-- ========================================================= -->
+## Single-Level Regression
+<!-- ========================================================= -->
+
+### Fit Nested Models
+
+Ignore the fact that students are nested or clustered within school, is called dissagregating.
+
+```{r}
+# linear model - ignores school (for reference only)
+fit_read_lm_0 <- lm(formula = geread ~ 1,               # intercept only
+                    data    = data_achieve)
+
+fit_read_lm_1 <- lm(formula = geread ~ gevocab ,        # one predictor
+                    data    = data_achieve)
+
+fit_read_lm_2 <- lm(formula = geread ~ gevocab + age,   # two predictors
+                    data    = data_achieve)
+
+fit_read_lm_3 <- lm(formula = geread ~ gevocab*age,    # interation+main effects
+                    data    = data_achieve)
+```
+
+
+Now compare the models:
+```{r, include=FALSE}
+texreg::screenreg(list(fit_read_lm_0, fit_read_lm_1, 
+                     fit_read_lm_2, fit_read_lm_3),
+                  digits = 3)
+```
+
+
+```{r regLM, results='asis'}
+texreg::htmlreg(list(fit_read_lm_0, fit_read_lm_1, 
+                     fit_read_lm_2, fit_read_lm_3),
+                caption = "OLS: Investigate Fixed, Pupil-level Predictors",
+                caption.above = TRUE,
+                doctype = FALSE,
+                digits = 4)
+```
+
+
+Assess the significance of terms in the last 'best' model
+
+```{r}
+summary(fit_read_lm_3) 
+```
+
+
+```{r}
+sjstats::r2(fit_read_lm_3)
+```
+
+
+```{r}
+anova(fit_read_lm_3)
+```
+
+### Visualize the Interaction
+
+```{r}
+effects::Effect(focal.predictors = c("gevocab", "age"),     # chooses defaul values for
+                mod = fit_read_lm_3)                        # continuous vars
+```
+
+
+
+```{r}
+effects::Effect(focal.predictors = c("gevocab", "age"),     # chooses defaul values for
+                mod = fit_read_lm_3) %>%                    # continuous vars
+  data.frame() %>%  
+  mutate(age = factor(age)) %>%           # must make a factor to seperate lines
+  ggplot(aes(x = gevocab,
+             y = fit,
+             color = age)) +
+  geom_point() +
+  geom_line() 
+```
+
+
+Here is a better version of the plot.
+
+Age is in months, so we want multiples of 12 for good visualization
+
+```{r}
+summary(data_achieve$age)/12
+```
+
+
+```{r mlInteraction}
+effects::Effect(focal.predictors = c("gevocab", "age"),
+                mod = fit_read_lm_3,
+                xlevels = list(age = c(84, 108, 132))) %>% 
+  data.frame() %>% 
+  mutate(age_yr = factor(age/12)) %>% 
+  ggplot(aes(x        = gevocab,
+             y        = fit,
+             color    = age_yr,
+             linetype = age_yr)) +
+  geom_line(size = 1.25) +
+  theme_bw() +
+  labs(title = "Best Linear Model - Disaggregated Data (OLS)",
+       x = "Vocabulary Score",
+       y = "Reading Score",
+       linetype = "Age (yrs)",
+       color    = "Age (yrs)") +
+  theme(legend.position = c(0.85, 0.2),
+        legend.key.width = unit(2, "cm"),
+        legend.background = element_rect(color = "black")) +
+  scale_linetype_manual(values = c("solid", "longdash", "dotted")) +
+  scale_x_continuous(breaks = seq(from = 0, to = 11, by = 2)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 11, by = 1))
+```
+
+
+
+<!-- ========================================================= -->
+## MLM - Step 1: Null Model, only fixed and random intercepts
+<!-- ========================================================= -->
+
+
+A so called *Empty Model* only includes random intercepts.  No independent variables are involved, other the grouping or clustering variable that designates how *level 1* units are nested within *level 2* units.  For a cross-sectional study design this would be the grouping variables, where as for longitudinal or repeated measures designs this would be the subject identifier.  This **nested structure** variable should be set to have class `factor`.
+
+### Fit the Model
+
+```{r}
+fit_read_0ml <- lme4::lmer(geread ~ 1 + (1|school), 
+                           data = data_achieve,
+                           REML = FALSE)                  # fit via ML (not the default)
+
+fit_read_0re <- lme4::lmer(geread ~ 1 + (1|school) , 
+                           data = data_achieve,
+                           REML = TRUE)                   # fit = REML (the default)
+```
+
+
+Compare the two models to OLS:
+```{r, include=FALSE}
+texreg::screenreg(list(fit_read_lm_0, fit_read_0ml, fit_read_0re),
+                custom.model.names = c("OLS", "MLM-ML", "MLM-REML"),
+                caption = "NULL Model: different estimation methods",
+                digits = 4)
+```
+
+
+```{r mlmNull, results='asis'}
+texreg::htmlreg(list(fit_read_lm_0, fit_read_0ml, fit_read_0re),
+                custom.model.names = c("OLS", "MLM-ML", "MLM-REML"),
+                caption = "MLM: NULL Model,two estimation methods",
+                caption.above = TRUE,
+                doctype = FALSE,
+                digits = 4)
+```
+
+Notice that the estimate for the intercept is nearly the same in the linear regression and intercept only models, but the standard errors are quite different.  When there is clustering in sample, the result of ignoring it is under estimation of the standard errors and over stating the significance of associations.  This table was made with the `screenreg()` function in the self named package.  I tend to prefer this display over `stargazer()`.
+
+
+### Estimate the ICC
+
+First, ask for the variance compenents:
+
+```{r}
+lme4::VarCorr(fit_read_0re) %>% 
+  print(comp = c("Variance", "Std.Dev"),
+        digits = 4)
+```
+
+```{r}
+sjstats::re_var(fit_read_0re)
+```
+
+
+$$
+\sigma^2_{u0} = 0.392 \\
+\sigma^2_{e}  = 5.045 
+$$
+
+
+```{block type='genericEq', echo=TRUE}
+**Intraclass Correlation (ICC) Formula**
+$$
+\overbrace{\rho}^{\text{ICC}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance}}}
+     {\underbrace{\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.9}
+$$
+```
+
+
+Then you can manually caluclate the ICC.
+
+```{r}
+0.392 / (0.392 + 5.045)
+```
+
+Or you can use the `icc()` function in the `sjstats` package.
+
+```{r}
+sjstats::icc(fit_read_0re)
+```
+
+
+*Note: On page 45 of the Finch textbook, the authors substituted standard deviations into the formula, rather than variances.  The mistake is listed on their webpage errata (http://www.mlminr.com/errata).*
+
+
+<!-- ========================================================= -->
+## MLM - Step 2: Add Lower-level explanatory variables, fixed, ML
+<!-- ========================================================= -->
+
+**Variance Component** models (steps 2 and 3) - decompose the INTERCEPT variance into different variance compondents for each level.  The regression intercepts are assumed to varry ACROSS the groups, while the slopes are assumed fixed (no random effects).
+
+
+Fixed effects selection should come **prior** to random effects.  You should use *Maximum Likelihood (ML)* estimation when fitting these models.
+
+```{block type='rmdlightbulb', echo=TRUE}
+* IF: only level 1 predictors and random intercepts are incorporated  
+* Then: MLM \textit{(ML)} $\approx$ ANCOVA \textit{OLS}.
+```
+
+
+
+### Add pupil's vocab score as a fixed effects predictor
+
+```{r}
+fit_read_1ml <- lme4::lmer(geread ~ gevocab + (1|school), 
+                           data = data_achieve,
+                           REML = FALSE)            # to compare fixed var sig
+
+fit_read_1re <- lme4::lmer(geread ~ gevocab + (1|school), 
+                           data = data_achieve,
+                           REML = TRUE)             # for R-sq calcs
+```
+
+
+```{r, include=FALSE}
+texreg::screenreg(list(fit_read_0ml, fit_read_1ml),
+                  custom.model.names = c("Null", "w Pred"),
+                  digits = 3)
+```
+
+```{r, results='asis'}
+texreg::htmlreg(list(fit_read_0ml, fit_read_1ml),
+                custom.model.names = c("Null", "w Pred"),
+                caption = "MLM: Investigate a Fixed Pupil-level Predictor",
+                caption.above = TRUE,
+                doctype = FALSE,
+                digits = 4)
+```
+
+
+#### Assess Significance of Effects
+
+Likelihood Ratio Test (LRT)
+
+Since models 0 and 1 are nested models, only differing by the the inclusion or exclusion of the fixed effects predictor `gevocab`, AND both models were fit via Maximum Likelihood, we can compare the model fit may be compared via the *Likilihood-Ratio Test (LRT)*.  The *Likelihood Ratio* value *(L. Ratio)* is found by subtracting the two model's  `-2 * logLik` or `deviance` values.  Significance is judged by the Chi Squared distribution, using the difference in the number of parameters fit as the degrees of freedom. 
+
+
+```{r}
+anova(fit_read_0ml, fit_read_1ml)
+```
+
+What does the model look like?
+
+```{r}
+effects::Effect(focal.predictors = c("gevocab"), 
+                mod = fit_read_1ml) %>% 
+  data.frame() %>% 
+  ggplot(aes(x = gevocab,
+             y = fit)) +
+  geom_ribbon(aes(ymin = lower,
+                  ymax = upper),
+                alpha = .3) +
+  geom_line() +
+  theme_bw()
+```
+
+#### Proportion of Variance Explained 
+
+Extract the variance-covariance estimates:
+
+BL = BAseline: The Null Model (fit via REML)
+```{r}
+sjstats::re_var(fit_read_0re)
+```
+$$
+\sigma^2_{u0-BL} = 0.392 \\
+\sigma^2_{e-BL}  = 5.045 
+$$
+
+
+
+MC = Model to Compare: Model with Predictor (fit via REML)
+```{r}
+sjstats::re_var(fit_read_1re)
+```
+
+$$
+\sigma^2_{u0-MC} = 0.100 \\
+\sigma^2_{e-MC}  = 3.766 
+$$
+
+
+**Level 1 $R^2$ - Snijders and Bosker**
+
+Found on Finch (page 47), proportion of variance in the outcome explained by predictor on level one    
+
+```{block type='genericEq', echo=TRUE}
+**Snijders and Bosker Formula - Level 1 ** 
+$$
+R^2_1 = 1 - \frac{\sigma^2_{e-MC} + \sigma^2_{u0-MC}}
+                 {\sigma^2_{e-BL} + \sigma^2_{u0-BL}}
+$$
+```
+
+
+
+
+*Note: This formula also apprears in the Finch errata.  The subscripts in the denominator of the fraction should be for model 0, not model 1.  They did substitute in the correct values.*
+
+
+Calculate the value by hand:
+```{r}
+1 - (0.100 + 3.766)/(0.392 + 5.045)
+```
+
+Or use the `sjstats` package to help out:
+```{r}
+1 - sum(sjstats::re_var(fit_read_1re)) / sum(sjstats::re_var(fit_read_0re))
+```
+
+
+
+
+
+**Level 1 $R^2$ - Raudenbush and Bryk**
+
+@hox2017 presents this formula on page 58 of chapter 2
+
+> R-squared: *"proportion of variance explained by the first level predictor(s)"*
+
+```{block type='genericEq', echo=TRUE}
+**Raudenbush and Bryk Approximate Formula - Level 1 ** 
+$$
+R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
+              {\sigma^2_{e-BL} }
+\tag{Hox 4.8}
+$$
+```
+
+
+
+Calculate the value by hand:
+```{r}
+(5.045 - 3.766) / 5.045
+```
+
+
+
+**Level 2 $R^2$ - ???** 
+
+
+Proportion of variance in the outcome explained by predictors
+
+```{block type='genericEq', echo=TRUE}
+$$
+R^2_2 = 1 - \frac{\frac{\sigma^2_{e-MC}}{B} + \sigma^2_{u0-MC}}
+                 {\frac{\sigma^2_{e-BL}}{B} + \sigma^2_{u0-BL}}
+$$
+```
+
+$B$ is the average size of the Level 2 units (schools).  Technically, you should use the *harmonic mean*, but unless the clusters differ greatly in size, it doesn't make a huge difference.
+
+
+* Average sample cluster size
+```{r}
+num_subjects / num_schools
+```
+
+
+* Calculate by hand:
+```{r}
+1 - ((3.766 / 64.5) + 0.100)/
+    ((5.045 / 64.5) + 0.391)
+```
+
+
+**Level 2 $R^2$ - Raudenbush and Bryk**
+
+```{block type='genericEq', echo=TRUE}
+**Raudenbush and Bryk Approximate Formula - Level 2 ** 
+$$
+R^2_1 = \frac{\sigma^2_{u0-BL} - \sigma^2_{u0-MC}}
+                 {\sigma^2_{u0-BL} }
+\tag{Hox 4.9}
+$$
+```
+
+
+```{r}
+(0.392 - 0.100)/(0.392)
+```
+
+
+
+
+
+
+### Investigate More Level 1 Predictors
+
+Part of investigating lower level explanatory variables, is checking for interactions between these variables.  The interaction between fixed effects is also considered to be a fixed effect, so we need to employ *Maximum Likelihood* estimation to compare nested models.
+
+```{r}
+fit_read_2ml <- lmer(geread ~ gevocab + age + (1 | school), 
+                     data = data_achieve,
+                     REML = FALSE)
+
+fit_read_3ml <- lmer(geread ~ gevocab*age + (1 | school), 
+                     data = data_achieve,
+                     REML = FALSE)
+```
+
+
+```{r, include = FALSE}
+texreg::screenreg(list(fit_read_1ml, fit_read_2ml, fit_read_3ml),
+                  custom.model.names = c("Only Vocab", "Both Main Effects", "Interaction"),
+                  digits = 4)
+```
+
+```{r, results='asis'}
+texreg::htmlreg(list(fit_read_1ml, 
+                     fit_read_2ml, 
+                     fit_read_3ml),
+                custom.model.names = c("Only Vocab", 
+                                       "Both Main Effects", 
+                                       "Interaction"),
+                caption = "MLM: Investigate Other Fixed Pupil-level Predictors",
+                caption.above = TRUE,
+                doctype = FALSE,
+                digits = 4)
+```
+
+#### Assess Significance of Effects
+
+Likelihood Ratio Test (LRT)
+
+```{r}
+anova(fit_read_1ml, fit_read_2ml, fit_read_3ml)
+```
+
+
+#### Visulaize the Interation
+
+```{r}
+effects::Effect(focal.predictors = c("gevocab", "age"), 
+                mod = fit_read_3ml,
+                xlevels = list(age = c(84, 108, 132))) %>% 
+  data.frame() %>% 
+  dplyr::mutate(age_yr = factor(age/12)) %>% 
+  ggplot(aes(x = gevocab,
+             y = fit,
+             color = age_yr)) +
+  geom_line() +
+  theme_bw()
+```
+
+<!-- ========================================================= -->
+## MLM - Step 3: Higher-level explanatory variables, fixed, ML
+<!-- ========================================================= -->
+
+School enrollment (`senroll`) applies to each school as a whole.  When a variable is measured at a higher level, all units in the same group have the same value.  In this case, all student in the same school have the same value for `senroll`.  
+
+```{r}
+fit_read_4ml <- lme4::lmer(geread ~ gevocab*age + senroll + (1 | school), 
+                           data = data_achieve,
+                           REML = FALSE)
+```
+
+
+```{r, include=FALSE}
+texreg::screenreg(list(fit_read_0ml, fit_read_3ml, fit_read_4ml),
+                  custom.model.names = c("Null", "Level 1 only", "Level 2 Pred"),
+                  digits = 4)
+```
+
+
+```{r, results='asis'}
+texreg::htmlreg(list(fit_read_0ml, 
+                     fit_read_3ml, 
+                     fit_read_4ml),
+                custom.model.names = c("Null", 
+                                       "Level 1 only", 
+                                       "Level 2 Pred"),
+                caption = "MLM: Investigate a Fixed School-Level Predictor",
+                caption.above = TRUE,
+                doctype = FALSE,
+                digits = 4)
+```
+
+
+### Assess Significance of Effects
+
+Likelihood Ratio Test (LRT)
+```{r}
+anova(fit_read_0ml, fit_read_3ml, fit_read_4ml)
+```
+
+
+<!-- ========================================================= -->
+## MLM - Step 4: Explanatory variables predict Slopes, random, REML
+<!-- ========================================================= -->
+
+**Random Coefficient** models - decompose the SLOPE variance BETWEEN groups. 
+
+The fixed effect of the predictor captures the overall association it has with the outcome (intercept), while the random effect of the predictor captures the group-to-group variation in the association (slope).  *Note: A variable can be fit as BOTH a fixed and random effect.*  
+
+```{r}
+fit_read_3re <- lme4::lmer(geread ~ gevocab*age + (1 | school), 
+                     data = data_achieve,
+                     REML = TRUE)
+
+#fit_read_5re <- lmer(geread ~ gevocab + (gevocab | school), 
+#                     data = achieve,
+#                     REML = TRUE)         # failed to converge :(
+
+fit_read_5re <- lme4::lmer(geread ~ gevocab*age + (gevocab | school), 
+                           data = data_achieve,
+                           REML = TRUE,
+                           control = lmerControl(optimizer = "optimx", 
+                                                 calc.derivs = FALSE,
+                                                 optCtrl = list(method = "nlminb",
+                                                                starttests = FALSE,
+                                                                kkt = FALSE))) 
+```
+
+
+
+```{r, include=FALSE}
+texreg::screenreg(list(fit_read_3re, fit_read_5re),
+                  custom.model.names = c("Rand Int", "Rand Int and Slopes"),
+                  digits = 4)
+```
+
+```{r, results='asis'}
+texreg::htmlreg(list(fit_read_3re, 
+                     fit_read_5re),
+                custom.model.names = c("Rand Int", 
+                                       "Rand Int and Slopes"),
+                caption = "MLM: Investigate Random Effects",
+                caption.above = TRUE,
+                doctype = FALSE,
+                digits = 4)
+```
+
+
+
+
+#### Assess Significance of Effect
+
+Likelihood Ratio Test (LRT)
+```{r}
+anova(fit_read_3re, fit_read_5re, refit = FALSE)
+```
+
+You can use the Chi-squared LRT test based on deviances even though we fit our modesl with REML, since the models only differe in terms of random effects, but have the same fixed effects.
+
+#### Visualize the Model
+
+What does the model look like?
+
+```{r}
+effects::Effect(focal.predictors = c("gevocab", "age"), 
+                mod = fit_read_5re,
+                xlevels = list(age = c(84, 108, 132))) %>% 
+  data.frame() %>% 
+  dplyr::mutate(age_yr = factor(age/12)) %>% 
+  ggplot(aes(x = gevocab,
+             y = fit,
+             color = age_yr)) +
+  geom_line() +
+  theme_bw()
+```
+
+
+
+<!-- ========================================================= -->
+## MLM - Step 5: Cross-Level interactions between explanatory variables - fixed, ML
+<!-- ========================================================= -->
+
+Remember that an interaction beween fixed effects is also fixed.
+
+```{r}
+fit_read_5ml <- lme4::lmer(geread ~ gevocab*age + (gevocab | school), 
+                           data = data_achieve,
+                           REML = FALSE,
+                           control = lmerControl(optimizer = "optimx", 
+                                                 calc.derivs = FALSE,
+                                                 optCtrl = list(method = "nlminb",
+                                                                starttests = FALSE,
+                                                                kkt = FALSE)))
+
+fit_read_6ml <- lme4::lmer(geread ~ gevocab*age + senroll +
+                             (gevocab | school), 
+                           data = data_achieve,
+                           REML = FALSE)
+
+fit_read_7ml <- lme4::lmer(geread ~ gevocab*age + gevocab*senroll +
+                           (gevocab | school), 
+                           data = data_achieve,
+                           REML = FALSE)
+```
+
+
+```{r, include = FALSE}
+screenreg(list(fit_read_3ml, fit_read_6ml, fit_read_7ml),
+          custom.model.names = c("Level 1 only", "Both Levels", "Cross-Level"),
+          digits = 4)
+```
+
+```{r, results='asis'}
+texreg::htmlreg(list(fit_read_3ml, 
+                     fit_read_6ml, 
+                     fit_read_7ml),
+                custom.model.names = c("Level 1 only", 
+                                       "Both Levels", 
+                                       "Cross-Level"),
+                caption = "MLM: Investigate a Fixed Cross-level Interaction",
+                caption.above = TRUE,
+                doctype = FALSE,
+                digits = 4)
+```
+
+
+#### Assess Significance of Effects
+
+Likelihood Ratio Test (LRT)
+```{r}
+anova(fit_read_3ml, fit_read_6ml, fit_read_7ml)
+```
+
+
+<!-- ========================================================= -->
+## Centering Predictors: Change Center
+<!-- ========================================================= -->
+
+Centering variables measured on the lowest level only involves subtacting the mean from every value.  The spread or standard deviation is not changed.
+
+### Compute the Grand Means
+
+```{r, results='asis'}
+data_achieve %>% 
+  furniture::table1(gevocab, age, senroll,
+                    output = "html",
+                    digits = 4)
+```
+
+#### Subtract the Grand Mean
+
+Subract the grand-mean from each observation:
+
+```{r}
+data_achieve_center <- data_achieve %>% 
+  dplyr::mutate(gevocab_c = gevocab - 4.4938) %>% 
+  dplyr::mutate(age_c     = age     - 107.5290) %>% 
+  dplyr::mutate(senroll_c = senroll - 533.4148)
+```
+
+
+
+#### Compare the centered and uncentered measures
+
+View the first and last few observations:
+
+```{r}
+data_achieve_center %>% 
+  dplyr::select(id, school, 
+                gevocab, gevocab_c, 
+                age,     age_c, 
+                senroll, senroll_c) %>% 
+  headTail()
+```
+
+Compare the summary statistcs:
+
+```{r, results='asis'}
+data_achieve_center %>% 
+  furniture::table1(gevocab, gevocab_c, 
+                    age,     age_c, 
+                    senroll, senroll_c,
+                    output = "html",
+                    digits = 4)
+```
+
+### Use Centered Variables
+
+```{r}
+fit_read_8ml <- lme4::lmer(geread ~ gevocab + age + (gevocab | school), 
+                           data = data_achieve_center,
+                           REML = FALSE,
+                             control = lmerControl(optimizer = "optimx", 
+                                                   calc.derivs = FALSE,
+                                                   optCtrl = list(method = "nlminb",
+                                                                  starttests = FALSE,
+                                                                  kkt = FALSE)))
+
+fit_read_8ml_c <- lme4::lmer(geread ~ gevocab_c + age_c + (gevocab_c | school), 
+                             data = data_achieve_center,
+                             REML = FALSE,
+                               control = lmerControl(optimizer = "optimx", 
+                                                     calc.derivs = FALSE,
+                                                     optCtrl = list(method = "nlminb",
+                                                                    starttests = FALSE,
+                                                                    kkt = FALSE)))
+
+fit_read_9ml <- lme4::lmer(geread ~ gevocab*age + (gevocab | school), 
+                           data = data_achieve_center,
+                           REML = FALSE,
+                             control = lmerControl(optimizer = "optimx", 
+                                                   calc.derivs = FALSE,
+                                                   optCtrl = list(method = "nlminb",
+                                                                  starttests = FALSE,
+                                                                  kkt = FALSE)))
+
+fit_read_9ml_c <- lme4::lmer(geread ~ gevocab_c*age_c + (gevocab_c | school), 
+                             data = data_achieve_center,
+                             REML = FALSE,
+                               control = lmerControl(optimizer = "optimx", 
+                                                     calc.derivs = FALSE,
+                                                     optCtrl = list(method = "nlminb",
+                                                                    starttests = FALSE,
+                                                                    kkt = FALSE)))
+```
+
+#### Compare the Models
+
+```{r, include=FALSE}
+screenreg(list(fit_read_8ml, fit_read_9ml, fit_read_8ml_c, fit_read_9ml_c),
+          custom.model.names = c("Main Effects", "Interaction",
+                                 "Main Effects", "Interaction"),
+          groups = list("Raw Scale" = 2:4,
+                        "Mean Centered" = 5:7),
+          digits = 3)
+```
+
+
+```{r, include=FALSE}
+texreg::htmlreg(list(fit_read_8ml, 
+                     fit_read_9ml, 
+                     fit_read_8ml_c, 
+                     fit_read_9ml_c),
+                custom.model.names = c("Main Effects", 
+                                       "Interaction",
+                                       "Main Effects", 
+                                       "Interaction"),
+                groups = list("Raw Scale" = 2:4,
+                              "Mean Centered" = 5:7),
+                caption = "MLM: Investigate Centering Variables Involved in an Interaction",
+                caption.above = TRUE,
+                doctype = FALSE,
+                digits = 4)
+```
+
+
+
+```{r}
+anova(fit_read_8ml, fit_read_9ml)
+```
+
+```{r}
+anova(fit_read_8ml_c, fit_read_9ml_c)
+```
+
+
+#### Visualize the Model
+
+What does the model look like?
+
+
+```{r}
+effects::Effect(focal.predictors = c("gevocab_c", "age_c"),
+                mod = fit_read_9ml_c) %>%  
+  data.frame() %>% 
+  dplyr::mutate(age_c = factor(age_c)) %>% 
+  ggplot(aes(x = gevocab_c,
+             y = fit,
+             color = age_c)) +
+  geom_line() +
+  theme_bw()
+```
+
+```{r}
+effects::Effect(focal.predictors = c("gevocab_c", "age_c"),
+                mod = fit_read_9ml_c,
+                xlevels = list(age_c = c(84, 108, 132) - 107.5290)) %>%  
+  data.frame() %>% 
+  dplyr::mutate(age_yrs = factor((age_c + 107.5290)/12)) %>% 
+  dplyr::mutate(gevocab = gevocab_c + 4.4938) %>% 
+  ggplot(aes(x = gevocab,
+             y = fit,
+             color = age_yrs)) +
+  geom_line() +
+  theme_bw()
+```
+
+
+
+<!-- ========================================================= -->
+## Rescaling Predictors: Change Units or Standardize
+<!-- ========================================================= -->
+
+To retain meaningful units, you can multiply or divide all the measured values of a variable by a set amount, like a multiple of 10.  This retains the meaning behind the units while still bringing them into line with other variables in the model and can avoid some convergence issues.
+
+### Scale Varaibles
+
+#### Divide by a Meaningful Value
+
+```{r}
+data_achieve_center_scale <- data_achieve_center %>%  
+  dplyr::mutate(senroll_ch = senroll_c / 100) %>%    # centered AND divided by one hundred
+  dplyr::mutate(ses_t      = ses / 10)               # JUST divide by ten
+```
+
+
+
+#### Compare the scaled and unscaled measures
+
+View the first and last few observations:
+
+```{r}
+data_achieve_center_scale %>% 
+  dplyr::select(id, school, 
+                senroll, senroll_c, senroll_ch,
+                ses, ses_t) %>% 
+  headTail()
+```
+
+Compare the summary statistcs:
+
+```{r, results='asis'}
+data_achieve_center_scale %>% 
+  furniture::table1(senroll, senroll_c, senroll_ch,
+                    ses, ses_t,
+                    output = "html",
+                    digits = 4)
+```
+
+### Use Scaled Variables
+
+
+
+```{r}
+fit_read_10ml <- lme4::lmer(geread ~ gevocab_c*age_c + gevocab_c*ses_t +   # 2 2-way interactions
+                                      (gevocab_c | school),  
+                             data   = data_achieve_center_scale,
+                             REML   = FALSE)
+
+fit_read_11ml <- lme4::lmer(geread ~ gevocab_c*age_c*ses_t +              # 3-way interaction
+                                      (gevocab_c | school),  
+                             data   = data_achieve_center_scale,
+                             REML  = FALSE)
+```
+
+
+```{r, include = FALSE}
+screenreg(list(fit_read_10ml, fit_read_11ml),
+          custom.model.names = c("2-way", "3-way"),
+          digits = 4)
+```
+
+```{r, results='asis'}
+texreg::htmlreg(list(fit_read_10ml, 
+                     fit_read_11ml),
+                custom.model.names = c("2-ways", 
+                                       "3-way"),
+                caption = "MLM: Investigate More Complex Fixed Interactions",
+                caption.above = TRUE,
+                doctype = FALSE,
+                digits = 4)
+```
+
+
+```{r}
+anova(fit_read_10ml, fit_read_11ml)
+```
+
+
+#### Visualize the Model
+
+```{r}
+data_achieve_center_scale %>% 
+  dplyr::select(gevocab_c, age_c, ses_t) %>% 
+  summary()
+```
+
+
+```{r}
+effects::Effect(focal.predictors = c("gevocab_c", "age_c", "ses_t"),
+                mod = fit_read_11ml,
+                xlevels = list(age_c = c(84, 108, 132) - 107.5290,
+                               ses_t = c(0, 5, 10))) %>%  
+  data.frame() %>% 
+  dplyr::mutate(age_yrs = factor((age_c + 107.5290)/12)) %>% 
+  dplyr::mutate(gevocab = gevocab_c + 4.4938) %>% 
+  dplyr::mutate(ses     = factor(ses_t * 10)) %>% 
+  ggplot(aes(x = gevocab,
+             y = fit,
+             color = age_yrs)) +
+  geom_line() +
+  theme_bw() +
+  facet_grid(.~ ses, labeller = "label_both") +
+  labs(x = "Vocabulary Score",
+       y = "Reading Score\nEstimated Marginal Mean",
+       color = "Student Age")
+```
+
+
+
+
+
+
+
+---- 
+
+Helpful links:
+
+http://maths-people.anu.edu.au/~johnm/r-book/xtras/mlm-ohp.pdf
+
+http://ase.tufts.edu/gsc/gradresources/guidetomixedmodelsinr/mixed%20model%20guide.html 
+
+http://web.stanford.edu/class/psych252/section_2015/Section_week9.html 
+
+https://www.r-bloggers.com/visualizing-generalized-linear-mixed-effects-models-with-ggplot-rstats-lme4/ 
+
+https://www.r-bloggers.com/visualizing-generalized-linear-mixed-effects-models-part-2-rstats-lme4/ 
+
+http://www.strengejacke.de/sjPlot/sjp.lmer/

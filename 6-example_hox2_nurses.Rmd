@@ -1,0 +1,389 @@
+# Intro 3-Level Model Example: Nurse's Stress Intervention
+
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)
+library(haven)        # read in SPSS dataset
+library(furniture)    # nice table1() descriptives
+library(stargazer)    # display nice tables: summary & regression
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(psych)        # contains some useful functions, like headTail
+library(car)          # Companion to Applied Regression
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(lmerTest)     # Tests on lmer objects
+library(sjstats)      # ICC calculations
+library(effects)      # Effects for regression models
+library(optimx)       # Different optimizers to solve mlm's
+```
+
+
+<!-- ========================================================= -->
+## Background
+<!-- ========================================================= -->
+
+The text **"Multilevel Analysis: Techniques and Applications, Third Edition"** [@hox2017] has a companion [website](https://multilevel-analysis.sites.uu.nl/) which includes links to all the data files used throughout the book (housed on the [book's GitHub repository](https://github.com/MultiLevelAnalysis)).  
+
+The following example is used through out @hox2017's chapater 2.
+
+> From **Appendix E**:  
+>
+> The **nurses.sav** file contains three-level simulated data from a hypothetical study on stress in hospitals.  The data are from nurses working in wards nested within hospitals.  It is a cluster-randomized experiment.  In each of **25** hospitals, **four wards** are selected and randomly assigned to an experimental and a control condition.  In the experimental condition, a training program is offered to all nurses to cope with job-related stress.  After the program is completed, a sample of about 10 nurses from each ward is given a test that measures job-related stress.  ADditional variables are: nurse age (years), nurse experience (years), nurse gender (0=male, 1 = female), type of ward (0=general care, 1=special care), and hospital size (0=small, 1 = medium, 2=large).  The data have been generated to illustrate three-level analysis with a random slope for the effect of `ExpCon`.
+
+Here the data is read in and the SPSS variables with labels are converted to $R$ factors. 
+
+```{r}
+data_raw <- haven::read_sav("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/Nurses/SPSS/Nurses.sav") %>% 
+  haven::as_factor()             # retain the labels from SPSS --> factor
+```
+
+
+### Unique Identifiers
+
+ All standardized *(starts with "Z")* and mean centered *(starts with "C")* variables will be remove so that their creation may be shown later.  A new indicator varible for nurses with be created by combining the `hospital`, `ward`, and `nurse` indicators.  Having a unique, distinct identifier variable for each of the lowest (Level 1) units is imparative for multilevel anlayses.
+
+```{r}
+data_nurse <- data_raw %>%
+  dplyr::mutate(genderF = factor(gender, labels = c("Male", "Female"))) %>% # apply factor labels
+  dplyr::mutate(id = paste(hospital, ward, nurse,
+                           sep = "_") %>%                                   # cunique id for each student
+                  factor()) %>%                                             # declare id is a factor
+  dplyr::mutate_at(vars(hospital, ward, 
+                        wardid, nurse), factor) %>%                         # declare to be factors
+  dplyr::mutate(age = age %>% as.character %>% as.numeric) %>%              # declare to be numeric
+  dplyr::select(id, wardid, nurse, ward, hospital,
+                age, gender, genderF, experien, 
+                wardtype, hospsize,
+                expcon, stress)                                             # reduce variables included
+
+tibble::glimpse(data_nurse)
+```
+
+
+## Exploratory Data Analysis
+
+### Summarize Descriptive Statistics
+
+#### The `stargazer` package
+
+Most posters, journal articles, and reports start with a table of descriptive statistics.  Since it tends to come first, this type of table is often refered to as *Table 1*.  The `stargazer()` function can be used to create such a table, but only for the entire dataset [@R-stargazer].  I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.
+
+```{r, results='asis'}
+data_nurse %>% 
+  data.frame() %>% 
+  stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
+                       header = FALSE,
+                       type = "html")
+```
+
+
+#### The `furniture` package
+
+Tyson Barrett's  **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics.  Full documentation can be accessed by executing `?furniture::table1`.    
+
+```{r, results='asis'}
+data_nurse %>% 
+  furniture::table1(age, genderF, experien,  wardtype, hospsize, 
+                     splitby    = ~ expcon,                                  # var to divide sample by
+                     test       = TRUE,                                      # test groups different?
+                     type       = "full",                                    # give the test statistic
+                     output     = "html",                                    # output for latex
+                     align      = c("l", "r", "r", "r"),                     # column alignment
+                     caption    = "Compare Intervention groups on five main variables")  # title
+```
+
+
+
+
+```{block type='rmdlightbulb', echo=TRUE}
+The t-test performed by the `furniture::table1()` function will always assume indepent groups and that HOV is not violated.  This may or may not be appropriate.
+```
+
+
+```{r}
+data_nurse %>% 
+  ggplot() +
+  aes(x = expcon,
+      y = stress) +
+  geom_boxplot()
+```
+
+
+
+<!-- ========================================================= -->
+## MLM: Intercept-only or Null Model
+<!-- ========================================================= -->
+
+> In a Null, intercept-only, or Empty model, no predictors are included.
+
+
+#### Fit the Model
+
+Fit the model to the data.
+
+```{r}
+nurse_lmer_0_ml <- lme4::lmer(stress ~ 1 + (1|hospital/ward),  # each hospital contains several wards
+                              data = data_nurse,
+                              REML = TRUE)              # fit via REML (the default) for ICC calculations
+
+nurse_lmer_0_re <- lme4::lmer(stress ~ 1 + (1|hospital/ward),  
+                              data = data_nurse,
+                              REML = FALSE)             # fit via ML for comparing FIXED effects inclusion to
+```
+
+```{r, results='asis'}
+texreg::htmlreg(list(nurse_lmer_0_ml, nurse_lmer_0_re),
+                  custom.model.names = c("M0: Null, ML", "M0: Null, REML"),
+                  caption = "NULL Model: different estimation methods",
+                  digits = 4)
+```
+
+<!-- ========================================================= -->
+## Estimate the ICC
+<!-- ========================================================= -->
+
+The ICC is calculated by dividing the between-group-variance (random intercept variance) by the total variance (i.e. sum of between-group-variance and within-group (residual) variance).
+
+```{block type='genericEq', echo=TRUE}
+**Intraclass Correlation (ICC) Formula**
+$$
+\overbrace{\rho}^{\text{ICC}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance}}}
+     {\underbrace{\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.9}
+$$
+```
+
+```{r}
+lme4::VarCorr(nurse_lmer_0_re) 
+```
+
+```{r}
+lme4::VarCorr(nurse_lmer_0_re) %>% 
+  print(comp = c("Variance", "Std.Dev"),
+        digits = 3)
+```
+
+
+```{r}
+vc <- lme4::VarCorr(nurse_lmer_0_re) %>% 
+  data.frame() 
+  
+pie(x = vc$vcov,
+    labels = vc$grp)
+```
+
+The `sjstats` package has a few really helpful funcitons:
+
+```{r}
+sjstats::re_var(nurse_lmer_0_re)
+```
+
+```{r}
+sjstats::icc(nurse_lmer_0_re)
+```
+
+
+<!-- ========================================================= -->
+## MLM: Add Fixed Effects
+<!-- ========================================================= -->
+
+### Fit the Model
+
+```{r}
+nurse_lmer_1_ml <- lme4::lmer(stress ~ expcon + age + gender + 
+                                       experien + wardtype + hospsize +
+                                       (1|hospital/ward),  # each hospital contains several wards
+                              data = data_nurse,
+                              REML = FALSE)              # fit via ML for nested FIXED effects
+```
+
+
+```{r, results='asis'}
+texreg::htmlreg(list(nurse_lmer_0_ml, nurse_lmer_1_ml),
+                  custom.model.names = c("M0: null", "M1: fixed pred"),
+                  caption = "Nested Models: Fixed effects via ML",
+                  digits = 4)
+```
+
+### Assess Significance
+
+```{r}
+anova(nurse_lmer_0_ml, nurse_lmer_1_ml)
+```
+
+
+
+<!-- ========================================================= -->
+## MLM: Add Random Slope
+<!-- ========================================================= -->
+
+### Fit the Model
+
+```{r}
+nurse_lmer_1_re <- lme4::lmer(stress ~ expcon + age + gender + experien + wardtype + hospsize +
+                                (1|hospital/ward),  
+                              data = data_nurse,
+                              REML = TRUE)              # fit via REML for nested Random Effects
+
+nurse_lmer_2_re <- lme4::lmer(stress ~ expcon + age + gender + experien + wardtype + hospsize +
+                                (expcon|hospital/ward),  
+                              data = data_nurse,
+                              REML = TRUE)              # fit via REML for nested Random Effects
+```
+
+
+
+
+
+
+
+```{r, results='asis'}
+texreg::htmlreg(list(nurse_lmer_1_re, nurse_lmer_2_re),
+                  custom.model.names = c("M1: RI", "M2: RIAS"),
+                  caption = "Nested Models: Random Slope via REML",
+                  digits = 4)
+```
+
+### Assess Significance
+
+```{r}
+anova(nurse_lmer_1_re, nurse_lmer_2_re, refit = FALSE)
+```
+
+
+<!-- ========================================================= -->
+## MLM: Add Cross-Level Interaction
+<!-- ========================================================= -->
+
+### Fit the Model
+
+```{r}
+nurse_lmer_2_ml <- lme4::lmer(stress ~ expcon + age + gender + experien + wardtype + hospsize +
+                                (expcon|hospital/ward),  
+                              data = data_nurse,
+                              REML = FALSE)              # fit via ML for nested FIXED Effects
+
+nurse_lmer_3_ml <- lme4::lmer(stress ~ expcon + age + gender + experien + wardtype + hospsize*expcon +
+                                (expcon|hospital/ward),  
+                              data = data_nurse,
+                              REML = FALSE)              # fit via ML for nested FIXED Effects
+```
+
+
+```{r, results='asis'}
+texreg::htmlreg(list(nurse_lmer_2_ml, nurse_lmer_3_ml),
+                  custom.model.names = c("M2: RAIS", "M3: Xlevel Int"),
+                  caption = "Nested Models: Fixed Cross-Level Interaction via ML",
+                  digits = 4)
+```
+
+### Assess Significance
+
+```{r}
+anova(nurse_lmer_2_ml, nurse_lmer_3_ml)
+```
+
+
+### Final Model
+
+```{r}
+nurse_lmer_3_re <- lme4::lmer(stress ~ expcon + age + gender + experien + wardtype + hospsize*expcon +
+                                (expcon|hospital/ward),  
+                              data = data_nurse,
+                              REML = TRUE,                                     # fit via REML for final model
+                            control = lmerControl(optimizer ="Nelder_Mead"))   # Hessian convergence issues           
+```
+
+```{r, results='asis'}
+texreg::htmlreg(list(nurse_lmer_3_re),
+                  custom.model.names = c("M3: Xlevel Int"),
+                  caption = "Final Model: with REML",
+                  single.row = TRUE,
+                  digits = 4)
+```
+
+```{block type='rmdimportant', echo=TRUE}
+**ICC for unconditional and conditional model**
+
+Usually, the ICC is calculated for the null model ("unconditional model"). However, according to Raudenbush and Bryk (2002) or Rabe-Hesketh and Skrondal (2012) it is also feasible to compute the ICC for full models with covariates ("conditional models") and compare how much a level-2 variable explains the portion of variation in the grouping structure (random intercept). 
+
+**ICC for random-slope models** 
+
+**Caution:** For models with **random slopes and random intercepts**, the ICC would differ at each unit of the predictors. Hence, the ICC for these kind of models cannot be understood simply as proportion of variance (see Goldstein et al. 2010). For convenience reasons, as the 'icc()' function also extracts the different random effects variances, the ICC for random-slope-intercept-models is reported nonetheless, but **it is usually no meaningful summary** of the proportion of variances. 
+
+**ICC for models with multiple or nested random effects**
+
+**Caution:** By default, for **three-level-models**, depending on the nested structure of the model, or for models with multiple random effects, 'icc()' only reports the proportion of variance explained for each grouping level. Use 'adjusted = TRUE' to calculate the adjusted and conditional ICC.
+```
+
+
+
+
+```{r}
+sjstats::icc(nurse_lmer_3_re)
+```
+
+
+
+```{r}
+effects::Effect(focal.predictors = c("expcon", "hospsize"),
+                mod = nurse_lmer_3_re) %>% 
+  data.frame()  %>% 
+  ggplot() +
+  aes(x = hospsize %>% forcats::fct_rev(),
+      y = fit,
+      group = expcon,
+      shape = expcon,
+      color = expcon) +
+  geom_errorbar(aes(ymin = lower,
+                    ymax = upper),
+                width = .4,
+                position = position_dodge(width = .2)) + 
+  geom_line(position = position_dodge(width = .2)) +
+  geom_point(size = 3,
+             position = position_dodge(width = .2)) +
+  theme_bw() +
+  labs(x = "Hospital Size",
+       y = "Estimated Marginal Mean, Stress",
+       shape = "Condition",
+       color = "Condition")
+```
+
+
+
+```{r}
+nurse_lmer_3_re %>% 
+  emmeans::emmeans(~ expcon | hospsize)
+```
+
+```{r}
+nurse_lmer_3_re %>% 
+  emmeans::emmeans(~ expcon | hospsize) %>% 
+  pairs()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

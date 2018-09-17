@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
+  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="EQM_v1_cover.png" />
+  <meta property="og:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="github-repo" content="cehs-research/eBook_wrangle" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  
+  <meta name="twitter:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="twitter:image" content="EQM_v1_cover.png" />
+
+<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="index.html">
+<link rel="next" href="example-pupil-popularity.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Vol. 5: Multilevel Models</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#blocked-notes"><i class="fa fa-check"></i>Blocked Notes</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-output"><i class="fa fa-check"></i>Code and Output</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#the-authors"><i class="fa fa-check"></i>The Authors</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#why-choose-r"><i class="fa fa-check"></i>Why choose R ?</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fyi"><i class="fa fa-check"></i>FYI</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="notation.html"><a href="notation.html"><i class="fa fa-check"></i><b>1</b> Notation</a><ul>
+<li class="chapter" data-level="1.1" data-path="notation.html"><a href="notation.html#data"><i class="fa fa-check"></i><b>1.1</b> Data</a></li>
+<li class="chapter" data-level="1.2" data-path="notation.html"><a href="notation.html#single-level-regression-analysis"><i class="fa fa-check"></i><b>1.2</b> Single-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="notation.html"><a href="notation.html#the-only-equation"><i class="fa fa-check"></i><b>1.2.1</b> The Only Equation</a></li>
+<li class="chapter" data-level="1.2.2" data-path="notation.html"><a href="notation.html#parameters"><i class="fa fa-check"></i><b>1.2.2</b> Parameters</a></li>
+<li class="chapter" data-level="1.2.3" data-path="notation.html"><a href="notation.html#assumptions-to-check"><i class="fa fa-check"></i><b>1.2.3</b> Assumptions to Check</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="notation.html"><a href="notation.html#multi-level-regression-analysis"><i class="fa fa-check"></i><b>1.3</b> Multi-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="notation.html"><a href="notation.html#level-1-regression-equation"><i class="fa fa-check"></i><b>1.3.1</b> Level 1 Regression Equation*</a></li>
+<li class="chapter" data-level="1.3.2" data-path="notation.html"><a href="notation.html#level-2-regression-equations"><i class="fa fa-check"></i><b>1.3.2</b> Level 2 Regression Equations</a></li>
+<li class="chapter" data-level="1.3.3" data-path="notation.html"><a href="notation.html#combinded-multilevel-regression-equation"><i class="fa fa-check"></i><b>1.3.3</b> Combinded, Multilevel Regression Equation</a></li>
+<li class="chapter" data-level="1.3.4" data-path="notation.html"><a href="notation.html#parameters-1"><i class="fa fa-check"></i><b>1.3.4</b> Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="notation.html"><a href="notation.html#intraclass-correlation-icc"><i class="fa fa-check"></i><b>1.4</b> Intraclass Correlation (ICC)</a></li>
+<li class="chapter" data-level="1.5" data-path="notation.html"><a href="notation.html#proporion-of-variance-explianed"><i class="fa fa-check"></i><b>1.5</b> Proporion of Variance Explianed</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="notation.html"><a href="notation.html#level-1-variance-explained"><i class="fa fa-check"></i><b>1.5.1</b> Level 1 Variance Explained</a></li>
+<li class="chapter" data-level="1.5.2" data-path="notation.html"><a href="notation.html#level-2-variance-explined"><i class="fa fa-check"></i><b>1.5.2</b> Level 2 Variance Explined</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="notation.html"><a href="notation.html#using-latex-for-equation-typesetting"><i class="fa fa-check"></i><b>1.6</b> Using <span class="math inline">\(\LaTeX\)</span> for Equation Typesetting</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html"><i class="fa fa-check"></i><b>2</b> Example - Pupil Popularity</a><ul>
+<li class="chapter" data-level="2.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#background"><i class="fa fa-check"></i><b>2.1</b> Background</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#unique-identifiers"><i class="fa fa-check"></i><b>2.1.1</b> Unique Identifiers</a></li>
+<li class="chapter" data-level="2.1.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#structure-and-variables"><i class="fa fa-check"></i><b>2.1.2</b> Structure and variables</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>2.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#summarize-descriptive-statistics"><i class="fa fa-check"></i><b>2.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="2.2.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#visualizations-of-raw-data"><i class="fa fa-check"></i><b>2.2.2</b> Visualizations of Raw Data</a></li>
+<li class="chapter" data-level="2.2.3" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#consider-clustering"><i class="fa fa-check"></i><b>2.2.3</b> Consider Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#single-level-regression-analysis-1"><i class="fa fa-check"></i><b>2.3</b> Single-level Regression Analysis</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#null-model"><i class="fa fa-check"></i><b>2.3.1</b> Null Model</a></li>
+<li class="chapter" data-level="2.3.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#add-predictors-to-the-model"><i class="fa fa-check"></i><b>2.3.2</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="2.3.3" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#compare-fixed-effects"><i class="fa fa-check"></i><b>2.3.3</b> Compare Fixed Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#multi-level-regression-analysis-1"><i class="fa fa-check"></i><b>2.4</b> Multi-level Regression Analysis</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#intercept-only-or-null-model"><i class="fa fa-check"></i><b>2.4.1</b> Intercept-only or Null Model</a></li>
+<li class="chapter" data-level="2.4.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#intraclass-correlation-icc-1"><i class="fa fa-check"></i><b>2.4.2</b> Intraclass Correlation (ICC)</a></li>
+<li class="chapter" data-level="2.4.3" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#add-predictors-to-the-model-1"><i class="fa fa-check"></i><b>2.4.3</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="2.4.4" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#testing-random-components"><i class="fa fa-check"></i><b>2.4.4</b> Testing Random Components</a></li>
+<li class="chapter" data-level="2.4.5" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#testing-cross-level-interactions"><i class="fa fa-check"></i><b>2.4.5</b> Testing Cross-Level Interactions</a></li>
+<li class="chapter" data-level="2.4.6" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#final-model"><i class="fa fa-check"></i><b>2.4.6</b> Final Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html"><i class="fa fa-check"></i><b>3</b> Example - Nurse’s Stress Intervention</a><ul>
+<li class="chapter" data-level="3.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#background-1"><i class="fa fa-check"></i><b>3.1</b> Background</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#unique-identifiers-1"><i class="fa fa-check"></i><b>3.1.1</b> Unique Identifiers</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#exploratory-data-analysis-1"><i class="fa fa-check"></i><b>3.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#summarize-descriptive-statistics-1"><i class="fa fa-check"></i><b>3.2.1</b> Summarize Descriptive Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#mlm-intercept-only-or-null-model"><i class="fa fa-check"></i><b>3.3</b> MLM: Intercept-only or Null Model</a></li>
+<li class="chapter" data-level="3.4" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#estimate-the-icc"><i class="fa fa-check"></i><b>3.4</b> Estimate the ICC</a></li>
+<li class="chapter" data-level="3.5" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#mlm-add-fixed-effects"><i class="fa fa-check"></i><b>3.5</b> MLM: Add Fixed Effects</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#fit-the-model-5"><i class="fa fa-check"></i><b>3.5.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.5.2" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#assess-significance"><i class="fa fa-check"></i><b>3.5.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#mlm-add-random-slope"><i class="fa fa-check"></i><b>3.6</b> MLM: Add Random Slope</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#fit-the-model-6"><i class="fa fa-check"></i><b>3.6.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.6.2" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#assess-significance-1"><i class="fa fa-check"></i><b>3.6.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#mlm-add-cross-level-interaction"><i class="fa fa-check"></i><b>3.7</b> MLM: Add Cross-Level Interaction</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#fit-the-model-7"><i class="fa fa-check"></i><b>3.7.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.7.2" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#assess-significance-2"><i class="fa fa-check"></i><b>3.7.2</b> Assess Significance</a></li>
+<li class="chapter" data-level="3.7.3" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#final-model-1"><i class="fa fa-check"></i><b>3.7.3</b> Final Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="example-achievement.html"><a href="example-achievement.html"><i class="fa fa-check"></i><b>4</b> Example - Achievement</a><ul>
+<li class="chapter" data-level="4.1" data-path="example-achievement.html"><a href="example-achievement.html#background-2"><i class="fa fa-check"></i><b>4.1</b> Background</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="example-achievement.html"><a href="example-achievement.html#sample-structure"><i class="fa fa-check"></i><b>4.1.1</b> Sample Structure</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="example-achievement.html"><a href="example-achievement.html#exploratory-data-analysis-2"><i class="fa fa-check"></i><b>4.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="example-achievement.html"><a href="example-achievement.html#summarize-descriptive-statistics-2"><i class="fa fa-check"></i><b>4.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="4.2.2" data-path="example-achievement.html"><a href="example-achievement.html#visualization-of-raw-data"><i class="fa fa-check"></i><b>4.2.2</b> Visualization of Raw Data</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="example-achievement.html"><a href="example-achievement.html#single-level-regression"><i class="fa fa-check"></i><b>4.3</b> Single-Level Regression</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="example-achievement.html"><a href="example-achievement.html#fit-nested-models-2"><i class="fa fa-check"></i><b>4.3.1</b> Fit Nested Models</a></li>
+<li class="chapter" data-level="4.3.2" data-path="example-achievement.html"><a href="example-achievement.html#visualize-the-interaction"><i class="fa fa-check"></i><b>4.3.2</b> Visualize the Interaction</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-1-null-model-only-fixed-and-random-intercepts"><i class="fa fa-check"></i><b>4.4</b> MLM - Step 1: Null Model, only fixed and random intercepts</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="example-achievement.html"><a href="example-achievement.html#fit-the-model-8"><i class="fa fa-check"></i><b>4.4.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="4.4.2" data-path="example-achievement.html"><a href="example-achievement.html#estimate-the-icc-1"><i class="fa fa-check"></i><b>4.4.2</b> Estimate the ICC</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-2-add-lower-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>4.5</b> MLM - Step 2: Add Lower-level explanatory variables, fixed, ML</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="example-achievement.html"><a href="example-achievement.html#add-pupils-vocab-score-as-a-fixed-effects-predictor"><i class="fa fa-check"></i><b>4.5.1</b> Add pupil’s vocab score as a fixed effects predictor</a></li>
+<li class="chapter" data-level="4.5.2" data-path="example-achievement.html"><a href="example-achievement.html#investigate-more-level-1-predictors"><i class="fa fa-check"></i><b>4.5.2</b> Investigate More Level 1 Predictors</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-3-higher-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>4.6</b> MLM - Step 3: Higher-level explanatory variables, fixed, ML</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="example-achievement.html"><a href="example-achievement.html#assess-significance-of-effects-2"><i class="fa fa-check"></i><b>4.6.1</b> Assess Significance of Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-4-explanatory-variables-predict-slopes-random-reml"><i class="fa fa-check"></i><b>4.7</b> MLM - Step 4: Explanatory variables predict Slopes, random, REML</a></li>
+<li class="chapter" data-level="4.8" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-5-cross-level-interactions-between-explanatory-variables---fixed-ml"><i class="fa fa-check"></i><b>4.8</b> MLM - Step 5: Cross-Level interactions between explanatory variables - fixed, ML</a></li>
+<li class="chapter" data-level="4.9" data-path="example-achievement.html"><a href="example-achievement.html#centering-predictors-change-center"><i class="fa fa-check"></i><b>4.9</b> Centering Predictors: Change Center</a><ul>
+<li class="chapter" data-level="4.9.1" data-path="example-achievement.html"><a href="example-achievement.html#compute-the-grand-means"><i class="fa fa-check"></i><b>4.9.1</b> Compute the Grand Means</a></li>
+<li class="chapter" data-level="4.9.2" data-path="example-achievement.html"><a href="example-achievement.html#use-centered-variables"><i class="fa fa-check"></i><b>4.9.2</b> Use Centered Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.10" data-path="example-achievement.html"><a href="example-achievement.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>4.10</b> Rescaling Predictors: Change Units or Standardize</a><ul>
+<li class="chapter" data-level="4.10.1" data-path="example-achievement.html"><a href="example-achievement.html#scale-varaibles"><i class="fa fa-check"></i><b>4.10.1</b> Scale Varaibles</a></li>
+<li class="chapter" data-level="4.10.2" data-path="example-achievement.html"><a href="example-achievement.html#use-scaled-variables"><i class="fa fa-check"></i><b>4.10.2</b> Use Scaled Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="notation" class="section level1">
+<h1><span class="header-section-number">1</span> Notation</h1>
+<div id="data" class="section level2">
+<h2><span class="header-section-number">1.1</span> Data</h2>
+<p>Sample Sizes:</p>
+<ul>
+<li><span class="math inline">\(n_j\)</span> = number of pupils in class <span class="math inline">\(j\)</span></li>
+<li><span class="math inline">\(N\)</span> = number of classes</li>
+</ul>
+<p>Indicators:</p>
+<ul>
+<li><span class="math inline">\(i \in (1, 2, \dots, n_j)\)</span> = index for pupil number</li>
+<li><span class="math inline">\(j \in (1, 2, \dots, N)\)</span> = index for class number</li>
+</ul>
+<table>
+<thead>
+<tr class="header">
+<th>Level</th>
+<th>Type of Variable</th>
+<th>Symbol</th>
+<th>pupil <span class="math inline">\(i\)</span> in class <span class="math inline">\(j\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Outcome (Dependent)</td>
+<td><span class="math inline">\(Y\)</span></td>
+<td><span class="math inline">\(Y_{ij}\)</span></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Predictor (Independent)</td>
+<td><span class="math inline">\(X_1\)</span></td>
+<td><span class="math inline">\(X_{1ij}\)</span></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>Predictor (Independent)</td>
+<td><span class="math inline">\(X_2\)</span></td>
+<td><span class="math inline">\(X_{2ij}\)</span></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Predictor (Independent)</td>
+<td><span class="math inline">\(Z\)</span></td>
+<td><span class="math inline">\(Z_j\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="single-level-regression-analysis" class="section level2">
+<h2><span class="header-section-number">1.2</span> Single-level Regression Analysis</h2>
+<div id="the-only-equation" class="section level3">
+<h3><span class="header-section-number">1.2.1</span> The Only Equation</h3>
+<p>Since we are don’t have or are ignoring clustering, there is only one level.</p>
+<div class="genericEq">
+<p>
+<strong>Single-Level Regression Equation</strong> <span class="math display"><span class="math display">\[
+\overbrace{Y_{ij}}^{Outcome} = 
+         \underbrace{\beta_{0}}_{\text{Fixed}\atop\text{intercept}}  + 
+         \underbrace{\beta_{1}}_{\text{Fixed}\atop\text{slope } X_1} \overbrace{X_{1ij}}^{\text{Predictor 1}}  + 
+         \underbrace{\beta_{2}}_{\text{Fixed}\atop\text{slope } X_2} \overbrace{X_{2ij}}^{\text{Predictor 2}} + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
+\tag{Hox 2.1}
+\]</span></span>
+</p>
+</div>
+</div>
+<div id="parameters" class="section level3">
+<h3><span class="header-section-number">1.2.2</span> Parameters</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th align="left">Parameter of Interest</th>
+<th>Estimates This</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Intercept</td>
+<td><span class="math inline">\(\beta_{0}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Slope or main effect of <span class="math inline">\(X_1\)</span></td>
+<td><span class="math inline">\(\beta_{1}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Slope or main effect of <span class="math inline">\(X_2\)</span></td>
+<td><span class="math inline">\(\beta_{2}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Residual Variance <span class="math inline">\(var[e_{ij}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{e}\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="assumptions-to-check" class="section level3">
+<h3><span class="header-section-number">1.2.3</span> Assumptions to Check</h3>
+<ul>
+<li>The <span class="math inline">\(e_{ij}\)</span>’s follow a normal distribution with a mean of <span class="math inline">\(0\)</span></li>
+<li>The <span class="math inline">\(e_{ij}\)</span>’s have a constant variance <em>(homoscedasticity)</em></li>
+</ul>
+</div>
+</div>
+<div id="multi-level-regression-analysis" class="section level2">
+<h2><span class="header-section-number">1.3</span> Multi-level Regression Analysis</h2>
+<p>Continue taking into account fixed slopes for two Level 1 variables, <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>.</p>
+<div id="level-1-regression-equation" class="section level3">
+<h3><span class="header-section-number">1.3.1</span> Level 1 Regression Equation*</h3>
+<p><span class="math display">\[
+\overbrace{Y_{ij}}^{\text{Level 1}\atop\text{Outcome}} = 
+         \underbrace{\beta_{0j}}_{\text{Level 2}\atop\text{intercepts}}  + 
+         \underbrace{\beta_{1j}}_{\text{Level 2}\atop\text{slopes}} 
+         \overbrace{X_{1ij}}^{\text{Level 1}\atop\text{Predictor 1}}  + 
+         \underbrace{\beta_{2j}}_{\text{Level 2}\atop\text{slopes}} 
+         \overbrace{X_{2ij}}^{\text{Level 1}\atop\text{Predictor 2}}  + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
+\tag{Hox 2.1}
+\]</span></p>
+<p>Now we take clustering into account and include random intercepts (<span class="math inline">\(\beta_{0j}\)</span>) and slopes (<span class="math inline">\(\beta_{1j}, \beta_{2j}\)</span>), as well as including a single Level 2 variable, <span class="math inline">\(Z\)</span> that interacts with both Level 1 variables.</p>
+</div>
+<div id="level-2-regression-equations" class="section level3">
+<h3><span class="header-section-number">1.3.2</span> Level 2 Regression Equations</h3>
+<div id="random-intercepts" class="section level4">
+<h4><span class="header-section-number">1.3.2.1</span> Random Intercepts:</h4>
+<p><span class="math display">\[
+\overbrace{\beta_{0j}}^{\text{Level 2}\atop\text{intercepts}} = 
+     \underbrace{\gamma_{00}}_{\text{Fixed}\atop\text{intercept}}  + 
+     \underbrace{\gamma_{01}}_{\text{Fixed}\atop\text{slope } Z}
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}}  + 
+     \underbrace{u_{0j}}_{\text{Intercept}\atop\text{residual}} 
+\tag{Hox 2.3}
+\]</span></p>
+</div>
+<div id="random-slopes" class="section level4">
+<h4><span class="header-section-number">1.3.2.2</span> Random Slopes</h4>
+<ul>
+<li>For the first predictor, <span class="math inline">\(X_1\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+\overbrace{\beta_{1j}}^{\text{Level 2}\atop\text{slopes}} = 
+     \underbrace{\gamma_{10}}_{\text{Fixed}\atop\text{Slope  } X_1}  + 
+     \underbrace{\gamma_{11}}_{\text{Fixed}\atop X_1 \times Z} 
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}} + 
+     \underbrace{u_{1j}}_{\text{Slope } X_1\atop\text{residual}} 
+\tag{Hox 2.4a}
+\]</span></p>
+<ul>
+<li>For the second predictor, <span class="math inline">\(X_2\)</span>:</li>
+</ul>
+<p><span class="math display">\[
+\overbrace{\beta_{2j}}^{\text{Level 2}\atop\text{slopes}} = 
+     \underbrace{\gamma_{20}}_{\text{Fixed}\atop\text{Slope  } X_2}  + 
+     \underbrace{\gamma_{21}}_{\text{Fixed}\atop X_2 \times Z} 
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}} + 
+     \underbrace{u_{2j}}_{\text{Slope } X_2\atop\text{residual}} 
+\tag{Hox 2.4a}
+\]</span></p>
+</div>
+<div id="merging-the-equations" class="section level4">
+<h4><span class="header-section-number">1.3.2.3</span> Merging the Equations</h4>
+<p>Starting with Level 1 equation (2.1) and allow the <span class="math inline">\(\beta\)</span>’s to be varry for each class and plug in the level 2 equations (2.3 and 2.4) into the level 1 equation (2.1) to make the combined equation. <span class="math display">\[
+Y_{ij} = \overbrace{(\gamma_{00} + \gamma_{01} Z_{j} + u_{0j})}^{\beta_{0j}} + 
+         \overbrace{(\gamma_{10} + \gamma_{11} Z_{j} + u_{1j})}^{\beta_{1j}} X_{1ij} + 
+         \overbrace{(\gamma_{20} + \gamma_{21} Z_{j} + u_{2j})}^{\beta_{2j}} X_{2ij} + e_{ij} 
+\]</span></p>
+<p>Use the distributive property of multiplication to get rid of the parentheses. <span class="math display">\[
+Y_{ij} = \overbrace{\gamma_{00}         + \gamma_{01} Z_{j}         + u_{0j}}^{\beta_{0j}} + 
+         \overbrace{\gamma_{10} X_{1ij} + \gamma_{11} Z_{j} X_{1ij} + u_{1j} X_{1ij}}^{\beta_{1j} \times X_{1ij}}  +
+         \overbrace{\gamma_{20} X_{2ij} + \gamma_{21} Z_{j} X_{2ij} + u_{2j} X_{2ij}}^{\beta_{2j} \times X_{2ij}}  +
+         e_{ij} 
+\]</span></p>
+</div>
+</div>
+<div id="combinded-multilevel-regression-equation" class="section level3">
+<h3><span class="header-section-number">1.3.3</span> Combinded, Multilevel Regression Equation</h3>
+<p>Collect ‘like-terms’ (i.e. get the <span class="math inline">\(\gamma\)</span>’s together and the <span class="math inline">\(u\)</span>’s together)</p>
+<div class="genericEq">
+<p>
+<strong>Combinded, Multilevel Regression Equation - Generic</strong>
+</p>
+<p>
+<span class="math display"><span class="math display">\[
+Y_{ij} = \overbrace{\gamma_{00} + 
+                      \gamma_{10} X_{1ij} + 
+                      \gamma_{20} X_{2ij} + 
+                      \gamma_{01} Z_{j} + 
+                      \gamma_{11} Z_{j} X_{1ij} +  
+                      \gamma_{21} Z_{j} X_{2ij}}^{\text{Fixed part}\atop\text{Deterministic}} + \\
+         \underbrace{u_{0j} + u_{1j} X_{1ij} + u_{2j} X_{2ij} + e_{ij} }_{\text{Random part}\atop\text{Stochastic}}
+ \tag{Hox 2.5}
+\]</span></span>
+</p>
+</div>
+</div>
+<div id="parameters-1" class="section level3">
+<h3><span class="header-section-number">1.3.4</span> Parameters</h3>
+<table>
+<colgroup>
+<col width="12%" />
+<col width="63%" />
+<col width="23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th align="left">Parameter of Interest</th>
+<th>Estimates This</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Intercept</td>
+<td><span class="math inline">\(\gamma_{00}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Main Effect of <span class="math inline">\(X_1\)</span></td>
+<td><span class="math inline">\(\gamma_{10}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Main Effect of <span class="math inline">\(X_2\)</span></td>
+<td><span class="math inline">\(\gamma_{20}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Main Effect of <span class="math inline">\(Z\)</span></td>
+<td><span class="math inline">\(\gamma_{01}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Fixed</td>
+<td align="left">Cross-Level interaction between <span class="math inline">\(X_1\)</span> and <span class="math inline">\(Z\)</span></td>
+<td><span class="math inline">\(\gamma_{11}\)</span></td>
+</tr>
+<tr class="even">
+<td>Fixed</td>
+<td align="left">Cross-Level interaction between <span class="math inline">\(X_2\)</span> and <span class="math inline">\(Z\)</span></td>
+<td><span class="math inline">\(\gamma_{21}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Variance in random intercepts, <span class="math inline">\(var[u_{0j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u0}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Variance in random slope of <span class="math inline">\(X_1\)</span>, <span class="math inline">\(var[u_{1j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u1}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Variance in random slope of <span class="math inline">\(X_2\)</span>, <span class="math inline">\(var[u_{2j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u2}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Covariance between random intercepts and random slope of <span class="math inline">\(X_1\)</span>, <span class="math inline">\(cov[u_{0j}, u_{1j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u01}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Covariance between random intercepts and random slope of <span class="math inline">\(X_2\)</span>, <span class="math inline">\(cov[u_{0j}, u_{2j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u02}\)</span></td>
+</tr>
+<tr class="even">
+<td>Random</td>
+<td align="left">Covariance between random slopes of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>, <span class="math inline">\(cov[u_{1j}, u_{2j}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{u12}\)</span></td>
+</tr>
+<tr class="odd">
+<td>Random</td>
+<td align="left">Residual Variance <span class="math inline">\(var[e_{ij}]\)</span></td>
+<td><span class="math inline">\(\sigma^2_{e}\)</span></td>
+</tr>
+</tbody>
+</table>
+<div class="rmdimportant">
+<p>
+The <span class="math inline"><span class="math inline">\(u_{1j}\)</span></span> and <span class="math inline"><span class="math inline">\(u_{2j}\)</span></span> terms allow for <strong>heteroscedasticity</strong> by fitting different error terms for different values of <span class="math inline"><span class="math inline">\(X_1\)</span></span> and <span class="math inline"><span class="math inline">\(X_2\)</span></span>. The HOV assumption is that AFTER accounting for this, the remaining residuals are HOV.
+</p>
+</div>
+</div>
+</div>
+<div id="intraclass-correlation-icc" class="section level2">
+<h2><span class="header-section-number">1.4</span> Intraclass Correlation (ICC)</h2>
+<div class="genericEq">
+<p>
+<strong>Combined, Multilevel Model Equation - Null Model</strong> <span class="math display"><span class="math display">\[ 
+\overbrace{Y_{ij}}^{Outcome} = 
+    \underbrace{\gamma_{00}}_{\text{Fixed}\atop\text{intercept}} + 
+    \underbrace{u_{0j}}_{\text{Random}\atop\text{intercepts}} + 
+    \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}}
+\tag{Hox 2.8}
+\]</span></span>
+</p>
+</div>
+<p>Although the Null model above does not explain any variance in the dependent variable, since there are no independent variables, it does decompose (i.e. divide up) the variance into two pieces. We can compute the amount of total variance in the outcome that is attribute to the clustering of Level 1 untis <em>(micro-units)</em> into clusters of Level 2 units <em>(macro-units)</em> verses the total variance.</p>
+<div class="genericEq">
+<p>
+<strong>Intraclass Correlation (ICC) Formula</strong> <span class="math display"><span class="math display">\[
+\overbrace{\rho}^{\text{ICC}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance}}}
+     {\underbrace{\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.9}
+\]</span></span>
+</p>
+</div>
+</div>
+<div id="proporion-of-variance-explianed" class="section level2">
+<h2><span class="header-section-number">1.5</span> Proporion of Variance Explianed</h2>
+<p>Analogous to multiple <span class="math inline">\(R^2\)</span> - done seperately by level</p>
+<ul>
+<li><span class="math inline">\(BL\)</span> = Baseline model (Null)</li>
+<li><span class="math inline">\(MC\)</span> = Model to Compare to</li>
+</ul>
+<div id="level-1-variance-explained" class="section level3">
+<h3><span class="header-section-number">1.5.1</span> Level 1 Variance Explained</h3>
+<div id="snijders-and-bosker" class="section level4">
+<h4><span class="header-section-number">1.5.1.1</span> Snijders and Bosker</h4>
+<div class="genericEq">
+<p>
+<strong>Snijders and Bosker Formula - Level 1 </strong> <span class="math display"><span class="math display">\[
+R^2_1 = 1 - \frac{\sigma^2_{e-MC} + \sigma^2_{u0-MC}}
+                 {\sigma^2_{e-BL} + \sigma^2_{u0-BL}}
+\]</span></span>
+</p>
+</div>
+</div>
+<div id="raudenbush-and-bryk" class="section level4">
+<h4><span class="header-section-number">1.5.1.2</span> Raudenbush and Bryk</h4>
+<div class="genericEq">
+<p>
+<strong>Raudenbush and Bryk Approximate Formula - Level 1 </strong> <span class="math display"><span class="math display">\[
+R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
+             {\sigma^2_{e-BL} }
+\tag{Hox 4.8}
+\]</span></span>
+</p>
+</div>
+</div>
+</div>
+<div id="level-2-variance-explined" class="section level3">
+<h3><span class="header-section-number">1.5.2</span> Level 2 Variance Explined</h3>
+<div id="who" class="section level4">
+<h4><span class="header-section-number">1.5.2.1</span> who?</h4>
+<div class="genericEq">
+<p>
+<span class="math display"><span class="math display">\[
+R^2_2 = 1 - \frac{\frac{\sigma^2_{e-MC}}{B} + \sigma^2_{u0-MC}}
+                 {\frac{\sigma^2_{e-BL}}{B} + \sigma^2_{u0-BL}}
+\]</span></span>
+</p>
+</div>
+</div>
+<div id="raudenbush-and-bryk-1" class="section level4">
+<h4><span class="header-section-number">1.5.2.2</span> Raudenbush and Bryk</h4>
+<div class="genericEq">
+<p>
+<strong>Raudenbush and Bryk Approximate Formula - Level 2 </strong> <span class="math display"><span class="math display">\[
+R^2_1 = \frac{\sigma^2_{u0-BL} - \sigma^2_{u0-MC}}
+             {\sigma^2_{u0-BL} }
+\tag{Hox 4.9}
+\]</span></span>
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="using-latex-for-equation-typesetting" class="section level2">
+<h2><span class="header-section-number">1.6</span> Using <span class="math inline">\(\LaTeX\)</span> for Equation Typesetting</h2>
+<div class="rmdlink">
+<p>
+R markdown is a user friendly, simplified language that allows for more complex formating utilizing standard <span class="math inline"><span class="math inline">\(\LaTeX\)</span></span> code. A great resource for learning how to many common tasks in <span class="math inline"><span class="math inline">\(\LaTeX\)</span></span> is the <a href="www.sharelatex.com">Sharewebsite</a>.
+</p>
+<p>
+Specific mathematical equation documentation may be found on the <a href="https://www.sharelatex.com/learn/Mathematical_expressions">Mathematical Expressions</a> subpage.
+</p>
+<p>
+There are also many websites that offer Point-n-click interfaces to build <span class="math inline"><span class="math inline">\(\LaTeX\)</span></span> equations, including: <a href="http://www.hostmath.com/">Host Math</a>, <a href="https://www.codecogs.com/latex/eqneditor.php">Code Cogs</a>, <a href="https://www.latex4technics.com/">LaTeX 4 Technics</a>, and <a href="http://www.sciweavers.org/free-online-latex-equation-editor">Sci-Weavers</a>
+</p>
+</div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="example-pupil-popularity.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section",
+"toc_depth": 3
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

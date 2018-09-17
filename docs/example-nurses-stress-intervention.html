@@ -1,0 +1,2426 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
+  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="EQM_v1_cover.png" />
+  <meta property="og:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="github-repo" content="cehs-research/eBook_wrangle" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  
+  <meta name="twitter:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="twitter:image" content="EQM_v1_cover.png" />
+
+<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="example-pupil-popularity.html">
+<link rel="next" href="example-achievement.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Vol. 5: Multilevel Models</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#blocked-notes"><i class="fa fa-check"></i>Blocked Notes</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-output"><i class="fa fa-check"></i>Code and Output</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#the-authors"><i class="fa fa-check"></i>The Authors</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#why-choose-r"><i class="fa fa-check"></i>Why choose R ?</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fyi"><i class="fa fa-check"></i>FYI</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="notation.html"><a href="notation.html"><i class="fa fa-check"></i><b>1</b> Notation</a><ul>
+<li class="chapter" data-level="1.1" data-path="notation.html"><a href="notation.html#data"><i class="fa fa-check"></i><b>1.1</b> Data</a></li>
+<li class="chapter" data-level="1.2" data-path="notation.html"><a href="notation.html#single-level-regression-analysis"><i class="fa fa-check"></i><b>1.2</b> Single-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="notation.html"><a href="notation.html#the-only-equation"><i class="fa fa-check"></i><b>1.2.1</b> The Only Equation</a></li>
+<li class="chapter" data-level="1.2.2" data-path="notation.html"><a href="notation.html#parameters"><i class="fa fa-check"></i><b>1.2.2</b> Parameters</a></li>
+<li class="chapter" data-level="1.2.3" data-path="notation.html"><a href="notation.html#assumptions-to-check"><i class="fa fa-check"></i><b>1.2.3</b> Assumptions to Check</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="notation.html"><a href="notation.html#multi-level-regression-analysis"><i class="fa fa-check"></i><b>1.3</b> Multi-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="notation.html"><a href="notation.html#level-1-regression-equation"><i class="fa fa-check"></i><b>1.3.1</b> Level 1 Regression Equation*</a></li>
+<li class="chapter" data-level="1.3.2" data-path="notation.html"><a href="notation.html#level-2-regression-equations"><i class="fa fa-check"></i><b>1.3.2</b> Level 2 Regression Equations</a></li>
+<li class="chapter" data-level="1.3.3" data-path="notation.html"><a href="notation.html#combinded-multilevel-regression-equation"><i class="fa fa-check"></i><b>1.3.3</b> Combinded, Multilevel Regression Equation</a></li>
+<li class="chapter" data-level="1.3.4" data-path="notation.html"><a href="notation.html#parameters-1"><i class="fa fa-check"></i><b>1.3.4</b> Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="notation.html"><a href="notation.html#intraclass-correlation-icc"><i class="fa fa-check"></i><b>1.4</b> Intraclass Correlation (ICC)</a></li>
+<li class="chapter" data-level="1.5" data-path="notation.html"><a href="notation.html#proporion-of-variance-explianed"><i class="fa fa-check"></i><b>1.5</b> Proporion of Variance Explianed</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="notation.html"><a href="notation.html#level-1-variance-explained"><i class="fa fa-check"></i><b>1.5.1</b> Level 1 Variance Explained</a></li>
+<li class="chapter" data-level="1.5.2" data-path="notation.html"><a href="notation.html#level-2-variance-explined"><i class="fa fa-check"></i><b>1.5.2</b> Level 2 Variance Explined</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="notation.html"><a href="notation.html#using-latex-for-equation-typesetting"><i class="fa fa-check"></i><b>1.6</b> Using <span class="math inline">\(\LaTeX\)</span> for Equation Typesetting</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html"><i class="fa fa-check"></i><b>2</b> Example - Pupil Popularity</a><ul>
+<li class="chapter" data-level="2.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#background"><i class="fa fa-check"></i><b>2.1</b> Background</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#unique-identifiers"><i class="fa fa-check"></i><b>2.1.1</b> Unique Identifiers</a></li>
+<li class="chapter" data-level="2.1.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#structure-and-variables"><i class="fa fa-check"></i><b>2.1.2</b> Structure and variables</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>2.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#summarize-descriptive-statistics"><i class="fa fa-check"></i><b>2.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="2.2.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#visualizations-of-raw-data"><i class="fa fa-check"></i><b>2.2.2</b> Visualizations of Raw Data</a></li>
+<li class="chapter" data-level="2.2.3" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#consider-clustering"><i class="fa fa-check"></i><b>2.2.3</b> Consider Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#single-level-regression-analysis-1"><i class="fa fa-check"></i><b>2.3</b> Single-level Regression Analysis</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#null-model"><i class="fa fa-check"></i><b>2.3.1</b> Null Model</a></li>
+<li class="chapter" data-level="2.3.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#add-predictors-to-the-model"><i class="fa fa-check"></i><b>2.3.2</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="2.3.3" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#compare-fixed-effects"><i class="fa fa-check"></i><b>2.3.3</b> Compare Fixed Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#multi-level-regression-analysis-1"><i class="fa fa-check"></i><b>2.4</b> Multi-level Regression Analysis</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#intercept-only-or-null-model"><i class="fa fa-check"></i><b>2.4.1</b> Intercept-only or Null Model</a></li>
+<li class="chapter" data-level="2.4.2" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#intraclass-correlation-icc-1"><i class="fa fa-check"></i><b>2.4.2</b> Intraclass Correlation (ICC)</a></li>
+<li class="chapter" data-level="2.4.3" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#add-predictors-to-the-model-1"><i class="fa fa-check"></i><b>2.4.3</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="2.4.4" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#testing-random-components"><i class="fa fa-check"></i><b>2.4.4</b> Testing Random Components</a></li>
+<li class="chapter" data-level="2.4.5" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#testing-cross-level-interactions"><i class="fa fa-check"></i><b>2.4.5</b> Testing Cross-Level Interactions</a></li>
+<li class="chapter" data-level="2.4.6" data-path="example-pupil-popularity.html"><a href="example-pupil-popularity.html#final-model"><i class="fa fa-check"></i><b>2.4.6</b> Final Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html"><i class="fa fa-check"></i><b>3</b> Example - Nurse’s Stress Intervention</a><ul>
+<li class="chapter" data-level="3.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#background-1"><i class="fa fa-check"></i><b>3.1</b> Background</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#unique-identifiers-1"><i class="fa fa-check"></i><b>3.1.1</b> Unique Identifiers</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#exploratory-data-analysis-1"><i class="fa fa-check"></i><b>3.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#summarize-descriptive-statistics-1"><i class="fa fa-check"></i><b>3.2.1</b> Summarize Descriptive Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#mlm-intercept-only-or-null-model"><i class="fa fa-check"></i><b>3.3</b> MLM: Intercept-only or Null Model</a></li>
+<li class="chapter" data-level="3.4" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#estimate-the-icc"><i class="fa fa-check"></i><b>3.4</b> Estimate the ICC</a></li>
+<li class="chapter" data-level="3.5" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#mlm-add-fixed-effects"><i class="fa fa-check"></i><b>3.5</b> MLM: Add Fixed Effects</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#fit-the-model-5"><i class="fa fa-check"></i><b>3.5.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.5.2" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#assess-significance"><i class="fa fa-check"></i><b>3.5.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#mlm-add-random-slope"><i class="fa fa-check"></i><b>3.6</b> MLM: Add Random Slope</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#fit-the-model-6"><i class="fa fa-check"></i><b>3.6.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.6.2" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#assess-significance-1"><i class="fa fa-check"></i><b>3.6.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#mlm-add-cross-level-interaction"><i class="fa fa-check"></i><b>3.7</b> MLM: Add Cross-Level Interaction</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#fit-the-model-7"><i class="fa fa-check"></i><b>3.7.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.7.2" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#assess-significance-2"><i class="fa fa-check"></i><b>3.7.2</b> Assess Significance</a></li>
+<li class="chapter" data-level="3.7.3" data-path="example-nurses-stress-intervention.html"><a href="example-nurses-stress-intervention.html#final-model-1"><i class="fa fa-check"></i><b>3.7.3</b> Final Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="example-achievement.html"><a href="example-achievement.html"><i class="fa fa-check"></i><b>4</b> Example - Achievement</a><ul>
+<li class="chapter" data-level="4.1" data-path="example-achievement.html"><a href="example-achievement.html#background-2"><i class="fa fa-check"></i><b>4.1</b> Background</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="example-achievement.html"><a href="example-achievement.html#sample-structure"><i class="fa fa-check"></i><b>4.1.1</b> Sample Structure</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="example-achievement.html"><a href="example-achievement.html#exploratory-data-analysis-2"><i class="fa fa-check"></i><b>4.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="example-achievement.html"><a href="example-achievement.html#summarize-descriptive-statistics-2"><i class="fa fa-check"></i><b>4.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="4.2.2" data-path="example-achievement.html"><a href="example-achievement.html#visualization-of-raw-data"><i class="fa fa-check"></i><b>4.2.2</b> Visualization of Raw Data</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="example-achievement.html"><a href="example-achievement.html#single-level-regression"><i class="fa fa-check"></i><b>4.3</b> Single-Level Regression</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="example-achievement.html"><a href="example-achievement.html#fit-nested-models-2"><i class="fa fa-check"></i><b>4.3.1</b> Fit Nested Models</a></li>
+<li class="chapter" data-level="4.3.2" data-path="example-achievement.html"><a href="example-achievement.html#visualize-the-interaction"><i class="fa fa-check"></i><b>4.3.2</b> Visualize the Interaction</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-1-null-model-only-fixed-and-random-intercepts"><i class="fa fa-check"></i><b>4.4</b> MLM - Step 1: Null Model, only fixed and random intercepts</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="example-achievement.html"><a href="example-achievement.html#fit-the-model-8"><i class="fa fa-check"></i><b>4.4.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="4.4.2" data-path="example-achievement.html"><a href="example-achievement.html#estimate-the-icc-1"><i class="fa fa-check"></i><b>4.4.2</b> Estimate the ICC</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-2-add-lower-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>4.5</b> MLM - Step 2: Add Lower-level explanatory variables, fixed, ML</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="example-achievement.html"><a href="example-achievement.html#add-pupils-vocab-score-as-a-fixed-effects-predictor"><i class="fa fa-check"></i><b>4.5.1</b> Add pupil’s vocab score as a fixed effects predictor</a></li>
+<li class="chapter" data-level="4.5.2" data-path="example-achievement.html"><a href="example-achievement.html#investigate-more-level-1-predictors"><i class="fa fa-check"></i><b>4.5.2</b> Investigate More Level 1 Predictors</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-3-higher-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>4.6</b> MLM - Step 3: Higher-level explanatory variables, fixed, ML</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="example-achievement.html"><a href="example-achievement.html#assess-significance-of-effects-2"><i class="fa fa-check"></i><b>4.6.1</b> Assess Significance of Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-4-explanatory-variables-predict-slopes-random-reml"><i class="fa fa-check"></i><b>4.7</b> MLM - Step 4: Explanatory variables predict Slopes, random, REML</a></li>
+<li class="chapter" data-level="4.8" data-path="example-achievement.html"><a href="example-achievement.html#mlm---step-5-cross-level-interactions-between-explanatory-variables---fixed-ml"><i class="fa fa-check"></i><b>4.8</b> MLM - Step 5: Cross-Level interactions between explanatory variables - fixed, ML</a></li>
+<li class="chapter" data-level="4.9" data-path="example-achievement.html"><a href="example-achievement.html#centering-predictors-change-center"><i class="fa fa-check"></i><b>4.9</b> Centering Predictors: Change Center</a><ul>
+<li class="chapter" data-level="4.9.1" data-path="example-achievement.html"><a href="example-achievement.html#compute-the-grand-means"><i class="fa fa-check"></i><b>4.9.1</b> Compute the Grand Means</a></li>
+<li class="chapter" data-level="4.9.2" data-path="example-achievement.html"><a href="example-achievement.html#use-centered-variables"><i class="fa fa-check"></i><b>4.9.2</b> Use Centered Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.10" data-path="example-achievement.html"><a href="example-achievement.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>4.10</b> Rescaling Predictors: Change Units or Standardize</a><ul>
+<li class="chapter" data-level="4.10.1" data-path="example-achievement.html"><a href="example-achievement.html#scale-varaibles"><i class="fa fa-check"></i><b>4.10.1</b> Scale Varaibles</a></li>
+<li class="chapter" data-level="4.10.2" data-path="example-achievement.html"><a href="example-achievement.html#use-scaled-variables"><i class="fa fa-check"></i><b>4.10.2</b> Use Scaled Variables</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="example---nurses-stress-intervention" class="section level1">
+<h1><span class="header-section-number">3</span> Example - Nurse’s Stress Intervention</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
+<span class="kw">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span>
+<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(RColorBrewer) <span class="co"># nice color palettes for plots</span>
+<span class="kw">library</span>(gridExtra)    <span class="co"># place ggplots together as one plot</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
+<span class="kw">library</span>(car)          <span class="co"># Companion to Applied Regression</span>
+<span class="kw">library</span>(nlme)         <span class="co"># non-linear mixed-effects models</span>
+<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
+<span class="kw">library</span>(lmerTest)     <span class="co"># Tests on lmer objects</span>
+<span class="kw">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for nlme &amp; lmer4</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(optimx)       <span class="co"># Different optimizers to solve mlm&#39;s</span>
+<span class="kw">library</span>(effsize)      <span class="co"># effect size computations</span>
+<span class="kw">library</span>(lsr)          <span class="co"># companion to learning stats with R</span></code></pre></div>
+<!-- ========================================================= -->
+<div id="background-1" class="section level2">
+<h2><span class="header-section-number">3.1</span> Background</h2>
+<!-- ========================================================= -->
+<p>The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edition”</strong> <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span> has a companion <a href="https://multilevel-analysis.sites.uu.nl/">website</a> which includes links to all the data files used throughout the book (housed on the <a href="https://github.com/MultiLevelAnalysis">book’s GitHub repository</a>).</p>
+<p>The following example is used through out <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>’s chapater 2.</p>
+<blockquote>
+<p>From <strong>Appendix E</strong>:</p>
+<p>The <strong>nurses.sav</strong> file contains three-level simulated data from a hypothetical study on stress in hospitals. The data are from nurses working in wards nested within hospitals. It is a cluster-randomized experiment. In each of <strong>25</strong> hospitals, <strong>four wards</strong> are selected and randomly assigned to an experimental and a control condition. In the experimental condition, a training program is offered to all nurses to cope with job-related stress. After the program is completed, a sample of about 10 nurses from each ward is given a test that measures job-related stress. ADditional variables are: nurse age (years), nurse experience (years), nurse gender (0=male, 1 = female), type of ward (0=general care, 1=special care), and hospital size (0=small, 1 = medium, 2=large). The data have been generated to illustrate three-level analysis with a random slope for the effect of <code>ExpCon</code>.</p>
+</blockquote>
+<p>Here the data is read in and the SPSS variables with labels are converted to <span class="math inline">\(R\)</span> factors.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/Nurses/SPSS/Nurses.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span>
+
+tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw) </code></pre></div>
+<pre><code>Observations: 1,000
+Variables: 20
+$ hospital  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+$ ward      &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2...
+$ wardid    &lt;dbl&gt; 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, ...
+$ nurse     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 1...
+$ age       &lt;fct&gt; 36, 45, 32, 57, 46, 60, 23, 32, 60, 45, 57, 47, 32, ...
+$ gender    &lt;dbl&gt; 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1...
+$ experien  &lt;dbl&gt; 11, 20, 7, 25, 22, 22, 13, 13, 17, 21, 24, 24, 14, 1...
+$ stress    &lt;dbl&gt; 7, 7, 7, 6, 6, 6, 6, 7, 7, 6, 6, 6, 6, 6, 6, 5, 5, 6...
+$ wardtype  &lt;fct&gt; general care, general care, general care, general ca...
+$ hospsize  &lt;fct&gt; large, large, large, large, large, large, large, lar...
+$ expcon    &lt;fct&gt; experiment, experiment, experiment, experiment, expe...
+$ Zage      &lt;dbl&gt; -0.58173364, 0.16567575, -0.91391558, 1.16222159, 0....
+$ Zgender   &lt;dbl&gt; -1.664575, -1.664575, -1.664575, 0.600153, 0.600153,...
+$ Zexperien &lt;dbl&gt; -1.00244836, 0.48707372, -1.66445818, 1.31458599, 0....
+$ Zstress   &lt;dbl&gt; 2.06532850, 2.06532850, 2.06532850, 1.04440487, 1.04...
+$ Zwardtype &lt;dbl&gt; -1.0015009, -1.0015009, -1.0015009, -1.0015009, -1.0...
+$ Zhospsize &lt;dbl&gt; 1.777279, 1.777279, 1.777279, 1.777279, 1.777279, 1....
+$ Zexpcon   &lt;dbl&gt; 0.9915356, 0.9915356, 0.9915356, 0.9915356, 0.991535...
+$ Cexpcon   &lt;dbl&gt; 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0.5, 0....
+$ Chospsize &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...</code></pre>
+<div id="unique-identifiers-1" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Unique Identifiers</h3>
+<p>All standardized <em>(starts with “Z”)</em> and mean centered <em>(starts with “C”)</em> variables will be remove so that their creation may be shown later. A new indicator varible for nurses with be created by combining the <code>hospital</code>, <code>ward</code>, and <code>nurse</code> indicators. Having a unique, distinct identifier variable for each of the lowest (Level 1) units is imparative for multilevel anlayses.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_nurse &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">genderF =</span> <span class="kw">factor</span>(gender, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># apply factor labels</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">paste</span>(hospital, ward, nurse,
+                           <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st">                                   </span><span class="co"># cunique id for each student</span>
+<span class="st">                  </span><span class="kw">factor</span>()) <span class="op">%&gt;%</span><span class="st">                                             </span><span class="co"># declare id is a factor</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(hospital, ward, 
+                        wardid, nurse), factor) <span class="op">%&gt;%</span><span class="st">                         </span><span class="co"># declare to be factors</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age <span class="op">%&gt;%</span><span class="st"> </span>as.character <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st">              </span><span class="co"># declare to be numeric</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, wardid, nurse, ward, hospital,
+                age, gender, genderF, experien, 
+                wardtype, hospsize,
+                expcon, stress)                                             <span class="co"># reduce variables included</span>
+
+tibble<span class="op">::</span><span class="kw">glimpse</span>(data_nurse)</code></pre></div>
+<pre><code>Observations: 1,000
+Variables: 13
+$ id       &lt;fct&gt; 1_1_1, 1_1_2, 1_1_3, 1_1_4, 1_1_5, 1_1_6, 1_1_7, 1_1_...
+$ wardid   &lt;fct&gt; 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 1...
+$ nurse    &lt;fct&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16...
+$ ward     &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,...
+$ hospital &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+$ age      &lt;dbl&gt; 36, 45, 32, 57, 46, 60, 23, 32, 60, 45, 57, 47, 32, 4...
+$ gender   &lt;dbl&gt; 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1,...
+$ genderF  &lt;fct&gt; Male, Male, Male, Female, Female, Female, Female, Fem...
+$ experien &lt;dbl&gt; 11, 20, 7, 25, 22, 22, 13, 13, 17, 21, 24, 24, 14, 13...
+$ wardtype &lt;fct&gt; general care, general care, general care, general car...
+$ hospsize &lt;fct&gt; large, large, large, large, large, large, large, larg...
+$ expcon   &lt;fct&gt; experiment, experiment, experiment, experiment, exper...
+$ stress   &lt;dbl&gt; 7, 7, 7, 6, 6, 6, 6, 7, 7, 6, 6, 6, 6, 6, 6, 5, 5, 6,...</code></pre>
+</div>
+</div>
+<div id="exploratory-data-analysis-1" class="section level2">
+<h2><span class="header-section-number">3.2</span> Exploratory Data Analysis</h2>
+<div id="summarize-descriptive-statistics-1" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Summarize Descriptive Statistics</h3>
+<div id="the-stargazer-package-1" class="section level4">
+<h4><span class="header-section-number">3.2.1.1</span> The <code>stargazer</code> package</h4>
+<p>Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as <em>Table 1</em>. The <code>stargazer()</code> function can be used to create such a table, but only for the entire dataset <span class="citation">(Hlavac <a href="references.html#ref-R-stargazer">2018</a>)</span>. I haven’t been able to find a way to get it to summarize subsamples and compare them in the standard format.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_nurse <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>stargazer<span class="op">::</span><span class="kw">stargazer</span>(<span class="dt">title  =</span> <span class="st">&quot;Descriptive statistics, aggregate over entire sample&quot;</span>,
+                       <span class="dt">header =</span> <span class="ot">FALSE</span>,
+                       <span class="dt">type =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<table style="text-align:center">
+<caption>
+<strong>Descriptive statistics, aggregate over entire sample</strong>
+</caption>
+<tr>
+<td colspan="8" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Statistic
+</td>
+<td>
+N
+</td>
+<td>
+Mean
+</td>
+<td>
+St. Dev.
+</td>
+<td>
+Min
+</td>
+<td>
+Pctl(25)
+</td>
+<td>
+Pctl(75)
+</td>
+<td>
+Max
+</td>
+</tr>
+<tr>
+<td colspan="8" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+age
+</td>
+<td>
+1,000
+</td>
+<td>
+43.005
+</td>
+<td>
+12.042
+</td>
+<td>
+23
+</td>
+<td>
+33
+</td>
+<td>
+53
+</td>
+<td>
+64
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+gender
+</td>
+<td>
+1,000
+</td>
+<td>
+0.735
+</td>
+<td>
+0.442
+</td>
+<td>
+0
+</td>
+<td>
+0
+</td>
+<td>
+1
+</td>
+<td>
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+experien
+</td>
+<td>
+1,000
+</td>
+<td>
+17.057
+</td>
+<td>
+6.042
+</td>
+<td>
+1
+</td>
+<td>
+13
+</td>
+<td>
+21
+</td>
+<td>
+38
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+stress
+</td>
+<td>
+1,000
+</td>
+<td>
+4.977
+</td>
+<td>
+0.980
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+6
+</td>
+<td>
+7
+</td>
+</tr>
+<tr>
+<td colspan="8" style="border-bottom: 1px solid black">
+</td>
+</tr>
+</table>
+</div>
+<div id="the-furniture-package-1" class="section level4">
+<h4><span class="header-section-number">3.2.1.2</span> The <code>furniture</code> package</h4>
+<p>Tyson Barrett’s <strong>furniture</strong> package includes the extremely useful function <code>table1()</code> which simplifies the common task of creating a stratified, comparative table of descriptive statistics. Full documentation can be accessed by executing <code>?furniture::table1</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_nurse <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age, genderF, experien,  wardtype, hospsize, 
+                     <span class="dt">splitby    =</span> <span class="op">~</span><span class="st"> </span>expcon,                                  <span class="co"># var to divide sample by</span>
+                     <span class="dt">test       =</span> <span class="ot">TRUE</span>,                                      <span class="co"># test groups different?</span>
+                     <span class="dt">type       =</span> <span class="st">&quot;full&quot;</span>,                                    <span class="co"># give the test statistic</span>
+                     <span class="dt">output     =</span> <span class="st">&quot;html&quot;</span>,                                    <span class="co"># output for latex</span>
+                     <span class="dt">align      =</span> <span class="kw">c</span>(<span class="st">&quot;l&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;r&quot;</span>),                     <span class="co"># column alignment</span>
+                     <span class="dt">caption    =</span> <span class="st">&quot;Compare Intervention groups on five main variables&quot;</span>)  <span class="co"># title</span></code></pre></div>
+<table>
+<caption>
+<span id="tab:unnamed-chunk-86">Table 3.1: </span>Compare Intervention groups on five main variables
+</caption>
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+control
+</th>
+<th style="text-align:right;">
+experiment
+</th>
+<th style="text-align:right;">
+Test
+</th>
+<th style="text-align:left;">
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+n = 496
+</td>
+<td style="text-align:right;">
+n = 504
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+age
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+T-Test: 0.82
+</td>
+<td style="text-align:left;">
+0.411
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+43.3 (11.6)
+</td>
+<td style="text-align:right;">
+42.7 (12.5)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+genderF
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+Chi Square: 0.19
+</td>
+<td style="text-align:left;">
+0.661
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Male
+</td>
+<td style="text-align:right;">
+135 (27.2%)
+</td>
+<td style="text-align:right;">
+130 (25.8%)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+Female
+</td>
+<td style="text-align:right;">
+361 (72.8%)
+</td>
+<td style="text-align:right;">
+374 (74.2%)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+experien
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+T-Test: 0.69
+</td>
+<td style="text-align:left;">
+0.491
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+</td>
+<td style="text-align:right;">
+17.2 (5.8)
+</td>
+<td style="text-align:right;">
+16.9 (6.3)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+wardtype
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+Chi Square: 0
+</td>
+<td style="text-align:left;">
+1
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+general care
+</td>
+<td style="text-align:right;">
+247 (49.8%)
+</td>
+<td style="text-align:right;">
+252 (50%)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+special care
+</td>
+<td style="text-align:right;">
+249 (50.2%)
+</td>
+<td style="text-align:right;">
+252 (50%)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+hospsize
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:right;">
+Chi Square: 0.01
+</td>
+<td style="text-align:left;">
+0.993
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+small
+</td>
+<td style="text-align:right;">
+185 (37.3%)
+</td>
+<td style="text-align:right;">
+189 (37.5%)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+medium
+</td>
+<td style="text-align:right;">
+237 (47.8%)
+</td>
+<td style="text-align:right;">
+239 (47.4%)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;">
+large
+</td>
+<td style="text-align:right;">
+74 (14.9%)
+</td>
+<td style="text-align:right;">
+76 (15.1%)
+</td>
+<td style="text-align:right;">
+</td>
+<td style="text-align:left;">
+</td>
+</tr>
+</tbody>
+</table>
+<div class="rmdlightbulb">
+<p>
+The t-test performed by the <code>furniture::table1()</code> function will always assume indepent groups and that HOV is not violated. This may or may not be appropriate.
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_nurse <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> expcon,
+      <span class="dt">y =</span> stress) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>()</code></pre></div>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-88-1.png" width="576" style="display: block; margin: auto;" /></p>
+<!-- ========================================================= -->
+</div>
+</div>
+</div>
+<div id="mlm-intercept-only-or-null-model" class="section level2">
+<h2><span class="header-section-number">3.3</span> MLM: Intercept-only or Null Model</h2>
+<!-- ========================================================= -->
+<blockquote>
+<p>In a Null, intercept-only, or Empty model, no predictors are included.</p>
+</blockquote>
+<div id="fit-the-model-4" class="section level4">
+<h4><span class="header-section-number">3.3.0.1</span> Fit the Model</h4>
+<p>Fit the model to the data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_0_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),  <span class="co"># each hospital contains several wards</span>
+                              <span class="dt">data =</span> data_nurse,
+                              <span class="dt">REML =</span> <span class="ot">TRUE</span>)              <span class="co"># fit via REML (the default) for ICC calculations</span>
+
+nurse_lmer_0_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),  
+                              <span class="dt">data =</span> data_nurse,
+                              <span class="dt">REML =</span> <span class="ot">FALSE</span>)             <span class="co"># fit via ML for comparing FIXED effects inclusion to</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_ml, nurse_lmer_0_re),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M0: Null, ML&quot;</span>, <span class="st">&quot;M0: Null, REML&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;NULL Model: different estimation methods&quot;</span>,
+                  <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+NULL Model: different estimation methods
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M0: Null, ML</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M0: Null, REML</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+5.0010<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.0010<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1103)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1081)
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+1952.9530
+</td>
+<td style="border-top: 1px solid black;">
+1950.3612
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+1972.5840
+</td>
+<td style="padding-right: 12px; border: none;">
+1969.9922
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-972.4765
+</td>
+<td style="padding-right: 12px; border: none;">
+-971.1806
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+1000
+</td>
+<td style="padding-right: 12px; border: none;">
+1000
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: ward:hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+25
+</td>
+<td style="padding-right: 12px; border: none;">
+25
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: ward:hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.4888
+</td>
+<td style="padding-right: 12px; border: none;">
+0.4888
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1743
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1621
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: Residual
+</td>
+<td style="border-bottom: 2px solid black;">
+0.3013
+</td>
+<td style="border-bottom: 2px solid black;">
+0.3013
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="4">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+<!-- ========================================================= -->
+</div>
+</div>
+<div id="estimate-the-icc" class="section level2">
+<h2><span class="header-section-number">3.4</span> Estimate the ICC</h2>
+<!-- ========================================================= -->
+<p>The ICC is calculated by dividing the between-group-variance (random intercept variance) by the total variance (i.e. sum of between-group-variance and within-group (residual) variance).</p>
+<div class="genericEq">
+<p>
+<strong>Intraclass Correlation (ICC) Formula</strong> <span class="math display"><span class="math display">\[
+\overbrace{\rho}^{\text{ICC}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance}}}
+     {\underbrace{\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.9}
+\]</span></span>
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lme4<span class="op">::</span><span class="kw">VarCorr</span>(nurse_lmer_0_re) </code></pre></div>
+<pre><code> Groups        Name        Std.Dev.
+ ward:hospital (Intercept) 0.69916 
+ hospital      (Intercept) 0.40266 
+ Residual                  0.54887 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lme4<span class="op">::</span><span class="kw">VarCorr</span>(nurse_lmer_0_re) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">print</span>(<span class="dt">comp =</span> <span class="kw">c</span>(<span class="st">&quot;Variance&quot;</span>, <span class="st">&quot;Std.Dev&quot;</span>),
+        <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre></div>
+<pre><code> Groups        Name        Variance Std.Dev.
+ ward:hospital (Intercept) 0.489    0.699   
+ hospital      (Intercept) 0.162    0.403   
+ Residual                  0.301    0.549   </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vc &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">VarCorr</span>(nurse_lmer_0_re) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">data.frame</span>() 
+  
+<span class="kw">pie</span>(<span class="dt">x =</span> vc<span class="op">$</span>vcov,
+    <span class="dt">labels =</span> vc<span class="op">$</span>grp)</code></pre></div>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-94-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>The <code>sjstats</code> package has a few really helpful funcitons:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">re_var</span>(nurse_lmer_0_re)</code></pre></div>
+<pre><code>      Within-group-variance:    0.301
+     Between-group-variance:    0.489 (ward:hospital)
+     Between-group-variance:    0.162 (hospital)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(nurse_lmer_0_re)</code></pre></div>
+<pre><code>
+Linear mixed model
+
+Family : gaussian (identity)
+Formula: stress ~ 1 + (1 | hospital/ward)
+
+  ICC (ward:hospital): 0.5134
+       ICC (hospital): 0.1703</code></pre>
+<!-- ========================================================= -->
+</div>
+<div id="mlm-add-fixed-effects" class="section level2">
+<h2><span class="header-section-number">3.5</span> MLM: Add Fixed Effects</h2>
+<!-- ========================================================= -->
+<div id="fit-the-model-5" class="section level3">
+<h3><span class="header-section-number">3.5.1</span> Fit the Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_1_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span>expcon <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>
+<span class="st">                                       </span>experien <span class="op">+</span><span class="st"> </span>wardtype <span class="op">+</span><span class="st"> </span>hospsize <span class="op">+</span>
+<span class="st">                                       </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),  <span class="co"># each hospital contains several wards</span>
+                              <span class="dt">data =</span> data_nurse,
+                              <span class="dt">REML =</span> <span class="ot">FALSE</span>)              <span class="co"># fit via ML for nested FIXED effects</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_ml, nurse_lmer_1_ml),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M0: null&quot;</span>, <span class="st">&quot;M1: fixed pred&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;Nested Models: Fixed effects via ML&quot;</span>,
+                  <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+Nested Models: Fixed effects via ML
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M0: null</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M1: fixed pred</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+5.0010<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.3798<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1103)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1764)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.6999<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1181)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+age
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0221<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0022)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+gender
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.4533<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0349)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+experien
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0616<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0045)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+wardtypespecial care
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0508
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1181)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+hospsizemedium
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.4894<sup style="vertical-align: 0px;">**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1890)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+hospsizelarge
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.9016<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2578)
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+1952.9530
+</td>
+<td style="border-top: 1px solid black;">
+1626.3179
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+1972.5840
+</td>
+<td style="padding-right: 12px; border: none;">
+1680.3032
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-972.4765
+</td>
+<td style="padding-right: 12px; border: none;">
+-802.1589
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+1000
+</td>
+<td style="padding-right: 12px; border: none;">
+1000
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: ward:hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+25
+</td>
+<td style="padding-right: 12px; border: none;">
+25
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: ward:hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.4888
+</td>
+<td style="padding-right: 12px; border: none;">
+0.3270
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1743
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0967
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: Residual
+</td>
+<td style="border-bottom: 2px solid black;">
+0.3013
+</td>
+<td style="border-bottom: 2px solid black;">
+0.2167
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="4">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+</div>
+<div id="assess-significance" class="section level3">
+<h3><span class="header-section-number">3.5.2</span> Assess Significance</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(nurse_lmer_0_ml, nurse_lmer_1_ml)</code></pre></div>
+<pre><code>Data: data_nurse
+Models:
+nurse_lmer_0_ml: stress ~ 1 + (1 | hospital/ward)
+nurse_lmer_1_ml: stress ~ expcon + age + gender + experien + wardtype + hospsize + 
+nurse_lmer_1_ml:     (1 | hospital/ward)
+                Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+nurse_lmer_0_ml  4 1950.4 1970.0 -971.18   1942.4                         
+nurse_lmer_1_ml 11 1626.3 1680.3 -802.16   1604.3 338.04      7  &lt; 2.2e-16
+                   
+nurse_lmer_0_ml    
+nurse_lmer_1_ml ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<!-- ========================================================= -->
+</div>
+</div>
+<div id="mlm-add-random-slope" class="section level2">
+<h2><span class="header-section-number">3.6</span> MLM: Add Random Slope</h2>
+<!-- ========================================================= -->
+<div id="fit-the-model-6" class="section level3">
+<h3><span class="header-section-number">3.6.1</span> Fit the Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_1_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span>expcon <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>experien <span class="op">+</span><span class="st"> </span>wardtype <span class="op">+</span><span class="st"> </span>hospsize <span class="op">+</span>
+<span class="st">                                </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),  
+                              <span class="dt">data =</span> data_nurse,
+                              <span class="dt">REML =</span> <span class="ot">TRUE</span>)              <span class="co"># fit via REML for nested Random Effects</span>
+
+nurse_lmer_2_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span>expcon <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>experien <span class="op">+</span><span class="st"> </span>wardtype <span class="op">+</span><span class="st"> </span>hospsize <span class="op">+</span>
+<span class="st">                                </span>(expcon<span class="op">|</span>hospital<span class="op">/</span>ward),  
+                              <span class="dt">data =</span> data_nurse,
+                              <span class="dt">REML =</span> <span class="ot">TRUE</span>)              <span class="co"># fit via REML for nested Random Effects</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_1_re, nurse_lmer_2_re),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M1: RI&quot;</span>, <span class="st">&quot;M2: RIAS&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;Nested Models: Random Slope via REML&quot;</span>,
+                  <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+Nested Models: Random Slope via REML
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M1: RI</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M2: RIAS</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+5.3796<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.5219<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1847)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1743)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.6999<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.6986<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1198)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1812)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+age
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0221<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0221<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0022)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0022)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+gender
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.4532<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.4550<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0350)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0349)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+experien
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0617<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0612<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0045)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0045)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+wardtypespecial care
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0508
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0448
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1198)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0646)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+hospsizemedium
+</td>
+<td style="padding-right: 12px; border: none;">
+0.4894<sup style="vertical-align: 0px;">*</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.2982
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2015)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1966)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+hospsizelarge
+</td>
+<td style="padding-right: 12px; border: none;">
+0.9015<sup style="vertical-align: 0px;">**</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.5706<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2748)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2681)
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+1661.9601
+</td>
+<td style="border-top: 1px solid black;">
+1634.1726
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+1715.9454
+</td>
+<td style="padding-right: 12px; border: none;">
+1707.7889
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-819.9801
+</td>
+<td style="padding-right: 12px; border: none;">
+-802.0863
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+1000
+</td>
+<td style="padding-right: 12px; border: none;">
+1000
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: ward:hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+25
+</td>
+<td style="padding-right: 12px; border: none;">
+25
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: ward:hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.3366
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0492
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1194
+</td>
+<td style="padding-right: 12px; border: none;">
+0.2523
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: Residual
+</td>
+<td style="padding-right: 12px; border: none;">
+0.2174
+</td>
+<td style="padding-right: 12px; border: none;">
+0.2174
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: ward:hospital expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1191
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: ward:hospital (Intercept) expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0017
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: hospital expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.6887
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Cov: hospital (Intercept) expconexperiment
+</td>
+<td style="border-bottom: 2px solid black;">
+</td>
+<td style="border-bottom: 2px solid black;">
+-0.2348
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="4">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+</div>
+<div id="assess-significance-1" class="section level3">
+<h3><span class="header-section-number">3.6.2</span> Assess Significance</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(nurse_lmer_1_re, nurse_lmer_2_re, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>Data: data_nurse
+Models:
+nurse_lmer_1_re: stress ~ expcon + age + gender + experien + wardtype + hospsize + 
+nurse_lmer_1_re:     (1 | hospital/ward)
+nurse_lmer_2_re: stress ~ expcon + age + gender + experien + wardtype + hospsize + 
+nurse_lmer_2_re:     (expcon | hospital/ward)
+                Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+nurse_lmer_1_re 11 1662.0 1716.0 -819.98   1640.0                         
+nurse_lmer_2_re 15 1634.2 1707.8 -802.09   1604.2 35.788      4    3.2e-07
+                   
+nurse_lmer_1_re    
+nurse_lmer_2_re ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<!-- ========================================================= -->
+</div>
+</div>
+<div id="mlm-add-cross-level-interaction" class="section level2">
+<h2><span class="header-section-number">3.7</span> MLM: Add Cross-Level Interaction</h2>
+<!-- ========================================================= -->
+<div id="fit-the-model-7" class="section level3">
+<h3><span class="header-section-number">3.7.1</span> Fit the Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_2_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span>expcon <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>experien <span class="op">+</span><span class="st"> </span>wardtype <span class="op">+</span><span class="st"> </span>hospsize <span class="op">+</span>
+<span class="st">                                </span>(expcon<span class="op">|</span>hospital<span class="op">/</span>ward),  
+                              <span class="dt">data =</span> data_nurse,
+                              <span class="dt">REML =</span> <span class="ot">FALSE</span>)              <span class="co"># fit via ML for nested FIXED Effects</span>
+
+nurse_lmer_3_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span>expcon <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>experien <span class="op">+</span><span class="st"> </span>wardtype <span class="op">+</span><span class="st"> </span>hospsize<span class="op">*</span>expcon <span class="op">+</span>
+<span class="st">                                </span>(expcon<span class="op">|</span>hospital<span class="op">/</span>ward),  
+                              <span class="dt">data =</span> data_nurse,
+                              <span class="dt">REML =</span> <span class="ot">FALSE</span>)              <span class="co"># fit via ML for nested FIXED Effects</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_2_ml, nurse_lmer_3_ml),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M2: RAIS&quot;</span>, <span class="st">&quot;M3: Xlevel Int&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;Nested Models: Fixed Cross-Level Interaction via ML&quot;</span>,
+                  <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+Nested Models: Fixed Cross-Level Interaction via ML
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M2: RAIS</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M3: Xlevel Int</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+5.5220<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.8006<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1659)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1666)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.6986<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-1.5451<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1776)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1836)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+age
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0221<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0221<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0022)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0022)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+gender
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.4550<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.4551<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0348)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0348)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+experien
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0611<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0613<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0044)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0044)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+wardtypespecial care
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0447
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0447
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0638)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0638)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+hospsizemedium
+</td>
+<td style="padding-right: 12px; border: none;">
+0.2982
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0694
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1844)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2011)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+hospsizelarge
+</td>
+<td style="padding-right: 12px; border: none;">
+0.5706<sup style="vertical-align: 0px;">*</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0676
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2515)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2745)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+expconexperiment:hospsizemedium
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+1.1174<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2431)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+expconexperiment:hospsizelarge
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+1.9369<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.3318)
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+1597.9486
+</td>
+<td style="border-top: 1px solid black;">
+1578.1449
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+1671.5650
+</td>
+<td style="padding-right: 12px; border: none;">
+1661.5767
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-783.9743
+</td>
+<td style="padding-right: 12px; border: none;">
+-772.0724
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+1000
+</td>
+<td style="padding-right: 12px; border: none;">
+1000
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: ward:hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+25
+</td>
+<td style="padding-right: 12px; border: none;">
+25
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: ward:hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0472
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0472
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: ward:hospital expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1392
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1782
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: ward:hospital (Intercept) expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0084
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0279
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.2259
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1736
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: hospital expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+0.6579
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1739
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: hospital (Intercept) expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.2249
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0657
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: Residual
+</td>
+<td style="border-bottom: 2px solid black;">
+0.2167
+</td>
+<td style="border-bottom: 2px solid black;">
+0.2166
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="4">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+</div>
+<div id="assess-significance-2" class="section level3">
+<h3><span class="header-section-number">3.7.2</span> Assess Significance</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(nurse_lmer_2_ml, nurse_lmer_3_ml)</code></pre></div>
+<pre><code>Data: data_nurse
+Models:
+nurse_lmer_2_ml: stress ~ expcon + age + gender + experien + wardtype + hospsize + 
+nurse_lmer_2_ml:     (expcon | hospital/ward)
+nurse_lmer_3_ml: stress ~ expcon + age + gender + experien + wardtype + hospsize * 
+nurse_lmer_3_ml:     expcon + (expcon | hospital/ward)
+                Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+nurse_lmer_2_ml 15 1598.0 1671.6 -783.97   1568.0                         
+nurse_lmer_3_ml 17 1578.1 1661.6 -772.07   1544.1 23.804      2  6.778e-06
+                   
+nurse_lmer_2_ml    
+nurse_lmer_3_ml ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="final-model-1" class="section level3">
+<h3><span class="header-section-number">3.7.3</span> Final Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_3_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span>expcon <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>experien <span class="op">+</span><span class="st"> </span>wardtype <span class="op">+</span><span class="st"> </span>hospsize<span class="op">*</span>expcon <span class="op">+</span>
+<span class="st">                                </span>(expcon<span class="op">|</span>hospital<span class="op">/</span>ward),  
+                              <span class="dt">data =</span> data_nurse,
+                              <span class="dt">REML =</span> <span class="ot">TRUE</span>,                                     <span class="co"># fit via REML for final model</span>
+                            <span class="dt">control =</span> <span class="kw">lmerControl</span>(<span class="dt">optimizer =</span><span class="st">&quot;Nelder_Mead&quot;</span>))   <span class="co"># Hessian convergence issues           </span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_3_re),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M3: Xlevel Int&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;Final Model: with REML&quot;</span>,
+                  <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                  <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+Final Model: with REML
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>M3: Xlevel Int</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+5.8004 (0.1759)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+-1.5452 (0.1958)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+age
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0221 (0.0022)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+gender
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.4551 (0.0349)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+experien
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0613 (0.0045)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+wardtypespecial care
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0448 (0.0646)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+hospsizemedium
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0697 (0.2144)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+hospsizelarge
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0679 (0.2926)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+expconexperiment:hospsizemedium
+</td>
+<td style="padding-right: 12px; border: none;">
+1.1178 (0.2592)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+expconexperiment:hospsizelarge
+</td>
+<td style="padding-right: 12px; border: none;">
+1.9374 (0.3537)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+1616.7054
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+1700.1373
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-791.3527
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+1000
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: ward:hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: hospital
+</td>
+<td style="padding-right: 12px; border: none;">
+25
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: ward:hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0493
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: ward:hospital expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0542
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: ward:hospital (Intercept) expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0341
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: hospital (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.2010
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: hospital expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+0.2133
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: hospital (Intercept) expconexperiment
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.0783
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: Residual
+</td>
+<td style="border-bottom: 2px solid black;">
+0.2174
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="3">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+<div class="rmdimportant">
+<p>
+<strong>ICC for unconditional and conditional model</strong>
+</p>
+<p>
+Usually, the ICC is calculated for the null model (“unconditional model”). However, according to Raudenbush and Bryk (2002) or Rabe-Hesketh and Skrondal (2012) it is also feasible to compute the ICC for full models with covariates (“conditional models”) and compare how much a level-2 variable explains the portion of variation in the grouping structure (random intercept).
+</p>
+<p>
+<strong>ICC for random-slope models</strong>
+</p>
+<p>
+<strong>Caution:</strong> For models with <strong>random slopes and random intercepts</strong>, the ICC would differ at each unit of the predictors. Hence, the ICC for these kind of models cannot be understood simply as proportion of variance (see Goldstein et al. 2010). For convenience reasons, as the ‘icc()’ function also extracts the different random effects variances, the ICC for random-slope-intercept-models is reported nonetheless, but <strong>it is usually no meaningful summary</strong> of the proportion of variances.
+</p>
+<p>
+<strong>ICC for models with multiple or nested random effects</strong>
+</p>
+<p>
+<strong>Caution:</strong> By default, for <strong>three-level-models</strong>, depending on the nested structure of the model, or for models with multiple random effects, ‘icc()’ only reports the proportion of variance explained for each grouping level. Use ‘adjusted = TRUE’ to calculate the adjusted and conditional ICC.
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(nurse_lmer_3_re)</code></pre></div>
+<pre><code>
+Linear mixed model
+
+Family : gaussian (identity)
+Formula: stress ~ expcon + age + gender + experien + wardtype + hospsize * expcon + (expcon | hospital/ward)
+
+  ICC (ward:hospital): 0.1054
+       ICC (hospital): 0.4298</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;expcon&quot;</span>, <span class="st">&quot;hospsize&quot;</span>),
+                <span class="dt">mod =</span> nurse_lmer_3_re) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">data.frame</span>()  <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> hospsize <span class="op">%&gt;%</span><span class="st"> </span>forcats<span class="op">::</span><span class="kw">fct_rev</span>(),
+      <span class="dt">y =</span> fit,
+      <span class="dt">group =</span> expcon,
+      <span class="dt">shape =</span> expcon,
+      <span class="dt">color =</span> expcon) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower,
+                    <span class="dt">ymax =</span> upper),
+                <span class="dt">width =</span> .<span class="dv">4</span>,
+                <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> .<span class="dv">2</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> .<span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">3</span>,
+             <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> .<span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Hospital Size&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean, Stress&quot;</span>,
+       <span class="dt">shape =</span> <span class="st">&quot;Condition&quot;</span>,
+       <span class="dt">color =</span> <span class="st">&quot;Condition&quot;</span>)</code></pre></div>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-110-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_3_re <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>emmeans<span class="op">::</span><span class="kw">emmeans</span>(<span class="op">~</span><span class="st"> </span>expcon <span class="op">|</span><span class="st"> </span>hospsize)</code></pre></div>
+<pre><code>hospsize = small:
+ expcon       emmean        SE    df lower.CL upper.CL
+ control    5.394351 0.1620449 21.93 5.058227 5.730475
+ experiment 3.849106 0.1983170 21.95 3.437765 4.260447
+
+hospsize = medium:
+ expcon       emmean        SE    df lower.CL upper.CL
+ control    5.324655 0.1404573 22.01 5.033368 5.615941
+ experiment 4.897244 0.1718780 22.01 4.540804 5.253683
+
+hospsize = large:
+ expcon       emmean        SE    df lower.CL upper.CL
+ control    5.326489 0.2436163 22.13 4.821429 5.831548
+ experiment 5.718598 0.2978723 22.07 5.100955 6.336241
+
+Results are averaged over the levels of: wardtype 
+Degrees-of-freedom method: kenward-roger 
+Confidence level used: 0.95 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_3_re <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>emmeans<span class="op">::</span><span class="kw">emmeans</span>(<span class="op">~</span><span class="st"> </span>expcon <span class="op">|</span><span class="st"> </span>hospsize) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">pairs</span>()</code></pre></div>
+<pre><code>hospsize = small:
+ contrast               estimate        SE    df t.ratio p.value
+ control - experiment  1.5452447 0.1958086 21.90   7.892  &lt;.0001
+
+hospsize = medium:
+ contrast               estimate        SE    df t.ratio p.value
+ control - experiment  0.4274109 0.1698082 22.02   2.517  0.0196
+
+hospsize = large:
+ contrast               estimate        SE    df t.ratio p.value
+ control - experiment -0.3921092 0.2945688 22.16  -1.331  0.1967
+
+Results are averaged over the levels of: wardtype </code></pre>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="example-pupil-popularity.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="example-achievement.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section",
+"toc_depth": 3
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

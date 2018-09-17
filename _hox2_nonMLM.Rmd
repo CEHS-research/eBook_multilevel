@@ -1,0 +1,238 @@
+# hox 2 non-MLM anlaysis
+
+
+
+
+
+## Disaggregation Completely
+
+Ignore all nesting and dissagregate all variables.  This treats ward type and hospital size as a nurse-specific factor.  It erroneously assumes that all nurses are independent and that the treatement was randomized to individual nurses rather than wards. 
+
+### Data Treatment
+
+Requires no edicts to the dataset.
+
+The simplest statistical test would be to compare the mean stress level of all nurses who participated in the stress training to the mean of all nurses that did not.  
+
+#### Summary
+
+```{r, results='asis'}
+data_nurse %>% 
+  furniture::table1(stress,
+                    splitby = ~ expcon,
+                    output = "html",
+                    test = TRUE,
+                    type = "full",
+                    digits = 4)
+```
+
+
+
+
+
+
+
+### Independent Groups t-Test
+
+#### Assumptions
+
+The t-test assumes that the amount of variation or spread is the same in the two groups.  Thi sassumption of homogeneity of variance (HOV) across groups is tested via Levene's Test.  
+
+```{r}
+car::leveneTest(stress ~ expcon,        # continuous outcome ~ grouping var
+                data = data_nurse,      
+                center = "mean")        # the default is 'median'
+```
+
+#### Model Fitting
+
+Since evidence of  a violation of HOV was found, `F(1, 998) = 64.037, p < .0001`, use the Welch (or Satterthwaite) approximation to the degrees of freedom to pool the variances for the t-test.
+
+```{r}
+nurse_t_ind <- t.test(stress ~ expcon,        # continuous outcome ~ grouping var
+                      data = data_nurse,   
+                      paired = FALSE,         # independnet groups are not paired
+                      var.equal = FALSE)      # since HOV is violated
+
+nurse_t_ind
+```
+
+
+
+#### Effect Size
+
+A confidence interval around the mean difference is one type of quantificaiton of effect size.  While Cohen's $d$ is the most frequently published single measure of effect size, anothers do exits and may be more appropriate.  These include Hedge's $g$ and Glass' $\Delta$.
+
+
+```{r}
+effsize::cohen.d(stress ~ expcon, 
+                 data = data_nurse)  # default is Cohen's d
+```
+
+```{r}
+effsize::cohen.d(stress ~ expcon, 
+                 data = data_nurse,
+                 hedges.correction = TRUE)   # also do hedges g
+```
+
+
+```{r}
+lsr::cohensD(stress ~ expcon,
+             data = data_nurse)
+```
+
+
+
+#### Interpretation
+
+The nurses participanting in the intervention had lower stress level, `(M = 4.61, SD = 1.05)`, than thoes who did not, `(M = 5.33, SD = 0.72)`, at the end of end of the program.  An independence-groups t-test between means was conducted using the Welch approximation to pool the standard deviation after evidence was found of a violation of the homogeneity of variance assumption, `F(1, 998) = 64.037, p < .0001`. This sample provides strong evidence the intervention was efective at lowering stress, `t(891.67) = 13.048, p < .0001, 95CI [0.633, 0.858], d = -0.825, g = -0.825`.
+
+
+### Single-level Simple Regression
+
+
+#### Model Fitting
+
+```{r}
+nurse_lm_simple <- lm(stress ~ expcon,  
+                      data = data_nurse)
+
+summary(nurse_lm_simple)
+```
+
+#### Assumptions
+
+
+```{r}
+plot(nurse_lm_simple, which = 1)
+```
+
+```{r}
+plot(nurse_lm_simple, which = 2)
+```
+
+
+#### Effect Size
+
+```{r}
+summary(nurse_lm_simple)$r.squared
+```
+
+#### Interpretation
+
+
+
+
+
+## Aggregate Individuals in Wards
+
+### Data Treatment
+
+Reduce from 3 levels to 2 levels by aggregating nurses belonging to the same ward.
+
+Collapse each set of about 10 nurse to only 1 mean per ward 
+
+```{r}
+data_nurse %>% 
+  dplyr::group_by(hospital, ward, wardid) %>% 
+  dplyr::summarize(hospsize           = first(hospsize),
+                   wardtype           = first(wardtype),
+                   expcon             = first(expcon),
+                   ward_mean_age      = mean(age),
+                   ward_prop_gender   = mean(gender),
+                   ward_mean_experien = mean(experien),
+                   ward_mean_stress   = mean(stress)) %>% 
+  dplyr::ungroup() %>% 
+  furniture::table1(hospsize, wardtype,
+                    ward_mean_age, ward_prop_gender, ward_mean_experien,
+                    splitby    = ~ expcon,                                  # var to divide sample by
+                    test       = TRUE,                                      # test groups different?
+                    type       = "full",                                    # give the test statistic
+                    output     = "html",                                    # output for latex
+                    align      = c("l", "r", "r", "r"),                     # column alignment
+                    caption    = "Compare genders on four main variables")  # title
+```
+
+
+Aggregate:   
+* 
+    + Each ward is entirely assigned the control group or the treatment group
+    + Sample size: n = 100
+
+Dissaggregate:
+* Ignore the correlation between wards in the same hostial
+* Treats the hospital size as if it were a ward attribute, not a hospital attribute
+
+```{r}
+nurse_ANOVA_ward <- data_nurse %>% 
+  dplyr::group_by(expcon, hospsize, wardid) %>% 
+  dplyr::summarize(stress_mean = mean(stress)) %>% 
+  afex::aov_4(stress_mean ~ hospsize*expcon + (1|wardid),
+              data = .)
+
+summary(nurse_ANOVA_ward)
+```
+
+```{r}
+nurse_ANOVA_ward %>% 
+  emmeans::emmip(expcon~ hospsize, CIs = TRUE)
+```
+
+
+
+```{r}
+nurse_ANOVA_ward %>% 
+  emmeans::emmeans(~ expcon|hospsize)
+```
+
+```{r}
+nurse_ANOVA_ward %>% 
+  emmeans::emmeans(~ expcon|hospsize) %>% 
+  pairs()
+```
+
+### Dissagregate: 
+
+
+
+
+
+## RM ANOVA
+
+### Aggregate: Collapse to Hospital Averages
+
+Collapse to only 2 means per hospital: one for the control group and one for the treatment group
+
+
+```{r}
+nurse_rmANOVA_hosp <- data_nurse %>% 
+  dplyr::group_by(expcon, hospsize, hospital) %>% 
+  dplyr::summarize(stress_mean = mean(stress)) %>% 
+  afex::aov_4(stress_mean ~ hospsize + (expcon|hospital),
+              data = .)
+
+summary(nurse_rmANOVA_hosp)
+```
+
+```{r}
+nurse_rmANOVA_hosp %>% 
+  emmeans::emmip(expcon~ hospsize, CIs = TRUE)
+```
+
+
+
+```{r}
+nurse_rmANOVA_hosp %>% 
+  emmeans::emmeans(~ expcon|hospsize)
+```
+
+```{r}
+nurse_rmANOVA_hosp %>% 
+  emmeans::emmeans(~ expcon|hospsize) %>% 
+  pairs()
+```
+
+
+
+
+

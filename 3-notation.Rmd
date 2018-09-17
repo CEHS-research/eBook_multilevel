@@ -1,0 +1,313 @@
+# Formula Warehouse
+
+
+
+```{block type='rmdconstruct', echo=TRUE}
+This is the home for notation and formulas used thorugh this eBook.  Most important equations will be located here.
+```
+
+## Data Notation
+
+Sample Sizes:
+
+* $n_j$ = number of pupils in class $j$
+* $N$   = number of classes
+
+
+Indicators:
+
+* $i \in (1, 2, \dots, n_j)$  = index for pupil number 
+* $j \in (1, 2, \dots, N)$  = index for class number
+
+
+| Level |     Type of Variable    |  Symbol  |  pupil $i$ in class $j$ |  
+|-------|-------------------------|----------|------------|
+|   1   | Outcome (Dependent)     |  $Y$     | $Y_{ij}$   |
+|   1   | Predictor (Independent) |  $X_1$   | $X_{1ij}$  |
+|   1   | Predictor (Independent) |  $X_2$   | $X_{2ij}$  |
+|   2   | Predictor (Independent) |  $Z$     | $Z_j$      |  
+    
+    
+
+
+## Single-level Regression Analysis
+
+### The Only Equation
+
+Since we are don't have or are ignoring clustering, there is only one level.
+
+```{block type='genericEq', echo=TRUE}
+**Single-Level Regression Equation** 
+$$
+\overbrace{Y_{ij}}^{Outcome} = 
+         \underbrace{\beta_{0}}_{\text{Fixed}\atop\text{intercept}}  + 
+         \underbrace{\beta_{1}}_{\text{Fixed}\atop\text{slope } X_1} \overbrace{X_{1ij}}^{\text{Predictor 1}}  + 
+         \underbrace{\beta_{2}}_{\text{Fixed}\atop\text{slope } X_2} \overbrace{X_{2ij}}^{\text{Predictor 2}} + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
+\tag{Hox 2.1}
+$$
+
+```
+
+### Parameters
+
+|  Type  | Parameter of Interest           | Estimates This |
+|--------|:--------------------------------|----------------|
+| Fixed  | Intercept                       | $\beta_{0}$    |
+| Fixed  | Slope or main effect of $X_1$   | $\beta_{1}$    |
+| Fixed  | Slope or main effect of $X_2$   | $\beta_{2}$    |
+| Random | Residual Variance $var[e_{ij}]$ | $\sigma^2_{e}$ |
+
+
+### Assumptions to Check
+
+* The $e_{ij}$'s follow a normal distribution with a mean of $0$
+* The $e_{ij}$'s have a constant variance *(homoscedasticity)* 
+    
+    
+
+
+## Multi-level Regression Analysis
+
+ 
+Continue taking into account fixed slopes for two Level 1 variables, $X_1$ and $X_2$.
+
+
+### Level 1 Regression Equation*
+
+$$
+\overbrace{Y_{ij}}^{\text{Level 1}\atop\text{Outcome}} = 
+         \underbrace{\beta_{0j}}_{\text{Level 2}\atop\text{intercepts}}  + 
+         \underbrace{\beta_{1j}}_{\text{Level 2}\atop\text{slopes}} 
+         \overbrace{X_{1ij}}^{\text{Level 1}\atop\text{Predictor 1}}  + 
+         \underbrace{\beta_{2j}}_{\text{Level 2}\atop\text{slopes}} 
+         \overbrace{X_{2ij}}^{\text{Level 1}\atop\text{Predictor 2}}  + 
+         \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}} 
+\tag{Hox 2.1}
+$$
+
+
+
+
+Now we take clustering into account and include random intercepts ($\beta_{0j}$) and slopes ($\beta_{1j}, \beta_{2j}$), as well as including a single Level 2 variable, $Z$ that interacts with both Level 1 variables.
+
+
+### Level 2 Regression Equations
+
+#### Random Intercepts:
+
+$$
+\overbrace{\beta_{0j}}^{\text{Level 2}\atop\text{intercepts}} = 
+     \underbrace{\gamma_{00}}_{\text{Fixed}\atop\text{intercept}}  + 
+     \underbrace{\gamma_{01}}_{\text{Fixed}\atop\text{slope } Z}
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}}  + 
+     \underbrace{u_{0j}}_{\text{Intercept}\atop\text{residual}} 
+\tag{Hox 2.3}
+$$
+
+
+#### Random Slopes
+
+* For the first predictor, $X_1$:
+
+$$
+\overbrace{\beta_{1j}}^{\text{Level 2}\atop\text{slopes}} = 
+     \underbrace{\gamma_{10}}_{\text{Fixed}\atop\text{Slope  } X_1}  + 
+     \underbrace{\gamma_{11}}_{\text{Fixed}\atop X_1 \times Z} 
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}} + 
+     \underbrace{u_{1j}}_{\text{Slope } X_1\atop\text{residual}} 
+\tag{Hox 2.4a}
+$$
+
+
+
+* For the second predictor, $X_2$:
+
+$$
+\overbrace{\beta_{2j}}^{\text{Level 2}\atop\text{slopes}} = 
+     \underbrace{\gamma_{20}}_{\text{Fixed}\atop\text{Slope  } X_2}  + 
+     \underbrace{\gamma_{21}}_{\text{Fixed}\atop X_2 \times Z} 
+     \overbrace{Z_{j}}^{\text{Level 2}\atop\text{Predictor 3}} + 
+     \underbrace{u_{2j}}_{\text{Slope } X_2\atop\text{residual}} 
+\tag{Hox 2.4a}
+$$
+
+
+
+#### Merging the Equations
+
+Starting with Level 1 equation (2.1) and allow the $\beta$'s to be varry for each class and plug in the level 2 equations (2.3 and 2.4) into the level 1 equation (2.1) to make the combined equation.
+$$
+Y_{ij} = \overbrace{(\gamma_{00} + \gamma_{01} Z_{j} + u_{0j})}^{\beta_{0j}} + 
+         \overbrace{(\gamma_{10} + \gamma_{11} Z_{j} + u_{1j})}^{\beta_{1j}} X_{1ij} + 
+         \overbrace{(\gamma_{20} + \gamma_{21} Z_{j} + u_{2j})}^{\beta_{2j}} X_{2ij} + e_{ij} 
+$$
+
+
+
+Use the distributive property of multiplication to get rid of the parentheses.
+$$
+Y_{ij} = \overbrace{\gamma_{00}         + \gamma_{01} Z_{j}         + u_{0j}}^{\beta_{0j}} + 
+         \overbrace{\gamma_{10} X_{1ij} + \gamma_{11} Z_{j} X_{1ij} + u_{1j} X_{1ij}}^{\beta_{1j} \times X_{1ij}}  +
+         \overbrace{\gamma_{20} X_{2ij} + \gamma_{21} Z_{j} X_{2ij} + u_{2j} X_{2ij}}^{\beta_{2j} \times X_{2ij}}  +
+         e_{ij} 
+$$
+
+
+
+### Combinded, Multilevel Regression Equation
+
+Collect 'like-terms' (i.e. get the $\gamma$'s together and the $u$'s together)
+
+```{block type='genericEq', echo=TRUE}
+**Combinded, Multilevel Regression Equation - Generic** 
+
+$$
+Y_{ij} = \overbrace{\gamma_{00} + 
+                      \gamma_{10} X_{1ij} + 
+                      \gamma_{20} X_{2ij} + 
+                      \gamma_{01} Z_{j} + 
+                      \gamma_{11} Z_{j} X_{1ij} +  
+                      \gamma_{21} Z_{j} X_{2ij}}^{\text{Fixed part}\atop\text{Deterministic}} + \\
+         \underbrace{u_{0j} + u_{1j} X_{1ij} + u_{2j} X_{2ij} + e_{ij} }_{\text{Random part}\atop\text{Stochastic}}
+ \tag{Hox 2.5}
+$$
+
+```
+
+
+### Parameters
+
+|  Type  | Parameter of Interest                       | Estimates This |
+|--------|:--------------------------------------------|----------------|
+| Fixed  | Intercept                                   | $\gamma_{00}$  |
+| Fixed  | Main Effect of $X_1$                        | $\gamma_{10}$  |
+| Fixed  | Main Effect of $X_2$                        | $\gamma_{20}$  |
+| Fixed  | Main Effect of $Z$                          | $\gamma_{01}$  |
+| Fixed  | Cross-Level interaction between $X_1$ and $Z$    | $\gamma_{11}$  |
+| Fixed  | Cross-Level interaction between $X_2$ and $Z$    | $\gamma_{21}$  |
+| Random | Variance in random intercepts, $var[u_{0j}]$     | $\sigma^2_{u0}$ | 
+| Random | Variance in random slope of $X_1$, $var[u_{1j}]$ | $\sigma^2_{u1}$ | 
+| Random | Variance in random slope of $X_2$, $var[u_{2j}]$ | $\sigma^2_{u2}$ | 
+| Random | Covariance between random intercepts and random slope of $X_1$, $cov[u_{0j}, u_{1j}]$ | $\sigma^2_{u01}$ |
+| Random | Covariance between random intercepts and random slope of $X_2$, $cov[u_{0j}, u_{2j}]$ | $\sigma^2_{u02}$ |
+| Random | Covariance between random slopes of $X_1$ and $X_2$,  $cov[u_{1j}, u_{2j}]$           | $\sigma^2_{u12}$ | 
+| Random | Residual Variance $var[e_{ij}]$                 | $\sigma^2_{e}$ |    
+
+
+```{block type='rmdimportant', echo=TRUE}
+The $u_{1j}$ and $u_{2j}$ terms allow for **heteroscedasticity** by fitting different error terms for different values of $X_1$ and $X_2$.  The HOV assumption is that AFTER accounting for this, the remaining residuals are HOV.
+```
+
+
+## Intraclass Correlation (ICC)
+
+
+```{block type='genericEq', echo=TRUE}
+**Combined, Multilevel Model Equation - Null Model**
+$$ 
+\overbrace{Y_{ij}}^{Outcome} = 
+    \underbrace{\gamma_{00}}_{\text{Fixed}\atop\text{intercept}} + 
+    \underbrace{u_{0j}}_{\text{Random}\atop\text{intercepts}} + 
+    \underbrace{e_{ij}}_{\text{Random}\atop\text{residuals}}
+\tag{Hox 2.8}
+$$
+```
+
+
+Although the Null model above does not explain any variance in the dependent variable, since there are no independent variables, it does decompose (i.e. divide up) the variance into two pieces.  We can compute the amount of total variance in the outcome that is attribute to the clustering of Level 1 untis *(micro-units)* into clusters of Level 2 units *(macro-units)* verses the total variance.
+
+
+```{block type='genericEq', echo=TRUE}
+**Intraclass Correlation (ICC) Formula**
+$$
+\overbrace{\rho}^{\text{ICC}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance}}}
+     {\underbrace{\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.9}
+$$
+```
+
+
+
+## Proporion of Variance Explianed
+
+Analogous to multiple $R^2$ - done seperately by level
+
+* $BL$ = Baseline model (Null)
+* $MC$ = Model to Compare to 
+
+
+### Level 1 Variance Explained
+
+#### Snijders and Bosker
+
+```{block type='genericEq', echo=TRUE}
+**Snijders and Bosker Formula - Level 1 ** 
+$$
+R^2_1 = 1 - \frac{\sigma^2_{e-MC} + \sigma^2_{u0-MC}}
+                 {\sigma^2_{e-BL} + \sigma^2_{u0-BL}}
+$$
+```
+
+
+#### Raudenbush and Bryk
+
+```{block type='genericEq', echo=TRUE}
+**Raudenbush and Bryk Approximate Formula - Level 1 ** 
+$$
+R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
+             {\sigma^2_{e-BL} }
+\tag{Hox 4.8}
+$$
+```
+
+
+### Level 2 Variance Explined
+
+#### who?
+
+```{block type='genericEq', echo=TRUE}
+$$
+R^2_2 = 1 - \frac{\frac{\sigma^2_{e-MC}}{B} + \sigma^2_{u0-MC}}
+                 {\frac{\sigma^2_{e-BL}}{B} + \sigma^2_{u0-BL}}
+$$
+```
+
+#### Raudenbush and Bryk
+
+```{block type='genericEq', echo=TRUE}
+**Raudenbush and Bryk Approximate Formula - Level 2 ** 
+$$
+R^2_1 = \frac{\sigma^2_{u0-BL} - \sigma^2_{u0-MC}}
+             {\sigma^2_{u0-BL} }
+\tag{Hox 4.9}
+$$
+```
+
+
+
+
+
+
+
+
+
+
+## Using $\LaTeX$ for Equation Typesetting
+
+
+```{block type='rmdlink', echo=TRUE}
+R markdown is a user friendly, simplified language that allows for more complex formating utilizing standard $\LaTeX$ code.  A great resource for learning how to many common tasks in $\LaTeX$ is the [Share\LaTeX website](www.sharelatex.com).  
+
+Specific mathematical equation documentation may be found on the [Mathematical  Expressions](https://www.sharelatex.com/learn/Mathematical_expressions) subpage.
+
+There are also many websites that offer Point-n-click interfaces to build $\LaTeX$ equations, including:
+[Host Math](http://www.hostmath.com/), 
+[Code Cogs](https://www.codecogs.com/latex/eqneditor.php), 
+[LaTeX 4 Technics](https://www.latex4technics.com/), and
+[Sci-Weavers](http://www.sciweavers.org/free-online-latex-equation-editor)
+```
+
+    
+    
