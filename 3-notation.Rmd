@@ -237,13 +237,15 @@ Analogous to multiple $R^2$ - done seperately by level
 * $BL$ = Baseline model (Null)
 * $MC$ = Model to Compare to 
 
+http://journals.sagepub.com/doi/10.1177/1094428114541701 
+
 
 ### Level 1 Variance Explained
 
 #### Snijders and Bosker
 
 ```{block type='genericEq', echo=TRUE}
-**Snijders and Bosker Formula - Level 1 ** 
+**Snijders and Bosker Formula - Level 1 ** Random Intercepts Models Only *address potential negative $R^2$ issue*
 $$
 R^2_1 = 1 - \frac{\sigma^2_{e-MC} + \sigma^2_{u0-MC}}
                  {\sigma^2_{e-BL} + \sigma^2_{u0-BL}}
@@ -254,7 +256,7 @@ $$
 #### Raudenbush and Bryk
 
 ```{block type='genericEq', echo=TRUE}
-**Raudenbush and Bryk Approximate Formula - Level 1 ** 
+**Raudenbush and Bryk Approximate Formula - Level 1 ** *approximate*
 $$
 R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
              {\sigma^2_{e-BL} }
