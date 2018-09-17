@@ -1,0 +1,25 @@
+# Variance Explained
+
+
+@nakagawa2013 
+
+https://ecologyforacrowdedplanet.wordpress.com/2013/08/27/r-squared-in-mixed-models-the-easy-way/
+
+
+## For Generalized MLMs
+
+https://stats.stackexchange.com/questions/111150/calculating-r2-in-mixed-models-using-nakagawa-schielzeths-2013-r2glmm-me
+
+
+I am answering by pasting Douglas Bates's reply in the R-Sig-ME mailing list, on 17 Dec 2014 on the question of **how to calculate an $R^2$ statistic for generalized linear mixed models**, which I believe is required reading for anyone interested in such a thing. Bates is the original author of the `lme4` package for $R$ and co-author of `nlme`, as well as co-author of a well-known book on mixed models, and CV will benefit from having the text in an answer, rather than just a link to it.
+
+>I must admit to getting a little twitchy when people speak of the "$R^2$ for GLMMs". $R^2$ for a linear model is well-defined and has many desirable properties. For other models one can define different quantities that reflect some but not all of these properties. But this is not calculating an $R^2$ in the sense of obtaining a number having all the properties that the $R^2$ for linear models does. Usually there are several different ways that such a quantity could be defined. Especially for GLMs and GLMMs before you can define "proportion of response variance explained" you first need to define what you mean by "response variance". The whole point of GLMs and GLMMs is that a simple sum of squares of deviations does not meaningfully reflect the variability in the response because the variance of an individual response depends on its mean.
+>
+> Confusion about what constitutes $R^2$ or degrees of freedom of any of the other quantities associated with linear models as applied to other models comes from confusing the formula with the concept. Although formulas are derived from models the derivation often involves quite sophisticated mathematics. To avoid a potentially confusing derivation and just "cut to the chase" it is easier to present the formulas. But the formula is not the concept. **Generalizing a formula is not equivalent to generalizing the concept.** And those formulas are almost never used in practice, especially for generalized linear models, analysis of variance and random effects. I have a "meta-theorem" that the only quantity actually calculated according to the formulas given in introductory texts is the sample mean.
+>
+>It may seem that **I am being a grumpy old man about this, and perhaps I am, but the danger is that people expect an "$R^2$-like" quantity **to have all the properties of an $R^2$ for linear models. It can't. There is no way to generalize all the properties to a much more complicated model like a GLMM.
+>
+> I was once on the committee reviewing a thesis proposal for Ph.D. candidacy. The proposal was to examine I think 9 different formulas that could be considered ways of computing an $R^2$ for a nonlinear regression model to decide which one was "best". Of course, this would be done through a simulation study with only a couple of different models and only a few different sets of parameter values for each. My suggestion that this was an entirely meaningless exercise was not greeted warmly.
+
+
+
