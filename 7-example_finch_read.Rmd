@@ -1,4 +1,4 @@
-# Intro Centering and Scaling Example: Reading Achievement
+# Intro Centering and Scaling Example: Reading Achievement (2-levels only)
 
 
 ```{r, include=FALSE}
@@ -30,9 +30,13 @@ library(optimx)       # Different optimizers to solve mlm's
 ## Background
 <!-- ========================================================= -->
 
-Finch textbook...
+The following example was included in the text "Multilevel Modeling in R" by @finch2016.
 
-The datasets for this textbook may be downloaded from the website: http://www.mlminr.com/data-sets/.  I was unable to find any documentation on this dataset in the book or online, so I contacted the authors.  There were unable to provide much either, but based on visual inspection designated the class of *factor* to thoes vairables that seem to represent categorical quantities. The labels for gender and class size are relative to the frequencies in the journal article the authors did point me to *(although the samples sizes do not match up)*.
+The datasets for this textbook may be downloaded from the website: http://www.mlminr.com/data-sets/.  
+
+I was unable to find any documentation on this dataset in the book or online, so I contacted the authors.  There were unable to provide much either, but based on visual inspection designated the class of *factor* to thoes vairables that seem to represent categorical quantities. The labels for gender and class size are relative to the frequencies in the journal article the authors did point me to *(although the samples sizes do not match up)*.
+
+FOR THIS CHAPTER WE WILL IGNORE ALL LEVELS EXCEPT FOR STUDNETS BEING NESTED WITHIN SCHOOLS.
 
 
 Read the SPSS data in with the `haven` package .
@@ -77,7 +81,7 @@ data_achieve <- data_raw %>%
 
 It is obvious that the sample is hiarchical in nature.  The nesting starts with `students` (level 1) nested within `class` (level 2), which are further nested within `school` (level 3), `corp` (level 4), and finally `region` (level 5).  
 
-For this chapter we will only focus on two levels: **students** are the units on which the outcome is measured and **schools** are the units in which they are nested.
+For this chapter we will only focus on TWO levels: **students** (level 1) are the units on which the outcome is measured and **schools** (level 2) are the units in which they are nested.
 
 The number of ***regions*** = 9:
 
@@ -142,7 +146,7 @@ Most posters, journal articles, and reports start with a table of descriptive st
 
 ```{r sumtable0, results='asis'}
 data_achieve %>% 
-  dplyr::select(classize, gender, geread, gevocab, age) %>% 
+  dplyr::select(classize, gender, geread, gevocab, age, ses, senroll) %>% 
   data.frame() %>% 
   stargazer::stargazer(header = FALSE,
                       title = "Summary of the numeric variables with `stargazer`",
@@ -159,9 +163,12 @@ Tyson Barrett's  **furniture** package includes the extremely useful function `t
 # note: the label for the table must be entered above, right after the "r"
 table1(data_achieve,
        geread, gevocab, age, 
+       ses, senroll,
        var_names = c("Reading Score",  
                      "Vocabulary Score",
-                     "Age (in months)"),    # override names
+                     "Age (in months)",
+                     "School SES",
+                     "School's Enrollment"),    # override names
        splitby   = ~ gender,                # var to divide sample by
        test      = TRUE,                    # test groups different?
        caption   = "Summary of the numeric variables with `table1`", 
@@ -257,7 +264,7 @@ data_achieve %>%
 
 ### Fit Nested Models
 
-Ignore the fact that students are nested or clustered within school, is called dissagregating.
+Ignoring the fact that students are nested or clustered within schools, is called dissagregating.  This treats all students as independent units.
 
 ```{r}
 # linear model - ignores school (for reference only)
@@ -336,16 +343,22 @@ Here is a better version of the plot.
 Age is in months, so we want multiples of 12 for good visualization
 
 ```{r}
-summary(data_achieve$age)/12
+summary(data_achieve$age)/12   # divide by 12 to change months to years
+```
+
+A good set set of illustrative ages could be: 7, 9, and 11:
+
+```{r}
+c(7, 9, 11) * 12   # times by 12 to change years to months
 ```
 
 
 ```{r mlInteraction}
 effects::Effect(focal.predictors = c("gevocab", "age"),
                 mod = fit_read_lm_3,
-                xlevels = list(age = c(84, 108, 132))) %>% 
+                xlevels = list(age = c(84, 108, 132))) %>%  # age is in months
   data.frame() %>% 
-  mutate(age_yr = factor(age/12)) %>% 
+  mutate(age_yr = factor(age/12)) %>%    # it would be nice to plot age in years
   ggplot(aes(x        = gevocab,
              y        = fit,
              color    = age_yr,
@@ -424,8 +437,10 @@ sjstats::re_var(fit_read_0re)
 
 
 $$
-\sigma^2_{u0} = 0.392 \\
-\sigma^2_{e}  = 5.045 
+\begin{align*}
+\text{schools}                      \rightarrow \; & \sigma^2_{u0} = 0.6257^2 = 0.392 \\
+\text{students within schools}      \rightarrow \; & \sigma^2_{e}  = 2.2461^2 = 5.045 
+\end{align}
 $$
 
 
@@ -453,7 +468,7 @@ sjstats::icc(fit_read_0re)
 ```
 
 
-*Note: On page 45 of the Finch textbook, the authors substituted standard deviations into the formula, rather than variances.  The mistake is listed on their webpage errata (http://www.mlminr.com/errata).*
+*Note: On page 45  [@finch2016], the authors substituted standard deviations into the formula, rather than variances.  The mistake is listed on their webpage errata (http://www.mlminr.com/errata) and is repeated through the text.*
 
 
 <!-- ========================================================= -->
@@ -487,7 +502,7 @@ fit_read_1re <- lme4::lmer(geread ~ gevocab + (1|school),
 
 ```{r, include=FALSE}
 texreg::screenreg(list(fit_read_0ml, fit_read_1ml),
-                  custom.model.names = c("Null", "w Pred"),
+                  custom.model.names = c("Null", "w L1vPred"),
                   digits = 3)
 ```
 
@@ -555,7 +570,7 @@ $$
 
 **Level 1 $R^2$ - Snijders and Bosker**
 
-Found on Finch (page 47), proportion of variance in the outcome explained by predictor on level one    
+Found on page 47 [@finch2016], theproportion of variance in the outcome explained by predictor on level one is given by:   
 
 ```{block type='genericEq', echo=TRUE}
 **Snijders and Bosker Formula - Level 1 ** 
@@ -568,7 +583,7 @@ $$
 
 
 
-*Note: This formula also apprears in the Finch errata.  The subscripts in the denominator of the fraction should be for model 0, not model 1.  They did substitute in the correct values.*
+*Note: This formula also apprears in the Finch errata.  The subscripts in the denominator of the fraction should be for model 0, not model 1. The formula is given correctly here. They did substitute in the correct values.*
 
 
 Calculate the value by hand:
@@ -581,7 +596,7 @@ Or use the `sjstats` package to help out:
 1 - sum(sjstats::re_var(fit_read_1re)) / sum(sjstats::re_var(fit_read_0re))
 ```
 
-
+This means nearly 30% of the variance in reading scores, above and beyond that accounted for by school membership *(i.e. school makeup or school-to-school variation)*, is attributable to vocabulary scores. 
 
 
 
@@ -589,12 +604,11 @@ Or use the `sjstats` package to help out:
 
 @hox2017 presents this formula on page 58 of chapter 2
 
-> R-squared: *"proportion of variance explained by the first level predictor(s)"*
 
 ```{block type='genericEq', echo=TRUE}
 **Raudenbush and Bryk Approximate Formula - Level 1 ** 
 $$
-R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
+approx\; R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
               {\sigma^2_{e-BL} }
 \tag{Hox 4.8}
 $$
@@ -607,21 +621,27 @@ Calculate the value by hand:
 (5.045 - 3.766) / 5.045
 ```
 
+Although slightly different in value and meaning, this value also conveys that vcabulary scores are highly associated with reading scores.
 
 
-**Level 2 $R^2$ - ???** 
 
 
-Proportion of variance in the outcome explained by predictors
+
+**Level 2 $R^2$ - Snijders and Bosker Formula Extended ** 
+
+
 
 ```{block type='genericEq', echo=TRUE}
+**Snijders and Bosker Formula Extended - Level 2 ** 
 $$
 R^2_2 = 1 - \frac{\frac{\sigma^2_{e-MC}}{B} + \sigma^2_{u0-MC}}
                  {\frac{\sigma^2_{e-BL}}{B} + \sigma^2_{u0-BL}}
 $$
-```
 
 $B$ is the average size of the Level 2 units (schools).  Technically, you should use the *harmonic mean*, but unless the clusters differ greatly in size, it doesn't make a huge difference.
+```
+
+
 
 
 * Average sample cluster size
@@ -635,6 +655,8 @@ num_subjects / num_schools
 1 - ((3.766 / 64.5) + 0.100)/
     ((5.045 / 64.5) + 0.391)
 ```
+
+This means that over two-thrids in school mean reading levelsmay be explained by their student's vocabulary scores.
 
 
 **Level 2 $R^2$ - Raudenbush and Bryk**
@@ -654,7 +676,7 @@ $$
 ```
 
 
-
+Remeber that these 'variance accounted for' estimations are not as straight forwards as we would like.  
 
 
 
@@ -663,11 +685,11 @@ $$
 Part of investigating lower level explanatory variables, is checking for interactions between these variables.  The interaction between fixed effects is also considered to be a fixed effect, so we need to employ *Maximum Likelihood* estimation to compare nested models.
 
 ```{r}
-fit_read_2ml <- lmer(geread ~ gevocab + age + (1 | school), 
+fit_read_2ml <- lmer(geread ~ gevocab + age + (1 | school), # add main effect of age
                      data = data_achieve,
                      REML = FALSE)
 
-fit_read_3ml <- lmer(geread ~ gevocab*age + (1 | school), 
+fit_read_3ml <- lmer(geread ~ gevocab*age + (1 | school), # add interaction between vocab and age
                      data = data_achieve,
                      REML = FALSE)
 ```
@@ -678,6 +700,7 @@ texreg::screenreg(list(fit_read_1ml, fit_read_2ml, fit_read_3ml),
                   custom.model.names = c("Only Vocab", "Both Main Effects", "Interaction"),
                   digits = 4)
 ```
+
 
 ```{r, results='asis'}
 texreg::htmlreg(list(fit_read_1ml, 
@@ -701,20 +724,33 @@ anova(fit_read_1ml, fit_read_2ml, fit_read_3ml)
 ```
 
 
+Not only is student's age predictive of their reading level (I could have guessed that), but that age moderated the relationship between vocabulary and reading.
+
+
 #### Visulaize the Interation
 
+Visulaizations are extremely helpful to interpred interactions.
+
 ```{r}
-effects::Effect(focal.predictors = c("gevocab", "age"), 
+summary(data_achieve$age)
+```
+
+
+```{r}
+effects::Effect(focal.predictors = c("gevocab", "age"),   # variables involved in the interaction
                 mod = fit_read_3ml,
-                xlevels = list(age = c(84, 108, 132))) %>% 
+                xlevels = list(age = c(84, 108, 132))) %>%  # age is in months
   data.frame() %>% 
-  dplyr::mutate(age_yr = factor(age/12)) %>% 
+  mutate(age_yr = factor(age/12)) %>%    # it would be nice to plot age in years 
   ggplot(aes(x = gevocab,
              y = fit,
              color = age_yr)) +
   geom_line() +
   theme_bw()
 ```
+
+There is a positive association between vocabulary and reading, but it is strongest for older childred.  Among younger children, reading scores are more stable across vocabulary differences. 
+
 
 <!-- ========================================================= -->
 ## MLM - Step 3: Higher-level explanatory variables, fixed, ML
@@ -757,6 +793,8 @@ Likelihood Ratio Test (LRT)
 anova(fit_read_0ml, fit_read_3ml, fit_read_4ml)
 ```
 
+School enrollment (or size) does not seem be related to reading scores.
+
 
 <!-- ========================================================= -->
 ## MLM - Step 4: Explanatory variables predict Slopes, random, REML
@@ -767,7 +805,7 @@ anova(fit_read_0ml, fit_read_3ml, fit_read_4ml)
 The fixed effect of the predictor captures the overall association it has with the outcome (intercept), while the random effect of the predictor captures the group-to-group variation in the association (slope).  *Note: A variable can be fit as BOTH a fixed and random effect.*  
 
 ```{r}
-fit_read_3re <- lme4::lmer(geread ~ gevocab*age + (1 | school), 
+fit_read_3re <- lme4::lmer(geread ~ gevocab*age + (1 | school), # refit the previous 'best' model via REML
                      data = data_achieve,
                      REML = TRUE)
 
@@ -778,7 +816,7 @@ fit_read_3re <- lme4::lmer(geread ~ gevocab*age + (1 | school),
 fit_read_5re <- lme4::lmer(geread ~ gevocab*age + (gevocab | school), 
                            data = data_achieve,
                            REML = TRUE,
-                           control = lmerControl(optimizer = "optimx", 
+                           control = lmerControl(optimizer = "optimx",    # get it to converge
                                                  calc.derivs = FALSE,
                                                  optCtrl = list(method = "nlminb",
                                                                 starttests = FALSE,
@@ -809,12 +847,20 @@ texreg::htmlreg(list(fit_read_3re,
 
 #### Assess Significance of Effect
 
-Likelihood Ratio Test (LRT)
+
+```{block type='rmdlightbulb', echo=TRUE}
+Likelihood Ratio Test (LRT) for Random Effects
+
+You can use the Chi-squared LRT test based on deviances even though we fit our modesl with REML, since the models only differ in terms of including/exclusing of a random effects; they have same fixed effects.  Just make sure to include the `refit = FALSE` option.
+```
+
+
 ```{r}
 anova(fit_read_3re, fit_read_5re, refit = FALSE)
 ```
 
-You can use the Chi-squared LRT test based on deviances even though we fit our modesl with REML, since the models only differe in terms of random effects, but have the same fixed effects.
+There is evidence the effect child vocabulary has on reading varies across schools.
+
 
 #### Visualize the Model
 
@@ -822,7 +868,7 @@ What does the model look like?
 
 ```{r}
 effects::Effect(focal.predictors = c("gevocab", "age"), 
-                mod = fit_read_5re,
+                mod = fit_read_5re,                              # just different model
                 xlevels = list(age = c(84, 108, 132))) %>% 
   data.frame() %>% 
   dplyr::mutate(age_yr = factor(age/12)) %>% 
@@ -833,13 +879,15 @@ effects::Effect(focal.predictors = c("gevocab", "age"),
   theme_bw()
 ```
 
-
+We are seeming much the same trends, but perhaps more separation between the lines.
 
 <!-- ========================================================= -->
 ## MLM - Step 5: Cross-Level interactions between explanatory variables - fixed, ML
 <!-- ========================================================= -->
 
-Remember that an interaction beween fixed effects is also fixed.
+Cross-level interacitons involve variables at different levels.  Here we will investigate the school-level enrollment moderating vocabulary's effect since we say that vocab's effect differs across schools (step 4).
+
+Remember that an interaction beween fixed effects is also fixed.  
 
 ```{r}
 fit_read_5ml <- lme4::lmer(geread ~ gevocab*age + (gevocab | school), 
@@ -851,43 +899,68 @@ fit_read_5ml <- lme4::lmer(geread ~ gevocab*age + (gevocab | school),
                                                                 starttests = FALSE,
                                                                 kkt = FALSE)))
 
-fit_read_6ml <- lme4::lmer(geread ~ gevocab*age + senroll +
-                             (gevocab | school), 
+fit_read_6ml <- lme4::lmer(geread ~ gevocab*age + senroll + (gevocab | school), 
                            data = data_achieve,
                            REML = FALSE)
 
-fit_read_7ml <- lme4::lmer(geread ~ gevocab*age + gevocab*senroll +
-                           (gevocab | school), 
+fit_read_7ml <- lme4::lmer(geread ~ gevocab*age + gevocab*senroll + (gevocab | school), 
+                           data = data_achieve,
+                           REML = FALSE)
+
+fit_read_8ml <- lme4::lmer(geread ~ gevocab*age*senroll + (gevocab | school), 
                            data = data_achieve,
                            REML = FALSE)
 ```
 
+```{block type='rmdlightbulb', echo=TRUE}
+If you get the`lmer()` message: **Some predictor variables are on very different scales: consider rescaling**, you can trust your results, but you really should try re-scaling your variables.
+```
+
+We are getting this message since `gevoab` is on mostly a single digit scale,0 to 11.2, and age (in months) ranges in the low thripe-digits, 82 through 135, while school enrollment is in the mid-hundreds, 112-916.  When we compute the interactions we get much, much larger values.  Having variables on such widely different ranges of values can cause estimation problems.
+
+```{r}
+data_achieve %>% 
+  dplyr::mutate(gevocab_x_age            = gevocab*age,
+                gevocab_x_senroll        = gevocab*senroll,
+                gevocab_x_age_x_senroll  = gevocab*senroll*age) %>% 
+  dplyr::select(gevocab, age, senroll, gevocab_x_age, gevocab_x_senroll, gevocab_x_age_x_senroll) %>% 
+  summary()
+```
+
+For now, let us look at the results.
 
 ```{r, include = FALSE}
-screenreg(list(fit_read_3ml, fit_read_6ml, fit_read_7ml),
-          custom.model.names = c("Level 1 only", "Both Levels", "Cross-Level"),
+screenreg(list(fit_read_3ml, fit_read_6ml, fit_read_7ml, fit_read_8ml),
+          custom.model.names = c("Level 1 only", "Both Levels", "Cross-Level", "3-way"),
           digits = 4)
 ```
 
 ```{r, results='asis'}
 texreg::htmlreg(list(fit_read_3ml, 
                      fit_read_6ml, 
-                     fit_read_7ml),
+                     fit_read_7ml,
+                     fit_read_8ml),
                 custom.model.names = c("Level 1 only", 
                                        "Both Levels", 
-                                       "Cross-Level"),
+                                       "Cross-Level",
+                                       "3-way"),
                 caption = "MLM: Investigate a Fixed Cross-level Interaction",
                 caption.above = TRUE,
                 doctype = FALSE,
-                digits = 4)
+                digits = 3)
 ```
+
+There is no evidence school enrollment moderates either of age or vocabulary's effects.
 
 
 #### Assess Significance of Effects
 
 Likelihood Ratio Test (LRT)
+
+When you have a list of sequentially nested models, you can test them in order with one call to the `anova()` funtion.
+
 ```{r}
-anova(fit_read_3ml, fit_read_6ml, fit_read_7ml)
+anova(fit_read_3ml, fit_read_6ml, fit_read_7ml, fit_read_8ml)
 ```
 
 
@@ -896,6 +969,10 @@ anova(fit_read_3ml, fit_read_6ml, fit_read_7ml)
 <!-- ========================================================= -->
 
 Centering variables measured on the lowest level only involves subtacting the mean from every value.  The spread or standard deviation is not changed.
+
+```{block type='rmdlightbulb', echo=TRUE}
+Although there are functions to automatically center and standardize variables, it is beneficial to manually create these variables, as it is more transparent and facilitates un-centering them later.
+```
 
 ### Compute the Grand Means
 
@@ -908,7 +985,7 @@ data_achieve %>%
 
 #### Subtract the Grand Mean
 
-Subract the grand-mean from each observation:
+Subract the grand-mean from each observation's vale to create grand-mean centered variables.
 
 ```{r}
 data_achieve_center <- data_achieve %>% 
@@ -945,8 +1022,11 @@ data_achieve_center %>%
 
 ### Use Centered Variables
 
+
+NOTE:  The models with CENTERED variables are able to be fit with the default optimizer settings and do not return the error: "unable to evaluate scaled gradientModel failed to converge: degenerate  Hessian with 1 negative eigenvalues"
+
 ```{r}
-fit_read_8ml <- lme4::lmer(geread ~ gevocab + age + (gevocab | school), 
+fit_read_9ml <- lme4::lmer(geread ~ gevocab + age + (gevocab | school), 
                            data = data_achieve_center,
                            REML = FALSE,
                              control = lmerControl(optimizer = "optimx", 
@@ -955,16 +1035,7 @@ fit_read_8ml <- lme4::lmer(geread ~ gevocab + age + (gevocab | school),
                                                                   starttests = FALSE,
                                                                   kkt = FALSE)))
 
-fit_read_8ml_c <- lme4::lmer(geread ~ gevocab_c + age_c + (gevocab_c | school), 
-                             data = data_achieve_center,
-                             REML = FALSE,
-                               control = lmerControl(optimizer = "optimx", 
-                                                     calc.derivs = FALSE,
-                                                     optCtrl = list(method = "nlminb",
-                                                                    starttests = FALSE,
-                                                                    kkt = FALSE)))
-
-fit_read_9ml <- lme4::lmer(geread ~ gevocab*age + (gevocab | school), 
+fit_read_10ml <- lme4::lmer(geread ~ gevocab*age + (gevocab | school), 
                            data = data_achieve_center,
                            REML = FALSE,
                              control = lmerControl(optimizer = "optimx", 
@@ -973,20 +1044,24 @@ fit_read_9ml <- lme4::lmer(geread ~ gevocab*age + (gevocab | school),
                                                                   starttests = FALSE,
                                                                   kkt = FALSE)))
 
-fit_read_9ml_c <- lme4::lmer(geread ~ gevocab_c*age_c + (gevocab_c | school), 
+
+
+fit_read_9ml_c <- lme4::lmer(geread ~ gevocab_c + age_c + (gevocab_c | school), 
                              data = data_achieve_center,
-                             REML = FALSE,
-                               control = lmerControl(optimizer = "optimx", 
-                                                     calc.derivs = FALSE,
-                                                     optCtrl = list(method = "nlminb",
-                                                                    starttests = FALSE,
-                                                                    kkt = FALSE)))
+                             REML = FALSE)
+
+fit_read_10ml_c <- lme4::lmer(geread ~ gevocab_c*age_c + (gevocab_c | school), 
+                             data = data_achieve_center,
+                             REML = FALSE)
 ```
+
+
+
 
 #### Compare the Models
 
 ```{r, include=FALSE}
-screenreg(list(fit_read_8ml, fit_read_9ml, fit_read_8ml_c, fit_read_9ml_c),
+screenreg(list(fit_read_9ml, fit_read_10ml, fit_read_9ml_c, fit_read_10ml_c),
           custom.model.names = c("Main Effects", "Interaction",
                                  "Main Effects", "Interaction"),
           groups = list("Raw Scale" = 2:4,
@@ -996,10 +1071,10 @@ screenreg(list(fit_read_8ml, fit_read_9ml, fit_read_8ml_c, fit_read_9ml_c),
 
 
 ```{r, include=FALSE}
-texreg::htmlreg(list(fit_read_8ml, 
-                     fit_read_9ml, 
-                     fit_read_8ml_c, 
-                     fit_read_9ml_c),
+texreg::htmlreg(list(fit_read_9ml, 
+                     fit_read_10ml, 
+                     fit_read_9ml_c, 
+                     fit_read_10ml_c),
                 custom.model.names = c("Main Effects", 
                                        "Interaction",
                                        "Main Effects", 
@@ -1013,13 +1088,16 @@ texreg::htmlreg(list(fit_read_8ml,
 ```
 
 
+Notice that the interactions yield the exact same parameter estimates and significances, but the main effects (including the interactions) are different.  Model fit statistics include $-2LL$ are exactly the same, too.
+
+
 
 ```{r}
-anova(fit_read_8ml, fit_read_9ml)
+anova(fit_read_9ml, fit_read_10ml)
 ```
 
 ```{r}
-anova(fit_read_8ml_c, fit_read_9ml_c)
+anova(fit_read_9ml_c, fit_read_10ml_c)
 ```
 
 
@@ -1027,10 +1105,11 @@ anova(fit_read_8ml_c, fit_read_9ml_c)
 
 What does the model look like?
 
+First plot the model fit to the centered variables with all defaut settings.
 
 ```{r}
 effects::Effect(focal.predictors = c("gevocab_c", "age_c"),
-                mod = fit_read_9ml_c) %>%  
+                mod = fit_read_10ml_c) %>%  
   data.frame() %>% 
   dplyr::mutate(age_c = factor(age_c)) %>% 
   ggplot(aes(x = gevocab_c,
@@ -1040,13 +1119,18 @@ effects::Effect(focal.predictors = c("gevocab_c", "age_c"),
   theme_bw()
 ```
 
+Notice that the vocab and ages are centered at zero.  This makes it hard to read the plot, especially if we are unsure what the means of the variables were.
+
+
+Plot the model again, but this time UN-centering the variables by adding back the grand-mean we subtracted prior to fitting the model.
+
 ```{r}
 effects::Effect(focal.predictors = c("gevocab_c", "age_c"),
-                mod = fit_read_9ml_c,
-                xlevels = list(age_c = c(84, 108, 132) - 107.5290)) %>%  
+                mod = fit_read_10ml_c,
+                xlevels = list(age_c = c(84, 108, 132) - 107.5290)) %>%  # add back the mean of age
   data.frame() %>% 
-  dplyr::mutate(age_yrs = factor((age_c + 107.5290)/12)) %>% 
-  dplyr::mutate(gevocab = gevocab_c + 4.4938) %>% 
+  dplyr::mutate(age_yrs = factor((age_c + 107.5290)/12)) %>%        # add back the mean of age
+  dplyr::mutate(gevocab = gevocab_c + 4.4938) %>%                   # add back the mean of vocab
   ggplot(aes(x = gevocab,
              y = fit,
              color = age_yrs)) +
@@ -1055,16 +1139,31 @@ effects::Effect(focal.predictors = c("gevocab_c", "age_c"),
 ```
 
 
+Now the plot is back on to the origial variables.
+
 
 <!-- ========================================================= -->
 ## Rescaling Predictors: Change Units or Standardize
 <!-- ========================================================= -->
+
+
+Where centering variables involved subtracting a set value, scalling a varaibles involves dividing by a set amount.  When we both center to the mean and divide by the standard deviation, the new resulting varaible is said to be standardized (not to be confusing with normalizing, which is does not do).  
 
 To retain meaningful units, you can multiply or divide all the measured values of a variable by a set amount, like a multiple of 10.  This retains the meaning behind the units while still bringing them into line with other variables in the model and can avoid some convergence issues.
 
 ### Scale Varaibles
 
 #### Divide by a Meaningful Value
+
+```{r}
+data_achieve_center %>% 
+  dplyr::select(senroll_c, ses) %>% 
+  summary()
+```
+
+
+
+For this situation, lets both center at the mean and scale (by 100) the school enrollemnt variable.  For SES, lets only divide by ten.
 
 ```{r}
 data_achieve_center_scale <- data_achieve_center %>%  
@@ -1081,6 +1180,7 @@ View the first and last few observations:
 ```{r}
 data_achieve_center_scale %>% 
   dplyr::select(id, school, 
+                age_c, gevocab_c,
                 senroll, senroll_c, senroll_ch,
                 ses, ses_t) %>% 
   headTail()
@@ -1098,15 +1198,21 @@ data_achieve_center_scale %>%
 
 ### Use Scaled Variables
 
-
+Using the new versions of our variables, investigate is SES has an effect, either in 2-way or 3-way interactions with age and vocabulary.
 
 ```{r}
-fit_read_10ml <- lme4::lmer(geread ~ gevocab_c*age_c + gevocab_c*ses_t +   # 2 2-way interactions
+fit_read_10ml_s <- lme4::lmer(geread ~ gevocab_c*age_c +                     # no SES
                                       (gevocab_c | school),  
                              data   = data_achieve_center_scale,
                              REML   = FALSE)
 
-fit_read_11ml <- lme4::lmer(geread ~ gevocab_c*age_c*ses_t +              # 3-way interaction
+
+fit_read_11ml_s <- lme4::lmer(geread ~ gevocab_c*age_c + gevocab_c*ses_t +   # 2 2-way interactions
+                                      (gevocab_c | school),  
+                             data   = data_achieve_center_scale,
+                             REML   = FALSE)
+
+fit_read_12ml_s <- lme4::lmer(geread ~ gevocab_c*age_c*ses_t +              # 3-way interaction
                                       (gevocab_c | school),  
                              data   = data_achieve_center_scale,
                              REML  = FALSE)
@@ -1114,16 +1220,18 @@ fit_read_11ml <- lme4::lmer(geread ~ gevocab_c*age_c*ses_t +              # 3-wa
 
 
 ```{r, include = FALSE}
-screenreg(list(fit_read_10ml, fit_read_11ml),
-          custom.model.names = c("2-way", "3-way"),
+screenreg(list(fit_read_10ml_s, fit_read_11ml_s, fit_read_12ml_s),
+          custom.model.names = c("no SES", "2-way", "3-way"),
           digits = 4)
 ```
 
 ```{r, results='asis'}
-texreg::htmlreg(list(fit_read_10ml, 
-                     fit_read_11ml),
-                custom.model.names = c("2-ways", 
-                                       "3-way"),
+texreg::htmlreg(list(fit_read_10ml_s, 
+                     fit_read_11ml_s, 
+                     fit_read_12ml_s),
+          custom.model.names = c("no SES", 
+                                 "2-way", 
+                                 "3-way"),
                 caption = "MLM: Investigate More Complex Fixed Interactions",
                 caption.above = TRUE,
                 doctype = FALSE,
@@ -1132,11 +1240,15 @@ texreg::htmlreg(list(fit_read_10ml,
 
 
 ```{r}
-anova(fit_read_10ml, fit_read_11ml)
+anova(fit_read_10ml_s, fit_read_11ml_s, fit_read_12ml_s)
 ```
+
+There is evidence that SES moderates the main effect of vocabualry, after accounting for the interaction between age and vocabulary.
 
 
 #### Visualize the Model
+
+Recall the scales that the revised variables are now on:
 
 ```{r}
 data_achieve_center_scale %>% 
@@ -1147,8 +1259,8 @@ data_achieve_center_scale %>%
 
 ```{r}
 effects::Effect(focal.predictors = c("gevocab_c", "age_c", "ses_t"),
-                mod = fit_read_11ml,
-                xlevels = list(age_c = c(84, 108, 132) - 107.5290,
+                mod = fit_read_11ml_s,
+                xlevels = list(age_c = c(84, 108, 132) - 107.5290, 
                                ses_t = c(0, 5, 10))) %>%  
   data.frame() %>% 
   dplyr::mutate(age_yrs = factor((age_c + 107.5290)/12)) %>% 
@@ -1166,9 +1278,19 @@ effects::Effect(focal.predictors = c("gevocab_c", "age_c", "ses_t"),
 ```
 
 
+There is evidence that higher vocabulary scores correlate with higher reading scores.  This relationship os strongest in low SES schools and among older students.  This relationship is especially weaker in younger studnets attending high SES schools.
 
 
+See: @nakagawa2013 for more regarding model $R^2$
 
+From the `sjstats::r2()` documentation, for mixed models:    
+
+* the **marginal r-squared** considers only the variance of the fixed effects    
+* **conditional r-squared** takes both the fixed and random effects into account
+
+```{r}
+sjstats::r2(fit_read_11ml_s)
+```
 
 
 ---- 

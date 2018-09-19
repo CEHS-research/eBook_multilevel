@@ -700,8 +700,10 @@ sjstats::re_var(pop_lmer_0_re)
 
 
 $$
-\sigma^2_{u0} = 0.83792^2 = 0.702\\
-\sigma^2_{e}  = 1.10535^2 = 1.222\\
+\begin{align*}
+\text{classes}      \rightarrow \; & \sigma^2_{u0} = 0.83792^2 = 0.702\\
+\text{pupils within classes}      \rightarrow \; & \sigma^2_{e}  = 1.10535^2 = 1.222\\
+\end{align*}
 $$
 
 #### By Hand
@@ -1059,9 +1061,27 @@ pop_lmer_1a_ml <- lme4::lmer(popular ~ sex + extrav + texp + (extrav|class), # m
 pop_lmer_2_ml  <- lme4::lmer(popular ~ sex + extrav*texp + (extrav|class), # include cross-level interaction
                              data = data_pop,
                              REML = FALSE)
+
+pop_lmer_3_ml  <- lme4::lmer(popular ~ extrav*texp + sex*texp + sex*extrav +  (extrav|class),  
+                             data = data_pop,
+                             REML = FALSE)
+
+pop_lmer_4_ml  <- lme4::lmer(popular ~ extrav*texp*sex + (extrav|class),  
+                             data = data_pop,
+                             REML = FALSE)
 ```
 
 Create a table to compare the two nested models:
+
+```{r, include=FALSE}
+texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
+                custom.model.names = c("M1a: Main Effects",
+                                       "M2: With Interaction"),
+                caption = "Hox Table 2.3 on page 17",
+                single.row = TRUE,
+                digits = 4)
+```
+
 
 ```{r, results='asis'}
 texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
@@ -1072,6 +1092,34 @@ texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
                 digits = 4)
 ```
 
+
+Investigate further interactions, not shown in by @hox2017.
+
+```{r, include=FALSE}
+texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
+                custom.model.names = c("M1a: Main Effects",
+                                       "M2: With Interaction",
+                                       "Add 2-way Inter",
+                                       "Add 3-way Interaction"),
+                single.row = TRUE,
+                digits = 2)
+```
+
+
+
+```{r, results='asis'}
+texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
+                custom.model.names = c("M1a: Main Effects",
+                                       "M2: With Interaction",
+                                       "Add 2-way Inter",
+                                       "Add 3-way Interaction"),
+                caption = "Hox Table 2.3 on page 17",
+                single.row = TRUE,
+                digits = 4)
+```
+
+
+
 #### Compare Fit
 
 Since these two models only differe by the inclusing/exclusing of a FIXED effect, they both employed `ML` estimation.  Thus we do not need worry about the `anova()` function refitting the models prior to conduction the LRT. 
@@ -1080,22 +1128,104 @@ Since these two models only differe by the inclusing/exclusing of a FIXED effect
 anova(pop_lmer_1a_ml, pop_lmer_2_ml)
 ```
 
-
 The significance likelihood ratio test (LRT: $\chi^2(1) = 65.18$, $p < .0001$) conveys that the more complex model DOES fit the data better.  Thus the more COMPLEX model does just as good of a job.  This is evidence for the INCLUSION of cross-level interaction between `extrav` and `texp` as a fixed component.
 
 
-### Final Model
+```{r}
+anova(pop_lmer_2_ml, pop_lmer_3_ml)
+```
+
+The significance likelihood ratio test (LRT: $\chi^2(2) = 2.46$, $p=.293$) conveys that the more complex model does NOT fit the data better.  Thus the more SIMPLE model does just as good of a job.  This is evidence for the EXCLUSION of the additional 2-way interactions as a fixed components.
+
 
 ```{r}
-pop_lmer_2_re  <- lme4::lmer(popular ~ sex + extrav*texp + (extrav|class), # include cross-level interaction
-                             data = data_pop,
-                             REML = TRUE)
+anova(pop_lmer_2_ml, pop_lmer_4_ml)
+```
 
-summary(pop_lmer_2_re)
+The significance likelihood ratio test (LRT: $\chi^2(3) = 3.36$, $p=.339$) conveys that the more complex model does NOT fit the data better.  Thus the more SIMPLE model does just as good of a job.  This is evidence for the EXCLUSION of the additional 3-way interactions as a fixed components.
+
+### Final Model
+
+#### Refit with REML
+
+```{r}
+pop_lmer_2_re  <- lme4::lmer(popular ~ sex + extrav*texp + (extrav|class), 
+                             data = data_pop,
+                             REML = TRUE)       # re-fit the final model via REML
+```
+
+#### Parameters
+
+```{r, results='asis'}
+texreg::htmlreg(list(pop_lmer_2_ml),
+                custom.model.names = c("Final Model"),
+                caption = "MLM for Popularity",
+                single.row = TRUE,
+                digits = 4)
 ```
 
 
 
+#### Visualization 
+
+Get Estimated Marginal Means - default 'nice' predictor values:
+
+**Focal predictors:** All combinations of...
+* `sex` categorical, both levels    
+* `extrav` continuous 1-10, default: 1, 3, 6, 8, 10    
+* `texp` continuous, default: 2.0, 7.8, 14.0, 19.0, 25.0    
+
+**Always followed by:** 
+* `fit` estimated marginal mean
+* `se` standard error for the marginal mean
+* `lower` lower end of the 95% confidence interval around the estimated marginal mean
+* `upper` upper end of the 95% confidence interval around the estimated marginal mean
+
+
+```{r}
+effects::Effect(focal.predictors = c("sex", "extrav", "texp"),
+                mod = pop_lmer_2_re) %>% 
+  data.frame() %>% 
+  head(n = 12)
+```
+
+Pick 'nicer' illustrative values for `texp`
+
+```{r}
+effects::Effect(focal.predictors = c("sex", "extrav", "texp"),
+                mod = pop_lmer_2_re,
+                xlevels = list(texp = c(5, 15, 25))) %>% 
+  data.frame() %>% 
+  head(n = 12)
+```
+
+**Basic, default plot**
+
+Other than selecting three illustrative values for the teacher extraversion rating, most everything is left to default.
+
+```{r}
+effects::Effect(focal.predictors = c("sex", "extrav", "texp"),
+                mod = pop_lmer_2_re,
+                xlevels = list(texp = c(5, 15, 25))) %>% 
+  data.frame() %>% 
+  dplyr::mutate(texp = factor(texp)) %>% 
+  ggplot() +
+  aes(x = extrav,
+      y = fit,
+      fill = texp,
+      linetype = texp) +
+  geom_ribbon(aes(ymin = lower,
+                  ymax = upper),
+              alpha = .3) +
+  geom_line(aes(color = texp)) +
+  facet_grid(.~ sex) 
+```
+
+
+
+**More Clean Plot**
+
+There are many ways to clean up a plot, including labeling the axes.
 
 ```{r}
 effects::Effect(focal.predictors = c("sex", "extrav", "texp"),
@@ -1127,6 +1257,43 @@ effects::Effect(focal.predictors = c("sex", "extrav", "texp"),
 ```
 
 
+**Publishable Plot**
 
+Since `gender` only exhibited a main effect and is not involved in any interactions, if would be a better use of space to not muddy the water with seperate panels.  The `Effect()` function will estimate the marginal means using the reference category for categorical variables and the mean for continuous variables.
+
+```{r}
+effects::Effect(focal.predictors = c("extrav", "texp"),  # choose not to investigate sex (the reference category will be used)
+                mod = pop_lmer_2_re,
+                xlevels = list(texp = c(5, 15, 25))) %>% 
+  data.frame() %>% 
+  dplyr::mutate(texp = factor(texp) %>% 
+                  forcats::fct_rev()) %>% 
+  ggplot() +
+  aes(x = extrav,
+      y = fit,
+      linetype = texp) +
+  geom_ribbon(aes(ymin = lower,
+                  ymax = upper),
+              fill = "black",
+              alpha = .3) +
+  geom_line() +
+  theme_bw() +
+  labs(x = "Pupil's Extroversion, Rated by Teacher",
+       y = "Estimated Marginal Mean\nPupil Popularity, Mean Rating of Classroom Peers",
+       color    = "Teacher's\nExperience,\nYears",
+       linetype = "Teacher's\nExperience,\nYears",
+       alpha    = "Teacher's\nExperience,\nYears") +
+  theme(legend.key.width = unit(2, "cm"),
+        legend.background = element_rect(color = "Black"),
+        legend.position = c(1, 0),
+        legend.justification = c(1, 0)) +
+  scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
+  scale_x_continuous(breaks = seq(from = 0, to = 10, by = 2)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 1))  
+```
+
+#### Interpretation
+
+After accounting for class-to-class variation and the effect of gender, a positive association was found between teacher rated extroversion and peer rated popularity.  This relationship was more marked for less experienced teachers.
 
 

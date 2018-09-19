@@ -202,9 +202,10 @@ The $u_{1j}$ and $u_{2j}$ terms allow for **heteroscedasticity** by fitting diff
 
 ## Intraclass Correlation (ICC)
 
+### Two Level Models
 
 ```{block type='genericEq', echo=TRUE}
-**Combined, Multilevel Model Equation - Null Model**
+**Combined, Multilevel Model Equation - Null Model, 2 levels**
 $$ 
 \overbrace{Y_{ij}}^{Outcome} = 
     \underbrace{\gamma_{00}}_{\text{Fixed}\atop\text{intercept}} + 
@@ -219,7 +220,7 @@ Although the Null model above does not explain any variance in the dependent var
 
 
 ```{block type='genericEq', echo=TRUE}
-**Intraclass Correlation (ICC) Formula**
+**Intraclass Correlation (ICC) Formula, 2 level model**
 $$
 \overbrace{\rho}^{\text{ICC}} = 
 \frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance}}}
@@ -229,23 +230,95 @@ $$
 ```
 
 
+### Three Level Models
+
+
+Indicators:
+
+* $i$  = index for units in the lowest level (Level 1) 
+* $j$  = index for units in the middle level (Level 2) 
+* $k$  = index for units in the highest level (Level 3) 
+
+
+```{block type='genericEq', echo=TRUE}
+**Combined, Multilevel Model Equation - Null Model, 3 levels**
+$$ 
+\overbrace{Y_{ijk}}^{Outcome} = 
+    \underbrace{\gamma_{000}}_{\text{Fixed}\atop\text{intercept}} + 
+    \underbrace{v_{0k }}_{\text{Random Intercepts}\atop\text{Level 3}} + 
+    \underbrace{u_{0jk}}_{\text{Random Intercepts}\atop\text{Level 2}} + 
+    \underbrace{e_{ijk}}_{\text{Random}\atop\text{residuals}}
+\tag{Hox 2.15}
+$$
+```
+
+If you are interested in teh decomposition of variance across all levels, use the Davis and Scott method:
+
+```{block type='genericEq', echo=TRUE}
+**Intraclass Correlation (ICC) Formula, 3 level model - Davis and Scott Method**
+$$
+\overbrace{\rho_{mid}}^{\text{ICC}\atop\text{at level 2}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance Level 2}}}
+     {\underbrace{\sigma^2_{v0}+\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.16}
+$$
+$$
+\overbrace{\rho_{top}}^{\text{ICC}\atop\text{ at level 3}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance Level 3}}}
+     {\underbrace{\sigma^2_{v0}+\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.17}
+$$
+```
+
+
+
+If you would like to estimate the expected (population) correlation between two randomly chosen elements of the same group:
+
+```{block type='genericEq', echo=TRUE}
+**Intraclass Correlation (ICC) Formula, 3 level model - Siddiqui Method **
+$$
+\overbrace{\rho_{mid}}^{\text{ICC}\atop\text{at level 2}} = 
+\frac{\overbrace{\sigma^2_{v0}+\sigma^2_{u0}}^{\text{Random variance}\atop\text{at levels 2 & 3}}}
+     {\underbrace{\sigma^2_{v0}+\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.18}
+$$
+$$
+\overbrace{\rho_{top}}^{\text{ICC}\atop\text{ at level 3}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random variance}\atop\text{at only level 3}}}
+     {\underbrace{\sigma^2_{v0}+\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.19}
+$$
+```
+
+
 
 ## Proporion of Variance Explianed
+
+**See pages 61-63 of @hox2017**
+
+http://journals.sagepub.com/doi/10.1177/1094428114541701 
+
 
 Analogous to multiple $R^2$ - done seperately by level
 
 * $BL$ = Baseline model (Null)
 * $MC$ = Model to Compare to 
 
-http://journals.sagepub.com/doi/10.1177/1094428114541701 
+### Level 1 Variance Explained 
 
+**MODELS SHOULD NOT INCLUDE ANY RANOM EFFECTS**, OTHER THAN RANDOM INTERCEPTS. 
 
-### Level 1 Variance Explained
+Different approaches differ in values and meaning.
 
 #### Snijders and Bosker
 
+* Explained variance is a proportion of the total variance, because in principle first-level variables can explain all variation, including the variation at the second level.
+* Correction removes the spurious increase in $R^2$ when random slopes are added to a model
+
 ```{block type='genericEq', echo=TRUE}
-**Snijders and Bosker Formula - Level 1 ** Random Intercepts Models Only *address potential negative $R^2$ issue*
+**Snijders and Bosker Formula - Level 1 ** 
+
+Random Intercepts Models Only, *address potential negative $R^2$ issue*
 $$
 R^2_1 = 1 - \frac{\sigma^2_{e-MC} + \sigma^2_{u0-MC}}
                  {\sigma^2_{e-BL} + \sigma^2_{u0-BL}}
@@ -255,10 +328,13 @@ $$
 
 #### Raudenbush and Bryk
 
+* Explained variance is a proportion of first-level variance only
+* A good option when the multilevel sampling process is is close to two-stage simple random sampling
+
 ```{block type='genericEq', echo=TRUE}
 **Raudenbush and Bryk Approximate Formula - Level 1 ** *approximate*
 $$
-R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
+approx \;R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
              {\sigma^2_{e-BL} }
 \tag{Hox 4.8}
 $$
@@ -267,13 +343,18 @@ $$
 
 ### Level 2 Variance Explined
 
-#### who?
+
+#### Snijders and Bosker
+
 
 ```{block type='genericEq', echo=TRUE}
+**Snijders and Bosker Formula Extended - Level 2 ** 
 $$
 R^2_2 = 1 - \frac{\frac{\sigma^2_{e-MC}}{B} + \sigma^2_{u0-MC}}
                  {\frac{\sigma^2_{e-BL}}{B} + \sigma^2_{u0-BL}}
 $$
+
+$B$ is the average size of the Level 2 units (schools).  Technically, you should use the *harmonic mean*, but unless the clusters differ greatly in size, it doesn't make a huge difference.
 ```
 
 #### Raudenbush and Bryk
@@ -281,7 +362,7 @@ $$
 ```{block type='genericEq', echo=TRUE}
 **Raudenbush and Bryk Approximate Formula - Level 2 ** 
 $$
-R^2_1 = \frac{\sigma^2_{u0-BL} - \sigma^2_{u0-MC}}
+approx \; R^2_s = \frac{\sigma^2_{u0-BL} - \sigma^2_{u0-MC}}
              {\sigma^2_{u0-BL} }
 \tag{Hox 4.9}
 $$

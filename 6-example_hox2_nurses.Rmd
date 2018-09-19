@@ -54,7 +54,8 @@ data_raw <- haven::read_sav("https://github.com/MultiLevelAnalysis/Datasets-thir
 
 ```{r}
 data_nurse <- data_raw %>%
-  dplyr::mutate(genderF = factor(gender, labels = c("Male", "Female"))) %>% # apply factor labels
+  dplyr::mutate(genderF = factor(gender, 
+                                 labels = c("Male", "Female"))) %>% # apply factor labels
   dplyr::mutate(id = paste(hospital, ward, nurse,
                            sep = "_") %>%                                   # cunique id for each student
                   factor()) %>%                                             # declare id is a factor
@@ -68,6 +69,7 @@ data_nurse <- data_raw %>%
 
 tibble::glimpse(data_nurse)
 ```
+
 
 
 ## Exploratory Data Analysis
@@ -110,18 +112,9 @@ The t-test performed by the `furniture::table1()` function will always assume in
 ```
 
 
-```{r}
-data_nurse %>% 
-  ggplot() +
-  aes(x = expcon,
-      y = stress) +
-  geom_boxplot()
-```
-
-
 
 <!-- ========================================================= -->
-## MLM: Intercept-only or Null Model
+## MLM: Null Model
 <!-- ========================================================= -->
 
 > In a Null, intercept-only, or Empty model, no predictors are included.
@@ -129,7 +122,7 @@ data_nurse %>%
 
 #### Fit the Model
 
-Fit the model to the data.
+Fit the model to the data, with both ML and REML.
 
 ```{r}
 nurse_lmer_0_ml <- lme4::lmer(stress ~ 1 + (1|hospital/ward),  # each hospital contains several wards
@@ -138,14 +131,21 @@ nurse_lmer_0_ml <- lme4::lmer(stress ~ 1 + (1|hospital/ward),  # each hospital c
 
 nurse_lmer_0_re <- lme4::lmer(stress ~ 1 + (1|hospital/ward),  
                               data = data_nurse,
-                              REML = FALSE)             # fit via ML for comparing FIXED effects inclusion to
+                              REML = FALSE)             # fit via ML for comparing FIXED effects inclusion
+```
+
+```{r, include=FALSE}
+texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_0_re),
+                custom.model.names = c("M0: Null (ML)", "M0: Null (REML)"),
+                caption = "NULL Model: different estimation methods",
+                digits = 4)
 ```
 
 ```{r, results='asis'}
 texreg::htmlreg(list(nurse_lmer_0_ml, nurse_lmer_0_re),
-                  custom.model.names = c("M0: Null, ML", "M0: Null, REML"),
-                  caption = "NULL Model: different estimation methods",
-                  digits = 4)
+                custom.model.names = c("M0: Null, ML", "M0: Null, REML"),
+                caption = "NULL Model: different estimation methods",
+                digits = 4)
 ```
 
 <!-- ========================================================= -->
@@ -188,6 +188,40 @@ The `sjstats` package has a few really helpful funcitons:
 ```{r}
 sjstats::re_var(nurse_lmer_0_re)
 ```
+$$
+\begin{align*}
+\text{hospitals}                                 \rightarrow \; & \sigma^2_{v0} = 0.403^2 = 0.162\\
+\text{wards within hospitals}                    \rightarrow \; & \sigma^2_{u0} = 0.699^2 = 0.489\\
+\text{nurses within wards within hospitals}      \rightarrow \; & \sigma^2_{e}  = 0.549^2 = 0.301\\
+\end{align*}
+$$
+
+
+
+```{block type='genericEq', echo=TRUE}
+**Intraclass Correlation (ICC) Formula, 3 level model - Davis and Scott Method**
+$$
+\overbrace{\rho_{mid}}^{\text{ICC}\atop\text{at level 2}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance Level 2}}}
+     {\underbrace{\sigma^2_{v0}+\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.16}
+$$
+$$
+\overbrace{\rho_{top}}^{\text{ICC}\atop\text{ at level 3}} = 
+\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance Level 3}}}
+     {\underbrace{\sigma^2_{v0}+\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
+\tag{Hox 2.17}
+$$
+```
+
+For more than two levels, the `sjstats::icc()` function computes ICC's by the Davis and Scott method.
+
+```{r}
+0.489 / (0.162 + 0.489 + 0.301) # middle level (wards)
+0.301 / (0.162 + 0.489 + 0.301) # top level (hospitals)
+```
+
+
 
 ```{r}
 sjstats::icc(nurse_lmer_0_re)
@@ -208,6 +242,12 @@ nurse_lmer_1_ml <- lme4::lmer(stress ~ expcon + age + gender +
                               REML = FALSE)              # fit via ML for nested FIXED effects
 ```
 
+```{r, include=FALSE}
+texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_1_ml),
+                  custom.model.names = c("M0: null", "M1: fixed pred"),
+                  caption = "Nested Models: Fixed effects via ML",
+                  digits = 4)
+```
 
 ```{r, results='asis'}
 texreg::htmlreg(list(nurse_lmer_0_ml, nurse_lmer_1_ml),
@@ -222,6 +262,7 @@ texreg::htmlreg(list(nurse_lmer_0_ml, nurse_lmer_1_ml),
 anova(nurse_lmer_0_ml, nurse_lmer_1_ml)
 ```
 
+It is clear that the inclusing of these fixed, main effects improves the model's fit, but it is questionable that the type of ward is significant *(Wald test is non-significant)*.  Rather than test it directly, we will elave it in the model.  This is common practice to show that an expected variable is not significant.  
 
 
 <!-- ========================================================= -->
@@ -243,16 +284,19 @@ nurse_lmer_2_re <- lme4::lmer(stress ~ expcon + age + gender + experien + wardty
 ```
 
 
-
-
-
+```{r, include=FALSE}
+texreg::screenreg(list(nurse_lmer_1_re, nurse_lmer_2_re),
+                  custom.model.names = c("M1: RI", "M2: RIAS"),
+                  caption = "Nested Models: Random Slope via REML",
+                  digits = 4)
+```
 
 
 ```{r, results='asis'}
 texreg::htmlreg(list(nurse_lmer_1_re, nurse_lmer_2_re),
-                  custom.model.names = c("M1: RI", "M2: RIAS"),
-                  caption = "Nested Models: Random Slope via REML",
-                  digits = 4)
+                custom.model.names = c("M1: RI", "M2: RIAS"),
+                caption = "Nested Models: Random Slope via REML",
+                digits = 4)
 ```
 
 ### Assess Significance
@@ -261,6 +305,7 @@ texreg::htmlreg(list(nurse_lmer_1_re, nurse_lmer_2_re),
 anova(nurse_lmer_1_re, nurse_lmer_2_re, refit = FALSE)
 ```
 
+The inclusion of a random slope effect for the experimental condition `expcon` significantly improves the models's fit, thus is should be retained.
 
 <!-- ========================================================= -->
 ## MLM: Add Cross-Level Interaction
@@ -280,6 +325,13 @@ nurse_lmer_3_ml <- lme4::lmer(stress ~ expcon + age + gender + experien + wardty
                               REML = FALSE)              # fit via ML for nested FIXED Effects
 ```
 
+```{r, include=FALSE}
+texreg::screenreg(list(nurse_lmer_2_ml, nurse_lmer_3_ml),
+                  custom.model.names = c("M2: RAIS", "M3: Xlevel Int"),
+                  caption = "Nested Models: Fixed Cross-Level Interaction via ML",
+                  digits = 4)
+```
+
 
 ```{r, results='asis'}
 texreg::htmlreg(list(nurse_lmer_2_ml, nurse_lmer_3_ml),
@@ -294,16 +346,38 @@ texreg::htmlreg(list(nurse_lmer_2_ml, nurse_lmer_3_ml),
 anova(nurse_lmer_2_ml, nurse_lmer_3_ml)
 ```
 
+There is evidence that hospital size moderated the effect of the intervention.  We will want to plot the estimated marginal means to interpret the meaning of this interaction. 
+
+
+
+
 
 ### Final Model
 
+
+#### Fit the model
+
+The final model should be fit via REML.
+
 ```{r}
-nurse_lmer_3_re <- lme4::lmer(stress ~ expcon + age + gender + experien + wardtype + hospsize*expcon +
+nurse_lmer_3_re <- lme4::lmer(stress ~ expcon + age + gender + experien + wardtype + 
+                                hospsize*expcon +
                                 (expcon|hospital/ward),  
                               data = data_nurse,
                               REML = TRUE,                                     # fit via REML for final model
-                            control = lmerControl(optimizer ="Nelder_Mead"))   # Hessian convergence issues           
+                              control = lmerControl(optimizer ="Nelder_Mead"))   # Hessian convergence issues           
 ```
+
+#### Parameters
+
+```{r, include=FALSE}
+texreg::screenreg(list(nurse_lmer_3_re),
+                  custom.model.names = c("Model"),
+                  caption = "Final Model: with REML",
+                  single.row = TRUE,
+                  digits = 4)
+```
+
 
 ```{r, results='asis'}
 texreg::htmlreg(list(nurse_lmer_3_re),
@@ -320,7 +394,7 @@ Usually, the ICC is calculated for the null model ("unconditional model"). Howev
 
 **ICC for random-slope models** 
 
-**Caution:** For models with **random slopes and random intercepts**, the ICC would differ at each unit of the predictors. Hence, the ICC for these kind of models cannot be understood simply as proportion of variance (see Goldstein et al. 2010). For convenience reasons, as the 'icc()' function also extracts the different random effects variances, the ICC for random-slope-intercept-models is reported nonetheless, but **it is usually no meaningful summary** of the proportion of variances. 
+**Caution!!!** For models with **random slopes and random intercepts**, the ICC would differ at each unit of the predictors. Hence, the ICC for these kind of models cannot be understood simply as proportion of variance *(see Goldstein et al. 2010)*. For convenience reasons, as the 'icc()' function also extracts the different random effects variances, the ICC for random-slope-intercept-models is reported nonetheless, but **it is usually not a  meaningful summary** of the proportion of variances. 
 
 **ICC for models with multiple or nested random effects**
 
@@ -332,6 +406,31 @@ Usually, the ICC is calculated for the null model ("unconditional model"). Howev
 
 ```{r}
 sjstats::icc(nurse_lmer_3_re)
+```
+
+#### Visualization 
+
+
+Although there are many variables in this model, only two are involved in any interaction(s).  For this reason, we will choose to display the estimated marginal means across only experimental condition and hospital size.  For this illustration, all other continuous predictors are taken to be at their mean and categorical predictors at their reference category.
+
+
+Get Estimated Marginal Means - default 'nice' predictor values:
+
+**Focal predictors:** All combinations of...
+* `expcon` categorical, both levels `control` and `experiment`    
+* `hospsize` categorical, all three levels`small` , `medium`, `large`  
+
+**Always followed by:** 
+* `fit` estimated marginal mean
+* `se` standard error for the marginal mean
+* `lower` lower end of the 95% confidence interval around the estimated marginal mean
+* `upper` upper end of the 95% confidence interval around the estimated marginal mean
+
+
+```{r}
+effects::Effect(focal.predictors = c("expcon", "hospsize"),
+                mod = nurse_lmer_3_re) %>% 
+  data.frame()  
 ```
 
 
@@ -351,15 +450,22 @@ effects::Effect(focal.predictors = c("expcon", "hospsize"),
                 width = .4,
                 position = position_dodge(width = .2)) + 
   geom_line(position = position_dodge(width = .2)) +
-  geom_point(size = 3,
+  geom_point(size = 4,
              position = position_dodge(width = .2)) +
   theme_bw() +
   labs(x = "Hospital Size",
        y = "Estimated Marginal Mean, Stress",
        shape = "Condition",
-       color = "Condition")
+       color = "Condition") +
+  theme(legend.key.width = unit(2, "cm"),
+        legend.background = element_rect(color = "black"),
+        legend.position = c(1, 0),
+        legend.justification = c(1, 0))
 ```
 
+This plot illustrates the estimated marginal means among male nurses at the overall mean age (43.01 years), with the mean level experience (17.06 years), working in general sized hospitals.  Different values for thoes predictors would yield the exact sample plot, shifted as a whole either up or down.
+
+#### Post Hoc Tests
 
 
 ```{r}
@@ -373,10 +479,12 @@ nurse_lmer_3_re %>%
   pairs()
 ```
 
+#### Interpretation
+
+There is evidence this intervention lowered stress among nurses working in small hospitals only.
 
 
-
-
+ 
 
 
 
