@@ -1246,6 +1246,25 @@ anova(fit_read_10ml_s, fit_read_11ml_s, fit_read_12ml_s)
 There is evidence that SES moderates the main effect of vocabualry, after accounting for the interaction between age and vocabulary.
 
 
+### Final Model
+
+Always refit the final model via REML.
+
+```{r}
+fit_read_11re_s <- lme4::lmer(geread ~ gevocab_c*age_c + gevocab_c*ses_t +   # 2 2-way interactions
+                                      (gevocab_c | school),  
+                             data   = data_achieve_center_scale,
+                             REML   = TRUE)
+```
+
+### Table
+
+```{r}
+texreg::texreg(fit_read_11re_s,
+               single.row = TRUE)
+```
+
+
 #### Visualize the Model
 
 Recall the scales that the revised variables are now on:
@@ -1259,7 +1278,7 @@ data_achieve_center_scale %>%
 
 ```{r}
 effects::Effect(focal.predictors = c("gevocab_c", "age_c", "ses_t"),
-                mod = fit_read_11ml_s,
+                mod = fit_read_11re_s,
                 xlevels = list(age_c = c(84, 108, 132) - 107.5290, 
                                ses_t = c(0, 5, 10))) %>%  
   data.frame() %>% 
@@ -1278,18 +1297,18 @@ effects::Effect(focal.predictors = c("gevocab_c", "age_c", "ses_t"),
 ```
 
 
-There is evidence that higher vocabulary scores correlate with higher reading scores.  This relationship os strongest in low SES schools and among older students.  This relationship is especially weaker in younger studnets attending high SES schools.
+There is evidence that higher vocabulary scores correlate with higher reading scores.  This relationship os strongest in low SES schools and among older students.  This relationship is especially weaker in younger students attending high SES schools.
 
 
 See: @nakagawa2013 for more regarding model $R^2$
 
 From the `sjstats::r2()` documentation, for mixed models:    
 
-* the **marginal r-squared** considers only the variance of the fixed effects    
+* **marginal r-squared** considers only the variance of the fixed effects    
 * **conditional r-squared** takes both the fixed and random effects into account
 
 ```{r}
-sjstats::r2(fit_read_11ml_s)
+sjstats::r2(fit_read_11re_s)
 ```
 
 

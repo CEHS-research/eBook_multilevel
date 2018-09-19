@@ -125,11 +125,11 @@ The t-test performed by the `furniture::table1()` function will always assume in
 Fit the model to the data, with both ML and REML.
 
 ```{r}
-nurse_lmer_0_ml <- lme4::lmer(stress ~ 1 + (1|hospital/ward),  # each hospital contains several wards
+nurse_lmer_0_re <- lme4::lmer(stress ~ 1 + (1|hospital/ward),  # each hospital contains several wards
                               data = data_nurse,
                               REML = TRUE)              # fit via REML (the default) for ICC calculations
 
-nurse_lmer_0_re <- lme4::lmer(stress ~ 1 + (1|hospital/ward),  
+nurse_lmer_0_ml <- lme4::lmer(stress ~ 1 + (1|hospital/ward),  
                               data = data_nurse,
                               REML = FALSE)             # fit via ML for comparing FIXED effects inclusion
 ```
@@ -190,7 +190,7 @@ sjstats::re_var(nurse_lmer_0_re)
 ```
 $$
 \begin{align*}
-\text{hospitals}                                 \rightarrow \; & \sigma^2_{v0} = 0.403^2 = 0.162\\
+\text{hospitals}                                 \rightarrow \; & \sigma^2_{v0} = 0.417^2 = 0.174\\
 \text{wards within hospitals}                    \rightarrow \; & \sigma^2_{u0} = 0.699^2 = 0.489\\
 \text{nurses within wards within hospitals}      \rightarrow \; & \sigma^2_{e}  = 0.549^2 = 0.301\\
 \end{align*}
@@ -217,8 +217,8 @@ $$
 For more than two levels, the `sjstats::icc()` function computes ICC's by the Davis and Scott method.
 
 ```{r}
-0.489 / (0.162 + 0.489 + 0.301) # middle level (wards)
-0.301 / (0.162 + 0.489 + 0.301) # top level (hospitals)
+0.489 / (0.174 + 0.489 + 0.301) # middle level (wards)
+0.174 / (0.174 + 0.489 + 0.301) # top level (hospitals)
 ```
 
 
@@ -368,6 +368,14 @@ nurse_lmer_3_re <- lme4::lmer(stress ~ expcon + age + gender + experien + wardty
                               control = lmerControl(optimizer ="Nelder_Mead"))   # Hessian convergence issues           
 ```
 
+
+
+```{block type='rmdlightbulb', echo=TRUE}
+The warning about **"Model is nearly unidentifiable: large eigenvalue ratio - Rescale variables?"** is sa suggestion, not an error.  You can trust the results, but you might want to look into rescaling your variables.
+```
+
+
+
 #### Parameters
 
 ```{r, include=FALSE}
@@ -445,18 +453,24 @@ effects::Effect(focal.predictors = c("expcon", "hospsize"),
       group = expcon,
       shape = expcon,
       color = expcon) +
-  geom_errorbar(aes(ymin = lower,
-                    ymax = upper),
+  geom_errorbar(aes(ymin = fit  - se,      # mean plus/minus one Std Error
+                    ymax = fit + se),
                 width = .4,
                 position = position_dodge(width = .2)) + 
-  geom_line(position = position_dodge(width = .2)) +
+  geom_errorbar(aes(ymin = lower,           # 95% CIs
+                    ymax = upper),
+                width = .2,
+                position = position_dodge(width = .2)) + 
+  geom_line(aes(linetype = expcon),
+            position = position_dodge(width = .2)) +
   geom_point(size = 4,
              position = position_dodge(width = .2)) +
   theme_bw() +
   labs(x = "Hospital Size",
        y = "Estimated Marginal Mean, Stress",
-       shape = "Condition",
-       color = "Condition") +
+       shape    = "Condition",
+       color    = "Condition",
+       linetype = "Condition") +
   theme(legend.key.width = unit(2, "cm"),
         legend.background = element_rect(color = "black"),
         legend.position = c(1, 0),
@@ -479,9 +493,19 @@ nurse_lmer_3_re %>%
   pairs()
 ```
 
+Note: the pairwise t-tests above do not control for multiple compairsons.  If we did manually, we would multiply the p-values by 3 (because we are doing three tests) to conduct the Bonferroni correction.
+
+```{r}
+c(.0001, .0196, .1967)*3
+```
+
+
+
+
+
 #### Interpretation
 
-There is evidence this intervention lowered stress among nurses working in small hospitals only.
+There is evidence this intervention lowered stress among nurses working in small hospitals and a trend for medium sized hospitals.  The intervention did not exhibit an effect in large hospitals.
 
 
  

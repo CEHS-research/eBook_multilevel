@@ -214,6 +214,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.10" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>4.10</b> Rescaling Predictors: Change Units or Standardize</a><ul>
 <li class="chapter" data-level="4.10.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#scale-varaibles"><i class="fa fa-check"></i><b>4.10.1</b> Scale Varaibles</a></li>
 <li class="chapter" data-level="4.10.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#use-scaled-variables"><i class="fa fa-check"></i><b>4.10.2</b> Use Scaled Variables</a></li>
+<li class="chapter" data-level="4.10.3" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.10.3</b> Final Model</a></li>
+<li class="chapter" data-level="4.10.4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.10.4</b> Table</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>5</b> Variance Explained</a><ul>
@@ -738,11 +740,11 @@ The t-test performed by the <code>furniture::table1()</code> function will alway
 <div id="fit-the-model-4" class="section level4">
 <h4><span class="header-section-number">3.3.0.1</span> Fit the Model</h4>
 <p>Fit the model to the data, with both ML and REML.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_0_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),  <span class="co"># each hospital contains several wards</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_0_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),  <span class="co"># each hospital contains several wards</span>
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">TRUE</span>)              <span class="co"># fit via REML (the default) for ICC calculations</span>
 
-nurse_lmer_0_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),  
+nurse_lmer_0_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),  
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">FALSE</span>)             <span class="co"># fit via ML for comparing FIXED effects inclusion</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_ml, nurse_lmer_0_re),
@@ -780,10 +782,10 @@ NULL Model: different estimation methods
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-(0.1103)
+(0.1081)
 </td>
 <td style="padding-right: 12px; border: none;">
-(0.1081)
+(0.1103)
 </td>
 </tr>
 <tr>
@@ -791,10 +793,10 @@ NULL Model: different estimation methods
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-1952.9530
+1950.3612
 </td>
 <td style="border-top: 1px solid black;">
-1950.3612
+1952.9530
 </td>
 </tr>
 <tr>
@@ -802,10 +804,10 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-1972.5840
+1969.9922
 </td>
 <td style="padding-right: 12px; border: none;">
-1969.9922
+1972.5840
 </td>
 </tr>
 <tr>
@@ -813,10 +815,10 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--972.4765
+-971.1806
 </td>
 <td style="padding-right: 12px; border: none;">
--971.1806
+-972.4765
 </td>
 </tr>
 <tr>
@@ -868,10 +870,10 @@ Var: ward:hospital (Intercept)
 Var: hospital (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1743
+0.1621
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1621
+0.1743
 </td>
 </tr>
 <tr>
@@ -911,14 +913,14 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lme4<span class="op">::</span><span class="kw">VarCorr</span>(nurse_lmer_0_re) </code></pre></div>
 <pre><code> Groups        Name        Std.Dev.
  ward:hospital (Intercept) 0.69916 
- hospital      (Intercept) 0.40266 
+ hospital      (Intercept) 0.41749 
  Residual                  0.54887 </code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lme4<span class="op">::</span><span class="kw">VarCorr</span>(nurse_lmer_0_re) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">print</span>(<span class="dt">comp =</span> <span class="kw">c</span>(<span class="st">&quot;Variance&quot;</span>, <span class="st">&quot;Std.Dev&quot;</span>),
         <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre></div>
 <pre><code> Groups        Name        Variance Std.Dev.
  ward:hospital (Intercept) 0.489    0.699   
- hospital      (Intercept) 0.162    0.403   
+ hospital      (Intercept) 0.174    0.417   
  Residual                  0.301    0.549   </code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">vc &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">VarCorr</span>(nurse_lmer_0_re) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">data.frame</span>() 
@@ -930,10 +932,10 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">re_var</span>(nurse_lmer_0_re)</code></pre></div>
 <pre><code>      Within-group-variance:    0.301
      Between-group-variance:    0.489 (ward:hospital)
-     Between-group-variance:    0.162 (hospital)</code></pre>
+     Between-group-variance:    0.174 (hospital)</code></pre>
 <p><span class="math display">\[
 \begin{align*}
-\text{hospitals}                                 \rightarrow \; &amp; \sigma^2_{v0} = 0.403^2 = 0.162\\
+\text{hospitals}                                 \rightarrow \; &amp; \sigma^2_{v0} = 0.417^2 = 0.174\\
 \text{wards within hospitals}                    \rightarrow \; &amp; \sigma^2_{u0} = 0.699^2 = 0.489\\
 \text{nurses within wards within hospitals}      \rightarrow \; &amp; \sigma^2_{e}  = 0.549^2 = 0.301\\
 \end{align*}
@@ -954,10 +956,10 @@ Var: Residual
 </p>
 </div>
 <p>For more than two levels, the <code>sjstats::icc()</code> function computes ICC’s by the Davis and Scott method.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="fl">0.489</span> <span class="op">/</span><span class="st"> </span>(<span class="fl">0.162</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.489</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.301</span>) <span class="co"># middle level (wards)</span></code></pre></div>
-<pre><code>[1] 0.5136555</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="fl">0.301</span> <span class="op">/</span><span class="st"> </span>(<span class="fl">0.162</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.489</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.301</span>) <span class="co"># top level (hospitals)</span></code></pre></div>
-<pre><code>[1] 0.3161765</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="fl">0.489</span> <span class="op">/</span><span class="st"> </span>(<span class="fl">0.174</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.489</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.301</span>) <span class="co"># middle level (wards)</span></code></pre></div>
+<pre><code>[1] 0.5072614</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="fl">0.174</span> <span class="op">/</span><span class="st"> </span>(<span class="fl">0.174</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.489</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.301</span>) <span class="co"># top level (hospitals)</span></code></pre></div>
+<pre><code>[1] 0.1804979</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(nurse_lmer_0_re)</code></pre></div>
 <pre><code>
 Linear mixed model
@@ -965,8 +967,8 @@ Linear mixed model
 Family : gaussian (identity)
 Formula: stress ~ 1 + (1 | hospital/ward)
 
-  ICC (ward:hospital): 0.5134
-       ICC (hospital): 0.1703</code></pre>
+  ICC (ward:hospital): 0.5069
+       ICC (hospital): 0.1807</code></pre>
 <!-- ========================================================= -->
 </div>
 <div id="mlm-add-fixed-effects" class="section level2">
@@ -1014,7 +1016,7 @@ Nested Models: Fixed effects via ML
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-(0.1103)
+(0.1081)
 </td>
 <td style="padding-right: 12px; border: none;">
 (0.1764)
@@ -1158,7 +1160,7 @@ hospsizelarge
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-1952.9530
+1950.3612
 </td>
 <td style="border-top: 1px solid black;">
 1626.3179
@@ -1169,7 +1171,7 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-1972.5840
+1969.9922
 </td>
 <td style="padding-right: 12px; border: none;">
 1680.3032
@@ -1180,7 +1182,7 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--972.4765
+-971.1806
 </td>
 <td style="padding-right: 12px; border: none;">
 -802.1589
@@ -1235,7 +1237,7 @@ Var: ward:hospital (Intercept)
 Var: hospital (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1743
+0.1621
 </td>
 <td style="padding-right: 12px; border: none;">
 0.0967
@@ -2068,6 +2070,11 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">TRUE</span>,                                     <span class="co"># fit via REML for final model</span>
                               <span class="dt">control =</span> <span class="kw">lmerControl</span>(<span class="dt">optimizer =</span><span class="st">&quot;Nelder_Mead&quot;</span>))   <span class="co"># Hessian convergence issues           </span></code></pre></div>
+<div class="rmdlightbulb">
+<p>
+The warning about <strong>“Model is nearly unidentifiable: large eigenvalue ratio - Rescale variables?”</strong> is sa suggestion, not an error. You can trust the results, but you might want to look into rescaling your variables.
+</p>
+</div>
 </div>
 <div id="parameters-7" class="section level4">
 <h4><span class="header-section-number">3.7.3.2</span> Parameters</h4>
@@ -2335,23 +2342,29 @@ Formula: stress ~ expcon + age + gender + experien + wardtype + hospsize * expco
       <span class="dt">group =</span> expcon,
       <span class="dt">shape =</span> expcon,
       <span class="dt">color =</span> expcon) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower,
-                    <span class="dt">ymax =</span> upper),
+<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> fit  <span class="op">-</span><span class="st"> </span>se,      <span class="co"># mean plus/minus one Std Error</span>
+                    <span class="dt">ymax =</span> fit <span class="op">+</span><span class="st"> </span>se),
                 <span class="dt">width =</span> .<span class="dv">4</span>,
                 <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> .<span class="dv">2</span>)) <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> .<span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower,           <span class="co"># 95% CIs</span>
+                    <span class="dt">ymax =</span> upper),
+                <span class="dt">width =</span> .<span class="dv">2</span>,
+                <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> .<span class="dv">2</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> expcon),
+            <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> .<span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">4</span>,
              <span class="dt">position =</span> <span class="kw">position_dodge</span>(<span class="dt">width =</span> .<span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Hospital Size&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean, Stress&quot;</span>,
-       <span class="dt">shape =</span> <span class="st">&quot;Condition&quot;</span>,
-       <span class="dt">color =</span> <span class="st">&quot;Condition&quot;</span>) <span class="op">+</span>
+       <span class="dt">shape    =</span> <span class="st">&quot;Condition&quot;</span>,
+       <span class="dt">color    =</span> <span class="st">&quot;Condition&quot;</span>,
+       <span class="dt">linetype =</span> <span class="st">&quot;Condition&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>),
         <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
         <span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),
         <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-131-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-132-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>This plot illustrates the estimated marginal means among male nurses at the overall mean age (43.01 years), with the mean level experience (17.06 years), working in general sized hospitals. Different values for thoes predictors would yield the exact sample plot, shifted as a whole either up or down.</p>
 </div>
 <div id="post-hoc-tests" class="section level4">
@@ -2392,10 +2405,13 @@ hospsize = large:
  control - experiment -0.3921092 0.2945688 22.16  -1.331  0.1967
 
 Results are averaged over the levels of: wardtype </code></pre>
+<p>Note: the pairwise t-tests above do not control for multiple compairsons. If we did manually, we would multiply the p-values by 3 (because we are doing three tests) to conduct the Bonferroni correction.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">c</span>(.<span class="dv">0001</span>, .<span class="dv">0196</span>, .<span class="dv">1967</span>)<span class="op">*</span><span class="dv">3</span></code></pre></div>
+<pre><code>[1] 0.0003 0.0588 0.5901</code></pre>
 </div>
 <div id="interpretation-6" class="section level4">
 <h4><span class="header-section-number">3.7.3.5</span> Interpretation</h4>
-<p>There is evidence this intervention lowered stress among nurses working in small hospitals only.</p>
+<p>There is evidence this intervention lowered stress among nurses working in small hospitals and a trend for medium sized hospitals. The intervention did not exhibit an effect in large hospitals.</p>
 
 </div>
 </div>

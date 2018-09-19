@@ -214,6 +214,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.10" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>4.10</b> Rescaling Predictors: Change Units or Standardize</a><ul>
 <li class="chapter" data-level="4.10.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#scale-varaibles"><i class="fa fa-check"></i><b>4.10.1</b> Scale Varaibles</a></li>
 <li class="chapter" data-level="4.10.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#use-scaled-variables"><i class="fa fa-check"></i><b>4.10.2</b> Use Scaled Variables</a></li>
+<li class="chapter" data-level="4.10.3" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.10.3</b> Final Model</a></li>
+<li class="chapter" data-level="4.10.4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.10.4</b> Table</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>5</b> Variance Explained</a><ul>
@@ -1084,7 +1086,7 @@ gevocab       82       95      110      120       140
              <span class="dt">color =</span> age)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() </code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-144-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-146-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Here is a better version of the plot.</p>
 <p>Age is in months, so we want multiples of 12 for good visualization</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(data_achieve<span class="op">$</span>age)<span class="op">/</span><span class="dv">12</span>   <span class="co"># divide by 12 to change months to years</span></code></pre></div>
@@ -1557,7 +1559,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
                 <span class="dt">alpha =</span> .<span class="dv">3</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-159-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-161-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="proportion-of-variance-explained" class="section level4">
 <h4><span class="header-section-number">4.5.1.2</span> Proportion of Variance Explained</h4>
@@ -1927,7 +1929,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_yr)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-177-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-179-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>There is a positive association between vocabulary and reading, but it is strongest for older childred. Among younger children, reading scores are more stable across vocabulary differences.</p>
 <!-- ========================================================= -->
 </div>
@@ -2486,7 +2488,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_yr)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-187-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-189-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>We are seeming much the same trends, but perhaps more separation between the lines.</p>
 <!-- ========================================================= -->
 </div>
@@ -3288,7 +3290,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_c)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-204-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-206-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Notice that the vocab and ages are centered at zero. This makes it hard to read the plot, especially if we are unsure what the means of the variables were.</p>
 <p>Plot the model again, but this time UN-centering the variables by adding back the grand-mean we subtracted prior to fitting the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;age_c&quot;</span>),
@@ -3302,7 +3304,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_yrs)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-205-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-207-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now the plot is back on to the origial variables.</p>
 <!-- ========================================================= -->
 </div>
@@ -3849,8 +3851,51 @@ fit_read_12ml_s
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>There is evidence that SES moderates the main effect of vocabualry, after accounting for the interaction between age and vocabulary.</p>
+</div>
+<div id="final-model-2" class="section level3">
+<h3><span class="header-section-number">4.10.3</span> Final Model</h3>
+<p>Always refit the final model via REML.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_read_11re_s &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab_c<span class="op">*</span>age_c <span class="op">+</span><span class="st"> </span>gevocab_c<span class="op">*</span>ses_t <span class="op">+</span><span class="st">   </span><span class="co"># 2 2-way interactions</span>
+<span class="st">                                      </span>(gevocab_c <span class="op">|</span><span class="st"> </span>school),  
+                             <span class="dt">data   =</span> data_achieve_center_scale,
+                             <span class="dt">REML   =</span> <span class="ot">TRUE</span>)</code></pre></div>
+</div>
+<div id="table" class="section level3">
+<h3><span class="header-section-number">4.10.4</span> Table</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">texreg</span>(fit_read_11re_s,
+               <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>
+\begin{table}
+\begin{center}
+\begin{tabular}{l c }
+\hline
+ &amp; Model 1 \\
+\hline
+(Intercept)                       &amp; $3.94 \; (0.11)^{***}$ \\
+gevocab\_c                        &amp; $0.67 \; (0.05)^{***}$ \\
+age\_c                            &amp; $-0.00 \; (0.00)$      \\
+ses\_t                            &amp; $0.06 \; (0.01)^{***}$ \\
+gevocab\_c:age\_c                 &amp; $0.01 \; (0.00)^{**}$  \\
+gevocab\_c:ses\_t                 &amp; $-0.02 \; (0.01)^{**}$ \\
+\hline
+AIC                               &amp; 42976.51               \\
+BIC                               &amp; 43048.93               \\
+Log Likelihood                    &amp; -21478.26              \\
+Num. obs.                         &amp; 10320                  \\
+Num. groups: school               &amp; 160                    \\
+Var: school (Intercept)           &amp; 0.08                   \\
+Var: school gevocab_c             &amp; 0.02                   \\
+Cov: school (Intercept) gevocab_c &amp; 0.03                   \\
+Var: Residual                     &amp; 3.66                   \\
+\hline
+\multicolumn{2}{l}{\scriptsize{$^{***}p&lt;0.001$, $^{**}p&lt;0.01$, $^*p&lt;0.05$}}
+\end{tabular}
+\caption{Statistical models}
+\label{table:coefficients}
+\end{center}
+\end{table}</code></pre>
 <div id="visualize-the-model-2" class="section level4">
-<h4><span class="header-section-number">4.10.2.1</span> Visualize the Model</h4>
+<h4><span class="header-section-number">4.10.4.1</span> Visualize the Model</h4>
 <p>Recall the scales that the revised variables are now on:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_achieve_center_scale <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(gevocab_c, age_c, ses_t) <span class="op">%&gt;%</span><span class="st"> </span>
@@ -3863,7 +3908,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
  3rd Qu.: 0.706200   3rd Qu.:  3.471000   3rd Qu.: 8.780  
  Max.   : 6.706200   Max.   : 27.471000   Max.   :10.000  </code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;age_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>),
-                <span class="dt">mod =</span> fit_read_11ml_s,
+                <span class="dt">mod =</span> fit_read_11re_s,
                 <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">age_c =</span> <span class="kw">c</span>(<span class="dv">84</span>, <span class="dv">108</span>, <span class="dv">132</span>) <span class="op">-</span><span class="st"> </span><span class="fl">107.5290</span>, 
                                <span class="dt">ses_t =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>))) <span class="op">%&gt;%</span><span class="st">  </span>
 <span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
@@ -3879,7 +3924,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Vocabulary Score&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Reading Score</span><span class="ch">\n</span><span class="st">Estimated Marginal Mean&quot;</span>,
        <span class="dt">color =</span> <span class="st">&quot;Student Age&quot;</span>)</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-215-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-219-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>There is evidence that higher vocabulary scores correlate with higher reading scores. This relationship os strongest in low SES schools and among older students. This relationship is especially weaker in younger studnets attending high SES schools.</p>
 <p>See: <span class="citation">Nakagawa and Schielzeth (<a href="references.html#ref-nakagawa2013">2013</a>)</span> for more regarding model <span class="math inline">\(R^2\)</span></p>
 <p>From the <code>sjstats::r2()</code> documentation, for mixed models:</p>
@@ -3888,7 +3933,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 </li>
 <li><strong>conditional r-squared</strong> takes both the fixed and random effects into account</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">r2</span>(fit_read_11ml_s)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">r2</span>(fit_read_11re_s)</code></pre></div>
 <pre><code>
 R-Squared for Generalized Linear Mixed Model
 
