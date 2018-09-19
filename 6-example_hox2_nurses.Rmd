@@ -371,7 +371,7 @@ nurse_lmer_3_re <- lme4::lmer(stress ~ expcon + age + gender + experien + wardty
 
 
 ```{block type='rmdlightbulb', echo=TRUE}
-The warning about **"Model is nearly unidentifiable: large eigenvalue ratio - Rescale variables?"** is sa suggestion, not an error.  You can trust the results, but you might want to look into rescaling your variables.
+The warning about **"Model is nearly unidentifiable: large eigenvalue ratio - Rescale variables?"** is a suggestion, not an error.  You can trust the results, but you might want to look into rescaling your variables.
 ```
 
 
@@ -424,11 +424,13 @@ Although there are many variables in this model, only two are involved in any in
 
 Get Estimated Marginal Means - default 'nice' predictor values:
 
-**Focal predictors:** All combinations of...
+**Focal predictors:** All combinations of...     
+
 * `expcon` categorical, both levels `control` and `experiment`    
 * `hospsize` categorical, all three levels`small` , `medium`, `large`  
 
-**Always followed by:** 
+**Always followed by:**     
+
 * `fit` estimated marginal mean
 * `se` standard error for the marginal mean
 * `lower` lower end of the 95% confidence interval around the estimated marginal mean

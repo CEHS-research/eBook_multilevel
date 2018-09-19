@@ -1337,8 +1337,8 @@ Var: Residual
 <p><span class="math display">\[
 \begin{align*}
 \text{schools}                      \rightarrow \; &amp; \sigma^2_{u0} = 0.6257^2 = 0.392 \\
-\text{students within schools}      \rightarrow \; &amp; \sigma^2_{e}  = 2.2461^2 = 5.045 
-\end{align}
+\text{students within schools}      \rightarrow \; &amp;   \sigma^2_{e}  = 2.2461^2 = 5.045 \\
+\end{align*}
 \]</span></p>
 <div class="genericEq">
 <p>
@@ -3864,36 +3864,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <h3><span class="header-section-number">4.10.4</span> Table</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">texreg</span>(fit_read_11re_s,
                <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>
-\begin{table}
-\begin{center}
-\begin{tabular}{l c }
-\hline
- &amp; Model 1 \\
-\hline
-(Intercept)                       &amp; $3.94 \; (0.11)^{***}$ \\
-gevocab\_c                        &amp; $0.67 \; (0.05)^{***}$ \\
-age\_c                            &amp; $-0.00 \; (0.00)$      \\
-ses\_t                            &amp; $0.06 \; (0.01)^{***}$ \\
-gevocab\_c:age\_c                 &amp; $0.01 \; (0.00)^{**}$  \\
-gevocab\_c:ses\_t                 &amp; $-0.02 \; (0.01)^{**}$ \\
-\hline
-AIC                               &amp; 42976.51               \\
-BIC                               &amp; 43048.93               \\
-Log Likelihood                    &amp; -21478.26              \\
-Num. obs.                         &amp; 10320                  \\
-Num. groups: school               &amp; 160                    \\
-Var: school (Intercept)           &amp; 0.08                   \\
-Var: school gevocab_c             &amp; 0.02                   \\
-Cov: school (Intercept) gevocab_c &amp; 0.03                   \\
-Var: Residual                     &amp; 3.66                   \\
-\hline
-\multicolumn{2}{l}{\scriptsize{$^{***}p&lt;0.001$, $^{**}p&lt;0.01$, $^*p&lt;0.05$}}
-\end{tabular}
-\caption{Statistical models}
-\label{table:coefficients}
-\end{center}
-\end{table}</code></pre>
+
 <div id="visualize-the-model-2" class="section level4">
 <h4><span class="header-section-number">4.10.4.1</span> Visualize the Model</h4>
 <p>Recall the scales that the revised variables are now on:</p>
@@ -3925,11 +3896,11 @@ Var: Residual                     &amp; 3.66                   \\
        <span class="dt">y =</span> <span class="st">&quot;Reading Score</span><span class="ch">\n</span><span class="st">Estimated Marginal Mean&quot;</span>,
        <span class="dt">color =</span> <span class="st">&quot;Student Age&quot;</span>)</code></pre></div>
 <p><img src="eBook_install_files/figure-html/unnamed-chunk-219-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>There is evidence that higher vocabulary scores correlate with higher reading scores. This relationship os strongest in low SES schools and among older students. This relationship is especially weaker in younger studnets attending high SES schools.</p>
+<p>There is evidence that higher vocabulary scores correlate with higher reading scores. This relationship os strongest in low SES schools and among older students. This relationship is especially weaker in younger students attending high SES schools.</p>
 <p>See: <span class="citation">Nakagawa and Schielzeth (<a href="references.html#ref-nakagawa2013">2013</a>)</span> for more regarding model <span class="math inline">\(R^2\)</span></p>
 <p>From the <code>sjstats::r2()</code> documentation, for mixed models:</p>
 <ul>
-<li>the <strong>marginal r-squared</strong> considers only the variance of the fixed effects<br />
+<li><strong>marginal r-squared</strong> considers only the variance of the fixed effects<br />
 </li>
 <li><strong>conditional r-squared</strong> takes both the fixed and random effects into account</li>
 </ul>

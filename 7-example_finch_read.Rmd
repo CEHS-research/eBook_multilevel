@@ -439,8 +439,8 @@ sjstats::re_var(fit_read_0re)
 $$
 \begin{align*}
 \text{schools}                      \rightarrow \; & \sigma^2_{u0} = 0.6257^2 = 0.392 \\
-\text{students within schools}      \rightarrow \; & \sigma^2_{e}  = 2.2461^2 = 5.045 
-\end{align}
+\text{students within schools}      \rightarrow \; &   \sigma^2_{e}  = 2.2461^2 = 5.045 \\
+\end{align*}
 $$
 
 
@@ -1259,7 +1259,7 @@ fit_read_11re_s <- lme4::lmer(geread ~ gevocab_c*age_c + gevocab_c*ses_t +   # 2
 
 ### Table
 
-```{r}
+```{r, results='asis'}
 texreg::texreg(fit_read_11re_s,
                single.row = TRUE)
 ```

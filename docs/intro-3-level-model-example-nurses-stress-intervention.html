@@ -2072,7 +2072,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
                               <span class="dt">control =</span> <span class="kw">lmerControl</span>(<span class="dt">optimizer =</span><span class="st">&quot;Nelder_Mead&quot;</span>))   <span class="co"># Hessian convergence issues           </span></code></pre></div>
 <div class="rmdlightbulb">
 <p>
-The warning about <strong>“Model is nearly unidentifiable: large eigenvalue ratio - Rescale variables?”</strong> is sa suggestion, not an error. You can trust the results, but you might want to look into rescaling your variables.
+The warning about <strong>“Model is nearly unidentifiable: large eigenvalue ratio - Rescale variables?”</strong> is a suggestion, not an error. You can trust the results, but you might want to look into rescaling your variables.
 </p>
 </div>
 </div>
@@ -2320,9 +2320,19 @@ Formula: stress ~ expcon + age + gender + experien + wardtype + hospsize * expco
 <h4><span class="header-section-number">3.7.3.3</span> Visualization</h4>
 <p>Although there are many variables in this model, only two are involved in any interaction(s). For this reason, we will choose to display the estimated marginal means across only experimental condition and hospital size. For this illustration, all other continuous predictors are taken to be at their mean and categorical predictors at their reference category.</p>
 <p>Get Estimated Marginal Means - default ‘nice’ predictor values:</p>
-<p><strong>Focal predictors:</strong> All combinations of… * <code>expcon</code> categorical, both levels <code>control</code> and <code>experiment</code><br />
-* <code>hospsize</code> categorical, all three levels<code>small</code> , <code>medium</code>, <code>large</code></p>
-<p><strong>Always followed by:</strong> * <code>fit</code> estimated marginal mean * <code>se</code> standard error for the marginal mean * <code>lower</code> lower end of the 95% confidence interval around the estimated marginal mean * <code>upper</code> upper end of the 95% confidence interval around the estimated marginal mean</p>
+<p><strong>Focal predictors:</strong> All combinations of…</p>
+<ul>
+<li><code>expcon</code> categorical, both levels <code>control</code> and <code>experiment</code><br />
+</li>
+<li><code>hospsize</code> categorical, all three levels<code>small</code> , <code>medium</code>, <code>large</code></li>
+</ul>
+<p><strong>Always followed by:</strong></p>
+<ul>
+<li><code>fit</code> estimated marginal mean</li>
+<li><code>se</code> standard error for the marginal mean</li>
+<li><code>lower</code> lower end of the 95% confidence interval around the estimated marginal mean</li>
+<li><code>upper</code> upper end of the 95% confidence interval around the estimated marginal mean</li>
+</ul>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;expcon&quot;</span>, <span class="st">&quot;hospsize&quot;</span>),
                 <span class="dt">mod =</span> nurse_lmer_3_re) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">data.frame</span>()  </code></pre></div>
