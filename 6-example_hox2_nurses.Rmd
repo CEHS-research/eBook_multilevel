@@ -110,11 +110,15 @@ data_nurse <- data_nurse %>%
 
 
 ```{r}
-table(data_nurse$expconNG)
+data_nurse %>% 
+  dplyr::select(expcon, expconNG) %>% 
+  table()
 ```
 
 ```{r}
-table(data_nurse$hospsizeNG)
+data_nurse %>% 
+  dplyr::select(hospsize, hospsizeNG) %>% 
+  table()
 ```
 
 ## Exploratory Data Analysis
@@ -616,6 +620,35 @@ sjstats::icc(nurse_lmer_3_re)
 
 
 Although there are many variables in this model, only two are involved in any interaction(s).  For this reason, we will choose to display the estimated marginal means across only experimental condition and hospital size.  For this illustration, all other continuous predictors are taken to be at their mean and categorical predictors at their reference category.
+
+
+```{r}
+sjPlot::plot_model(nurse_lmer_3_re, 
+                   type = "pred", 
+                   terms = c("hospsizeNG", "expconNG"))
+```
+
+
+```{r}
+sjPlot::plot_model(nurse_lmer_3_re, 
+                   type = "pred", 
+                   terms = c("hospsizeNG [-0.776, 0.224, 1.224]", 
+                             "expconNG [-0.504, 0.496]")) +
+  scale_x_continuous(breaks = c(-0.776, 0.224, 1.224),
+                     labels = c("small", "medium", "large")) +
+  scale_color_manual(labels = c("Control", "Intervention"),
+                     values = c("red", "blue")) +
+  labs(title = "Multilevel Modeling of Hospital Nurse Stress Intervention",
+       subtitle = "Ribbons display 95% Confidene Intervals",
+       x = "Hospital Size",
+       y = "Estimated Marginal Mean\nNorse's Stress Score",
+       color = "Condition") +
+  theme_bw()
+```
+
+
+
+
 
 
 Get Estimated Marginal Means - default 'nice' predictor values:

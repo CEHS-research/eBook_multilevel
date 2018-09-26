@@ -30,14 +30,19 @@ library(optimx)       # Different optimizers to solve mlm's
 ## Background
 <!-- ========================================================= -->
 
+
+```{block type='rmdlink', echo=TRUE}
 The following example was included in the text "Multilevel Modeling in R" by @finch2016.
 
 The datasets for this textbook may be downloaded from the website: http://www.mlminr.com/data-sets/.  
+```
+
 
 I was unable to find any documentation on this dataset in the book or online, so I contacted the authors.  There were unable to provide much either, but based on visual inspection designated the class of *factor* to thoes vairables that seem to represent categorical quantities. The labels for gender and class size are relative to the frequencies in the journal article the authors did point me to *(although the samples sizes do not match up)*.
 
+```{block type='rmdimportant', echo=TRUE}
 FOR THIS CHAPTER WE WILL IGNORE ALL LEVELS EXCEPT FOR STUDNETS BEING NESTED WITHIN SCHOOLS.
-
+```
 
 Read the SPSS data in with the `haven` package .
 
@@ -62,16 +67,17 @@ Declare all categorical variables to be factors and apply labels where meaningfu
 
 ```{r}
 data_achieve <- data_raw %>% 
-  dplyr::mutate_at(vars(id, region, corp, school, class), factor) %>% 
+  dplyr::mutate_at(vars(id, region, corp, school, class),    # declare these are factors
+                   factor) %>% 
   dplyr::mutate(gender = gender %>% 
-                  factor(labels = c("Female", "Male"))) %>% 
+                  factor(labels = c("Female", "Male"))) %>%  # guess based on subset sizes
   dplyr::mutate(classize = classize %>% 
-                  factor(labels = c("12-17", "18-21", 
+                  factor(labels = c("12-17", "18-21",        # guess based on subset sizes
                                     "22-26", ">26"))) %>% 
-  dplyr::select(id, region, corp, school, class,           # Identifiers
-                gender, age, geread, gevocab,              # Pupil-level vars
-                classize,                                  # Class-Level vars
-                senroll, ses)                              # School-level vars
+  dplyr::select(id, region, corp, school, class,             # Identifiers
+                gender, age, geread, gevocab,                # Pupil-level vars
+                classize,                                    # Class-Level vars
+                senroll, ses)                                # School-level vars
 ```
 
 
@@ -149,7 +155,7 @@ data_achieve %>%
   dplyr::select(classize, gender, geread, gevocab, age, ses, senroll) %>% 
   data.frame() %>% 
   stargazer::stargazer(header = FALSE,
-                      title = "Summary of the numeric variables with `stargazer`",
+                       title = "Summary of the numeric variables with `stargazer`",
                        type = "html")
 ```
 
@@ -161,16 +167,14 @@ Tyson Barrett's  **furniture** package includes the extremely useful function `t
 
 ```{r sumtable1, output="asis"}
 # note: the label for the table must be entered above, right after the "r"
-table1(data_achieve,
-       geread, gevocab, age, 
-       ses, senroll,
-       var_names = c("Reading Score",  
-                     "Vocabulary Score",
-                     "Age (in months)",
-                     "School SES",
-                     "School's Enrollment"),    # override names
-       splitby   = ~ gender,                # var to divide sample by
-       test      = TRUE,                    # test groups different?
+data_achieve %>% 
+  furniture::table1("Reading Score"       = geread, 
+                    "Vocabulary Score"    = gevocab, 
+                    "Age (in months)"     = age, 
+                    "School SES"          = ses, 
+                    "School's Enrollment" = senroll,
+       splitby   = ~ gender,                                          # var to divide sample by
+       test      = TRUE,                                              # test groups different?
        caption   = "Summary of the numeric variables with `table1`", 
        output    = "html")
 ```
@@ -184,17 +188,19 @@ table1(data_achieve,
 
 For a first look, its useful to plot all the data points on a single scatterplot as displayed in the previous plot.  Due to the large sample size, many points end up being plotted on top of or very near each other (*overplotted*).  When this is the case, it can be useful to use  `geom_binhex()` rather than `geom_point()` so the color saturation of the hexigons convey the number of points at that location, as seen in Figure \ref{fig:hexbin}.  
 
-*Note: I had to manually install the package `hexbin` for the `geom_hex()` to run.*
+*Note: I had to manually install the `hexbin` package  for the `geom_hex()` to run.*
 
 ```{r densityHex, fig.cap="Raw Data: Density, Vocab vs. Reading"}
 data_achieve %>% 
   ggplot() +
   aes(x = gevocab, 
       y = geread) +
-  stat_binhex(colour = "grey85", na.rm  = TRUE) +     # outlines
+  stat_binhex(colour = "grey85", na.rm  = TRUE) +         # outlines
   scale_fill_gradientn(colors   = c("grey80","navyblue"), # fill color extremes
-                       name     = "Frequency",        # legend title
-                       na.value = NA) +               # color for count = 0
+                       name     = "Frequency",            # legend title
+                       na.value = NA) +                   # color for count = 0
+  geom_smooth(method = "lm",                              # Single-level Regression Line
+              SE = FALSE) +                               #  (without the error bands)
   theme_bw()
 ```
 
@@ -208,7 +214,7 @@ data_achieve %>%
   dplyr::filter(school %in% c(1321, 6181, 
                               6197, 6823)) %>%  # choose school numbers
   ggplot(aes(x = gevocab,
-             y = geread))+
+             y = geread)) +
   geom_count() +             # creates points, size by overplotted number
   geom_smooth(method = "lm") +     # linear model (OLS) 
   facet_wrap(~ school) +           # panels by school

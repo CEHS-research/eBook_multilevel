@@ -353,14 +353,21 @@ When variables are involved in an interaction, it may be advantageous to center 
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">hospsizeN  =</span> <span class="kw">as.numeric</span>(hospsize) <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># Numeric Version of hospital size</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">expconNG   =</span> expconN   <span class="op">-</span><span class="st"> </span><span class="fl">0.504</span>) <span class="op">%&gt;%</span><span class="st">         </span><span class="co"># Grand-Mean Centered version of experimental condition</span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">hospsizeNG =</span> hospsizeN <span class="op">-</span><span class="st"> </span><span class="fl">0.776</span>)             <span class="co"># Grand-Mean Centered version of ehospital size</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(data_nurse<span class="op">$</span>expconNG)</code></pre></div>
-<pre><code>
--0.504  0.496 
-   496    504 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(data_nurse<span class="op">$</span>hospsizeNG)</code></pre></div>
-<pre><code>
--0.776  0.224  1.224 
-   374    476    150 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_nurse <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(expcon, expconNG) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">table</span>()</code></pre></div>
+<pre><code>            expconNG
+expcon       -0.504 0.496
+  control       496     0
+  experiment      0   504</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_nurse <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(hospsize, hospsizeNG) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">table</span>()</code></pre></div>
+<pre><code>        hospsizeNG
+hospsize -0.776 0.224 1.224
+  small     374     0     0
+  medium      0   476     0
+  large       0     0   150</code></pre>
 </div>
 </div>
 <div id="exploratory-data-analysis-1" class="section level2">
@@ -2987,6 +2994,25 @@ Formula: stress ~ expconNG + age + gender + experien + wardtype + hospsizeNG + e
 <div id="visualization-estimated-marginal-means-plot" class="section level3">
 <h3><span class="header-section-number">3.8.3</span> Visualization: Estimated Marginal Means Plot</h3>
 <p>Although there are many variables in this model, only two are involved in any interaction(s). For this reason, we will choose to display the estimated marginal means across only experimental condition and hospital size. For this illustration, all other continuous predictors are taken to be at their mean and categorical predictors at their reference category.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(nurse_lmer_3_re, 
+                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>, 
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;hospsizeNG&quot;</span>, <span class="st">&quot;expconNG&quot;</span>))</code></pre></div>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-145-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(nurse_lmer_3_re, 
+                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>, 
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;hospsizeNG [-0.776, 0.224, 1.224]&quot;</span>, 
+                             <span class="st">&quot;expconNG [-0.504, 0.496]&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.776</span>, <span class="fl">0.224</span>, <span class="fl">1.224</span>),
+                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;small&quot;</span>, <span class="st">&quot;medium&quot;</span>, <span class="st">&quot;large&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;Intervention&quot;</span>),
+                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Multilevel Modeling of Hospital Nurse Stress Intervention&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Ribbons display 95% Confidene Intervals&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Hospital Size&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Norse&#39;s Stress Score&quot;</span>,
+       <span class="dt">color =</span> <span class="st">&quot;Condition&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-146-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Get Estimated Marginal Means - default ‘nice’ predictor values:</p>
 <p><strong>Focal predictors:</strong> All combinations of…</p>
 <ul>
@@ -3073,7 +3099,7 @@ Formula: stress ~ expconNG + age + gender + experien + wardtype + hospsizeNG + e
         <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
         <span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),
         <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-147-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-149-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>This plot illustrates the estimated marginal means among male (gender’s reference category) nurses at the overall mean age (43.01 years), with the mean level experience (17.06 years), since thoes variables were not included as <code>focal.predictors</code> in the <code>effects::Effect()</code> function. Different values for thoes predictors would yield the exact sample plot, shifted as a whole either up or down.</p>
 </div>
 </div>

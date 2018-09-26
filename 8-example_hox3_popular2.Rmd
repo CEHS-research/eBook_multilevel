@@ -1,0 +1,198 @@
+# Centering and Standardizing Explanitory Variables
+
+
+
+
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)
+library(haven)        # read in SPSS dataset
+library(furniture)    # nice table1() descriptives
+library(stargazer)    # display nice tables: summary & regression
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(RColorBrewer) # nice color palettes for plots
+library(gridExtra)    # place ggplots together as one plot
+library(psych)        # contains some useful functions, like headTail
+library(car)          # Companion to Applied Regression
+library(nlme)         # non-linear mixed-effects models
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(lmerTest)     # Tests on lmer objects
+library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
+library(sjstats)      # ICC calculations
+library(optimx)       # Different optimizers to solve mlm's
+```
+
+## Background
+
+```{block type='rmdlink', echo=TRUE}
+The text **"Multilevel Analysis: Techniques and Applications, Third Edition"** [@hox2017] has a companion [website](https://multilevel-analysis.sites.uu.nl/) which includes links to all the data files used throughout the book (housed on the [book's GitHub repository](https://github.com/MultiLevelAnalysis)).  
+```
+
+
+The following example is used through out @hox2017's chapater 2.
+
+> From **Appendix E**:  
+>
+> The popularity data in **popular2.sav** are simulated data for **2000 pupils in 100 schools**. The purpose is to offer a very simple example for multilevel regression analysis.  The main outcome variable is the **pupil popularity**, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil.  Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: **pupil popularity** as rated by their teacher, on a scale from 1-10.  The explanatory variables are **pupil gender** (boy=0, girl=1), **pupil extraversion** (10-point scale) and **teacher experience** in years.  The popularity data have been generated to be a 'nice' well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.
+
+
+```{r}
+data_raw <- haven::read_sav("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav") %>% 
+  haven::as_factor()             # retain the labels from SPSS --> factor
+
+data_pop <- data_raw %>%   
+  dplyr::mutate(id = paste(class, pupil,
+                           sep = "_") %>%   # create a unique id for each student (char)
+                  factor()) %>%             # declare id is a factor
+  dplyr::select(id, pupil:popteach)         # reduce the variables included
+
+tibble::glimpse(data_pop)
+```
+
+
+```{r}
+mean(data_pop$extrav)
+sd(data_pop$extrav)
+```
+
+
+
+```{r}
+data_pop <- data_pop %>% 
+  dplyr::mutate(extravG =  extrav - 5.215) %>% 
+  dplyr::mutate(extravZ = (extrav - 5.215) / 1.262368)
+```
+
+
+```{r, include = FALSE}
+data_pop %>% 
+  dplyr::select(extrav, extravG, extravZ) %>% 
+  data.frame() %>% 
+  stargazer::stargazer(title  = "Descriptive statistics: Three versions of Extraversion",
+                       header = FALSE,
+                       type   = "text")
+```
+
+```{r, results="asis"}
+data_pop %>% 
+  dplyr::select(extrav, extravG, extravZ) %>% 
+  data.frame() %>% 
+  stargazer::stargazer(title  = "Descriptive statistics: Three versions of Extraversion",
+                       header = FALSE,
+                       type   = "html")
+```
+
+
+
+```{r}
+pop_lmer_1_raw <- lme4::lmer(popular ~ extrav + (1|class),
+                           data = data_pop,
+                           REML = FALSE)
+
+pop_lmer_1_cen <- lme4::lmer(popular ~ extravG + (1|class),
+                           data = data_pop,
+                           REML = FALSE)
+
+pop_lmer_1_std <- lme4::lmer(popular ~ extravZ + (1|class),
+                           data = data_pop,
+                           REML = FALSE)
+```
+
+
+```{r, include=FALSE}
+texreg::screenreg(list(pop_lmer_1_raw, pop_lmer_1_cen, pop_lmer_1_std))
+```
+
+
+
+
+```{r}
+coef(pop_lmer_1_raw)[[1]] %>% 
+  dplyr::mutate(version = "raw" )
+```
+
+
+
+
+```{r}
+pop_lmer_raw <- lme4::lmer(popular ~ extrav + (extrav|class),
+                           data = data_pop,
+                           REML = FALSE)
+
+pop_lmer_cen <- lme4::lmer(popular ~ extravG + (extravG|class),
+                           data = data_pop,
+                           REML = FALSE)
+
+pop_lmer_std <- lme4::lmer(popular ~ extravZ + (extravZ|class),
+                           data = data_pop,
+                           REML = FALSE)
+```
+
+
+```{r, include=FALSE}
+texreg::screenreg(list(pop_lmer_raw, pop_lmer_cen, pop_lmer_std))
+```
+
+
+
+```{r, results='asis'}
+texreg::htmlreg(list(pop_lmer_raw, 
+                     pop_lmer_cen, 
+                     pop_lmer_std),
+                custom.model.names = c("Raw", "Centered", "Standardized"),
+                caption = "Popularity predicted by pupil extraversion, raw and centered predictor",
+                caption.above = TRUE)
+
+```
+
+
+
+```{r}
+data_pop %>% 
+  dplyr::mutate(pred = predict(pop_lmer_raw)) %>% 
+  ggplot(aes(x = extrav,
+             y = pred,
+             group = class)) +
+  geom_line() +
+  theme_bw() +
+  geom_vline(xintercept = 0,
+             color = "red")
+```
+
+
+
+```{r}
+data_pop %>% 
+  dplyr::mutate(pred = predict(pop_lmer_cen)) %>% 
+  ggplot(aes(x = extravG,
+             y = pred,
+             group = class)) +
+  geom_line() +
+  theme_bw() +
+  geom_vline(xintercept = 0,
+             color = "red")
+```
+
+
+```{r}
+data_pop %>% 
+  dplyr::mutate(pred = predict(pop_lmer_std)) %>% 
+  ggplot(aes(x = extravZ,
+             y = pred,
+             group = class)) +
+  geom_line() +
+  theme_bw() +
+  geom_vline(xintercept = 0,
+             color = "red")
+```
+

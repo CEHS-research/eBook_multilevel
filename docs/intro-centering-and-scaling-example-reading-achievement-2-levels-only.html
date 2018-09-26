@@ -1097,7 +1097,7 @@ gevocab       82       95      110      120       140
              <span class="dt">color =</span> age)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() </code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-161-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-163-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Here is a better version of the plot.</p>
 <p>Age is in months, so we want multiples of 12 for good visualization</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(data_achieve<span class="op">$</span>age)<span class="op">/</span><span class="dv">12</span>   <span class="co"># divide by 12 to change months to years</span></code></pre></div>
@@ -1570,7 +1570,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
                 <span class="dt">alpha =</span> .<span class="dv">3</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-176-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-178-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="proportion-of-variance-explained" class="section level4">
 <h4><span class="header-section-number">4.5.1.2</span> Proportion of Variance Explained</h4>
@@ -1940,7 +1940,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_yr)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-194-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-196-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>There is a positive association between vocabulary and reading, but it is strongest for older childred. Among younger children, reading scores are more stable across vocabulary differences.</p>
 <!-- ========================================================= -->
 </div>
@@ -2499,7 +2499,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_yr)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-204-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-206-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>We are seeming much the same trends, but perhaps more separation between the lines.</p>
 <!-- ========================================================= -->
 </div>
@@ -3301,7 +3301,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_c)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-221-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-223-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Notice that the vocab and ages are centered at zero. This makes it hard to read the plot, especially if we are unsure what the means of the variables were.</p>
 <p>Plot the model again, but this time UN-centering the variables by adding back the grand-mean we subtracted prior to fitting the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;age_c&quot;</span>),
@@ -3315,7 +3315,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_yrs)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-222-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-224-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now the plot is back on to the origial variables.</p>
 <!-- ========================================================= -->
 </div>
@@ -3906,7 +3906,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Vocabulary Score&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Reading Score</span><span class="ch">\n</span><span class="st">Estimated Marginal Mean&quot;</span>,
        <span class="dt">color =</span> <span class="st">&quot;Student Age&quot;</span>)</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-234-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_install_files/figure-html/unnamed-chunk-236-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>There is evidence that higher vocabulary scores correlate with higher reading scores. This relationship os strongest in low SES schools and among older students. This relationship is especially weaker in younger students attending high SES schools.</p>
 <p>See: <span class="citation">Nakagawa and Schielzeth (<a href="references.html#ref-nakagawa2013">2013</a>)</span> for more regarding model <span class="math inline">\(R^2\)</span></p>
 <p>From the <code>sjstats::r2()</code> documentation, for mixed models:</p>
