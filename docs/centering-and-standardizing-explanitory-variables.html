@@ -1,0 +1,1616 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
+  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="EQM_v1_cover.png" />
+  <meta property="og:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="github-repo" content="cehs-research/eBook_wrangle" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  
+  <meta name="twitter:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="twitter:image" content="EQM_v1_cover.png" />
+
+<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html">
+<link rel="next" href="variance-explained.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="heading.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Vol. 5: Multilevel Models</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#blocked-notes"><i class="fa fa-check"></i>Blocked Notes</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-output"><i class="fa fa-check"></i>Code and Output</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#the-authors"><i class="fa fa-check"></i>The Authors</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#why-choose-r"><i class="fa fa-check"></i>Why choose R ?</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fyi"><i class="fa fa-check"></i>FYI</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="formula-warehouse.html"><a href="formula-warehouse.html"><i class="fa fa-check"></i><b>1</b> Formula Warehouse</a><ul>
+<li class="chapter" data-level="1.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#data-notation"><i class="fa fa-check"></i><b>1.1</b> Data Notation</a></li>
+<li class="chapter" data-level="1.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#single-level-regression-analysis"><i class="fa fa-check"></i><b>1.2</b> Single-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#the-only-equation"><i class="fa fa-check"></i><b>1.2.1</b> The Only Equation</a></li>
+<li class="chapter" data-level="1.2.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#parameters"><i class="fa fa-check"></i><b>1.2.2</b> Parameters</a></li>
+<li class="chapter" data-level="1.2.3" data-path="formula-warehouse.html"><a href="formula-warehouse.html#assumptions-to-check"><i class="fa fa-check"></i><b>1.2.3</b> Assumptions to Check</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="formula-warehouse.html"><a href="formula-warehouse.html#multi-level-regression-analysis"><i class="fa fa-check"></i><b>1.3</b> Multi-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#level-1-regression-equation"><i class="fa fa-check"></i><b>1.3.1</b> Level 1 Regression Equation*</a></li>
+<li class="chapter" data-level="1.3.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#level-2-regression-equations"><i class="fa fa-check"></i><b>1.3.2</b> Level 2 Regression Equations</a></li>
+<li class="chapter" data-level="1.3.3" data-path="formula-warehouse.html"><a href="formula-warehouse.html#combinded-multilevel-regression-equation"><i class="fa fa-check"></i><b>1.3.3</b> Combinded, Multilevel Regression Equation</a></li>
+<li class="chapter" data-level="1.3.4" data-path="formula-warehouse.html"><a href="formula-warehouse.html#parameters-1"><i class="fa fa-check"></i><b>1.3.4</b> Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="formula-warehouse.html"><a href="formula-warehouse.html#intraclass-correlation-icc"><i class="fa fa-check"></i><b>1.4</b> Intraclass Correlation (ICC)</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#two-level-models"><i class="fa fa-check"></i><b>1.4.1</b> Two Level Models</a></li>
+<li class="chapter" data-level="1.4.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#three-level-models"><i class="fa fa-check"></i><b>1.4.2</b> Three Level Models</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="formula-warehouse.html"><a href="formula-warehouse.html#proporion-of-variance-explianed"><i class="fa fa-check"></i><b>1.5</b> Proporion of Variance Explianed</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#level-1-variance-explained"><i class="fa fa-check"></i><b>1.5.1</b> Level 1 Variance Explained</a></li>
+<li class="chapter" data-level="1.5.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#level-2-variance-explined"><i class="fa fa-check"></i><b>1.5.2</b> Level 2 Variance Explined</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="formula-warehouse.html"><a href="formula-warehouse.html#using-latex-for-equation-typesetting"><i class="fa fa-check"></i><b>1.6</b> Using <span class="math inline">\(\LaTeX\)</span> for Equation Typesetting</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html"><i class="fa fa-check"></i><b>2</b> Intro 2-level Model Example: Pupil Popularity</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#background"><i class="fa fa-check"></i><b>2.1</b> Background</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#unique-identifiers"><i class="fa fa-check"></i><b>2.1.1</b> Unique Identifiers</a></li>
+<li class="chapter" data-level="2.1.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#structure-and-variables"><i class="fa fa-check"></i><b>2.1.2</b> Structure and variables</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>2.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#summarize-descriptive-statistics"><i class="fa fa-check"></i><b>2.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="2.2.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#visualizations-of-raw-data"><i class="fa fa-check"></i><b>2.2.2</b> Visualizations of Raw Data</a></li>
+<li class="chapter" data-level="2.2.3" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#consider-clustering"><i class="fa fa-check"></i><b>2.2.3</b> Consider Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#single-level-regression-analysis-1"><i class="fa fa-check"></i><b>2.3</b> Single-level Regression Analysis</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#null-model"><i class="fa fa-check"></i><b>2.3.1</b> Null Model</a></li>
+<li class="chapter" data-level="2.3.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#add-predictors-to-the-model"><i class="fa fa-check"></i><b>2.3.2</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="2.3.3" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#compare-fixed-effects"><i class="fa fa-check"></i><b>2.3.3</b> Compare Fixed Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#multi-level-regression-analysis-1"><i class="fa fa-check"></i><b>2.4</b> Multi-level Regression Analysis</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#intercept-only-or-null-model"><i class="fa fa-check"></i><b>2.4.1</b> Intercept-only or Null Model</a></li>
+<li class="chapter" data-level="2.4.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#intraclass-correlation-icc-1"><i class="fa fa-check"></i><b>2.4.2</b> Intraclass Correlation (ICC)</a></li>
+<li class="chapter" data-level="2.4.3" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#add-predictors-to-the-model-1"><i class="fa fa-check"></i><b>2.4.3</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="2.4.4" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#testing-random-components"><i class="fa fa-check"></i><b>2.4.4</b> Testing Random Components</a></li>
+<li class="chapter" data-level="2.4.5" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#testing-cross-level-interactions"><i class="fa fa-check"></i><b>2.4.5</b> Testing Cross-Level Interactions</a></li>
+<li class="chapter" data-level="2.4.6" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#final-model"><i class="fa fa-check"></i><b>2.4.6</b> Final Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html"><i class="fa fa-check"></i><b>3</b> Intro 3-Level Model Example: Nurse’s Stress Intervention</a><ul>
+<li class="chapter" data-level="3.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#background-1"><i class="fa fa-check"></i><b>3.1</b> Background</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#unique-identifiers-1"><i class="fa fa-check"></i><b>3.1.1</b> Unique Identifiers</a></li>
+<li class="chapter" data-level="3.1.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#centering-variables"><i class="fa fa-check"></i><b>3.1.2</b> Centering Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#exploratory-data-analysis-1"><i class="fa fa-check"></i><b>3.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#summarize-descriptive-statistics-1"><i class="fa fa-check"></i><b>3.2.1</b> Summarize Descriptive Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#mlm-null-model"><i class="fa fa-check"></i><b>3.3</b> MLM: Null Model</a></li>
+<li class="chapter" data-level="3.4" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#estimate-the-icc"><i class="fa fa-check"></i><b>3.4</b> Estimate the ICC</a></li>
+<li class="chapter" data-level="3.5" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#mlm-add-fixed-effects"><i class="fa fa-check"></i><b>3.5</b> MLM: Add Fixed Effects</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#fit-the-model-5"><i class="fa fa-check"></i><b>3.5.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.5.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#assess-significance"><i class="fa fa-check"></i><b>3.5.2</b> Assess Significance</a></li>
+<li class="chapter" data-level="3.5.3" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#centering-variables-1"><i class="fa fa-check"></i><b>3.5.3</b> Centering Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#mlm-add-random-slope"><i class="fa fa-check"></i><b>3.6</b> MLM: Add Random Slope</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#fit-the-model-6"><i class="fa fa-check"></i><b>3.6.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.6.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#assess-significance-1"><i class="fa fa-check"></i><b>3.6.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#mlm-add-cross-level-interaction"><i class="fa fa-check"></i><b>3.7</b> MLM: Add Cross-Level Interaction</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#fit-the-model-7"><i class="fa fa-check"></i><b>3.7.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.7.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#assess-significance-2"><i class="fa fa-check"></i><b>3.7.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#final-model-1"><i class="fa fa-check"></i><b>3.8</b> Final Model</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#fit-the-model-8"><i class="fa fa-check"></i><b>3.8.1</b> Fit the model</a></li>
+<li class="chapter" data-level="3.8.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#table-of-estimated-parameters"><i class="fa fa-check"></i><b>3.8.2</b> Table of Estimated Parameters</a></li>
+<li class="chapter" data-level="3.8.3" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#visualization-estimated-marginal-means-plot"><i class="fa fa-check"></i><b>3.8.3</b> Visualization: Estimated Marginal Means Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#interpretation-6"><i class="fa fa-check"></i><b>3.9</b> Interpretation</a><ul>
+<li class="chapter" data-level="3.9.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#strength"><i class="fa fa-check"></i><b>3.9.1</b> Strength</a></li>
+<li class="chapter" data-level="3.9.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#weakness"><i class="fa fa-check"></i><b>3.9.2</b> Weakness</a></li>
+</ul></li>
+<li class="chapter" data-level="3.10" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#reproduction-of-table-2.5"><i class="fa fa-check"></i><b>3.10</b> Reproduction of Table 2.5</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><i class="fa fa-check"></i><b>4</b> Intro Centering and Scaling Example: Reading Achievement (2-levels only)</a><ul>
+<li class="chapter" data-level="4.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#background-2"><i class="fa fa-check"></i><b>4.1</b> Background</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#sample-structure"><i class="fa fa-check"></i><b>4.1.1</b> Sample Structure</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#exploratory-data-analysis-2"><i class="fa fa-check"></i><b>4.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#summarize-descriptive-statistics-2"><i class="fa fa-check"></i><b>4.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="4.2.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#visualization-of-raw-data"><i class="fa fa-check"></i><b>4.2.2</b> Visualization of Raw Data</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#single-level-regression"><i class="fa fa-check"></i><b>4.3</b> Single-Level Regression</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#fit-nested-models-2"><i class="fa fa-check"></i><b>4.3.1</b> Fit Nested Models</a></li>
+<li class="chapter" data-level="4.3.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#visualize-the-interaction"><i class="fa fa-check"></i><b>4.3.2</b> Visualize the Interaction</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-1-null-model-only-fixed-and-random-intercepts"><i class="fa fa-check"></i><b>4.4</b> MLM - Step 1: Null Model, only fixed and random intercepts</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#fit-the-model-9"><i class="fa fa-check"></i><b>4.4.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="4.4.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#estimate-the-icc-1"><i class="fa fa-check"></i><b>4.4.2</b> Estimate the ICC</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-2-add-lower-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>4.5</b> MLM - Step 2: Add Lower-level explanatory variables, fixed, ML</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#add-pupils-vocab-score-as-a-fixed-effects-predictor"><i class="fa fa-check"></i><b>4.5.1</b> Add pupil’s vocab score as a fixed effects predictor</a></li>
+<li class="chapter" data-level="4.5.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#investigate-more-level-1-predictors"><i class="fa fa-check"></i><b>4.5.2</b> Investigate More Level 1 Predictors</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-3-higher-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>4.6</b> MLM - Step 3: Higher-level explanatory variables, fixed, ML</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#assess-significance-of-effects-2"><i class="fa fa-check"></i><b>4.6.1</b> Assess Significance of Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-4-explanatory-variables-predict-slopes-random-reml"><i class="fa fa-check"></i><b>4.7</b> MLM - Step 4: Explanatory variables predict Slopes, random, REML</a></li>
+<li class="chapter" data-level="4.8" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-5-cross-level-interactions-between-explanatory-variables---fixed-ml"><i class="fa fa-check"></i><b>4.8</b> MLM - Step 5: Cross-Level interactions between explanatory variables - fixed, ML</a></li>
+<li class="chapter" data-level="4.9" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#centering-predictors-change-center"><i class="fa fa-check"></i><b>4.9</b> Centering Predictors: Change Center</a><ul>
+<li class="chapter" data-level="4.9.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#compute-the-grand-means"><i class="fa fa-check"></i><b>4.9.1</b> Compute the Grand Means</a></li>
+<li class="chapter" data-level="4.9.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#use-centered-variables"><i class="fa fa-check"></i><b>4.9.2</b> Use Centered Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.10" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>4.10</b> Rescaling Predictors: Change Units or Standardize</a><ul>
+<li class="chapter" data-level="4.10.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#scale-varaibles"><i class="fa fa-check"></i><b>4.10.1</b> Scale Varaibles</a></li>
+<li class="chapter" data-level="4.10.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#use-scaled-variables"><i class="fa fa-check"></i><b>4.10.2</b> Use Scaled Variables</a></li>
+<li class="chapter" data-level="4.10.3" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.10.3</b> Final Model</a></li>
+<li class="chapter" data-level="4.10.4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.10.4</b> Table</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html"><i class="fa fa-check"></i><b>5</b> Centering and Standardizing Explanitory Variables</a><ul>
+<li class="chapter" data-level="5.1" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#background-3"><i class="fa fa-check"></i><b>5.1</b> Background</a></li>
+<li class="chapter" data-level="5.2" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#grand-mean-centering-and-standardizing-variables"><i class="fa fa-check"></i><b>5.2</b> Grand-Mean-Centering and Standardizing Variables</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#grand-mean-centering"><i class="fa fa-check"></i><b>5.2.1</b> Grand-Mean-Centering</a></li>
+<li class="chapter" data-level="5.2.2" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#standardizing"><i class="fa fa-check"></i><b>5.2.2</b> Standardizing</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#ri-only-random-intercepts"><i class="fa fa-check"></i><b>5.3</b> RI = ONLY Random Intercepts</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#fit-mlm-with-all-3-versions-of-the-predictor"><i class="fa fa-check"></i><b>5.3.1</b> Fit MLM with all 3 versions of the predictor</a></li>
+<li class="chapter" data-level="5.3.2" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#investigating-a-mlm-ri-model"><i class="fa fa-check"></i><b>5.3.2</b> Investigating a MLM-RI Model</a></li>
+<li class="chapter" data-level="5.3.3" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#comapre-the-centered-version"><i class="fa fa-check"></i><b>5.3.3</b> Comapre the Centered Version</a></li>
+<li class="chapter" data-level="5.3.4" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#comapre-the-standardized-version"><i class="fa fa-check"></i><b>5.3.4</b> Comapre the Standardized Version</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#rias-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>5.4</b> RIAS = Random Intercepts AND Slopes</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#fit-mlm-with-all-3-versions-of-the-predictor-1"><i class="fa fa-check"></i><b>5.4.1</b> Fit MLM with all 3 versions of the predictor</a></li>
+<li class="chapter" data-level="5.4.2" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#investigating-a-mlm-ri-model-1"><i class="fa fa-check"></i><b>5.4.2</b> Investigating a MLM-RI Model</a></li>
+<li class="chapter" data-level="5.4.3" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#comapre-the-centered-version-1"><i class="fa fa-check"></i><b>5.4.3</b> Comapre the Centered Version</a></li>
+<li class="chapter" data-level="5.4.4" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#comapre-the-standardized-version-1"><i class="fa fa-check"></i><b>5.4.4</b> Comapre the Standardized Version</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>6</b> Variance Explained</a><ul>
+<li class="chapter" data-level="6.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>6.1</b> For Generalized MLMs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sjplot-package.html"><a href="sjplot-package.html"><i class="fa fa-check"></i><b>7</b> sjPlot Package</a><ul>
+<li class="chapter" data-level="7.1" data-path="sjplot-package.html"><a href="sjplot-package.html#plotting-coefficients"><i class="fa fa-check"></i><b>7.1</b> Plotting Coefficients</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="sjplot-package.html"><a href="sjplot-package.html#fixed-effects"><i class="fa fa-check"></i><b>7.1.1</b> Fixed Effects</a></li>
+<li class="chapter" data-level="7.1.2" data-path="sjplot-package.html"><a href="sjplot-package.html#random-effects"><i class="fa fa-check"></i><b>7.1.2</b> Random Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="sjplot-package.html"><a href="sjplot-package.html#plotting-marginal-effects"><i class="fa fa-check"></i><b>7.2</b> Plotting Marginal Effects</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="sjplot-package.html"><a href="sjplot-package.html#predicted-values"><i class="fa fa-check"></i><b>7.2.1</b> Predicted Values</a></li>
+<li class="chapter" data-level="7.2.2" data-path="sjplot-package.html"><a href="sjplot-package.html#effect-plots"><i class="fa fa-check"></i><b>7.2.2</b> Effect Plots</a></li>
+<li class="chapter" data-level="7.2.3" data-path="sjplot-package.html"><a href="sjplot-package.html#interaction-plots"><i class="fa fa-check"></i><b>7.2.3</b> Interaction Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="sjplot-package.html"><a href="sjplot-package.html#model-diagnostics"><i class="fa fa-check"></i><b>7.3</b> Model Diagnostics</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="sjplot-package.html"><a href="sjplot-package.html#slope-of-coefficentes"><i class="fa fa-check"></i><b>7.3.1</b> Slope of Coefficentes</a></li>
+<li class="chapter" data-level="7.3.2" data-path="sjplot-package.html"><a href="sjplot-package.html#residuals"><i class="fa fa-check"></i><b>7.3.2</b> Residuals</a></li>
+<li class="chapter" data-level="7.3.3" data-path="sjplot-package.html"><a href="sjplot-package.html#diagnostics"><i class="fa fa-check"></i><b>7.3.3</b> Diagnostics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="centering-and-standardizing-explanitory-variables" class="section level1">
+<h1><span class="header-section-number">5</span> Centering and Standardizing Explanitory Variables</h1>
+<div class="figure">
+<img src="images/header_hox_popular2.png" />
+
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
+<span class="kw">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span>
+<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(RColorBrewer) <span class="co"># nice color palettes for plots</span>
+<span class="kw">library</span>(gridExtra)    <span class="co"># place ggplots together as one plot</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
+<span class="kw">library</span>(car)          <span class="co"># Companion to Applied Regression</span>
+<span class="kw">library</span>(nlme)         <span class="co"># non-linear mixed-effects models</span>
+<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
+<span class="kw">library</span>(lmerTest)     <span class="co"># Tests on lmer objects</span>
+<span class="kw">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for nlme &amp; lmer4</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(optimx)       <span class="co"># Different optimizers to solve mlm&#39;s</span></code></pre></div>
+<div id="background-3" class="section level2">
+<h2><span class="header-section-number">5.1</span> Background</h2>
+<div class="rmdlink">
+<p>
+The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edition”</strong> <span class="citation"><span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></span> has a companion <a href="https://multilevel-analysis.sites.uu.nl/">website</a> which includes links to all the data files used throughout the book (housed on the <a href="https://github.com/MultiLevelAnalysis">book’s GitHub repository</a>).
+</p>
+</div>
+<p>The following example is used through out <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>’s chapater 2.</p>
+<blockquote>
+<p>From <strong>Appendix E</strong>:</p>
+<p>The popularity data in <strong>popular2.sav</strong> are simulated data for <strong>2000 pupils in 100 schools</strong>. The purpose is to offer a very simple example for multilevel regression analysis. The main outcome variable is the <strong>pupil popularity</strong>, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil. Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: <strong>pupil popularity</strong> as rated by their teacher, on a scale from 1-10. The explanatory variables are <strong>pupil gender</strong> (boy=0, girl=1), <strong>pupil extraversion</strong> (10-point scale) and <strong>teacher experience</strong> in years. The popularity data have been generated to be a ‘nice’ well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.</p>
+</blockquote>
+<div class="figure">
+<img src="images/diagram_hox_popular2.png" />
+
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span>
+
+data_pop &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st">   </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">paste</span>(class, pupil,
+                           <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># create a unique id for each student (char)</span>
+<span class="st">                  </span><span class="kw">factor</span>()) <span class="op">%&gt;%</span><span class="st">             </span><span class="co"># declare id is a factor</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, pupil<span class="op">:</span>popteach)         <span class="co"># reduce the variables included</span>
+
+tibble<span class="op">::</span><span class="kw">glimpse</span>(data_pop)</code></pre></div>
+<pre><code>Observations: 2,000
+Variables: 8
+$ id       &lt;fct&gt; 1_1, 1_2, 1_3, 1_4, 1_5, 1_6, 1_7, 1_8, 1_9, 1_10, 1_...
+$ pupil    &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16...
+$ class    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+$ extrav   &lt;dbl&gt; 5, 7, 4, 3, 5, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 6, 4, 4,...
+$ sex      &lt;fct&gt; girl, boy, girl, girl, girl, boy, boy, boy, boy, boy,...
+$ texp     &lt;dbl&gt; 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 2...
+$ popular  &lt;dbl&gt; 6.3, 4.9, 5.3, 4.7, 6.0, 4.7, 5.9, 4.2, 5.2, 3.9, 5.7...
+$ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3,...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
+      <span class="dt">y =</span> popular,
+      <span class="dt">group =</span> class) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
+              <span class="dt">se =</span> <span class="ot">FALSE</span>,
+              <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,
+              <span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;OLS: Single Level Regression&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are OLS regression ran independently on each class&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-245-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="grand-mean-centering-and-standardizing-variables" class="section level2">
+<h2><span class="header-section-number">5.2</span> Grand-Mean-Centering and Standardizing Variables</h2>
+<p>It is best to manually determine the variable’s mean (<code>mean()</code>) and standard deviation (<code>sd()</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(data_pop<span class="op">$</span>extrav)</code></pre></div>
+<pre><code>[1] 5.215</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(data_pop<span class="op">$</span>extrav)</code></pre></div>
+<pre><code>[1] 1.262368</code></pre>
+<div id="grand-mean-centering" class="section level3">
+<h3><span class="header-section-number">5.2.1</span> Grand-Mean-Centering</h3>
+<p><span class="math display">\[
+VAR_G = VAR - mean(VAR)
+\]</span></p>
+</div>
+<div id="standardizing" class="section level3">
+<h3><span class="header-section-number">5.2.2</span> Standardizing</h3>
+<p><span class="math display">\[
+VAR_Z = \frac{VAR - mean(VAR)}{sd(VAR)}
+\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop &lt;-<span class="st"> </span>data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">extravG =</span>  extrav <span class="op">-</span><span class="st"> </span><span class="fl">5.215</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">extravZ =</span> (extrav <span class="op">-</span><span class="st"> </span><span class="fl">5.215</span>) <span class="op">/</span><span class="st"> </span><span class="fl">1.262368</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(extrav, extravG, extravZ) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>stargazer<span class="op">::</span><span class="kw">stargazer</span>(<span class="dt">title  =</span> <span class="st">&quot;Descriptive statistics: Three versions of Extraversion&quot;</span>,
+                       <span class="dt">header =</span> <span class="ot">FALSE</span>,
+                       <span class="dt">type   =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<table style="text-align:center">
+<caption>
+<strong>Descriptive statistics: Three versions of Extraversion</strong>
+</caption>
+<tr>
+<td colspan="8" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+Statistic
+</td>
+<td>
+N
+</td>
+<td>
+Mean
+</td>
+<td>
+St. Dev.
+</td>
+<td>
+Min
+</td>
+<td>
+Pctl(25)
+</td>
+<td>
+Pctl(75)
+</td>
+<td>
+Max
+</td>
+</tr>
+<tr>
+<td colspan="8" style="border-bottom: 1px solid black">
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+extrav
+</td>
+<td>
+2,000
+</td>
+<td>
+5.215
+</td>
+<td>
+1.262
+</td>
+<td>
+1
+</td>
+<td>
+4
+</td>
+<td>
+6
+</td>
+<td>
+10
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+extravG
+</td>
+<td>
+2,000
+</td>
+<td>
+0.000
+</td>
+<td>
+1.262
+</td>
+<td>
+-4.215
+</td>
+<td>
+-1.215
+</td>
+<td>
+0.785
+</td>
+<td>
+4.785
+</td>
+</tr>
+<tr>
+<td style="text-align:left">
+extravZ
+</td>
+<td>
+2,000
+</td>
+<td>
+0.000
+</td>
+<td>
+1.000
+</td>
+<td>
+-3.339
+</td>
+<td>
+-0.962
+</td>
+<td>
+0.622
+</td>
+<td>
+3.790
+</td>
+</tr>
+<tr>
+<td colspan="8" style="border-bottom: 1px solid black">
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div id="ri-only-random-intercepts" class="section level2">
+<h2><span class="header-section-number">5.3</span> RI = ONLY Random Intercepts</h2>
+<div id="fit-mlm-with-all-3-versions-of-the-predictor" class="section level3">
+<h3><span class="header-section-number">5.3.1</span> Fit MLM with all 3 versions of the predictor</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_1_raw &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class),
+                           <span class="dt">data =</span> data_pop,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+pop_lmer_1_cen &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravG <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class),
+                           <span class="dt">data =</span> data_pop,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+pop_lmer_1_std &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravZ <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class),
+                           <span class="dt">data =</span> data_pop,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_1_raw, 
+                     pop_lmer_1_cen, 
+                     pop_lmer_1_std),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Raw&quot;</span>, 
+                                       <span class="st">&quot;Centered&quot;</span>, 
+                                       <span class="st">&quot;Standardized&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM - RI: Effect of Grand-Mean Centering and Standardizing&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="top" style="margin-bottom:0.3em;">
+MLM - RI: Effect of Grand-Mean Centering and Standardizing
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Raw</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Centered</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Standardized</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+2.54 (0.14)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.08 (0.09)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.08 (0.09)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+extrav
+</td>
+<td style="padding-right: 12px; border: none;">
+0.49 (0.02)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+extravG
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.49 (0.02)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+extravZ
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.61 (0.03)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+5831.78
+</td>
+<td style="border-top: 1px solid black;">
+5831.78
+</td>
+<td style="border-top: 1px solid black;">
+5831.78
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+5854.18
+</td>
+<td style="padding-right: 12px; border: none;">
+5854.18
+</td>
+<td style="padding-right: 12px; border: none;">
+5854.18
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-2911.89
+</td>
+<td style="padding-right: 12px; border: none;">
+-2911.89
+</td>
+<td style="padding-right: 12px; border: none;">
+-2911.89
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: class
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: class (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.83
+</td>
+<td style="padding-right: 12px; border: none;">
+0.83
+</td>
+<td style="padding-right: 12px; border: none;">
+0.83
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: Residual
+</td>
+<td style="border-bottom: 2px solid black;">
+0.93
+</td>
+<td style="border-bottom: 2px solid black;">
+0.93
+</td>
+<td style="border-bottom: 2px solid black;">
+0.93
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="5">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+</div>
+<div id="investigating-a-mlm-ri-model" class="section level3">
+<h3><span class="header-section-number">5.3.2</span> Investigating a MLM-RI Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_1_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>broom<span class="op">::</span><span class="kw">tidy</span>()</code></pre></div>
+<pre><code># A tibble: 4 x 5
+  term                    estimate std.error statistic group   
+  &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;   
+1 (Intercept)                2.54     0.141       18.1 fixed   
+2 extrav                     0.486    0.0201      24.1 fixed   
+3 sd_(Intercept).class       0.912   NA           NA   class   
+4 sd_Observation.Residual    0.964   NA           NA   Residual</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_1_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>broom<span class="op">::</span><span class="kw">glance</span>()</code></pre></div>
+<pre><code># A tibble: 1 x 6
+  sigma logLik   AIC   BIC deviance df.residual
+  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
+1 0.964 -2912. 5832. 5854.    5824.        1996</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_1_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>broom<span class="op">::</span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per observation (2000 students)</span></code></pre></div>
+<pre><code>  popular extrav class  .fitted      .resid      .cooksd   .fixed      .mu
+1     6.3      5     1 5.138703  1.16129692 2.712828e-05 4.973704 5.138703
+2     4.9      7     1 6.111103 -1.21110349 1.752270e-03 5.946104 6.111103
+3     5.3      4     1 4.652503  0.64749713 8.856823e-05 4.487503 4.652503
+4     4.7      3     1 4.166303  0.53369734 2.626814e-04 4.001303 4.166303
+5     6.0      5     1 5.138703  0.86129692 1.492250e-05 4.973704 5.138703
+6     4.7      4     1 4.652503  0.04749713 4.765813e-07 4.487503 4.652503
+  .offset .sqrtXwt .sqrtrwt .weights      .wtres
+1       0        1        1        1  1.16129692
+2       0        1        1        1 -1.21110349
+3       0        1        1        1  0.64749713
+4       0        1        1        1  0.53369734
+5       0        1        1        1  0.86129692
+6       0        1        1        1  0.04749713</code></pre>
+<div id="fixed-effects-intercept-and-slope" class="section level4">
+<h4><span class="header-section-number">5.3.2.1</span> Fixed Effects: intercept and slope</h4>
+<p>There is only ONE fixed intercept and ONE fixed slope.</p>
+<p>The <code>fixef()</code> function extracts the estimates of the fixed effects.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_1_raw) </code></pre></div>
+<pre><code>(Intercept)      extrav 
+  2.5427027   0.4862002 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]</code></pre></div>
+<pre><code>[1] 2.542703</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;extrav&quot;</span>]]</code></pre></div>
+<pre><code>[1] 0.4862002</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
+      <span class="dt">y =</span> popular,
+      <span class="dt">group =</span> class) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
+              <span class="dt">se =</span> <span class="ot">FALSE</span>,
+              <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,
+              <span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;extrav&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = raw score&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are OLS regression ran independently on each class&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-259-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="random-effects-intercepts" class="section level4">
+<h4><span class="header-section-number">5.3.2.2</span> Random Effects: intercepts</h4>
+<p>There is a different random intercept for EACH CLASS. These tell how far each class’s average is off of the grand average.</p>
+<p>The <code>ranef()</code> function extracts the random effects from a fitted model object</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<pre><code>List of 1
+ $ class:&#39;data.frame&#39;:  100 obs. of  1 variable:
+  ..$ (Intercept): num [1:100] 0.165 -0.7536 -0.3646 0.5405 -0.0994 ...
+ - attr(*, &quot;class&quot;)= chr &quot;ranef.mer&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></code></pre></div>
+<pre><code>  (Intercept)
+1  0.16499938
+2 -0.75362983
+3 -0.36464658
+4  0.54049206
+5 -0.09943663
+6 -0.60487822</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Random_Intercepts =</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Random_Intercepts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> .<span class="dv">25</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-262-1.png" width="288" style="display: block; margin: auto;" /></p>
+</div>
+<div id="predictions" class="section level4">
+<h4><span class="header-section-number">5.3.2.3</span> Predictions</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<pre><code> Named num [1:2000] 5.14 6.11 4.65 4.17 5.14 ...
+ - attr(*, &quot;names&quot;)= chr [1:2000] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle value per observation (2000 students)</span></code></pre></div>
+<pre><code>       1        2        3        4        5        6 
+5.138703 6.111103 4.652503 4.166303 5.138703 4.652503 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_1_raw)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> extrav,
+             <span class="dt">y =</span> pred,
+             <span class="dt">group =</span> class)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;extrav&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
+             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = raw score&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-265-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="combined-effects" class="section level4">
+<h4><span class="header-section-number">5.3.2.4</span> Combined Effects</h4>
+<p>The <code>coef()</code> function computes the sum of the random and fixed effects coefficients for each explanatory variable for each level of each grouping factor.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<pre><code>List of 1
+ $ class:&#39;data.frame&#39;:  100 obs. of  2 variables:
+  ..$ (Intercept): num [1:100] 2.71 1.79 2.18 3.08 2.44 ...
+  ..$ extrav     : num [1:100] 0.486 0.486 0.486 0.486 0.486 ...
+ - attr(*, &quot;class&quot;)= chr &quot;coef.mer&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></code></pre></div>
+<pre><code>  (Intercept)    extrav
+1    2.707702 0.4862002
+2    1.789073 0.4862002
+3    2.178056 0.4862002
+4    3.083195 0.4862002
+5    2.443266 0.4862002
+6    1.937824 0.4862002</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_1_raw)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
+      <span class="dt">y =</span> pred,
+      <span class="dt">group =</span> class) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
+                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
+                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
+                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
+            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
+              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
+                  <span class="dt">slope     =</span> extrav),
+              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
+              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;extrav&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
+             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = raw score&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) </code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-268-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="comapre-the-centered-version" class="section level3">
+<h3><span class="header-section-number">5.3.3</span> Comapre the Centered Version</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_1_cen)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravG,
+      <span class="dt">y =</span> pred,
+      <span class="dt">group =</span> class) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="op">-</span><span class="fl">5.215</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
+                <span class="dt">xmax =</span> <span class="op">-</span><span class="fl">5.215</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
+                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
+                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
+            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
+                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
+                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
+                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
+            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_1_cen)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
+              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
+                  <span class="dt">slope     =</span> extravG),
+              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
+              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;extravG&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="op">-</span><span class="fl">5.215</span>,
+             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = grand-mean centered&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;GRAND-MEAN CENTERED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-269-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="comapre-the-standardized-version" class="section level3">
+<h3><span class="header-section-number">5.3.4</span> Comapre the Standardized Version</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_1_std)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravZ,
+      <span class="dt">y =</span> pred,
+      <span class="dt">group =</span> class) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
+                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
+                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
+                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
+            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_1_std)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
+              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
+                  <span class="dt">slope     =</span> extravZ),
+              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
+              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_std)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_std)[[<span class="st">&quot;extravZ&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="op">-</span><span class="fl">5.215</span>,
+             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = standardized&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;STANDARDIZED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-270-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="rias-random-intercepts-and-slopes" class="section level2">
+<h2><span class="header-section-number">5.4</span> RIAS = Random Intercepts AND Slopes</h2>
+<div id="fit-mlm-with-all-3-versions-of-the-predictor-1" class="section level3">
+<h3><span class="header-section-number">5.4.1</span> Fit MLM with all 3 versions of the predictor</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_2_raw &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>(extrav<span class="op">|</span>class),
+                           <span class="dt">data =</span> data_pop,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+pop_lmer_2_cen &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravG <span class="op">+</span><span class="st"> </span>(extravG<span class="op">|</span>class),
+                           <span class="dt">data =</span> data_pop,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+pop_lmer_2_std &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravZ <span class="op">+</span><span class="st"> </span>(extravZ<span class="op">|</span>class),
+                           <span class="dt">data =</span> data_pop,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_2_raw, 
+                     pop_lmer_2_cen, 
+                     pop_lmer_2_std),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Raw&quot;</span>, 
+                                       <span class="st">&quot;Centered&quot;</span>, 
+                                       <span class="st">&quot;Standardized&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM - RIAS: Effect of Grand-Mean Centering and Standardizing&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="top" style="margin-bottom:0.3em;">
+MLM - RIAS: Effect of Grand-Mean Centering and Standardizing
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Raw</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Centered</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Standardized</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+2.46 (0.20)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.03 (0.10)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.03 (0.10)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+extrav
+</td>
+<td style="padding-right: 12px; border: none;">
+0.49 (0.03)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+extravG
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.49 (0.03)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+extravZ
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.62 (0.03)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+5782.69
+</td>
+<td style="border-top: 1px solid black;">
+5782.69
+</td>
+<td style="border-top: 1px solid black;">
+5782.69
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+5816.29
+</td>
+<td style="padding-right: 12px; border: none;">
+5816.29
+</td>
+<td style="padding-right: 12px; border: none;">
+5816.29
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-2885.34
+</td>
+<td style="padding-right: 12px; border: none;">
+-2885.34
+</td>
+<td style="padding-right: 12px; border: none;">
+-2885.34
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+<td style="padding-right: 12px; border: none;">
+2000
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: class
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+<td style="padding-right: 12px; border: none;">
+100
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: class (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+2.95
+</td>
+<td style="padding-right: 12px; border: none;">
+0.88
+</td>
+<td style="padding-right: 12px; border: none;">
+0.88
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: class extrav
+</td>
+<td style="padding-right: 12px; border: none;">
+0.03
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: class (Intercept) extrav
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.26
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: Residual
+</td>
+<td style="padding-right: 12px; border: none;">
+0.90
+</td>
+<td style="padding-right: 12px; border: none;">
+0.90
+</td>
+<td style="padding-right: 12px; border: none;">
+0.90
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: class extravG
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.03
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: class (Intercept) extravG
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.13
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: class extravZ
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.04
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Cov: class (Intercept) extravZ
+</td>
+<td style="border-bottom: 2px solid black;">
+</td>
+<td style="border-bottom: 2px solid black;">
+</td>
+<td style="border-bottom: 2px solid black;">
+-0.17
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="5">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+</div>
+<div id="investigating-a-mlm-ri-model-1" class="section level3">
+<h3><span class="header-section-number">5.4.2</span> Investigating a MLM-RI Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_2_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>broom<span class="op">::</span><span class="kw">tidy</span>()</code></pre></div>
+<pre><code># A tibble: 6 x 5
+  term                         estimate std.error statistic group   
+  &lt;chr&gt;                           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;   
+1 (Intercept)                     2.46     0.202       12.2 fixed   
+2 extrav                          0.493    0.0253      19.5 fixed   
+3 sd_(Intercept).class            1.72    NA           NA   class   
+4 sd_extrav.class                 0.159   NA           NA   class   
+5 cor_(Intercept).extrav.class   -0.969   NA           NA   class   
+6 sd_Observation.Residual         0.946   NA           NA   Residual</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_2_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>broom<span class="op">::</span><span class="kw">glance</span>()</code></pre></div>
+<pre><code># A tibble: 1 x 6
+  sigma logLik   AIC   BIC deviance df.residual
+  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
+1 0.946 -2885. 5783. 5816.    5771.        1994</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_2_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>broom<span class="op">::</span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per observation (2000 students)</span></code></pre></div>
+<pre><code>  popular extrav class  .fitted      .resid      .cooksd   .fixed      .mu
+1     6.3      5     1 5.131082  1.16891841 3.872950e-05 4.925861 5.131082
+2     4.9      7     1 6.062463 -1.16246304 1.546709e-03 5.911665 6.062463
+3     5.3      4     1 4.665391  0.63460913 5.582607e-05 4.432959 4.665391
+4     4.7      3     1 4.199700  0.50029985 1.873118e-04 3.940057 4.199700
+5     6.0      5     1 5.131082  0.86891841 2.140087e-05 4.925861 5.131082
+6     4.7      4     1 4.665391  0.03460913 1.660373e-07 4.432959 4.665391
+  .offset .sqrtXwt .sqrtrwt .weights      .wtres
+1       0        1        1        1  1.16891841
+2       0        1        1        1 -1.16246304
+3       0        1        1        1  0.63460913
+4       0        1        1        1  0.50029985
+5       0        1        1        1  0.86891841
+6       0        1        1        1  0.03460913</code></pre>
+<div id="fixed-effects-intercept-and-slope-1" class="section level4">
+<h4><span class="header-section-number">5.4.2.1</span> Fixed Effects: intercept and slope</h4>
+<p>There is only ONE fixed intercept and ONE fixed slope.</p>
+<p>The <code>fixef()</code> function extracts the estimates of the fixed effects.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_2_raw) </code></pre></div>
+<pre><code>(Intercept)      extrav 
+   2.461351    0.492902 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]</code></pre></div>
+<pre><code>[1] 2.461351</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;extrav&quot;</span>]]</code></pre></div>
+<pre><code>[1] 0.492902</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
+      <span class="dt">y =</span> popular,
+      <span class="dt">group =</span> class) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
+              <span class="dt">se =</span> <span class="ot">FALSE</span>,
+              <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,
+              <span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;extrav&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
+             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = raw score&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are OLS regression ran independently on each class&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-280-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="random-effects-intercepts-1" class="section level4">
+<h4><span class="header-section-number">5.4.2.2</span> Random Effects: intercepts</h4>
+<p>There is a different random intercept AND random slope for EACH CLASS. These tell how far each class’s average is off of the grand average AND how far each class’s slope is off of the grand average sope.</p>
+<p>The <code>ranef()</code> function extracts the random effects from a fitted model object</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_2_raw) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<pre><code>List of 1
+ $ class:&#39;data.frame&#39;:  100 obs. of  2 variables:
+  ..$ (Intercept): num [1:100] 0.341 -1.18 -0.627 1.079 -0.191 ...
+  ..$ extrav     : num [1:100] -0.0272 0.0974 0.0565 -0.0988 0.0208 ...
+ - attr(*, &quot;class&quot;)= chr &quot;ranef.mer&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_2_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></code></pre></div>
+<pre><code>  (Intercept)      extrav
+1   0.3412771 -0.02721131
+2  -1.1800352  0.09737305
+3  -0.6268933  0.05654048
+4   1.0791097 -0.09876733
+5  -0.1910488  0.02083082
+6  -0.9833296  0.08369927</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_2_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Random_Intercepts =</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Random_Intercepts)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>()</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-283-1.png" width="288" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_2_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(extrav)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_histogram</span>()</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-284-1.png" width="288" style="display: block; margin: auto;" /></p>
+</div>
+<div id="predictions-1" class="section level4">
+<h4><span class="header-section-number">5.4.2.3</span> Predictions</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(pop_lmer_2_raw) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<pre><code> Named num [1:2000] 5.13 6.06 4.67 4.2 5.13 ...
+ - attr(*, &quot;names&quot;)= chr [1:2000] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(pop_lmer_2_raw) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle value per observation (2000 students)</span></code></pre></div>
+<pre><code>       1        2        3        4        5        6 
+5.131082 6.062463 4.665391 4.199700 5.131082 4.665391 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_2_raw)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> extrav,
+             <span class="dt">y =</span> pred,
+             <span class="dt">group =</span> class)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;extrav&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
+             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = raw score&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-287-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="combined-effects-1" class="section level4">
+<h4><span class="header-section-number">5.4.2.4</span> Combined Effects</h4>
+<p>The <code>coef()</code> function computes the sum of the random and fixed effects coefficients for each explanatory variable for each level of each grouping factor.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<pre><code>List of 1
+ $ class:&#39;data.frame&#39;:  100 obs. of  2 variables:
+  ..$ (Intercept): num [1:100] 2.71 1.79 2.18 3.08 2.44 ...
+  ..$ extrav     : num [1:100] 0.486 0.486 0.486 0.486 0.486 ...
+ - attr(*, &quot;class&quot;)= chr &quot;coef.mer&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></code></pre></div>
+<pre><code>  (Intercept)    extrav
+1    2.707702 0.4862002
+2    1.789073 0.4862002
+3    2.178056 0.4862002
+4    3.083195 0.4862002
+5    2.443266 0.4862002
+6    1.937824 0.4862002</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_2_raw)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
+      <span class="dt">y =</span> pred,
+      <span class="dt">group =</span> class) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
+                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
+                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">4.5</span>,
+                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">4.5</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
+            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_2_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
+              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
+                  <span class="dt">slope     =</span> extrav),
+              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
+              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;extrav&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
+             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = raw score&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) </code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-290-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="comapre-the-centered-version-1" class="section level3">
+<h3><span class="header-section-number">5.4.3</span> Comapre the Centered Version</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_2_cen)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravG,
+      <span class="dt">y =</span> pred,
+      <span class="dt">group =</span> class) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="op">-</span><span class="fl">5.215</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
+                <span class="dt">xmax =</span> <span class="op">-</span><span class="fl">5.215</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
+                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">4.5</span>,
+                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">4.5</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
+            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
+                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
+                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
+                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
+            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_2_cen)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
+              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
+                  <span class="dt">slope     =</span> extravG),
+              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
+              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;extravG&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="op">-</span><span class="fl">5.215</span>,
+             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = grand-mean centered&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;GRAND-MEAN CENTERED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-291-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="comapre-the-standardized-version-1" class="section level3">
+<h3><span class="header-section-number">5.4.4</span> Comapre the Standardized Version</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_2_std)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravZ,
+      <span class="dt">y =</span> pred,
+      <span class="dt">group =</span> class) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
+                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
+                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
+                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
+            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_2_std)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
+              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
+                  <span class="dt">slope     =</span> extravZ),
+              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
+              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_std)[[<span class="st">&quot;(Intercept)&quot;</span>]],
+              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_std)[[<span class="st">&quot;extravZ&quot;</span>]],
+              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="op">-</span><span class="fl">5.215</span>,
+             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = standardized&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;STANDARDIZED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),
+                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-292-1.png" width="576" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="variance-explained.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section",
+"toc_depth": 3
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

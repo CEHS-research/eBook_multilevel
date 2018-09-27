@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="formula-warehouse.html">
+<link rel="prev" href="variance-explained.html">
+<link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -288,126 +288,358 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</h1>
-<h4 class="author"><em>Sarah Schwartz &amp; Tyson Barrett</em></h4>
-<h4 class="date"><em>Last updated: 2018-09-27</em></h4>
-</div>
-<div id="welcome" class="section level1 unnumbered">
-<h1>Welcome</h1>
-<p>Backgroup and links to other volumes of this encyclopedia may be found at the <a href="https://cehs-research.github.io/eBooks/">Encyclopedia’s Home Website</a>.</p>
+<div id="sjplot-package" class="section level1">
+<h1><span class="header-section-number">7</span> sjPlot Package</h1>
 <div class="figure">
-<img src="images/common/EQM_v5_header.png" />
+<img src="images/header_sjPlot.png" />
 
-</div>
-<div id="blocked-notes" class="section level2 unnumbered">
-<h2>Blocked Notes</h2>
-<p>Thoughout all the eBooks in this encyclopedia, several small secitons will be blocked out in the following ways:</p>
-<div class="rmdconstruct">
-<p>
-These blocks denote an area <strong>UNDER CONSTRUCTION</strong>, so check back often. This massive undertaking started during the summer of 2018 and is far from complete. The outline of seven volumes is given above despite any one being complete. Feedback is welcome via either author’s email.
-</p>
-</div>
-<div class="rmdimportant">
-<p>
-These blocks denote something <strong>EXTREMELY IMPORTANT</strong>. Do NOT skip these notes as they will be used very sparingly.
-</p>
-</div>
-<div class="rmddownload">
-<p>
-These blocks denote something to <strong>DOWNLOAD</strong>. This may include software installations, example datasets, or notebook code files.
-</p>
-</div>
-<div class="rmdlightbulb">
-<p>
-These blocks denote something <strong>INTERESTING</strong>. These point out information we found of interest or added value.
-</p>
 </div>
 <div class="rmdlink">
 <p>
-These blocks denote <strong>LINKS</strong> to other websites. This may include instructional video clips, articles, or blog posts. We are all about NOT re-creating the wheel. If somebody else has described or illustrated a topic well, we celebrate it!
+<a href="http://www.danielluedecke.de/">Daniel Lüdecke</a> is German researcher that has put together several GREAT packages, including <code>sjPlot</code> which we will detail here. Documentation can be found at: <a href="http://www.strengejacke.de/sjPlot/index.html" class="uri">http://www.strengejacke.de/sjPlot/index.html</a>
 </p>
 </div>
-</div>
-<div id="code-and-output" class="section level2 unnumbered">
-<h2>Code and Output</h2>
-<p>This is how <span class="math inline">\(R\)</span> code is shown:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span></code></pre></div>
-<p>This is what the output of the <span class="math inline">\(R\)</span> code above will look:</p>
-<pre><code>## [1] 2</code></pre>
-</div>
-<div id="the-authors" class="section level2 unnumbered">
-<h2>The Authors</h2>
-<table>
-<thead>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
+<span class="kw">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span>
+<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
+<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(effects)      <span class="co"># Effects for regression models</span>
+<span class="kw">library</span>(optimx)       <span class="co"># Different optimizers to solve mlm&#39;s</span></code></pre></div>
+<p>Read the SPSS data in with the <code>haven</code> package and prepare it (see previous chapter).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0&quot;</span>)
+
+data_achieve_center_scale &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(id, region, corp, school, class), factor) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gender =</span> gender <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">classize =</span> classize <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;12-17&quot;</span>, <span class="st">&quot;18-21&quot;</span>, 
+                                    <span class="st">&quot;22-26&quot;</span>, <span class="st">&quot;&gt;26&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, region, corp, school, class,           <span class="co"># Identifiers</span>
+                gender, age, geread, gevocab,              <span class="co"># Pupil-level vars</span>
+                classize,                                  <span class="co"># Class-Level vars</span>
+                senroll, ses) <span class="op">%&gt;%</span><span class="st">                          </span><span class="co"># School-level vars</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gevocab_c =</span> gevocab <span class="op">-</span><span class="st"> </span><span class="fl">4.4938</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age_c     =</span> age     <span class="op">-</span><span class="st"> </span><span class="fl">107.5290</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_c =</span> senroll <span class="op">-</span><span class="st"> </span><span class="fl">533.4148</span>) <span class="op">%&gt;%</span><span class="st">  </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_ch =</span> senroll_c <span class="op">/</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st">        </span><span class="co"># centered AND divided by one hundred</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">ses_t      =</span> ses <span class="op">/</span><span class="st"> </span><span class="dv">10</span>)                   <span class="co"># JUST divide by ten</span></code></pre></div>
+<p>Fit the final model (see previous chapter)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_read_11re_s &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab_c<span class="op">*</span>age_c <span class="op">+</span><span class="st"> </span>gevocab_c<span class="op">*</span>ses_t <span class="op">+</span><span class="st">   </span><span class="co"># 2 2-way interactions</span>
+<span class="st">                                      </span>(gevocab_c <span class="op">|</span><span class="st"> </span>school),  
+                             <span class="dt">data   =</span> data_achieve_center_scale,
+                             <span class="dt">REML   =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_11re_s),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Final&quot;</span>), 
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="top" style="margin-bottom:0.3em;">
+MLM: Final Model
+</caption>
 <tr>
-<th style="text-align:center;font-size: 20px;">
-Dr. Sarah Schwartz
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
 </th>
-<th style="text-align:center;font-size: 20px;">
-Dr. Tyson Barrett
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Final</b>
 </th>
 </tr>
-</thead>
-<tbody>
 <tr>
-<td style="text-align:center;">
-<img src="images/common/Sarah_headshot.jpg" width="300" />
+<td style="padding-right: 12px; border: none;">
+(Intercept)
 </td>
-<td style="text-align:center;">
-<img src="images/common/Tyson_headshot.jpg" width="300" />
+<td style="padding-right: 12px; border: none;">
+3.94 (0.11)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
-<td style="text-align:center;">
-<a href="http://www.sarahschwartzstats.com/">www.SarahSchwartzStats.com</a>
+<td style="padding-right: 12px; border: none;">
+gevocab_c
 </td>
-<td style="text-align:center;">
-<a href="http://tysonbarrett.com/">www.TysonBarrett.com</a>
-</td>
-</tr>
-<tr>
-<td style="text-align:center;">
-<a href="mailto:Sarah.Schwartz@usu.edu">Sarah.Schwartz@usu.edu</a>
-</td>
-<td style="text-align:center;">
-<a href="mailto:Tyson.Barrett@usu.edu">Tyson.Barrett@usu.edu</a>
+<td style="padding-right: 12px; border: none;">
+0.67 (0.05)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
-<td style="text-align:center;">
-<a href="https://cehs.usu.edu/research/statstudio/index">Statistical Consulting Studio</a>
+<td style="padding-right: 12px; border: none;">
+age_c
 </td>
-<td style="text-align:center;">
-<a href="https://cehs.usu.edu/research/dsdu/index">Data Science and Discover Unit</a>
+<td style="padding-right: 12px; border: none;">
+-0.00 (0.00)
 </td>
 </tr>
 <tr>
-<td style="text-align:center;">
-<img src="images/common/StatStudioLogo_dark_small.png" width="300" />
+<td style="padding-right: 12px; border: none;">
+ses_t
 </td>
-<td style="text-align:center;">
-<img src="images/common/dsdu_logo.PNG" width="300" />
+<td style="padding-right: 12px; border: none;">
+0.06 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
-</tbody>
+<tr>
+<td style="padding-right: 12px; border: none;">
+gevocab_c:age_c
+</td>
+<td style="padding-right: 12px; border: none;">
+0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+gevocab_c:ses_t
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.02 (0.01)<sup style="vertical-align: 0px;">**</sup>
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+42976.51
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+43048.93
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-21478.26
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+10320
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: school
+</td>
+<td style="padding-right: 12px; border: none;">
+160
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: school (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.08
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: school gevocab_c
+</td>
+<td style="padding-right: 12px; border: none;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: school (Intercept) gevocab_c
+</td>
+<td style="padding-right: 12px; border: none;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: Residual
+</td>
+<td style="border-bottom: 2px solid black;">
+3.66
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="3">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
 </table>
-<div id="why-choose-r" class="section level3 unnumbered">
-<h3>Why choose R ?</h3>
-<div class="rmdlink">
-<p>
-<strong>Check it out:</strong> an article from Fall 2016… <a href="https://datahowler.wordpress.com/2016/09/10/no-more-excuses-r-is-better-than-spss-for-psychology-undergrads-and-students-agree/">No more excuses: R is better than SPSS for psychology undergrads, and students agree</a>
-</p>
+<p>Now we will show some of the things the <code>sjPlot</code> package can do!</p>
+<div id="plotting-coefficients" class="section level2">
+<h2><span class="header-section-number">7.1</span> Plotting Coefficients</h2>
+<p>Select <code>terms</code> that should be plotted. All other term are removed from the output.</p>
+<p>Note that the term names must match the names of the model’s coefficients. For factors, this means that the variable name is suffixed with the related factor level, and each category counts as one term. E.g. <code>rm.terms = &quot;t_name [2,3]&quot;</code> would remove the terms <code>t_name2</code> and <code>t_name3</code> (assuming that the variable t_name is categorical and has at least the factor levels 2 and 3).</p>
+<p>Another example for the iris-dataset: <code>terms = &quot;Species&quot;</code> would not work, instead you would write <code>terms = &quot;Species [versicolor, virginica]&quot;</code> to remove these two levels, or <code>terms = &quot;Speciesversicolor&quot;</code> if you just want to remove the level versicolor from the plot.</p>
+<div id="fixed-effects" class="section level3">
+<h3><span class="header-section-number">7.1.1</span> Fixed Effects</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-300-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>,
+                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-301-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-302-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Determines in which way estimates are sorted in the plot with the option: <code>sort.est =</code></p>
+<ul>
+<li>If <code>NULL</code> (default), no sorting is done and estimates are sorted in the same order as they appear in the model formula.<br />
+</li>
+<li>If <code>TRUE</code>, estimates are sorted in descending order, with highest estimate at the top.<br />
+</li>
+<li>If <code>sort.est = &quot;sort.all&quot;</code>, estimates are re-sorted for each coefficient (only applies if <code>type = &quot;re&quot;</code> and <code>grid = FALSE</code>), i.e. the estimates of the random effects for each predictor are sorted and plotted to an own plot.<br />
+</li>
+<li>If <code>type = &quot;re&quot;</code>, specify a predictor’s / coefficient’s name to sort estimates according to this random effect.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
+                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-303-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
+                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>,
+                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-304-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Plots standardized beta values, however, standardization follows <span class="citation">Gelman (<a href="references.html#ref-gelman2008">2008</a>)</span> suggestion, rescaling the estimates by dividing them by two standard deviations instead of just one. Resulting coefficients are then directly comparable for untransformed <strong>binary predictors</strong>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;std2&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-305-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="random-effects" class="section level3">
+<h3><span class="header-section-number">7.1.2</span> Random Effects</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-306-1.png" width="288" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>,
+                   <span class="dt">grid =</span> <span class="ot">FALSE</span>,
+                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<pre><code>[[1]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-1.png" width="288" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[2]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-2.png" width="288" style="display: block; margin: auto;" /></p>
 </div>
 </div>
-<div id="fyi" class="section level3 unnumbered">
-<h3>FYI</h3>
-<p>This entire encyclopedia is written in <span class="math inline">\(R Markdown\)</span>, using <span class="math inline">\(R Studio\)</span> as the text editor and the <code>bookdown</code> package to turn a collection of markdown documents into a coherent whole. The book’s source code is hosted on GitHub. If you notice typos or other issues, feel free to email either of the authors.</p>
-<p>This work is licensed under the <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Attribution-NonCommercial-NoDerivatives 4.0 International</a> License.</p>
-<div class="figure">
-<img src="images/common/Education_Logo_WHITE-02.png" width="300" />
+<div id="plotting-marginal-effects" class="section level2">
+<h2><span class="header-section-number">7.2</span> Plotting Marginal Effects</h2>
+<p>Here <code>terms</code> indicates for which terms marginal effects should be displayed. At least one term is required to calculate effects, maximum length is three terms, where the second and third term indicate the groups, i.e. predictions of first term are grouped by the levels of the second (and third) term.</p>
+<p><code>terms</code> may also indicate higher order terms (e.g. interaction terms).</p>
+<p>Indicating levels in square brackets allows for selecting only specific groups. Term name and levels in brackets must be separated by a whitespace character, e.g. <code>terms = c(&quot;age&quot;, &quot;education [1,3]&quot;)</code>.</p>
+<p>It is also possible to specify a range of numeric values for the predictions with a colon, for instance <code>terms = c(&quot;education [1,3]&quot;, &quot;age [30:50]&quot;)</code>.</p>
+<p>Furthermore, it is possible to specify a function name. Values for predictions will then be transformed, e.g. <code>terms = &quot;income [exp]&quot;</code>. This is useful when model predictors were transformed for fitting the model and should be <strong>back-transformed</strong> to the original scale for predictions.</p>
+<p>Finally, using pretty for numeric variables (e.g. <code>terms = &quot;age [pretty]&quot;</code>) calculates a pretty range of values for the term, roughly of proportional length to the term’s value range. For more details, see the documentation for the <code>ggpredict</code> package.</p>
+<div id="predicted-values" class="section level3">
+<h3><span class="header-section-number">7.2.1</span> Predicted Values</h3>
+<p>Based on (i.e. is a wrapper for): <code>ggeffects::ggpredict()</code></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-308-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>The <code>pred.type =</code> option only applies for Marginal Effects plots with <strong>mixed effects models</strong>. Indicates whether predicted values should be <strong>conditioned on random effects</strong> (<code>pred.type = &quot;re&quot;</code>) or fixed effects only (<code>pred.type = &quot;fe&quot;</code>, the default). For details, see documentation of the type-argument in <code>ggpredict()</code> function.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
+                   <span class="dt">pred.type =</span> <span class="st">&quot;re&quot;</span>,
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="effect-plots" class="section level3">
+<h3><span class="header-section-number">7.2.2</span> Effect Plots</h3>
+<p>Based on (i.e. is a wrapper for): <code>ggeffects::ggeffect()</code></p>
+<p>Similar to <code>type = &quot;pred&quot;</code>, however, discrete predictors are held constant at their proportions (not reference level). See the <code>ggeffect</code> package documentation for details.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;eff&quot;</span>,
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-310-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="interaction-plots" class="section level3">
+<h3><span class="header-section-number">7.2.3</span> Interaction Plots</h3>
+<p>A shortcut for marginal effects plots, where <em>interaction terms are automatically detected</em> and used as terms-argument.</p>
+<p>Furthermore, if the moderator variable (the second - and third - term in an interaction) is continuous, <code>type = &quot;int&quot;</code> automatically chooses useful values based on the mdrt.values-argument, which are passed to terms. Then, <code>ggpredict</code> is called.</p>
+<p><code>type = &quot;int&quot;</code> plots the interaction term that appears:</p>
+<ul>
+<li><strong>first</strong> in the formula along the x-axis, while the</li>
+<li><strong>second</strong> (and possibly third) variable in an interaction is used as grouping factor(s) (moderating variable).</li>
+</ul>
+<p>Use <code>type = &quot;pred&quot;</code> or <code>type = &quot;eff&quot;</code> and specify a certain order in the terms-argument to indicate which variable(s) should be used as moderator.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>)</code></pre></div>
+<pre><code>[[1]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[2]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p>The <code>mdrt.values =</code> option indicates which values of the <strong>moderator variable</strong> should be used when plotting interaction terms (i.e. <code>type = &quot;int&quot;</code>).</p>
+<ul>
+<li><p><code>minmax</code> (default) minimum and maximum values (lower and upper bounds) of the moderator are used to plot the interaction between independent variable and moderator(s).</p></li>
+<li><p><code>meansd</code> uses the mean value of the moderator as well as one standard deviation below and above mean value to plot the effect of the moderator on the independent variable (following the convention suggested by Cohen and Cohen and popularized by Aiken and West (1991), i.e. using the mean, the value one standard deviation above, and the value one standard deviation below the mean as values of the moderator, see Grace-Martin K: 3 Tips to Make Interpreting Moderation Effects Easier).</p></li>
+<li><p><code>zeromax</code> is similar to the <code>minmax</code> option, however, <span class="math inline">\(0\)</span> is always used as minimum value for the moderator. This may be useful for predictors that don’t have an empirical zero-value, but absence of moderation should be simulated by using <span class="math inline">\(0\)</span> as minimum.</p></li>
+<li><p><code>quart</code> calculates and uses the quartiles (lower, median and upper) of the moderator value.</p></li>
+<li><p><code>all</code> uses all values of the moderator variable.</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>,
+                   <span class="dt">mdrt.values =</span> <span class="st">&quot;meansd&quot;</span>)</code></pre></div>
+<pre><code>[[1]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[2]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-2.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="model-diagnostics" class="section level2">
+<h2><span class="header-section-number">7.3</span> Model Diagnostics</h2>
+<p>Note: For mixed models, the diagnostic plots like linear relationship or check for Homoscedasticity, do not take the uncertainty of random effects into account, but is only based on the fixed effects part of the model.</p>
+<div id="slope-of-coefficentes" class="section level3">
+<h3><span class="header-section-number">7.3.1</span> Slope of Coefficentes</h3>
+<p>Slope of coefficients for each single predictor, against the response (linear relationship between each model term and response).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;slope&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="residuals" class="section level3">
+<h3><span class="header-section-number">7.3.2</span> Residuals</h3>
+<p>Slope of coefficients for each single predictor, against the residuals (linear relationship between each model term and residuals).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;resid&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="diagnostics" class="section level3">
+<h3><span class="header-section-number">7.3.3</span> Diagnostics</h3>
+<p>Check model assumptions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
+                   <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</code></pre></div>
+<pre><code>[[1]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-1.png" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[2]]
+[[2]]$school</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-2.png" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
 
-</div>
+[[3]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-3.png" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[4]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-4.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -417,8 +649,8 @@ Dr. Tyson Barrett
           </div>
         </div>
       </div>
-
-<a href="formula-warehouse.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="variance-explained.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
