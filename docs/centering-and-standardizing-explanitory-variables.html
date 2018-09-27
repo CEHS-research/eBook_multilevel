@@ -225,8 +225,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.10" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>4.10</b> Rescaling Predictors: Change Units or Standardize</a><ul>
 <li class="chapter" data-level="4.10.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#scale-varaibles"><i class="fa fa-check"></i><b>4.10.1</b> Scale Varaibles</a></li>
 <li class="chapter" data-level="4.10.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#use-scaled-variables"><i class="fa fa-check"></i><b>4.10.2</b> Use Scaled Variables</a></li>
-<li class="chapter" data-level="4.10.3" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.10.3</b> Final Model</a></li>
-<li class="chapter" data-level="4.10.4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.10.4</b> Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.11" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.11</b> Final Model</a><ul>
+<li class="chapter" data-level="4.11.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.11.1</b> Table</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html"><i class="fa fa-check"></i><b>5</b> Centering and Standardizing Explanitory Variables</a><ul>
@@ -718,6 +719,69 @@ Var: Residual
 </td>
 </tr>
 </table>
+<div class="rmdimportant">
+<p>
+** MLM - Random Intercepts ONLY**
+</p>
+<ol style="list-style-type: decimal">
+<li>
+Grand-Mean Centering a Predictor
+</li>
+</ol>
+<ul>
+<li>
+Different than when using the Raw Predictor:
+<ul>
+<li>
+fixed intercept
+</li>
+</ul>
+</li>
+<li>
+Same as when using the Raw Predictor:
+<ul>
+<li>
+fixed estimates or slopes for all predictors (main effects and interactions)<br />
+</li>
+<li>
+random estimates, i.e. variance and covariance components, includin the residual variance
+</li>
+<li>
+model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)
+</li>
+</ul>
+</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>
+Standardize a Predictor
+</li>
+</ol>
+<ul>
+<li>
+Different than when using the Raw Predictor:
+<ul>
+<li>
+fixed intercept (same as if using the grand-mean centered predictor)<br />
+</li>
+<li>
+fixed estimate (slope) for that variable
+</li>
+</ul>
+</li>
+<li>
+Stays the SAME:
+<ul>
+<li>
+random estimates, i.e. variance and covariance components, includin the residual variance<br />
+</li>
+<li>
+model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)
+</li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="investigating-a-mlm-ri-model" class="section level3">
 <h3><span class="header-section-number">5.3.2</span> Investigating a MLM-RI Model</h3>
@@ -788,7 +852,7 @@ Var: Residual
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-259-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-260-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="random-effects-intercepts" class="section level4">
 <h4><span class="header-section-number">5.3.2.2</span> Random Effects: intercepts</h4>
@@ -813,7 +877,7 @@ Var: Residual
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Random_Intercepts =</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Random_Intercepts)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> .<span class="dv">25</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-262-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-263-1.png" width="288" style="display: block; margin: auto;" /></p>
 </div>
 <div id="predictions" class="section level4">
 <h4><span class="header-section-number">5.3.2.3</span> Predictions</h4>
@@ -848,7 +912,7 @@ Var: Residual
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-265-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-266-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="combined-effects" class="section level4">
 <h4><span class="header-section-number">5.3.2.4</span> Combined Effects</h4>
@@ -904,7 +968,7 @@ Var: Residual
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) </code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-268-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-269-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="comapre-the-centered-version" class="section level3">
@@ -950,7 +1014,7 @@ Var: Residual
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-269-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-270-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="comapre-the-standardized-version" class="section level3">
 <h3><span class="header-section-number">5.3.4</span> Comapre the Standardized Version</h3>
@@ -989,7 +1053,7 @@ Var: Residual
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-270-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-271-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="rias-random-intercepts-and-slopes" class="section level2">
@@ -1265,6 +1329,69 @@ Cov: class (Intercept) extravZ
 </td>
 </tr>
 </table>
+<div class="rmdimportant">
+<p>
+** MLM - Random Intercepts AND Slopes**
+</p>
+<ol style="list-style-type: decimal">
+<li>
+Grand-Mean Centering a Predictor
+</li>
+</ol>
+<ul>
+<li>
+Different than when using the Raw Predictor:
+<ul>
+<li>
+fixed intercept
+</li>
+<li>
+random estimates, i.e. variance and covariance components, includin the residual variance
+</li>
+</ul>
+</li>
+<li>
+Same as when using the Raw Predictor:
+<ul>
+<li>
+fixed estimates or slopes for all predictors (main effects and interactions)<br />
+</li>
+<li>
+model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)
+</li>
+</ul>
+</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>
+Standardize a Predictor
+</li>
+</ol>
+<ul>
+<li>
+Different than when using the Raw Predictor:
+<ul>
+<li>
+fixed intercept (same as if using the grand-mean centered predictor)<br />
+</li>
+<li>
+fixed estimate (slope) for that variable
+</li>
+<li>
+random estimates, i.e. variance and covariance components, includin the residual variance
+</li>
+</ul>
+</li>
+<li>
+Stays the SAME:
+<ul>
+<li>
+model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)
+</li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 <div id="investigating-a-mlm-ri-model-1" class="section level3">
 <h3><span class="header-section-number">5.4.2</span> Investigating a MLM-RI Model</h3>
@@ -1339,7 +1466,7 @@ Cov: class (Intercept) extravZ
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-280-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-282-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="random-effects-intercepts-1" class="section level4">
 <h4><span class="header-section-number">5.4.2.2</span> Random Effects: intercepts</h4>
@@ -1365,11 +1492,11 @@ Cov: class (Intercept) extravZ
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Random_Intercepts =</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Random_Intercepts)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_histogram</span>()</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-283-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-285-1.png" width="288" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_2_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(extrav)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_histogram</span>()</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-284-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-286-1.png" width="288" style="display: block; margin: auto;" /></p>
 </div>
 <div id="predictions-1" class="section level4">
 <h4><span class="header-section-number">5.4.2.3</span> Predictions</h4>
@@ -1404,7 +1531,7 @@ Cov: class (Intercept) extravZ
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-287-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-289-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="combined-effects-1" class="section level4">
 <h4><span class="header-section-number">5.4.2.4</span> Combined Effects</h4>
@@ -1460,7 +1587,7 @@ Cov: class (Intercept) extravZ
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) </code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-290-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-292-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="comapre-the-centered-version-1" class="section level3">
@@ -1506,7 +1633,7 @@ Cov: class (Intercept) extravZ
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-291-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-293-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="comapre-the-standardized-version-1" class="section level3">
 <h3><span class="header-section-number">5.4.4</span> Comapre the Standardized Version</h3>
@@ -1545,7 +1672,7 @@ Cov: class (Intercept) extravZ
                   <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-292-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-294-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

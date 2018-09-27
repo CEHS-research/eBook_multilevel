@@ -188,6 +188,30 @@ texreg::htmlreg(list(pop_lmer_1_raw,
 
 
 
+```{block type='rmdimportant', echo=TRUE}
+** MLM - Random Intercepts ONLY**
+
+1. Grand-Mean Centering a Predictor    
+
+* Different than when using the Raw Predictor:    
+    + fixed intercept
+    
+* Same as when using the Raw Predictor: 
+    + fixed estimates or slopes for all predictors (main effects and interactions)    
+    + random estimates, i.e. variance and covariance components, includin the residual variance
+    + model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)
+    
+
+2. Standardize a Predictor    
+
+* Different than when using the Raw Predictor:    
+    + fixed intercept (same as if using the grand-mean centered predictor)    
+    + fixed estimate (slope) for that variable
+    
+* Stays the SAME:    
+    + random estimates, i.e. variance and covariance components, includin the residual variance  
+    + model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)    
+```
 
 
 
@@ -520,6 +544,33 @@ texreg::htmlreg(list(pop_lmer_2_raw,
                 caption            = "MLM - RIAS: Effect of Grand-Mean Centering and Standardizing",
                 caption.above      = TRUE,
                 single.row         = TRUE)
+```
+
+
+
+```{block type='rmdimportant', echo=TRUE}
+** MLM - Random Intercepts AND Slopes**
+
+1. Grand-Mean Centering a Predictor    
+
+* Different than when using the Raw Predictor:    
+    + fixed intercept
+    + random estimates, i.e. variance and covariance components, includin the residual variance
+    
+* Same as when using the Raw Predictor: 
+    + fixed estimates or slopes for all predictors (main effects and interactions)    
+    + model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)
+    
+
+2. Standardize a Predictor    
+
+* Different than when using the Raw Predictor:    
+    + fixed intercept (same as if using the grand-mean centered predictor)    
+    + fixed estimate (slope) for that variable
+    + random estimates, i.e. variance and covariance components, includin the residual variance  
+    
+* Stays the SAME:    
+    + model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)    
 ```
 
 

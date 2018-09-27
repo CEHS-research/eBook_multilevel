@@ -225,8 +225,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.10" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>4.10</b> Rescaling Predictors: Change Units or Standardize</a><ul>
 <li class="chapter" data-level="4.10.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#scale-varaibles"><i class="fa fa-check"></i><b>4.10.1</b> Scale Varaibles</a></li>
 <li class="chapter" data-level="4.10.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#use-scaled-variables"><i class="fa fa-check"></i><b>4.10.2</b> Use Scaled Variables</a></li>
-<li class="chapter" data-level="4.10.3" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.10.3</b> Final Model</a></li>
-<li class="chapter" data-level="4.10.4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.10.4</b> Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.11" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.11</b> Final Model</a><ul>
+<li class="chapter" data-level="4.11.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.11.1</b> Table</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html"><i class="fa fa-check"></i><b>5</b> Centering and Standardizing Explanitory Variables</a><ul>
@@ -491,14 +492,14 @@ Var: Residual
 <h3><span class="header-section-number">7.1.1</span> Fixed Effects</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-300-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-302-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>,
                    <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-301-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-303-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-302-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-304-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Determines in which way estimates are sorted in the plot with the option: <code>sort.est =</code></p>
 <ul>
 <li>If <code>NULL</code> (default), no sorting is done and estimates are sorted in the same order as they appear in the model formula.<br />
@@ -512,31 +513,31 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
                    <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-303-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-305-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
                    <span class="dt">sort.est =</span> <span class="ot">TRUE</span>,
                    <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-304-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-306-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Plots standardized beta values, however, standardization follows <span class="citation">Gelman (<a href="references.html#ref-gelman2008">2008</a>)</span> suggestion, rescaling the estimates by dividing them by two standard deviations instead of just one. Resulting coefficients are then directly comparable for untransformed <strong>binary predictors</strong>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;std2&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-305-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="random-effects" class="section level3">
 <h3><span class="header-section-number">7.1.2</span> Random Effects</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-306-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-308-1.png" width="288" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>,
                    <span class="dt">grid =</span> <span class="ot">FALSE</span>,
                    <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-1.png" width="288" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-2.png" width="288" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-2.png" width="288" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="plotting-marginal-effects" class="section level2">
@@ -553,13 +554,13 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
                    <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-308-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-310-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>pred.type =</code> option only applies for Marginal Effects plots with <strong>mixed effects models</strong>. Indicates whether predicted values should be <strong>conditioned on random effects</strong> (<code>pred.type = &quot;re&quot;</code>) or fixed effects only (<code>pred.type = &quot;fe&quot;</code>, the default). For details, see documentation of the type-argument in <code>ggpredict()</code> function.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
                    <span class="dt">pred.type =</span> <span class="st">&quot;re&quot;</span>,
                    <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="effect-plots" class="section level3">
 <h3><span class="header-section-number">7.2.2</span> Effect Plots</h3>
@@ -568,7 +569,7 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;eff&quot;</span>,
                    <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-310-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="interaction-plots" class="section level3">
 <h3><span class="header-section-number">7.2.3</span> Interaction Plots</h3>
@@ -583,10 +584,10 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>)</code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-2.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>mdrt.values =</code> option indicates which values of the <strong>moderator variable</strong> should be used when plotting interaction terms (i.e. <code>type = &quot;int&quot;</code>).</p>
 <ul>
 <li><p><code>minmax</code> (default) minimum and maximum values (lower and upper bounds) of the moderator are used to plot the interaction between independent variable and moderator(s).</p></li>
@@ -599,10 +600,10 @@ Var: Residual
                    <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>,
                    <span class="dt">mdrt.values =</span> <span class="st">&quot;meansd&quot;</span>)</code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-2.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-diagnostics" class="section level2">
@@ -613,14 +614,14 @@ Var: Residual
 <p>Slope of coefficients for each single predictor, against the response (linear relationship between each model term and response).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;slope&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="residuals" class="section level3">
 <h3><span class="header-section-number">7.3.2</span> Residuals</h3>
 <p>Slope of coefficients for each single predictor, against the residuals (linear relationship between each model term and residuals).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;resid&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-316-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="diagnostics" class="section level3">
 <h3><span class="header-section-number">7.3.3</span> Diagnostics</h3>
@@ -628,18 +629,18 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
                    <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]
 [[2]]$school</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-2.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 
 [[3]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-3.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-3.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[4]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-4.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

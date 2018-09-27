@@ -225,8 +225,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="4.10" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>4.10</b> Rescaling Predictors: Change Units or Standardize</a><ul>
 <li class="chapter" data-level="4.10.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#scale-varaibles"><i class="fa fa-check"></i><b>4.10.1</b> Scale Varaibles</a></li>
 <li class="chapter" data-level="4.10.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#use-scaled-variables"><i class="fa fa-check"></i><b>4.10.2</b> Use Scaled Variables</a></li>
-<li class="chapter" data-level="4.10.3" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.10.3</b> Final Model</a></li>
-<li class="chapter" data-level="4.10.4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.10.4</b> Table</a></li>
+</ul></li>
+<li class="chapter" data-level="4.11" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.11</b> Final Model</a><ul>
+<li class="chapter" data-level="4.11.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.11.1</b> Table</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="5" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html"><i class="fa fa-check"></i><b>5</b> Centering and Standardizing Explanitory Variables</a><ul>
@@ -3071,6 +3072,361 @@ fit_read_10ml_c &lt;-<span class="st"> </span>lme4<span class="op">::</span><spa
                              <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <div id="compare-the-models" class="section level4">
 <h4><span class="header-section-number">4.9.2.1</span> Compare the Models</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_9ml, 
+                     fit_read_10ml, 
+                     fit_read_9ml_c, 
+                     fit_read_10ml_c),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Main Effects&quot;</span>, 
+                                       <span class="st">&quot;Interaction&quot;</span>,
+                                       <span class="st">&quot;Main Effects&quot;</span>, 
+                                       <span class="st">&quot;Interaction&quot;</span>),
+                <span class="dt">groups =</span> <span class="kw">list</span>(<span class="st">&quot;Raw Scale&quot;</span> =<span class="st"> </span><span class="dv">2</span><span class="op">:</span><span class="dv">4</span>,
+                              <span class="st">&quot;Mean Centered&quot;</span> =<span class="st"> </span><span class="dv">5</span><span class="op">:</span><span class="dv">7</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Investigate Centering Variables Involved in an Interaction&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="top" style="margin-bottom:0.3em;">
+MLM: Investigate Centering Variables Involved in an Interaction
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Main Effects</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Interaction</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Main Effects</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Interaction</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+2.98 (0.41)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.61 (0.87)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+4.34 (0.03)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+4.35 (0.03)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Raw Scale
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+     gevocab
+</td>
+<td style="padding-right: 12px; border: none;">
+0.52 (0.01)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.14 (0.19)
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+     age
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.01 (0.00)<sup style="vertical-align: 0px;">*</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.03 (0.01)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+     gevocab:age
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.01 (0.00)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Mean Centered
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+     gevocab_c
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.52 (0.01)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.52 (0.01)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+     age_c
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.01 (0.00)<sup style="vertical-align: 0px;">*</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.01 (0.00)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+     gevocab_c:age_c
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.01 (0.00)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+42989.44
+</td>
+<td style="border-top: 1px solid black;">
+42979.71
+</td>
+<td style="border-top: 1px solid black;">
+42989.44
+</td>
+<td style="border-top: 1px solid black;">
+42979.71
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+43040.13
+</td>
+<td style="padding-right: 12px; border: none;">
+43037.65
+</td>
+<td style="padding-right: 12px; border: none;">
+43040.13
+</td>
+<td style="padding-right: 12px; border: none;">
+43037.65
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-21487.72
+</td>
+<td style="padding-right: 12px; border: none;">
+-21481.86
+</td>
+<td style="padding-right: 12px; border: none;">
+-21487.72
+</td>
+<td style="padding-right: 12px; border: none;">
+-21481.86
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+10320
+</td>
+<td style="padding-right: 12px; border: none;">
+10320
+</td>
+<td style="padding-right: 12px; border: none;">
+10320
+</td>
+<td style="padding-right: 12px; border: none;">
+10320
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: school
+</td>
+<td style="padding-right: 12px; border: none;">
+160
+</td>
+<td style="padding-right: 12px; border: none;">
+160
+</td>
+<td style="padding-right: 12px; border: none;">
+160
+</td>
+<td style="padding-right: 12px; border: none;">
+160
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: school (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.27
+</td>
+<td style="padding-right: 12px; border: none;">
+0.27
+</td>
+<td style="padding-right: 12px; border: none;">
+0.10
+</td>
+<td style="padding-right: 12px; border: none;">
+0.10
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: school gevocab
+</td>
+<td style="padding-right: 12px; border: none;">
+0.02
+</td>
+<td style="padding-right: 12px; border: none;">
+0.02
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: school (Intercept) gevocab
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.06
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.06
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: Residual
+</td>
+<td style="padding-right: 12px; border: none;">
+3.66
+</td>
+<td style="padding-right: 12px; border: none;">
+3.66
+</td>
+<td style="padding-right: 12px; border: none;">
+3.66
+</td>
+<td style="padding-right: 12px; border: none;">
+3.66
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: school gevocab_c
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.02
+</td>
+<td style="padding-right: 12px; border: none;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Cov: school (Intercept) gevocab_c
+</td>
+<td style="border-bottom: 2px solid black;">
+</td>
+<td style="border-bottom: 2px solid black;">
+</td>
+<td style="border-bottom: 2px solid black;">
+0.02
+</td>
+<td style="border-bottom: 2px solid black;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="6">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
 <p>Notice that the interactions yield the exact same parameter estimates and significances, but the main effects (including the interactions) are different. Model fit statistics include <span class="math inline">\(-2LL\)</span> are exactly the same, too.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_read_9ml, fit_read_10ml)</code></pre></div>
 <pre><code>Data: data_achieve_center
@@ -3581,16 +3937,16 @@ fit_read_12ml_s
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>There is evidence that SES moderates the main effect of vocabualry, after accounting for the interaction between age and vocabulary.</p>
 </div>
-<div id="final-model-2" class="section level3">
-<h3><span class="header-section-number">4.10.3</span> Final Model</h3>
+</div>
+<div id="final-model-2" class="section level2">
+<h2><span class="header-section-number">4.11</span> Final Model</h2>
 <p>Always refit the final model via REML.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_read_11re_s &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab_c<span class="op">*</span>age_c <span class="op">+</span><span class="st"> </span>gevocab_c<span class="op">*</span>ses_t <span class="op">+</span><span class="st">   </span><span class="co"># 2 2-way interactions</span>
 <span class="st">                                      </span>(gevocab_c <span class="op">|</span><span class="st"> </span>school),  
                              <span class="dt">data   =</span> data_achieve_center_scale,
                              <span class="dt">REML   =</span> <span class="ot">TRUE</span>)</code></pre></div>
-</div>
 <div id="table" class="section level3">
-<h3><span class="header-section-number">4.10.4</span> Table</h3>
+<h3><span class="header-section-number">4.11.1</span> Table</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
 <span class="co"># Knit to PDF:     texreg::texreg()</span>
 <span class="co"># View on Screen:  texreg::screenreg()</span>
@@ -3739,7 +4095,7 @@ Var: Residual
 </tr>
 </table>
 <div id="visualize-the-model-2" class="section level4">
-<h4><span class="header-section-number">4.10.4.1</span> Visualize the Model</h4>
+<h4><span class="header-section-number">4.11.1.1</span> Visualize the Model</h4>
 <p>Recall the scales that the revised variables are now on:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_achieve_center_scale <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(gevocab_c, age_c, ses_t) <span class="op">%&gt;%</span><span class="st"> </span>
