@@ -1,6 +1,6 @@
 # Intro 2-level Model Example: Pupil Popularity
 
-
+![](images/header_hox_popular2.png)
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(comment     = "",
@@ -45,6 +45,7 @@ The following example is used through out @hox2017's chapater 2.
 >
 > The popularity data in **popular2.sav** are simulated data for **2000 pupils in 100 schools**. The purpose is to offer a very simple example for multilevel regression analysis.  The main outcome variable is the **pupil popularity**, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil.  Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: **pupil popularity** as rated by their teacher, on a scale from 1-10.  The explanatory variables are **pupil gender** (boy=0, girl=1), **pupil extraversion** (10-point scale) and **teacher experience** in years.  The popularity data have been generated to be a 'nice' well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.
 
+![](images/diagram_hox_popular2.png)
 
 ```{r}
 data_raw <- haven::read_sav("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav") %>% 
@@ -89,9 +90,26 @@ Visual inspection reveals that most of the variables are measurements at level 1
 
 Most posters, journal articles, and reports start with a table of descriptive statistics.  Since it tends to come first, this type of table is often refered to as *Table 1*.  The `stargazer()` function can be used to create such a table, but only for the entire dataset [@R-stargazer].  I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.
 
-```{r, results='asis'}
+```{r, include=FALSE}
+# Knit to Website: type = "html" 
+# Knit to PDF:     type = "latex"
+# View on Screen:  type = "text"
+
 data_pop %>% 
-  dplyr::select(-id) %>% 
+  dplyr::select(extrav, texp, popular) %>% 
+  data.frame() %>% 
+  stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
+                       header = FALSE,
+                       type = "text")
+```
+
+```{r, results='asis'}
+# Knit to Website: type = "html" 
+# Knit to PDF:     type = "latex"
+# View on Screen:  type = "text"
+
+data_pop %>% 
+  dplyr::select(extrav, texp, popular) %>% 
   data.frame() %>% 
   stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
                        header = FALSE,
@@ -105,15 +123,18 @@ data_pop %>%
 Tyson Barrett's  **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics.  Full documentation can be accessed by executing `?furniture::table1`.    
 
 ```{r, results='asis'}
+# Knit to Website: output = "html" 
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
 data_pop %>% 
-  furniture:: table1("Pupil's Extraversion (10 pt)"  = extrav, 
+  furniture::table1("Pupil's Extraversion (10 pt)"   = extrav, 
                      "Teacher's Experience (years)"  = texp, 
                      "Popularity, Sociometric Score" = popular, 
                      "Popularity, Teacher Evaluated" = popteach,
-                     splitby    = ~ sex,                                     # var to divide sample by
+                     splitby    = ~ sex,                                     # divide sample into columns by...
                      test       = TRUE,                                      # test groups different?
                      output     = "html",                                    # output for latex
-                     align      = c("l", "r", "r", "r"),                     # column alignment
                      caption    = "Compare genders on four main variables")  # title
 ```
 
@@ -179,6 +200,10 @@ table <- data_pop %>%
   group_by(extrav) %>% 
   summarise(count = n_distinct(id),
             percent  = 100 * count / 2000) 
+
+# Knit to Website: type = "html" 
+# Knit to PDF:     type = "latex"
+# View on Screen:  type = "text"
 
 table %>% 
   stargazer(summary  = FALSE,
@@ -480,13 +505,18 @@ On average, girls were rated `r coef(pop_lm_1)[2] %>% round(2)` points more popu
 
 Create a table to compare the two nested models:
 
-```{r, results='asis'}
-texreg::htmlreg(list(pop_lm_0, pop_lm_1),
+```{r lmtable, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(pop_lm_0, 
+                     pop_lm_1),
                 custom.model.names = c("Null Model",
                                        "With Predictors"),
-                caption = "Single Level Models",
-                single.row = TRUE,
-                digits = 4)
+                caption            = "Single Level Models",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 ```{block type='rmdlightbulb', echo=TRUE}
@@ -885,13 +915,19 @@ After accounting for the heiarchical nesting of students in classes, girls were 
 Reproduce Table 2.1 on the top of page 14 [@hox2017]
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(pop_lm_0, 
                      pop_lmer_0_ml, 
                      pop_lmer_1_ml),
                 custom.model.names = c("Single-level", 
                                        "M0: int only", 
                                        "M1: w pred"),
-                caption = "Hox Table 2.1 on the top of page 14")
+                caption            = "Hox Table 2.1 on the top of page 14",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
@@ -961,11 +997,15 @@ Create a table to compare the three nested models:
 The middle column below reproduces Hox's Table 2.2 found on the bottom of page 15 [@hox2017], except the values differ slightly becuase here the model was fit via `REML` where as in the text, Hox used `ML`.
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
                 custom.model.names = c("M1", "M1a", "M1b"),
-                caption = "Assessing Significance of Random Slopes",
-                single.row = TRUE,
-                digits = 4)
+                caption            = "Assessing Significance of Random Slopes",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
@@ -1077,48 +1117,45 @@ pop_lmer_4_ml  <- lme4::lmer(popular ~ extrav*texp*sex + (extrav|class),
 Create a table to compare the two nested models:
 
 ```{r, include=FALSE}
-texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
-                custom.model.names = c("M1a: Main Effects",
-                                       "M2: With Interaction"),
-                caption = "Hox Table 2.3 on page 17",
-                single.row = TRUE,
-                digits = 4)
+texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml))
 ```
 
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
                 custom.model.names = c("M1a: Main Effects",
                                        "M2: With Interaction"),
-                caption = "Hox Table 2.3 on page 17",
-                single.row = TRUE,
-                digits = 4)
+                caption            = "Hox Table 2.3 on page 17",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
 Investigate further interactions, not shown in by @hox2017.
 
 ```{r, include=FALSE}
-texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
-                custom.model.names = c("M1a: Main Effects",
-                                       "M2: With Interaction",
-                                       "Add 2-way Inter",
-                                       "Add 3-way Interaction"),
-                single.row = TRUE,
-                digits = 2)
+texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml))
 ```
 
 
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
                 custom.model.names = c("M1a: Main Effects",
                                        "M2: With Interaction",
                                        "Add 2-way Inter",
                                        "Add 3-way Interaction"),
-                caption = "Hox Table 2.3 on page 17",
-                single.row = TRUE,
-                digits = 4)
+                caption            = "Hox Table 2.3 on page 17",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
@@ -1160,11 +1197,15 @@ pop_lmer_2_re  <- lme4::lmer(popular ~ sex + extrav*texp + (extrav|class),
 #### Parameters
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(pop_lmer_2_ml),
                 custom.model.names = c("Final Model"),
-                caption = "MLM for Popularity",
-                single.row = TRUE,
-                digits = 4)
+                caption            = "MLM for Popularity",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
