@@ -30,14 +30,18 @@ library(optimx)       # Different optimizers to solve mlm's
 ## Background
 <!-- ========================================================= -->
 
+```{block type='rmdlink', echo=TRUE}
 The following example was included in the text "Multilevel Modeling in R" by @finch2016.
 
 The datasets for this textbook may be downloaded from the website: http://www.mlminr.com/data-sets/.  
+```
+
 
 I was unable to find any documentation on this dataset in the book or online, so I contacted the authors.  There were unable to provide much either, but based on visual inspection designated the class of *factor* to thoes vairables that seem to represent categorical quantities. The labels for gender and class size are relative to the frequencies in the journal article the authors did point me to *(although the samples sizes do not match up)*.
 
+```{block type='rmdimportant', echo=TRUE}
 FOR THIS CHAPTER WE WILL IGNORE ALL LEVELS EXCEPT FOR STUDNETS BEING NESTED WITHIN SCHOOLS.
-
+```
 
 Read the SPSS data in with the `haven` package .
 
@@ -145,6 +149,10 @@ num_subjects
 Most posters, journal articles, and reports start with a table of descriptive statistics.  Since it tends to come first, this type of table is often refered to as Table 1.  The `stargazer()` function can be used to create such a table, but only for the entire dataset.  I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.  Also, it only summarises continuous, not categorical variables.
 
 ```{r sumtable0, results='asis'}
+# Knit to Website: type = "html" 
+# Knit to PDF:     type = "latex"
+# View on Screen:  type = "text"
+
 data_achieve %>% 
   dplyr::select(classize, gender, geread, gevocab, age, ses, senroll) %>% 
   data.frame() %>% 
@@ -160,19 +168,20 @@ Tyson Barrett's  **furniture** package includes the extremely useful function `t
 
 
 ```{r sumtable1, output="asis"}
-# note: the label for the table must be entered above, right after the "r"
-table1(data_achieve,
-       geread, gevocab, age, 
-       ses, senroll,
-       var_names = c("Reading Score",  
-                     "Vocabulary Score",
-                     "Age (in months)",
-                     "School SES",
-                     "School's Enrollment"),    # override names
-       splitby   = ~ gender,                # var to divide sample by
-       test      = TRUE,                    # test groups different?
-       caption   = "Summary of the numeric variables with `table1`", 
-       output    = "html")
+# Knit to Website: output = "html" 
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
+data_achieve %>% 
+  furniture:: table1("Reading Score"       = geread, 
+                     "Vocabulary Score"    = gevocab, 
+                     "Age (in months)"     = age, 
+                     "School SES"          = ses, 
+                     "School's Enrollment" = senroll,
+                     splitby   = ~ gender,                                        # var to divide sample by
+                     test      = TRUE,                                            # test groups different?
+                     caption   = "Summary of the numeric variables with `table1`", 
+                     output    = "html")
 ```
 
 
@@ -284,19 +293,26 @@ fit_read_lm_3 <- lm(formula = geread ~ gevocab*age,    # interation+main effects
 
 Now compare the models:
 ```{r, include=FALSE}
-texreg::screenreg(list(fit_read_lm_0, fit_read_lm_1, 
-                     fit_read_lm_2, fit_read_lm_3),
-                  digits = 3)
+texreg::screenreg(list(fit_read_lm_0, fit_read_lm_1, fit_read_lm_2, fit_read_lm_3))
 ```
 
 
 ```{r regLM, results='asis'}
-texreg::htmlreg(list(fit_read_lm_0, fit_read_lm_1, 
-                     fit_read_lm_2, fit_read_lm_3),
-                caption = "OLS: Investigate Fixed, Pupil-level Predictors",
-                caption.above = TRUE,
-                doctype = FALSE,
-                digits = 4)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_read_lm_0, 
+                     fit_read_lm_1, 
+                     fit_read_lm_2, 
+                     fit_read_lm_3),
+                custom.model.names = c("Null",
+                                       "1 IV",
+                                       "2 IV",
+                                       "Interaction"),
+                caption            = "OLS: Investigate Fixed, Pupil-level Predictors",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
@@ -402,20 +418,24 @@ fit_read_0re <- lme4::lmer(geread ~ 1 + (1|school) ,
 
 Compare the two models to OLS:
 ```{r, include=FALSE}
-texreg::screenreg(list(fit_read_lm_0, fit_read_0ml, fit_read_0re),
-                custom.model.names = c("OLS", "MLM-ML", "MLM-REML"),
-                caption = "NULL Model: different estimation methods",
-                digits = 4)
+texreg::screenreg(list(fit_read_lm_0, fit_read_0ml, fit_read_0re))
 ```
 
 
 ```{r mlmNull, results='asis'}
-texreg::htmlreg(list(fit_read_lm_0, fit_read_0ml, fit_read_0re),
-                custom.model.names = c("OLS", "MLM-ML", "MLM-REML"),
-                caption = "MLM: NULL Model,two estimation methods",
-                caption.above = TRUE,
-                doctype = FALSE,
-                digits = 4)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_read_lm_0, 
+                     fit_read_0ml, 
+                     fit_read_0re),
+                custom.model.names = c("OLS", 
+                                       "MLM-ML", 
+                                       "MLM-REML"),
+                caption            = "MLM: NULL Model,two estimation methods",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 Notice that the estimate for the intercept is nearly the same in the linear regression and intercept only models, but the standard errors are quite different.  When there is clustering in sample, the result of ignoring it is under estimation of the standard errors and over stating the significance of associations.  This table was made with the `screenreg()` function in the self named package.  I tend to prefer this display over `stargazer()`.
@@ -501,14 +521,18 @@ fit_read_1re <- lme4::lmer(geread ~ gevocab + (1|school),
 
 
 ```{r, include=FALSE}
-texreg::screenreg(list(fit_read_0ml, fit_read_1ml),
-                  custom.model.names = c("Null", "w L1vPred"),
-                  digits = 3)
+texreg::screenreg(list(fit_read_0ml, fit_read_1ml))
 ```
 
 ```{r, results='asis'}
-texreg::htmlreg(list(fit_read_0ml, fit_read_1ml),
-                custom.model.names = c("Null", "w Pred"),
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_read_0ml, 
+                     fit_read_1ml),
+                custom.model.names = c("Null", 
+                                       "w Pred"),
                 caption = "MLM: Investigate a Fixed Pupil-level Predictor",
                 caption.above = TRUE,
                 doctype = FALSE,
@@ -696,13 +720,15 @@ fit_read_3ml <- lmer(geread ~ gevocab*age + (1 | school), # add interaction betw
 
 
 ```{r, include = FALSE}
-texreg::screenreg(list(fit_read_1ml, fit_read_2ml, fit_read_3ml),
-                  custom.model.names = c("Only Vocab", "Both Main Effects", "Interaction"),
-                  digits = 4)
+texreg::screenreg(list(fit_read_1ml, fit_read_2ml, fit_read_3ml))
 ```
 
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(fit_read_1ml, 
                      fit_read_2ml, 
                      fit_read_3ml),
@@ -766,23 +792,24 @@ fit_read_4ml <- lme4::lmer(geread ~ gevocab*age + senroll + (1 | school),
 
 
 ```{r, include=FALSE}
-texreg::screenreg(list(fit_read_0ml, fit_read_3ml, fit_read_4ml),
-                  custom.model.names = c("Null", "Level 1 only", "Level 2 Pred"),
-                  digits = 4)
+texreg::screenreg(list(fit_read_0ml, fit_read_3ml, fit_read_4ml))
 ```
 
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(fit_read_0ml, 
                      fit_read_3ml, 
                      fit_read_4ml),
                 custom.model.names = c("Null", 
                                        "Level 1 only", 
                                        "Level 2 Pred"),
-                caption = "MLM: Investigate a Fixed School-Level Predictor",
-                caption.above = TRUE,
-                doctype = FALSE,
-                digits = 4)
+                caption            = "MLM: Investigate a Fixed School-Level Predictor",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
@@ -826,20 +853,21 @@ fit_read_5re <- lme4::lmer(geread ~ gevocab*age + (gevocab | school),
 
 
 ```{r, include=FALSE}
-texreg::screenreg(list(fit_read_3re, fit_read_5re),
-                  custom.model.names = c("Rand Int", "Rand Int and Slopes"),
-                  digits = 4)
+texreg::screenreg(list(fit_read_3re, fit_read_5re))
 ```
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(fit_read_3re, 
                      fit_read_5re),
                 custom.model.names = c("Rand Int", 
                                        "Rand Int and Slopes"),
-                caption = "MLM: Investigate Random Effects",
-                caption.above = TRUE,
-                doctype = FALSE,
-                digits = 4)
+                caption            = "MLM: Investigate Random Effects",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
@@ -930,12 +958,14 @@ data_achieve %>%
 For now, let us look at the results.
 
 ```{r, include = FALSE}
-screenreg(list(fit_read_3ml, fit_read_6ml, fit_read_7ml, fit_read_8ml),
-          custom.model.names = c("Level 1 only", "Both Levels", "Cross-Level", "3-way"),
-          digits = 4)
+texreg::screenreg(list(fit_read_3ml, fit_read_6ml, fit_read_7ml, fit_read_8ml))
 ```
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(fit_read_3ml, 
                      fit_read_6ml, 
                      fit_read_7ml,
@@ -944,10 +974,9 @@ texreg::htmlreg(list(fit_read_3ml,
                                        "Both Levels", 
                                        "Cross-Level",
                                        "3-way"),
-                caption = "MLM: Investigate a Fixed Cross-level Interaction",
-                caption.above = TRUE,
-                doctype = FALSE,
-                digits = 3)
+                caption            = "MLM: Investigate a Fixed Cross-level Interaction",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 There is no evidence school enrollment moderates either of age or vocabulary's effects.
@@ -977,6 +1006,10 @@ Although there are functions to automatically center and standardize variables, 
 ### Compute the Grand Means
 
 ```{r, results='asis'}
+# Knit to Website: output = "html" 
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
 data_achieve %>% 
   furniture::table1(gevocab, age, senroll,
                     output = "html",
@@ -1012,6 +1045,10 @@ data_achieve_center %>%
 Compare the summary statistcs:
 
 ```{r, results='asis'}
+# Knit to Website: output = "html" 
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
 data_achieve_center %>% 
   furniture::table1(gevocab, gevocab_c, 
                     age,     age_c, 
@@ -1061,16 +1098,15 @@ fit_read_10ml_c <- lme4::lmer(geread ~ gevocab_c*age_c + (gevocab_c | school),
 #### Compare the Models
 
 ```{r, include=FALSE}
-screenreg(list(fit_read_9ml, fit_read_10ml, fit_read_9ml_c, fit_read_10ml_c),
-          custom.model.names = c("Main Effects", "Interaction",
-                                 "Main Effects", "Interaction"),
-          groups = list("Raw Scale" = 2:4,
-                        "Mean Centered" = 5:7),
-          digits = 3)
+texreg::screenreg(list(fit_read_9ml, fit_read_10ml, fit_read_9ml_c, fit_read_10ml_c))
 ```
 
 
 ```{r, include=FALSE}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(fit_read_9ml, 
                      fit_read_10ml, 
                      fit_read_9ml_c, 
@@ -1081,10 +1117,9 @@ texreg::htmlreg(list(fit_read_9ml,
                                        "Interaction"),
                 groups = list("Raw Scale" = 2:4,
                               "Mean Centered" = 5:7),
-                caption = "MLM: Investigate Centering Variables Involved in an Interaction",
-                caption.above = TRUE,
-                doctype = FALSE,
-                digits = 4)
+                caption            = "MLM: Investigate Centering Variables Involved in an Interaction",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
@@ -1189,6 +1224,10 @@ data_achieve_center_scale %>%
 Compare the summary statistcs:
 
 ```{r, results='asis'}
+# Knit to Website: output = "html" 
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
 data_achieve_center_scale %>% 
   furniture::table1(senroll, senroll_c, senroll_ch,
                     ses, ses_t,
@@ -1220,22 +1259,23 @@ fit_read_12ml_s <- lme4::lmer(geread ~ gevocab_c*age_c*ses_t +              # 3-
 
 
 ```{r, include = FALSE}
-screenreg(list(fit_read_10ml_s, fit_read_11ml_s, fit_read_12ml_s),
-          custom.model.names = c("no SES", "2-way", "3-way"),
-          digits = 4)
+texreg::screenreg(list(fit_read_10ml_s, fit_read_11ml_s, fit_read_12ml_s))
 ```
 
 ```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(fit_read_10ml_s, 
                      fit_read_11ml_s, 
                      fit_read_12ml_s),
-          custom.model.names = c("no SES", 
-                                 "2-way", 
-                                 "3-way"),
-                caption = "MLM: Investigate More Complex Fixed Interactions",
-                caption.above = TRUE,
-                doctype = FALSE,
-                digits = 4)
+                custom.model.names = c("no SES", 
+                                       "2-way", 
+                                       "3-way"),
+                caption            = "MLM: Investigate More Complex Fixed Interactions",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 
@@ -1260,8 +1300,14 @@ fit_read_11re_s <- lme4::lmer(geread ~ gevocab_c*age_c + gevocab_c*ses_t +   # 2
 ### Table
 
 ```{r, results='asis'}
-texreg::texreg(fit_read_11re_s,
-               single.row = TRUE)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_read_11re_s),
+                caption            = "MLM: Final Model",
+                caption.above      = TRUE,
+                single.row         = TRUE)
 ```
 
 

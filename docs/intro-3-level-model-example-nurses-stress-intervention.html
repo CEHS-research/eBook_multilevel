@@ -232,6 +232,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>5</b> Variance Explained</a><ul>
 <li class="chapter" data-level="5.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>5.1</b> For Generalized MLMs</a></li>
 </ul></li>
+<li class="chapter" data-level="6" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html"><i class="fa fa-check"></i><b>6</b> Checking Assumptions with Residual Diagnostics</a><ul>
+<li class="chapter" data-level="6.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#plotting-coefficients"><i class="fa fa-check"></i><b>6.1</b> Plotting Coefficients</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#fixed-effects"><i class="fa fa-check"></i><b>6.1.1</b> Fixed Effects</a></li>
+<li class="chapter" data-level="6.1.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#random-effects"><i class="fa fa-check"></i><b>6.1.2</b> Random Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#plotting-marginal-effects"><i class="fa fa-check"></i><b>6.2</b> Plotting Marginal Effects</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#predicted-values"><i class="fa fa-check"></i><b>6.2.1</b> Predicted Values</a></li>
+<li class="chapter" data-level="6.2.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#effect-plots"><i class="fa fa-check"></i><b>6.2.2</b> Effect Plots</a></li>
+<li class="chapter" data-level="6.2.3" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#interaction-plots"><i class="fa fa-check"></i><b>6.2.3</b> Interaction Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#model-diagnostics"><i class="fa fa-check"></i><b>6.3</b> Model Diagnostics</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#slope-of-coefficentes"><i class="fa fa-check"></i><b>6.3.1</b> Slope of Coefficentes</a></li>
+<li class="chapter" data-level="6.3.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#residuals"><i class="fa fa-check"></i><b>6.3.2</b> Residuals</a></li>
+<li class="chapter" data-level="6.3.3" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#diagnostics"><i class="fa fa-check"></i><b>6.3.3</b> Diagnostics</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -370,7 +386,11 @@ When variables are involved in an interaction, it may be advantageous to center 
 <div id="the-stargazer-package-1" class="section level4">
 <h4><span class="header-section-number">3.2.1.1</span> The <code>stargazer</code> package</h4>
 <p>Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as <em>Table 1</em>. The <code>stargazer()</code> function can be used to create such a table, but only for the entire dataset <span class="citation">(Hlavac <a href="references.html#ref-R-stargazer">2018</a>)</span>. I haven’t been able to find a way to get it to summarize subsamples and compare them in the standard format.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_nurse <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: type = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     type = &quot;latex&quot;</span>
+<span class="co"># View on Screen:  type = &quot;text&quot;</span>
+
+data_nurse <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>stargazer<span class="op">::</span><span class="kw">stargazer</span>(<span class="dt">title  =</span> <span class="st">&quot;Descriptive statistics, aggregate over entire sample&quot;</span>,
                        <span class="dt">header =</span> <span class="ot">FALSE</span>,
@@ -630,13 +650,17 @@ hospsizeNG
 <div id="the-furniture-package-1" class="section level4">
 <h4><span class="header-section-number">3.2.1.2</span> The <code>furniture</code> package</h4>
 <p>Tyson Barrett’s <strong>furniture</strong> package includes the extremely useful function <code>table1()</code> which simplifies the common task of creating a stratified, comparative table of descriptive statistics. Full documentation can be accessed by executing <code>?furniture::table1</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_nurse <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_nurse <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age, genderF, experien, wardtype, hospsize, hospsizeN, hospsizeNG,
-                     <span class="dt">splitby    =</span> <span class="op">~</span><span class="st"> </span>expcon,                                  <span class="co"># var to divide sample by</span>
-                     <span class="dt">test       =</span> <span class="ot">TRUE</span>,                                      <span class="co"># test groups different?</span>
-                     <span class="dt">type       =</span> <span class="st">&quot;full&quot;</span>,                                    <span class="co"># give the test statistic</span>
-                     <span class="dt">output     =</span> <span class="st">&quot;html&quot;</span>,                                    <span class="co"># output for html</span>
-                     <span class="dt">caption    =</span> <span class="st">&quot;Compare Intervention groups on five main variables&quot;</span>)  <span class="co"># title</span></code></pre></div>
+                    <span class="dt">splitby    =</span> <span class="op">~</span><span class="st"> </span>expcon,                                              <span class="co"># var to divide sample by</span>
+                    <span class="dt">test       =</span> <span class="ot">TRUE</span>,                                                  <span class="co"># test groups different?</span>
+                    <span class="dt">type       =</span> <span class="st">&quot;full&quot;</span>,                                                <span class="co"># give the test statistic</span>
+                    <span class="dt">output     =</span> <span class="st">&quot;html&quot;</span>,                                                <span class="co"># output for html</span>
+                    <span class="dt">caption    =</span> <span class="st">&quot;Compare Intervention groups on five main variables&quot;</span>)  <span class="co"># title</span></code></pre></div>
 <table>
 <caption>
 <span id="tab:unnamed-chunk-106">Table 3.1: </span>Compare Intervention groups on five main variables
@@ -969,12 +993,17 @@ nurse_lmer_0_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><spa
 <span class="st">                                </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),      <span class="co"># Random Intercepts for wards within hospitals </span>
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">FALSE</span>)             <span class="co"># fit via ML for comparing FIXED effects inclusion</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_ml, nurse_lmer_0_re),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M0: Null, ML&quot;</span>, <span class="st">&quot;M0: Null, REML&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;NULL Model: different estimation methods&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_ml, 
+                     nurse_lmer_0_re),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M0: Null, ML&quot;</span>, 
+                                       <span class="st">&quot;M0: Null, REML&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;NULL Model: different estimation methods&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -996,10 +1025,10 @@ NULL Model: different estimation methods
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-5.0010 (0.1081)<sup style="vertical-align: 0px;">***</sup>
+5.00 (0.11)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-5.0010 (0.1103)<sup style="vertical-align: 0px;">***</sup>
+5.00 (0.11)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -1007,10 +1036,10 @@ NULL Model: different estimation methods
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-1950.3612
+1950.36
 </td>
 <td style="border-top: 1px solid black;">
-1952.9530
+1952.95
 </td>
 </tr>
 <tr>
@@ -1018,10 +1047,10 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-1969.9922
+1969.99
 </td>
 <td style="padding-right: 12px; border: none;">
-1972.5840
+1972.58
 </td>
 </tr>
 <tr>
@@ -1029,10 +1058,10 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--971.1806
+-971.18
 </td>
 <td style="padding-right: 12px; border: none;">
--972.4765
+-972.48
 </td>
 </tr>
 <tr>
@@ -1073,10 +1102,10 @@ Num. groups: hospital
 Var: ward:hospital (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4888
+0.49
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4888
+0.49
 </td>
 </tr>
 <tr>
@@ -1084,10 +1113,10 @@ Var: ward:hospital (Intercept)
 Var: hospital (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1621
+0.16
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1743
+0.17
 </td>
 </tr>
 <tr>
@@ -1095,10 +1124,10 @@ Var: hospital (Intercept)
 Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-0.3013
+0.30
 </td>
 <td style="border-bottom: 2px solid black;">
-0.3013
+0.30
 </td>
 </tr>
 <tr>
@@ -1131,7 +1160,7 @@ Var: Residual
   
 <span class="kw">pie</span>(<span class="dt">x =</span> vc<span class="op">$</span>vcov,
     <span class="dt">labels =</span> vc<span class="op">$</span>grp)</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-113-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-113-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>sjstats</code> package has a few really helpful funcitons:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">re_var</span>(nurse_lmer_0_re)</code></pre></div>
 <pre><code>      Within-group-variance:    0.301
@@ -1182,13 +1211,21 @@ Formula: stress ~ 1 + (1 | hospital/ward)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nurse_lmer_0_re_2level &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(stress <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>wardid),  <span class="co"># each hospital contains several wards</span>
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">TRUE</span>)              <span class="co"># fit via REML (the default) for ICC calculations</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_re_2level, nurse_lmer_0_re),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;2 levels&quot;</span>, <span class="st">&quot;3 levels&quot;</span>),
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_re_2level, 
+                     nurse_lmer_0_re),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;2 levels&quot;</span>, 
+                                       <span class="st">&quot;3 levels&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Two or Three Levels?&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="bottom" style="margin-top:0.3em;">
-Statistical models
+<caption align="top" style="margin-bottom:0.3em;">
+MLM: Two or Three Levels?
 </caption>
 <tr>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
@@ -1365,11 +1402,17 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <span class="st">                                 </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),          <span class="co"># Random Intercepts for wards within hospitals</span>
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">FALSE</span>)                  <span class="co"># fit via ML for nested FIXED effects</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_ml, nurse_lmer_1_ml),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M0: null&quot;</span>, <span class="st">&quot;M1: fixed pred&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Nested Models: Fixed effects via ML&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_ml, 
+                     nurse_lmer_1_ml),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M0: null&quot;</span>, 
+                                       <span class="st">&quot;M1: fixed pred&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;Nested Models: Fixed effects via ML&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -1615,15 +1658,19 @@ nurse_lmer_1b_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><sp
 <span class="st">                                 </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),          
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">FALSE</span>)                  </code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_1_ml, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_1_ml, 
                      nurse_lmer_1a_ml, 
                      nurse_lmer_1b_ml),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Factor&quot;</span>, 
                                        <span class="st">&quot;0 vs 1&quot;</span>, 
                                        <span class="st">&quot;Centered&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;MLM: Model 1 - Expereimental Condiditon Coding (2-levels)&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Model 1 - Expereimental Condiditon Coding (2-levels)&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -1930,15 +1977,19 @@ nurse_lmer_1d_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><sp
 <span class="st">                                 </span>(<span class="dv">1</span><span class="op">|</span>hospital<span class="op">/</span>ward),          
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_1b_ml, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_1b_ml, 
                      nurse_lmer_1c_ml, 
                      nurse_lmer_1d_ml),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Factor&quot;</span>, 
                                        <span class="st">&quot;0 vs 1&quot;</span>, 
                                        <span class="st">&quot;Centered&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;MLM: Model 1 - Hospital Coding (3-levels)&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Model 1 - Hospital Coding (3-levels)&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -2250,11 +2301,17 @@ nurse_lmer_2_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><spa
 <span class="st">                                </span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>expconNG<span class="op">|</span>hospital),      <span class="co"># RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!)</span>
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">TRUE</span>)                    <span class="co"># fit via REML for nested Random Effects</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_1d_re, nurse_lmer_2_re),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M1: RI&quot;</span>, <span class="st">&quot;M2: RIAS&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Nested Models: Random Slope via REML&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_1d_re, 
+                     nurse_lmer_2_re),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M1: RI&quot;</span>, 
+                                       <span class="st">&quot;M2: RIAS&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;Nested Models: Random Slope via REML&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -2521,11 +2578,17 @@ nurse_lmer_3_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><spa
 <span class="st">                                </span>(<span class="dv">0</span> <span class="op">+</span><span class="st"> </span>expconNG<span class="op">|</span>hospital),    <span class="co"># RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!) </span>
                               <span class="dt">data =</span> data_nurse,
                               <span class="dt">REML =</span> <span class="ot">FALSE</span>)                 <span class="co"># fit via ML for nested FIXED Effects</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_2_ml, nurse_lmer_3_ml),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M2: RAIS&quot;</span>, <span class="st">&quot;M3: Xlevel Int&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Nested Models: Fixed Cross-Level Interaction via ML&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_2_ml, 
+                     nurse_lmer_3_ml),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M2: RAIS&quot;</span>, 
+                                       <span class="st">&quot;M3: Xlevel Int&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;Nested Models: Fixed Cross-Level Interaction via ML&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -2784,12 +2847,15 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 </div>
 <div id="table-of-estimated-parameters" class="section level3">
 <h3><span class="header-section-number">3.8.2</span> Table of Estimated Parameters</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_3_re),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_3_re),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M3: Xlevel Int&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Final Model: with REML&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;Final Model: with REML&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -2808,7 +2874,7 @@ Final Model: with REML
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-5.3892 (0.1141)<sup style="vertical-align: 0px;">***</sup>
+5.39 (0.11)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2816,7 +2882,7 @@ Final Model: with REML
 expconNG
 </td>
 <td style="padding-right: 12px; border: none;">
--0.7228 (0.1160)<sup style="vertical-align: 0px;">***</sup>
+-0.72 (0.12)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2824,7 +2890,7 @@ expconNG
 age
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0223 (0.0022)<sup style="vertical-align: 0px;">***</sup>
+0.02 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2832,7 +2898,7 @@ age
 gender
 </td>
 <td style="padding-right: 12px; border: none;">
--0.4550 (0.0349)<sup style="vertical-align: 0px;">***</sup>
+-0.46 (0.03)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2840,7 +2906,7 @@ gender
 experien
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0617 (0.0045)<sup style="vertical-align: 0px;">***</sup>
+-0.06 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2848,7 +2914,7 @@ experien
 wardtypespecial care
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0531 (0.0731)
+0.05 (0.07)
 </td>
 </tr>
 <tr>
@@ -2856,7 +2922,7 @@ wardtypespecial care
 hospsizeNG
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4621 (0.1293)<sup style="vertical-align: 0px;">***</sup>
+0.46 (0.13)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2864,7 +2930,7 @@ hospsizeNG
 expconNG:hospsizeNG
 </td>
 <td style="padding-right: 12px; border: none;">
-0.9988 (0.1674)<sup style="vertical-align: 0px;">***</sup>
+1.00 (0.17)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2872,7 +2938,7 @@ expconNG:hospsizeNG
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-1614.4670
+1614.47
 </td>
 </tr>
 <tr>
@@ -2880,7 +2946,7 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-1673.3601
+1673.36
 </td>
 </tr>
 <tr>
@@ -2888,7 +2954,7 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--795.2335
+-795.23
 </td>
 </tr>
 <tr>
@@ -2920,7 +2986,7 @@ Num. groups: hospital
 Var: ward.hospital (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1114
+0.11
 </td>
 </tr>
 <tr>
@@ -2928,7 +2994,7 @@ Var: ward.hospital (Intercept)
 Var: hospital (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1673
+0.17
 </td>
 </tr>
 <tr>
@@ -2936,7 +3002,7 @@ Var: hospital (Intercept)
 Var: hospital.1 expconNG
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2024
+0.20
 </td>
 </tr>
 <tr>
@@ -2944,7 +3010,7 @@ Var: hospital.1 expconNG
 Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-0.2173
+0.22
 </td>
 </tr>
 <tr>
@@ -3073,7 +3139,7 @@ Formula: stress ~ expconNG + age + gender + experien + wardtype + hospsizeNG + e
         <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
         <span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),
         <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>))</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-147-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-147-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>This plot illustrates the estimated marginal means among male (gender’s reference category) nurses at the overall mean age (43.01 years), with the mean level experience (17.06 years), since thoes variables were not included as <code>focal.predictors</code> in the <code>effects::Effect()</code> function. Different values for thoes predictors would yield the exact sample plot, shifted as a whole either up or down.</p>
 </div>
 </div>
@@ -3092,15 +3158,18 @@ Formula: stress ~ expconNG + age + gender + experien + wardtype + hospsizeNG + e
 <div id="reproduction-of-table-2.5" class="section level2">
 <h2><span class="header-section-number">3.10</span> Reproduction of Table 2.5</h2>
 <p><span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span> presents a table on page 23 comparing various models. Note, that table includes models only fit via maximum likelihood, not REML. Also, the model <span class="math inline">\(M_3\)</span>: with cross-level interaction is slightly different for an unknown reason.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_ml, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(nurse_lmer_0_ml, 
                      nurse_lmer_1d_ml, 
                      nurse_lmer_2_ml, 
                      nurse_lmer_3_ml),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M0&quot;</span>, <span class="st">&quot;M1&quot;</span>, <span class="st">&quot;M2&quot;</span>, <span class="st">&quot;M3&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Hox Table 2.5: Models for stress in hospitals and wards&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
-                <span class="dt">digits =</span> <span class="dv">2</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;Hox Table 2.5: Models for stress in hospitals and wards&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">

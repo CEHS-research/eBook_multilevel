@@ -232,6 +232,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>5</b> Variance Explained</a><ul>
 <li class="chapter" data-level="5.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>5.1</b> For Generalized MLMs</a></li>
 </ul></li>
+<li class="chapter" data-level="6" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html"><i class="fa fa-check"></i><b>6</b> Checking Assumptions with Residual Diagnostics</a><ul>
+<li class="chapter" data-level="6.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#plotting-coefficients"><i class="fa fa-check"></i><b>6.1</b> Plotting Coefficients</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#fixed-effects"><i class="fa fa-check"></i><b>6.1.1</b> Fixed Effects</a></li>
+<li class="chapter" data-level="6.1.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#random-effects"><i class="fa fa-check"></i><b>6.1.2</b> Random Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#plotting-marginal-effects"><i class="fa fa-check"></i><b>6.2</b> Plotting Marginal Effects</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#predicted-values"><i class="fa fa-check"></i><b>6.2.1</b> Predicted Values</a></li>
+<li class="chapter" data-level="6.2.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#effect-plots"><i class="fa fa-check"></i><b>6.2.2</b> Effect Plots</a></li>
+<li class="chapter" data-level="6.2.3" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#interaction-plots"><i class="fa fa-check"></i><b>6.2.3</b> Interaction Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#model-diagnostics"><i class="fa fa-check"></i><b>6.3</b> Model Diagnostics</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#slope-of-coefficentes"><i class="fa fa-check"></i><b>6.3.1</b> Slope of Coefficentes</a></li>
+<li class="chapter" data-level="6.3.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#residuals"><i class="fa fa-check"></i><b>6.3.2</b> Residuals</a></li>
+<li class="chapter" data-level="6.3.3" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#diagnostics"><i class="fa fa-check"></i><b>6.3.3</b> Diagnostics</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -255,6 +271,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="intro-2-level-model-example-pupil-popularity" class="section level1">
 <h1><span class="header-section-number">2</span> Intro 2-level Model Example: Pupil Popularity</h1>
+<div class="figure">
+<img src="images/header_hox_popular2.png" />
+
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
 <span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
 <span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
@@ -278,6 +298,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>From <strong>Appendix E</strong>:</p>
 <p>The popularity data in <strong>popular2.sav</strong> are simulated data for <strong>2000 pupils in 100 schools</strong>. The purpose is to offer a very simple example for multilevel regression analysis. The main outcome variable is the <strong>pupil popularity</strong>, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil. Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: <strong>pupil popularity</strong> as rated by their teacher, on a scale from 1-10. The explanatory variables are <strong>pupil gender</strong> (boy=0, girl=1), <strong>pupil extraversion</strong> (10-point scale) and <strong>teacher experience</strong> in years. The popularity data have been generated to be a ‘nice’ well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.</p>
 </blockquote>
+<div class="figure">
+<img src="images/diagram_hox_popular2.png" />
+
+</div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span>
 
@@ -672,8 +696,12 @@ $ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3,...<
 <div id="the-stargazer-package" class="section level4">
 <h4><span class="header-section-number">2.2.1.1</span> The <code>stargazer</code> package</h4>
 <p>Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as <em>Table 1</em>. The <code>stargazer()</code> function can be used to create such a table, but only for the entire dataset <span class="citation">(Hlavac <a href="references.html#ref-R-stargazer">2018</a>)</span>. I haven’t been able to find a way to get it to summarize subsamples and compare them in the standard format.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>id) <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: type = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     type = &quot;latex&quot;</span>
+<span class="co"># View on Screen:  type = &quot;text&quot;</span>
+
+data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(extrav, texp, popular) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>stargazer<span class="op">::</span><span class="kw">stargazer</span>(<span class="dt">title  =</span> <span class="st">&quot;Descriptive statistics, aggregate over entire sample&quot;</span>,
                        <span class="dt">header =</span> <span class="ot">FALSE</span>,
@@ -714,58 +742,6 @@ Max
 </tr>
 <tr>
 <td colspan="8" style="border-bottom: 1px solid black">
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-pupil
-</td>
-<td>
-2,000
-</td>
-<td>
-10.649
-</td>
-<td>
-5.968
-</td>
-<td>
-1
-</td>
-<td>
-6
-</td>
-<td>
-16
-</td>
-<td>
-26
-</td>
-</tr>
-<tr>
-<td style="text-align:left">
-class
-</td>
-<td>
-2,000
-</td>
-<td>
-50.370
-</td>
-<td>
-29.078
-</td>
-<td>
-1
-</td>
-<td>
-25
-</td>
-<td>
-76
-</td>
-<td>
-100
 </td>
 </tr>
 <tr>
@@ -847,32 +823,6 @@ popular
 </td>
 </tr>
 <tr>
-<td style="text-align:left">
-popteach
-</td>
-<td>
-2,000
-</td>
-<td>
-5.061
-</td>
-<td>
-1.404
-</td>
-<td>
-1
-</td>
-<td>
-4
-</td>
-<td>
-6
-</td>
-<td>
-10
-</td>
-</tr>
-<tr>
 <td colspan="8" style="border-bottom: 1px solid black">
 </td>
 </tr>
@@ -881,142 +831,145 @@ popteach
 <div id="the-furniture-package" class="section level4">
 <h4><span class="header-section-number">2.2.1.2</span> The <code>furniture</code> package</h4>
 <p>Tyson Barrett’s <strong>furniture</strong> package includes the extremely useful function <code>table1()</code> which simplifies the common task of creating a stratified, comparative table of descriptive statistics. Full documentation can be accessed by executing <code>?furniture::table1</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>furniture<span class="op">::</span><span class="st"> </span><span class="kw">table1</span>(<span class="st">&quot;Pupil&#39;s Extraversion (10 pt)&quot;</span>  =<span class="st"> </span>extrav, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_pop <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(<span class="st">&quot;Pupil&#39;s Extraversion (10 pt)&quot;</span>   =<span class="st"> </span>extrav, 
                      <span class="st">&quot;Teacher&#39;s Experience (years)&quot;</span>  =<span class="st"> </span>texp, 
                      <span class="st">&quot;Popularity, Sociometric Score&quot;</span> =<span class="st"> </span>popular, 
                      <span class="st">&quot;Popularity, Teacher Evaluated&quot;</span> =<span class="st"> </span>popteach,
-                     <span class="dt">splitby    =</span> <span class="op">~</span><span class="st"> </span>sex,                                     <span class="co"># var to divide sample by</span>
+                     <span class="dt">splitby    =</span> <span class="op">~</span><span class="st"> </span>sex,                                     <span class="co"># divide sample into columns by...</span>
                      <span class="dt">test       =</span> <span class="ot">TRUE</span>,                                      <span class="co"># test groups different?</span>
                      <span class="dt">output     =</span> <span class="st">&quot;html&quot;</span>,                                    <span class="co"># output for latex</span>
-                     <span class="dt">align      =</span> <span class="kw">c</span>(<span class="st">&quot;l&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;r&quot;</span>, <span class="st">&quot;r&quot;</span>),                     <span class="co"># column alignment</span>
                      <span class="dt">caption    =</span> <span class="st">&quot;Compare genders on four main variables&quot;</span>)  <span class="co"># title</span></code></pre></div>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-31">Table 2.1: </span>Compare genders on four main variables
+<span id="tab:unnamed-chunk-32">Table 2.1: </span>Compare genders on four main variables
 </caption>
 <thead>
 <tr>
-<th style="text-align:left;">
+<th>
 </th>
-<th style="text-align:right;">
+<th>
 boy
 </th>
-<th style="text-align:right;">
+<th>
 girl
 </th>
-<th style="text-align:right;">
+<th>
 P-Value
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 n = 989
 </td>
-<td style="text-align:right;">
+<td>
 n = 1011
 </td>
-<td style="text-align:right;">
+<td>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td>
 Pupil.s.Extraversion..10.pt.
 </td>
-<td style="text-align:right;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 &lt;.001
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 5.1 (1.2)
 </td>
-<td style="text-align:right;">
+<td>
 5.3 (1.3)
 </td>
-<td style="text-align:right;">
+<td>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td>
 Teacher.s.Experience..years.
 </td>
-<td style="text-align:right;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 0.001
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 13.8 (6.3)
 </td>
-<td style="text-align:right;">
+<td>
 14.7 (6.8)
 </td>
-<td style="text-align:right;">
+<td>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td>
 Popularity..Sociometric.Score
 </td>
-<td style="text-align:right;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 &lt;.001
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 4.3 (1.1)
 </td>
-<td style="text-align:right;">
+<td>
 5.9 (1.1)
 </td>
-<td style="text-align:right;">
+<td>
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td>
 Popularity..Teacher.Evaluated
 </td>
-<td style="text-align:right;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 &lt;.001
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td>
 </td>
-<td style="text-align:right;">
+<td>
 4.3 (1.2)
 </td>
-<td style="text-align:right;">
+<td>
 5.8 (1.2)
 </td>
-<td style="text-align:right;">
+<td>
 </td>
 </tr>
 </tbody>
@@ -1047,7 +1000,7 @@ data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">1</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># x-ticks</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:scatter"></span>
-<img src="eBook_install_files/figure-html/scatter-1.png" alt="Disaggregate: pupil level only with extraversion treated as an continuous measure." width="576" />
+<img src="eBook_multilevel_files/figure-html/scatter-1.png" alt="Disaggregate: pupil level only with extraversion treated as an continuous measure." width="576" />
 <p class="caption">
 Figure 2.1: Disaggregate: pupil level only with extraversion treated as an continuous measure.
 </p>
@@ -1071,7 +1024,7 @@ data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">1</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># x-ticks</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:scatter2d"></span>
-<img src="eBook_install_files/figure-html/scatter2d-1.png" alt="Disaggregate: pupil level only with extraversion treated as an continuous measure." width="576" />
+<img src="eBook_multilevel_files/figure-html/scatter2d-1.png" alt="Disaggregate: pupil level only with extraversion treated as an continuous measure." width="576" />
 <p class="caption">
 Figure 2.2: Disaggregate: pupil level only with extraversion treated as an continuous measure.
 </p>
@@ -1082,6 +1035,10 @@ table &lt;-<span class="st"> </span>data_pop <span class="op">%&gt;%</span><span
 <span class="st">  </span><span class="kw">group_by</span>(extrav) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">count =</span> <span class="kw">n_distinct</span>(id),
             <span class="dt">percent  =</span> <span class="dv">100</span> <span class="op">*</span><span class="st"> </span>count <span class="op">/</span><span class="st"> </span><span class="dv">2000</span>) 
+
+<span class="co"># Knit to Website: type = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     type = &quot;latex&quot;</span>
+<span class="co"># View on Screen:  type = &quot;text&quot;</span>
 
 table <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">stargazer</span>(<span class="dt">summary  =</span> <span class="ot">FALSE</span>,
@@ -1245,7 +1202,7 @@ percent
        <span class="dt">y =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>) <span class="op">+</span><span class="st">               </span><span class="co"># y-axis label</span>
 <span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Spectral&quot;</span>, <span class="dt">direction =</span> <span class="dv">1</span>)    <span class="co"># select color</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:boxes"></span>
-<img src="eBook_install_files/figure-html/boxes-1.png" alt="Disaggregate: pupil level only with extraversion treated as an ordinal factor.  The width of the boxes are proportional to the square-roots of the number of observations each box represents." width="576" />
+<img src="eBook_multilevel_files/figure-html/boxes-1.png" alt="Disaggregate: pupil level only with extraversion treated as an ordinal factor.  The width of the boxes are proportional to the square-roots of the number of observations each box represents." width="576" />
 <p class="caption">
 Figure 2.3: Disaggregate: pupil level only with extraversion treated as an ordinal factor. The width of the boxes are proportional to the square-roots of the number of observations each box represents.
 </p>
@@ -1277,7 +1234,7 @@ data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_rect</span>(<span class="dt">colour =</span> <span class="ot">NA</span>, 
                                         <span class="dt">fill   =</span> <span class="ot">NA</span>))</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:scatter3x3"></span>
-<img src="eBook_install_files/figure-html/scatter3x3-1.png" alt="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  First nice classes shown." width="576" />
+<img src="eBook_multilevel_files/figure-html/scatter3x3-1.png" alt="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  First nice classes shown." width="576" />
 <p class="caption">
 Figure 2.4: Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class. First nice classes shown.
 </p>
@@ -1302,7 +1259,7 @@ data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
         <span class="dt">strip.text       =</span> <span class="kw">element_blank</span>())</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:scatter3x3b"></span>
-<img src="eBook_install_files/figure-html/scatter3x3b-1.png" alt="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  A set of nine classes was chosen to show a sampling of variability.  The facet labels are not shown as the identification number probably would not be advisable for a general publication." width="576" />
+<img src="eBook_multilevel_files/figure-html/scatter3x3b-1.png" alt="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  A set of nine classes was chosen to show a sampling of variability.  The facet labels are not shown as the identification number probably would not be advisable for a general publication." width="576" />
 <p class="caption">
 Figure 2.5: Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class. A set of nine classes was chosen to show a sampling of variability. The facet labels are not shown as the identification number probably would not be advisable for a general publication.
 </p>
@@ -1325,7 +1282,7 @@ Figure 2.5: Illustration of the degree of class level variability in the associa
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span><span class="st"> </span><span class="co"># x-ticks</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:classLMs"></span>
-<img src="eBook_install_files/figure-html/classLMs-1.png" alt="Spaghetti plot of seperate, independent linear models for each of the 100 classes." width="576" />
+<img src="eBook_multilevel_files/figure-html/classLMs-1.png" alt="Spaghetti plot of seperate, independent linear models for each of the 100 classes." width="576" />
 <p class="caption">
 Figure 2.6: Spaghetti plot of seperate, independent linear models for each of the 100 classes.
 </p>
@@ -1358,7 +1315,7 @@ data_pop <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodgerblue&quot;</span>, <span class="st">&quot;maroon1&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">facet_grid</span>(texp3 <span class="op">~</span><span class="st"> </span>sex) </code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:classLMs3x2"></span>
-<img src="eBook_install_files/figure-html/classLMs3x2-1.png" alt="Spaghetti plot of seperate, independent linear models for each of the 100 classes.  Seperate panels are used to untangle the 'hairball' in the previous figure.  The columns are seperated by the pupils' gender and the rows by the teacher's experince in years." width="576" />
+<img src="eBook_multilevel_files/figure-html/classLMs3x2-1.png" alt="Spaghetti plot of seperate, independent linear models for each of the 100 classes.  Seperate panels are used to untangle the 'hairball' in the previous figure.  The columns are seperated by the pupils' gender and the rows by the teacher's experince in years." width="576" />
 <p class="caption">
 Figure 2.7: Spaghetti plot of seperate, independent linear models for each of the 100 classes. Seperate panels are used to untangle the ‘hairball’ in the previous figure. The columns are seperated by the pupils’ gender and the rows by the teacher’s experince in years.
 </p>
@@ -1571,15 +1528,20 @@ F-statistic: 648.6 on 2 and 1997 DF,  p-value: &lt; 2.2e-16</code></pre>
 <div id="compare-nested-models" class="section level4">
 <h4><span class="header-section-number">2.3.3.1</span> Compare Nested Models</h4>
 <p>Create a table to compare the two nested models:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lm_<span class="dv">0</span>, pop_lm_<span class="dv">1</span>),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lm_<span class="dv">0</span>, 
+                     pop_lm_<span class="dv">1</span>),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Null Model&quot;</span>,
                                        <span class="st">&quot;With Predictors&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Single Level Models&quot;</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;Single Level Models&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="bottom" style="margin-top:0.3em;">
+<caption align="top" style="margin-bottom:0.3em;">
 Single Level Models
 </caption>
 <tr>
@@ -1598,10 +1560,10 @@ Single Level Models
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-5.0764 (0.0309)<sup style="vertical-align: 0px;">***</sup>
+5.08 (0.03)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-2.7895 (0.1036)<sup style="vertical-align: 0px;">***</sup>
+2.79 (0.10)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -1611,7 +1573,7 @@ sexgirl
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-1.5051 (0.0484)<sup style="vertical-align: 0px;">***</sup>
+1.51 (0.05)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -1621,7 +1583,7 @@ extrav
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2926 (0.0192)<sup style="vertical-align: 0px;">***</sup>
+0.29 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -1629,10 +1591,10 @@ extrav
 R<sup style="vertical-align: 0px;">2</sup>
 </td>
 <td style="border-top: 1px solid black;">
-0.0000
+0.00
 </td>
 <td style="border-top: 1px solid black;">
-0.3938
+0.39
 </td>
 </tr>
 <tr>
@@ -1640,10 +1602,10 @@ R<sup style="vertical-align: 0px;">2</sup>
 Adj. R<sup style="vertical-align: 0px;">2</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0000
+0.00
 </td>
 <td style="padding-right: 12px; border: none;">
-0.3932
+0.39
 </td>
 </tr>
 <tr>
@@ -1662,10 +1624,10 @@ Num. obs.
 RMSE
 </td>
 <td style="border-bottom: 2px solid black;">
-1.3825
+1.38
 </td>
 <td style="border-bottom: 2px solid black;">
-1.0770
+1.08
 </td>
 </tr>
 <tr>
@@ -2161,16 +2123,22 @@ texp    -0.683 -0.040  0.090</code></pre>
 <h4><span class="header-section-number">2.4.3.4</span> Interpretation</h4>
 <p>After accounting for the heiarchical nesting of students in classes, girls were rated 1.25 points more popular on average, than boys with the same extroversion score. One point higher extroversion scores were associated with 0.45 points higher popularity, within each gender.</p>
 <p>Reproduce Table 2.1 on the top of page 14 <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lm_<span class="dv">0</span>, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lm_<span class="dv">0</span>, 
                      pop_lmer_0_ml, 
                      pop_lmer_1_ml),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Single-level&quot;</span>, 
                                        <span class="st">&quot;M0: int only&quot;</span>, 
                                        <span class="st">&quot;M1: w pred&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Hox Table 2.1 on the top of page 14&quot;</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;Hox Table 2.1 on the top of page 14&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="bottom" style="margin-top:0.3em;">
+<caption align="top" style="margin-bottom:0.3em;">
 Hox Table 2.1 on the top of page 14
 </caption>
 <tr>
@@ -2192,26 +2160,13 @@ Hox Table 2.1 on the top of page 14
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-5.08<sup style="vertical-align: 0px;">***</sup>
+5.08 (0.03)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-5.08<sup style="vertical-align: 0px;">***</sup>
+5.08 (0.09)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.76<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.03)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.09)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.20)
+0.76 (0.20)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2223,18 +2178,7 @@ sexgirl
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-1.25<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.04)
+1.25 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2246,18 +2190,7 @@ extrav
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.45<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.02)
+0.45 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2269,18 +2202,7 @@ texp
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.09<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.01)
+0.09 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2549,14 +2471,18 @@ pop_lmer_1b_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span
                              <span class="dt">REML =</span> <span class="ot">TRUE</span>) </code></pre></div>
 <p>Create a table to compare the three nested models:</p>
 <p>The middle column below reproduces Hox’s Table 2.2 found on the bottom of page 15 <span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span>, except the values differ slightly becuase here the model was fit via <code>REML</code> where as in the text, Hox used <code>ML</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M1&quot;</span>, <span class="st">&quot;M1a&quot;</span>, <span class="st">&quot;M1b&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Assessing Significance of Random Slopes&quot;</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;Assessing Significance of Random Slopes&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="bottom" style="margin-top:0.3em;">
+<caption align="top" style="margin-bottom:0.3em;">
 Assessing Significance of Random Slopes
 </caption>
 <tr>
@@ -2578,13 +2504,13 @@ Assessing Significance of Random Slopes
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.7586 (0.1973)<sup style="vertical-align: 0px;">***</sup>
+0.76 (0.20)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.7361 (0.1966)<sup style="vertical-align: 0px;">***</sup>
+0.74 (0.20)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.8098 (0.1700)<sup style="vertical-align: 0px;">***</sup>
+0.81 (0.17)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2592,13 +2518,13 @@ Assessing Significance of Random Slopes
 sexgirl
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2508 (0.0369)<sup style="vertical-align: 0px;">***</sup>
+1.25 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2523 (0.0366)<sup style="vertical-align: 0px;">***</sup>
+1.25 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2538 (0.0373)<sup style="vertical-align: 0px;">***</sup>
+1.25 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2606,13 +2532,13 @@ sexgirl
 extrav
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4529 (0.0246)<sup style="vertical-align: 0px;">***</sup>
+0.45 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4526 (0.0246)<sup style="vertical-align: 0px;">***</sup>
+0.45 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4544 (0.0162)<sup style="vertical-align: 0px;">***</sup>
+0.45 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2620,13 +2546,13 @@ extrav
 texp
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0895 (0.0086)<sup style="vertical-align: 0px;">***</sup>
+0.09 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0910 (0.0087)<sup style="vertical-align: 0px;">***</sup>
+0.09 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0884 (0.0088)<sup style="vertical-align: 0px;">***</sup>
+0.09 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2634,13 +2560,13 @@ texp
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-4855.2551
+4855.26
 </td>
 <td style="border-top: 1px solid black;">
-4850.7684
+4850.77
 </td>
 <td style="border-top: 1px solid black;">
-4897.0246
+4897.02
 </td>
 </tr>
 <tr>
@@ -2648,13 +2574,13 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-4916.8651
+4916.87
 </td>
 <td style="padding-right: 12px; border: none;">
-4895.5756
+4895.58
 </td>
 <td style="padding-right: 12px; border: none;">
-4930.6301
+4930.63
 </td>
 </tr>
 <tr>
@@ -2662,13 +2588,13 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--2416.6276
+-2416.63
 </td>
 <td style="padding-right: 12px; border: none;">
--2417.3842
+-2417.38
 </td>
 <td style="padding-right: 12px; border: none;">
--2442.5123
+-2442.51
 </td>
 </tr>
 <tr>
@@ -2704,13 +2630,13 @@ Num. groups: class
 Var: class (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-1.3422
+1.34
 </td>
 <td style="padding-right: 12px; border: none;">
-1.3030
+1.30
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2954
+0.30
 </td>
 </tr>
 <tr>
@@ -2718,7 +2644,7 @@ Var: class (Intercept)
 Var: class sexgirl
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0024
+0.00
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -2730,10 +2656,10 @@ Var: class sexgirl
 Var: class extrav
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0347
+0.03
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0345
+0.03
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -2743,7 +2669,7 @@ Var: class extrav
 Cov: class (Intercept) sexgirl
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0224
+-0.02
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -2755,10 +2681,10 @@ Cov: class (Intercept) sexgirl
 Cov: class (Intercept) extrav
 </td>
 <td style="padding-right: 12px; border: none;">
--0.1895
+-0.19
 </td>
 <td style="padding-right: 12px; border: none;">
--0.1879
+-0.19
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -2768,7 +2694,7 @@ Cov: class (Intercept) extrav
 Cov: class sexgirl extrav
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0009
+-0.00
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -2780,13 +2706,13 @@ Cov: class sexgirl extrav
 Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5514
+0.55
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5521
+0.55
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5920
+0.59
 </td>
 </tr>
 <tr>
@@ -2936,15 +2862,19 @@ pop_lmer_4_ml  &lt;-<span class="st"> </span>lme4<span class="op">::</span><span
                              <span class="dt">data =</span> data_pop,
                              <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
 <p>Create a table to compare the two nested models:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_1a_ml, pop_lmer_2_ml),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_1a_ml, pop_lmer_2_ml),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M1a: Main Effects&quot;</span>,
                                        <span class="st">&quot;M2: With Interaction&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Hox Table 2.3 on page 17&quot;</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;Hox Table 2.3 on page 17&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="bottom" style="margin-top:0.3em;">
+<caption align="top" style="margin-bottom:0.3em;">
 Hox Table 2.3 on page 17
 </caption>
 <tr>
@@ -2963,10 +2893,10 @@ Hox Table 2.3 on page 17
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.7377 (0.1952)<sup style="vertical-align: 0px;">***</sup>
+0.74 (0.20)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--1.2070 (0.2689)<sup style="vertical-align: 0px;">***</sup>
+-1.21 (0.27)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2974,10 +2904,10 @@ Hox Table 2.3 on page 17
 sexgirl
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2525 (0.0366)<sup style="vertical-align: 0px;">***</sup>
+1.25 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2406 (0.0362)<sup style="vertical-align: 0px;">***</sup>
+1.24 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2985,10 +2915,10 @@ sexgirl
 extrav
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4526 (0.0245)<sup style="vertical-align: 0px;">***</sup>
+0.45 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.8031 (0.0395)<sup style="vertical-align: 0px;">***</sup>
+0.80 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2996,10 +2926,10 @@ extrav
 texp
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0909 (0.0086)<sup style="vertical-align: 0px;">***</sup>
+0.09 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2260 (0.0166)<sup style="vertical-align: 0px;">***</sup>
+0.23 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3009,7 +2939,7 @@ extrav:texp
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0247 (0.0025)<sup style="vertical-align: 0px;">***</sup>
+-0.02 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3017,10 +2947,10 @@ extrav:texp
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-4828.8069
+4828.81
 </td>
 <td style="border-top: 1px solid black;">
-4765.6243
+4765.62
 </td>
 </tr>
 <tr>
@@ -3028,10 +2958,10 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-4873.6141
+4873.61
 </td>
 <td style="padding-right: 12px; border: none;">
-4816.0324
+4816.03
 </td>
 </tr>
 <tr>
@@ -3039,10 +2969,10 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--2406.4035
+-2406.40
 </td>
 <td style="padding-right: 12px; border: none;">
--2373.8122
+-2373.81
 </td>
 </tr>
 <tr>
@@ -3072,10 +3002,10 @@ Num. groups: class
 Var: class (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2805
+1.28
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4538
+0.45
 </td>
 </tr>
 <tr>
@@ -3083,10 +3013,10 @@ Var: class (Intercept)
 Var: class extrav
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0339
+0.03
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0047
+0.00
 </td>
 </tr>
 <tr>
@@ -3094,10 +3024,10 @@ Var: class extrav
 Cov: class (Intercept) extrav
 </td>
 <td style="padding-right: 12px; border: none;">
--0.1847
+-0.18
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0290
+-0.03
 </td>
 </tr>
 <tr>
@@ -3105,10 +3035,10 @@ Cov: class (Intercept) extrav
 Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5518
+0.55
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5526
+0.55
 </td>
 </tr>
 <tr>
@@ -3118,17 +3048,21 @@ Var: Residual
 </tr>
 </table>
 <p>Investigate further interactions, not shown in by <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;M1a: Main Effects&quot;</span>,
                                        <span class="st">&quot;M2: With Interaction&quot;</span>,
                                        <span class="st">&quot;Add 2-way Inter&quot;</span>,
                                        <span class="st">&quot;Add 3-way Interaction&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Hox Table 2.3 on page 17&quot;</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;Hox Table 2.3 on page 17&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="bottom" style="margin-top:0.3em;">
+<caption align="top" style="margin-bottom:0.3em;">
 Hox Table 2.3 on page 17
 </caption>
 <tr>
@@ -3153,16 +3087,16 @@ Hox Table 2.3 on page 17
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.7377 (0.1952)<sup style="vertical-align: 0px;">***</sup>
+0.74 (0.20)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--1.2070 (0.2689)<sup style="vertical-align: 0px;">***</sup>
+-1.21 (0.27)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--1.0878 (0.2836)<sup style="vertical-align: 0px;">***</sup>
+-1.09 (0.28)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.9352 (0.3261)<sup style="vertical-align: 0px;">**</sup>
+-0.94 (0.33)<sup style="vertical-align: 0px;">**</sup>
 </td>
 </tr>
 <tr>
@@ -3170,16 +3104,16 @@ Hox Table 2.3 on page 17
 sexgirl
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2525 (0.0366)<sup style="vertical-align: 0px;">***</sup>
+1.25 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2406 (0.0362)<sup style="vertical-align: 0px;">***</sup>
+1.24 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.9582 (0.2118)<sup style="vertical-align: 0px;">***</sup>
+0.96 (0.21)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.6599 (0.3772)
+0.66 (0.38)
 </td>
 </tr>
 <tr>
@@ -3187,16 +3121,16 @@ sexgirl
 extrav
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4526 (0.0245)<sup style="vertical-align: 0px;">***</sup>
+0.45 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.8031 (0.0395)<sup style="vertical-align: 0px;">***</sup>
+0.80 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.7813 (0.0423)<sup style="vertical-align: 0px;">***</sup>
+0.78 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.7529 (0.0519)<sup style="vertical-align: 0px;">***</sup>
+0.75 (0.05)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3204,16 +3138,16 @@ extrav
 texp
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0909 (0.0086)<sup style="vertical-align: 0px;">***</sup>
+0.09 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2260 (0.0166)<sup style="vertical-align: 0px;">***</sup>
+0.23 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2267 (0.0169)<sup style="vertical-align: 0px;">***</sup>
+0.23 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2151 (0.0209)<sup style="vertical-align: 0px;">***</sup>
+0.22 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3223,13 +3157,13 @@ extrav:texp
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0247 (0.0025)<sup style="vertical-align: 0px;">***</sup>
+-0.02 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0250 (0.0026)<sup style="vertical-align: 0px;">***</sup>
+-0.02 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0227 (0.0035)<sup style="vertical-align: 0px;">***</sup>
+-0.02 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3241,10 +3175,10 @@ texp:sexgirl
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0021 (0.0062)
+0.00 (0.01)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0238 (0.0236)
+0.02 (0.02)
 </td>
 </tr>
 <tr>
@@ -3256,10 +3190,10 @@ extrav:sexgirl
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0488 (0.0311)
+0.05 (0.03)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1021 (0.0638)
+0.10 (0.06)
 </td>
 </tr>
 <tr>
@@ -3273,7 +3207,7 @@ extrav:texp:sexgirl
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0040 (0.0042)
+-0.00 (0.00)
 </td>
 </tr>
 <tr>
@@ -3281,16 +3215,16 @@ extrav:texp:sexgirl
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-4828.8069
+4828.81
 </td>
 <td style="border-top: 1px solid black;">
-4765.6243
+4765.62
 </td>
 <td style="border-top: 1px solid black;">
-4767.1691
+4767.17
 </td>
 <td style="border-top: 1px solid black;">
-4768.2607
+4768.26
 </td>
 </tr>
 <tr>
@@ -3298,16 +3232,16 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-4873.6141
+4873.61
 </td>
 <td style="padding-right: 12px; border: none;">
-4816.0324
+4816.03
 </td>
 <td style="padding-right: 12px; border: none;">
-4828.7791
+4828.78
 </td>
 <td style="padding-right: 12px; border: none;">
-4835.4715
+4835.47
 </td>
 </tr>
 <tr>
@@ -3315,16 +3249,16 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--2406.4035
+-2406.40
 </td>
 <td style="padding-right: 12px; border: none;">
--2373.8122
+-2373.81
 </td>
 <td style="padding-right: 12px; border: none;">
--2372.5846
+-2372.58
 </td>
 <td style="padding-right: 12px; border: none;">
--2372.1304
+-2372.13
 </td>
 </tr>
 <tr>
@@ -3366,16 +3300,16 @@ Num. groups: class
 Var: class (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2805
+1.28
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4538
+0.45
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4853
+0.49
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4897
+0.49
 </td>
 </tr>
 <tr>
@@ -3383,16 +3317,16 @@ Var: class (Intercept)
 Var: class extrav
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0339
+0.03
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0047
+0.00
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0052
+0.01
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0054
+0.01
 </td>
 </tr>
 <tr>
@@ -3400,16 +3334,16 @@ Var: class extrav
 Cov: class (Intercept) extrav
 </td>
 <td style="padding-right: 12px; border: none;">
--0.1847
+-0.18
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0290
+-0.03
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0333
+-0.03
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0343
+-0.03
 </td>
 </tr>
 <tr>
@@ -3417,16 +3351,16 @@ Cov: class (Intercept) extrav
 Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5518
+0.55
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5526
+0.55
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5514
+0.55
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5510
+0.55
 </td>
 </tr>
 <tr>
@@ -3484,14 +3418,18 @@ pop_lmer_4_ml 12 4768.3 4835.5 -2372.1   4744.3 3.3636      3     0.3389</code><
 </div>
 <div id="parameters-6" class="section level4">
 <h4><span class="header-section-number">2.4.6.2</span> Parameters</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_2_ml),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_2_ml),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Final Model&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;MLM for Popularity&quot;</span>,
-                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM for Popularity&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="bottom" style="margin-top:0.3em;">
+<caption align="top" style="margin-bottom:0.3em;">
 MLM for Popularity
 </caption>
 <tr>
@@ -3507,7 +3445,7 @@ MLM for Popularity
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
--1.2070 (0.2689)<sup style="vertical-align: 0px;">***</sup>
+-1.21 (0.27)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3515,7 +3453,7 @@ MLM for Popularity
 sexgirl
 </td>
 <td style="padding-right: 12px; border: none;">
-1.2406 (0.0362)<sup style="vertical-align: 0px;">***</sup>
+1.24 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3523,7 +3461,7 @@ sexgirl
 extrav
 </td>
 <td style="padding-right: 12px; border: none;">
-0.8031 (0.0395)<sup style="vertical-align: 0px;">***</sup>
+0.80 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3531,7 +3469,7 @@ extrav
 texp
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2260 (0.0166)<sup style="vertical-align: 0px;">***</sup>
+0.23 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3539,7 +3477,7 @@ texp
 extrav:texp
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0247 (0.0025)<sup style="vertical-align: 0px;">***</sup>
+-0.02 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3547,7 +3485,7 @@ extrav:texp
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-4765.6243
+4765.62
 </td>
 </tr>
 <tr>
@@ -3555,7 +3493,7 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-4816.0324
+4816.03
 </td>
 </tr>
 <tr>
@@ -3563,7 +3501,7 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--2373.8122
+-2373.81
 </td>
 </tr>
 <tr>
@@ -3587,7 +3525,7 @@ Num. groups: class
 Var: class (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4538
+0.45
 </td>
 </tr>
 <tr>
@@ -3595,7 +3533,7 @@ Var: class (Intercept)
 Var: class extrav
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0047
+0.00
 </td>
 </tr>
 <tr>
@@ -3603,7 +3541,7 @@ Var: class extrav
 Cov: class (Intercept) extrav
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0290
+-0.03
 </td>
 </tr>
 <tr>
@@ -3611,7 +3549,7 @@ Cov: class (Intercept) extrav
 Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-0.5526
+0.55
 </td>
 </tr>
 <tr>
@@ -3681,7 +3619,7 @@ Var: Residual
               <span class="dt">alpha =</span> .<span class="dv">3</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> texp)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>sex) </code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-92-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-92-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p><strong>More Clean Plot</strong></p>
 <p>There are many ways to clean up a plot, including labeling the axes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;sex&quot;</span>, <span class="st">&quot;extrav&quot;</span>, <span class="st">&quot;texp&quot;</span>),
@@ -3710,7 +3648,7 @@ Var: Residual
        <span class="dt">fill     =</span> <span class="st">&quot;Teacher&#39;s Experience, Years&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-93-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-93-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p><strong>Publishable Plot</strong></p>
 <p>Since <code>gender</code> only exhibited a main effect and is not involved in any interactions, if would be a better use of space to not muddy the water with seperate panels. The <code>Effect()</code> function will estimate the marginal means using the reference category for categorical variables and the mean for continuous variables.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;extrav&quot;</span>, <span class="st">&quot;texp&quot;</span>),  <span class="co"># choose not to investigate sex (the reference category will be used)</span>
@@ -3741,7 +3679,7 @@ Var: Residual
 <span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;dashed&quot;</span>, <span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">1</span>))  </code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-94-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-94-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="interpretation-5" class="section level4">
 <h4><span class="header-section-number">2.4.6.4</span> Interpretation</h4>

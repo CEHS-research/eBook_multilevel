@@ -232,6 +232,22 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="5" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>5</b> Variance Explained</a><ul>
 <li class="chapter" data-level="5.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>5.1</b> For Generalized MLMs</a></li>
 </ul></li>
+<li class="chapter" data-level="6" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html"><i class="fa fa-check"></i><b>6</b> Checking Assumptions with Residual Diagnostics</a><ul>
+<li class="chapter" data-level="6.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#plotting-coefficients"><i class="fa fa-check"></i><b>6.1</b> Plotting Coefficients</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#fixed-effects"><i class="fa fa-check"></i><b>6.1.1</b> Fixed Effects</a></li>
+<li class="chapter" data-level="6.1.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#random-effects"><i class="fa fa-check"></i><b>6.1.2</b> Random Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#plotting-marginal-effects"><i class="fa fa-check"></i><b>6.2</b> Plotting Marginal Effects</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#predicted-values"><i class="fa fa-check"></i><b>6.2.1</b> Predicted Values</a></li>
+<li class="chapter" data-level="6.2.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#effect-plots"><i class="fa fa-check"></i><b>6.2.2</b> Effect Plots</a></li>
+<li class="chapter" data-level="6.2.3" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#interaction-plots"><i class="fa fa-check"></i><b>6.2.3</b> Interaction Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#model-diagnostics"><i class="fa fa-check"></i><b>6.3</b> Model Diagnostics</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#slope-of-coefficentes"><i class="fa fa-check"></i><b>6.3.1</b> Slope of Coefficentes</a></li>
+<li class="chapter" data-level="6.3.2" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#residuals"><i class="fa fa-check"></i><b>6.3.2</b> Residuals</a></li>
+<li class="chapter" data-level="6.3.3" data-path="checking-assumptions-with-residual-diagnostics.html"><a href="checking-assumptions-with-residual-diagnostics.html#diagnostics"><i class="fa fa-check"></i><b>6.3.3</b> Diagnostics</a></li>
+</ul></li>
+</ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
 <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
@@ -269,10 +285,20 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="background-2" class="section level2">
 <h2><span class="header-section-number">4.1</span> Background</h2>
 <!-- ========================================================= -->
-<p>The following example was included in the text “Multilevel Modeling in R” by <span class="citation">Finch, Bolin, and Kelley (<a href="references.html#ref-finch2016">2016</a>)</span>.</p>
-<p>The datasets for this textbook may be downloaded from the website: <a href="http://www.mlminr.com/data-sets/" class="uri">http://www.mlminr.com/data-sets/</a>.</p>
+<div class="rmdlink">
+<p>
+The following example was included in the text “Multilevel Modeling in R” by <span class="citation"><span class="citation">Finch, Bolin, and Kelley (<a href="references.html#ref-finch2016">2016</a>)</span></span>.
+</p>
+<p>
+The datasets for this textbook may be downloaded from the website: <a href="http://www.mlminr.com/data-sets/" class="uri">http://www.mlminr.com/data-sets/</a>.
+</p>
+</div>
 <p>I was unable to find any documentation on this dataset in the book or online, so I contacted the authors. There were unable to provide much either, but based on visual inspection designated the class of <em>factor</em> to thoes vairables that seem to represent categorical quantities. The labels for gender and class size are relative to the frequencies in the journal article the authors did point me to <em>(although the samples sizes do not match up)</em>.</p>
-<p>FOR THIS CHAPTER WE WILL IGNORE ALL LEVELS EXCEPT FOR STUDNETS BEING NESTED WITHIN SCHOOLS.</p>
+<div class="rmdimportant">
+<p>
+FOR THIS CHAPTER WE WILL IGNORE ALL LEVELS EXCEPT FOR STUDNETS BEING NESTED WITHIN SCHOOLS.
+</p>
+</div>
 <p>Read the SPSS data in with the <code>haven</code> package .</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0&quot;</span>)</code></pre></div>
 <p>Declare all categorical variables to be factors and apply labels where meaningful.</p>
@@ -355,7 +381,11 @@ num_subjects</code></pre></div>
 <div id="the-stargazer-package-2" class="section level4">
 <h4><span class="header-section-number">4.2.1.1</span> The <code>stargazer</code> package</h4>
 <p>Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as Table 1. The <code>stargazer()</code> function can be used to create such a table, but only for the entire dataset. I haven’t been able to find a way to get it to summarize subsamples and compare them in the standard format. Also, it only summarises continuous, not categorical variables.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_achieve <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: type = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     type = &quot;latex&quot;</span>
+<span class="co"># View on Screen:  type = &quot;text&quot;</span>
+
+data_achieve <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(classize, gender, geread, gevocab, age, ses, senroll) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>stargazer<span class="op">::</span><span class="kw">stargazer</span>(<span class="dt">header =</span> <span class="ot">FALSE</span>,
@@ -538,173 +568,99 @@ senroll
 <div id="the-furniture-package-2" class="section level4">
 <h4><span class="header-section-number">4.2.1.2</span> The <code>furniture</code> package</h4>
 <p>Tyson Barrett’s <strong>furniture</strong> package includes the extremely useful function <code>table1()</code> which simplifies the common task of creating a stratified, comparative table of descriptive statistics. Full documentation can be accessed by executing <code>?furniture::table1</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># note: the label for the table must be entered above, right after the &quot;r&quot;</span>
-<span class="kw">table1</span>(data_achieve,
-       geread, gevocab, age, 
-       ses, senroll,
-       <span class="dt">var_names =</span> <span class="kw">c</span>(<span class="st">&quot;Reading Score&quot;</span>,  
-                     <span class="st">&quot;Vocabulary Score&quot;</span>,
-                     <span class="st">&quot;Age (in months)&quot;</span>,
-                     <span class="st">&quot;School SES&quot;</span>,
-                     <span class="st">&quot;School&#39;s Enrollment&quot;</span>),    <span class="co"># override names</span>
-       <span class="dt">splitby   =</span> <span class="op">~</span><span class="st"> </span>gender,                <span class="co"># var to divide sample by</span>
-       <span class="dt">test      =</span> <span class="ot">TRUE</span>,                    <span class="co"># test groups different?</span>
-       <span class="dt">caption   =</span> <span class="st">&quot;Summary of the numeric variables with `table1`&quot;</span>, 
-       <span class="dt">output    =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
-<table>
-<caption>
-<span id="tab:sumtable1">Table 4.1: </span>Summary of the numeric variables with <code>table1</code>
-</caption>
-<thead>
-<tr>
-<th>
-</th>
-<th>
-Female
-</th>
-<th>
-Male
-</th>
-<th>
-P-Value
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-</td>
-<td>
-n = 5143
-</td>
-<td>
-n = 5177
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<td>
-Reading Score
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>
-0.218
-</td>
-</tr>
-<tr>
-<td>
-</td>
-<td>
-4.4 (2.3)
-</td>
-<td>
-4.3 (2.3)
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<td>
-Vocabulary Score
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>
-&lt;.001
-</td>
-</tr>
-<tr>
-<td>
-</td>
-<td>
-4.6 (2.4)
-</td>
-<td>
-4.4 (2.3)
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<td>
-Age (in months)
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>
-&lt;.001
-</td>
-</tr>
-<tr>
-<td>
-</td>
-<td>
-107.1 (5.0)
-</td>
-<td>
-107.9 (5.1)
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<td>
-School SES
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>
-0.155
-</td>
-</tr>
-<tr>
-<td>
-</td>
-<td>
-72.5 (22.3)
-</td>
-<td>
-73.2 (21.7)
-</td>
-<td>
-</td>
-</tr>
-<tr>
-<td>
-School’s Enrollment
-</td>
-<td>
-</td>
-<td>
-</td>
-<td>
-0.483
-</td>
-</tr>
-<tr>
-<td>
-</td>
-<td>
-532.3 (154.5)
-</td>
-<td>
-534.5 (155.1)
-</td>
-<td>
-</td>
-</tr>
-</tbody>
-</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_achieve <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="st"> </span><span class="kw">table1</span>(<span class="st">&quot;Reading Score&quot;</span>       =<span class="st"> </span>geread, 
+                     <span class="st">&quot;Vocabulary Score&quot;</span>    =<span class="st"> </span>gevocab, 
+                     <span class="st">&quot;Age (in months)&quot;</span>     =<span class="st"> </span>age, 
+                     <span class="st">&quot;School SES&quot;</span>          =<span class="st"> </span>ses, 
+                     <span class="st">&quot;School&#39;s Enrollment&quot;</span> =<span class="st"> </span>senroll,
+                     <span class="dt">splitby   =</span> <span class="op">~</span><span class="st"> </span>gender,                                        <span class="co"># var to divide sample by</span>
+                     <span class="dt">test      =</span> <span class="ot">TRUE</span>,                                            <span class="co"># test groups different?</span>
+                     <span class="dt">caption   =</span> <span class="st">&quot;Summary of the numeric variables with `table1`&quot;</span>, 
+                     <span class="dt">output    =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<pre><code>&lt;table&gt;
+&lt;caption&gt;(\#tab:sumtable1)Summary of the numeric variables with `table1`&lt;/caption&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th&gt;   &lt;/th&gt;
+   &lt;th&gt; Female &lt;/th&gt;
+   &lt;th&gt; Male &lt;/th&gt;
+   &lt;th&gt; P-Value &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; n = 5143 &lt;/td&gt;
+   &lt;td&gt; n = 5177 &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt; Reading.Score &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; 0.218 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; 4.4 (2.3) &lt;/td&gt;
+   &lt;td&gt; 4.3 (2.3) &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt; Vocabulary.Score &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; &amp;lt;.001 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; 4.6 (2.4) &lt;/td&gt;
+   &lt;td&gt; 4.4 (2.3) &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt; Age..in.months. &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; &amp;lt;.001 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; 107.1 (5.0) &lt;/td&gt;
+   &lt;td&gt; 107.9 (5.1) &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt; School.SES &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; 0.155 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; 72.5 (22.3) &lt;/td&gt;
+   &lt;td&gt; 73.2 (21.7) &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt; School.s.Enrollment &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; 0.483 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td&gt;  &lt;/td&gt;
+   &lt;td&gt; 532.3 (154.5) &lt;/td&gt;
+   &lt;td&gt; 534.5 (155.1) &lt;/td&gt;
+   &lt;td&gt;  &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
 </div>
 </div>
 <div id="visualization-of-raw-data" class="section level3">
@@ -723,7 +679,7 @@ School’s Enrollment
                        <span class="dt">na.value =</span> <span class="ot">NA</span>) <span class="op">+</span><span class="st">               </span><span class="co"># color for count = 0</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:densityHex"></span>
-<img src="eBook_install_files/figure-html/densityHex-1.png" alt="Raw Data: Density, Vocab vs. Reading" width="576" />
+<img src="eBook_multilevel_files/figure-html/densityHex-1.png" alt="Raw Data: Density, Vocab vs. Reading" width="576" />
 <p class="caption">
 Figure 4.1: Raw Data: Density, Vocab vs. Reading
 </p>
@@ -742,7 +698,7 @@ Figure 4.1: Raw Data: Density, Vocab vs. Reading
 <span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>school) <span class="op">+</span><span class="st">           </span><span class="co"># panels by school</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:schoolRegEx"></span>
-<img src="eBook_install_files/figure-html/schoolRegEx-1.png" alt="Raw Data: Independent Single-Level Regression within each school, a few illustrative cases" width="576" />
+<img src="eBook_multilevel_files/figure-html/schoolRegEx-1.png" alt="Raw Data: Independent Single-Level Regression within each school, a few illustrative cases" width="576" />
 <p class="caption">
 Figure 4.2: Raw Data: Independent Single-Level Regression within each school, a few illustrative cases
 </p>
@@ -761,7 +717,7 @@ Figure 4.2: Raw Data: Independent Single-Level Regression within each school, a 
               <span class="dt">size   =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st">        </span><span class="co"># make the lines thinner</span>
 <span class="st">  </span><span class="kw">theme_bw</span>() </code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:schoolRegAll"></span>
-<img src="eBook_install_files/figure-html/schoolRegAll-1.png" alt="Raw Data: Independent Single-Level Regression within each school, all schools shown together" width="576" />
+<img src="eBook_multilevel_files/figure-html/schoolRegAll-1.png" alt="Raw Data: Independent Single-Level Regression within each school, all schools shown together" width="576" />
 <p class="caption">
 Figure 4.3: Raw Data: Independent Single-Level Regression within each school, all schools shown together
 </p>
@@ -786,7 +742,7 @@ Figure 4.3: Raw Data: Independent Single-Level Regression within each school, al
 <span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">facet_grid</span>(senroll <span class="op">~</span><span class="st"> </span>ses2)     <span class="co"># makes seperate panels (rows ~ columns)</span></code></pre></div>
 <div class="figure" style="text-align: center"><span id="fig:classRegSep"></span>
-<img src="eBook_install_files/figure-html/classRegSep-1.png" alt="Raw Data: Independent Single-Level Regression within each school, sepearated by school size and school SES" width="576" />
+<img src="eBook_multilevel_files/figure-html/classRegSep-1.png" alt="Raw Data: Independent Single-Level Regression within each school, sepearated by school size and school SES" width="576" />
 <p class="caption">
 Figure 4.4: Raw Data: Independent Single-Level Regression within each school, sepearated by school size and school SES
 </p>
@@ -814,12 +770,22 @@ fit_read_lm_<span class="dv">2</span> &lt;-<span class="st"> </span><span class=
 fit_read_lm_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">lm</span>(<span class="dt">formula =</span> geread <span class="op">~</span><span class="st"> </span>gevocab<span class="op">*</span>age,    <span class="co"># interation+main effects</span>
                     <span class="dt">data    =</span> data_achieve)</code></pre></div>
 <p>Now compare the models:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_lm_<span class="dv">0</span>, fit_read_lm_<span class="dv">1</span>, 
-                     fit_read_lm_<span class="dv">2</span>, fit_read_lm_<span class="dv">3</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;OLS: Investigate Fixed, Pupil-level Predictors&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">doctype =</span> <span class="ot">FALSE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_lm_<span class="dv">0</span>, 
+                     fit_read_lm_<span class="dv">1</span>, 
+                     fit_read_lm_<span class="dv">2</span>, 
+                     fit_read_lm_<span class="dv">3</span>),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Null&quot;</span>,
+                                       <span class="st">&quot;1 IV&quot;</span>,
+                                       <span class="st">&quot;2 IV&quot;</span>,
+                                       <span class="st">&quot;Interaction&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;OLS: Investigate Fixed, Pupil-level Predictors&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
 OLS: Investigate Fixed, Pupil-level Predictors
@@ -829,16 +795,16 @@ OLS: Investigate Fixed, Pupil-level Predictors
 <b></b>
 </th>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>Model 1</b>
+<b>Null</b>
 </th>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>Model 2</b>
+<b>1 IV</b>
 </th>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>Model 3</b>
+<b>2 IV</b>
 </th>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>Model 4</b>
+<b>Interaction</b>
 </th>
 </tr>
 <tr>
@@ -846,32 +812,16 @@ OLS: Investigate Fixed, Pupil-level Predictors
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-4.3408<sup style="vertical-align: 0px;">***</sup>
+4.34 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-1.9611<sup style="vertical-align: 0px;">***</sup>
+1.96 (0.04)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-3.1854<sup style="vertical-align: 0px;">***</sup>
+3.19 (0.42)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-5.2826<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0230)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0415)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.4164)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.8698)
+5.28 (0.87)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -881,28 +831,13 @@ gevocab
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.5295<sup style="vertical-align: 0px;">***</sup>
+0.53 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.5280<sup style="vertical-align: 0px;">***</sup>
+0.53 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0092
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0082)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0082)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.1891)
+0.01 (0.19)
 </td>
 </tr>
 <tr>
@@ -914,24 +849,10 @@ age
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0113<sup style="vertical-align: 0px;">**</sup>
+-0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0308<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0038)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0081)
+-0.03 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -945,20 +866,7 @@ gevocab:age
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0048<sup style="vertical-align: 0px;">**</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0018)
+0.00 (0.00)<sup style="vertical-align: 0px;">**</sup>
 </td>
 </tr>
 <tr>
@@ -966,16 +874,16 @@ gevocab:age
 R<sup style="vertical-align: 0px;">2</sup>
 </td>
 <td style="border-top: 1px solid black;">
-0.0000
+0.00
 </td>
 <td style="border-top: 1px solid black;">
-0.2891
+0.29
 </td>
 <td style="border-top: 1px solid black;">
-0.2897
+0.29
 </td>
 <td style="border-top: 1px solid black;">
-0.2902
+0.29
 </td>
 </tr>
 <tr>
@@ -983,16 +891,16 @@ R<sup style="vertical-align: 0px;">2</sup>
 Adj. R<sup style="vertical-align: 0px;">2</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0000
+0.00
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2891
+0.29
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2896
+0.29
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2900
+0.29
 </td>
 </tr>
 <tr>
@@ -1017,16 +925,16 @@ Num. obs.
 RMSE
 </td>
 <td style="border-bottom: 2px solid black;">
-2.3319
+2.33
 </td>
 <td style="border-bottom: 2px solid black;">
-1.9662
+1.97
 </td>
 <td style="border-bottom: 2px solid black;">
-1.9655
+1.97
 </td>
 <td style="border-bottom: 2px solid black;">
-1.9649
+1.96
 </td>
 </tr>
 <tr>
@@ -1097,7 +1005,7 @@ gevocab       82       95      110      120       140
              <span class="dt">color =</span> age)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() </code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-161-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-163-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Here is a better version of the plot.</p>
 <p>Age is in months, so we want multiples of 12 for good visualization</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(data_achieve<span class="op">$</span>age)<span class="op">/</span><span class="dv">12</span>   <span class="co"># divide by 12 to change months to years</span></code></pre></div>
@@ -1128,7 +1036,7 @@ gevocab       82       95      110      120       140
 <span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">11</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">11</span>, <span class="dt">by =</span> <span class="dv">1</span>))</code></pre></div>
-<p><img src="eBook_install_files/figure-html/mlInteraction-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/mlInteraction-1.png" width="576" style="display: block; margin: auto;" /></p>
 <!-- ========================================================= -->
 </div>
 </div>
@@ -1146,12 +1054,20 @@ fit_read_0re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span c
                            <span class="dt">data =</span> data_achieve,
                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)                   <span class="co"># fit = REML (the default)</span></code></pre></div>
 <p>Compare the two models to OLS:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_lm_<span class="dv">0</span>, fit_read_0ml, fit_read_0re),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;OLS&quot;</span>, <span class="st">&quot;MLM-ML&quot;</span>, <span class="st">&quot;MLM-REML&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;MLM: NULL Model,two estimation methods&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">doctype =</span> <span class="ot">FALSE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_lm_<span class="dv">0</span>, 
+                     fit_read_0ml, 
+                     fit_read_0re),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;OLS&quot;</span>, 
+                                       <span class="st">&quot;MLM-ML&quot;</span>, 
+                                       <span class="st">&quot;MLM-REML&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: NULL Model,two estimation methods&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
 MLM: NULL Model,two estimation methods
@@ -1175,26 +1091,13 @@ MLM: NULL Model,two estimation methods
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-4.3408<sup style="vertical-align: 0px;">***</sup>
+4.34 (0.02)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-4.3068<sup style="vertical-align: 0px;">***</sup>
+4.31 (0.05)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-4.3068<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0230)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0548)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0550)
+4.31 (0.05)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -1202,7 +1105,7 @@ MLM: NULL Model,two estimation methods
 R<sup style="vertical-align: 0px;">2</sup>
 </td>
 <td style="border-top: 1px solid black;">
-0.0000
+0.00
 </td>
 <td style="border-top: 1px solid black;">
 </td>
@@ -1214,7 +1117,7 @@ R<sup style="vertical-align: 0px;">2</sup>
 Adj. R<sup style="vertical-align: 0px;">2</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0000
+0.00
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -1240,7 +1143,7 @@ Num. obs.
 RMSE
 </td>
 <td style="padding-right: 12px; border: none;">
-2.3319
+2.33
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -1254,10 +1157,10 @@ AIC
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-46270.3388
+46270.34
 </td>
 <td style="padding-right: 12px; border: none;">
-46274.3058
+46274.31
 </td>
 </tr>
 <tr>
@@ -1267,10 +1170,10 @@ BIC
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-46292.0643
+46292.06
 </td>
 <td style="padding-right: 12px; border: none;">
-46296.0313
+46296.03
 </td>
 </tr>
 <tr>
@@ -1280,10 +1183,10 @@ Log Likelihood
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--23132.1694
+-23132.17
 </td>
 <td style="padding-right: 12px; border: none;">
--23134.1529
+-23134.15
 </td>
 </tr>
 <tr>
@@ -1306,10 +1209,10 @@ Var: school (Intercept)
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.3885
+0.39
 </td>
 <td style="padding-right: 12px; border: none;">
-0.3915
+0.39
 </td>
 </tr>
 <tr>
@@ -1319,10 +1222,10 @@ Var: Residual
 <td style="border-bottom: 2px solid black;">
 </td>
 <td style="border-bottom: 2px solid black;">
-5.0450
+5.05
 </td>
 <td style="border-bottom: 2px solid black;">
-5.0450
+5.05
 </td>
 </tr>
 <tr>
@@ -1401,8 +1304,14 @@ Then: MLM <span class="math inline"><span class="math inline">\(\approx\)</span>
 fit_read_1re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>school), 
                            <span class="dt">data =</span> data_achieve,
                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)             <span class="co"># for R-sq calcs</span></code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_0ml, fit_read_1ml),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Null&quot;</span>, <span class="st">&quot;w Pred&quot;</span>),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_0ml, 
+                     fit_read_1ml),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Null&quot;</span>, 
+                                       <span class="st">&quot;w Pred&quot;</span>),
                 <span class="dt">caption =</span> <span class="st">&quot;MLM: Investigate a Fixed Pupil-level Predictor&quot;</span>,
                 <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
                 <span class="dt">doctype =</span> <span class="ot">FALSE</span>,
@@ -1570,7 +1479,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
                 <span class="dt">alpha =</span> .<span class="dv">3</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-176-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-178-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="proportion-of-variance-explained" class="section level4">
 <h4><span class="header-section-number">4.5.1.2</span> Proportion of Variance Explained</h4>
@@ -1673,7 +1582,11 @@ R^2_1 = \frac{\sigma^2_{u0-BL} - \sigma^2_{u0-MC}}
 fit_read_3ml &lt;-<span class="st"> </span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab<span class="op">*</span>age <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>school), <span class="co"># add interaction between vocab and age</span>
                      <span class="dt">data =</span> data_achieve,
                      <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_1ml, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_1ml, 
                      fit_read_2ml, 
                      fit_read_3ml),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Only Vocab&quot;</span>, 
@@ -1940,7 +1853,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_yr)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-194-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-196-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>There is a positive association between vocabulary and reading, but it is strongest for older childred. Among younger children, reading scores are more stable across vocabulary differences.</p>
 <!-- ========================================================= -->
 </div>
@@ -1953,16 +1866,20 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_read_4ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab<span class="op">*</span>age <span class="op">+</span><span class="st"> </span>senroll <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>school), 
                            <span class="dt">data =</span> data_achieve,
                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_0ml, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_0ml, 
                      fit_read_3ml, 
                      fit_read_4ml),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Null&quot;</span>, 
                                        <span class="st">&quot;Level 1 only&quot;</span>, 
                                        <span class="st">&quot;Level 2 Pred&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;MLM: Investigate a Fixed School-Level Predictor&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">doctype =</span> <span class="ot">FALSE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Investigate a Fixed School-Level Predictor&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
 MLM: Investigate a Fixed School-Level Predictor
@@ -1986,26 +1903,13 @@ MLM: Investigate a Fixed School-Level Predictor
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-4.3068<sup style="vertical-align: 0px;">***</sup>
+4.31 (0.05)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-5.1874<sup style="vertical-align: 0px;">***</sup>
+5.19 (0.87)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-5.2385<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0548)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.8666)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.8725)
+5.24 (0.87)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2015,22 +1919,10 @@ gevocab
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0279
+-0.03 (0.19)
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0278
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.1881)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.1881)
+-0.03 (0.19)
 </td>
 </tr>
 <tr>
@@ -2040,22 +1932,10 @@ age
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0294<sup style="vertical-align: 0px;">***</sup>
+-0.03 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0294<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0080)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0080)
+-0.03 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2065,22 +1945,10 @@ gevocab:age
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0050<sup style="vertical-align: 0px;">**</sup>
+0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0050<sup style="vertical-align: 0px;">**</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0017)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0017)
+0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
 </td>
 </tr>
 <tr>
@@ -2092,18 +1960,7 @@ senroll
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0001
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0002)
+-0.00 (0.00)
 </td>
 </tr>
 <tr>
@@ -2111,13 +1968,13 @@ senroll
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-46270.3388
+46270.34
 </td>
 <td style="border-top: 1px solid black;">
-43122.5687
+43122.57
 </td>
 <td style="border-top: 1px solid black;">
-43124.3139
+43124.31
 </td>
 </tr>
 <tr>
@@ -2125,13 +1982,13 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-46292.0643
+46292.06
 </td>
 <td style="padding-right: 12px; border: none;">
-43166.0198
+43166.02
 </td>
 <td style="padding-right: 12px; border: none;">
-43175.0068
+43175.01
 </td>
 </tr>
 <tr>
@@ -2139,13 +1996,13 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--23132.1694
+-23132.17
 </td>
 <td style="padding-right: 12px; border: none;">
--21555.2844
+-21555.28
 </td>
 <td style="padding-right: 12px; border: none;">
--21555.1570
+-21555.16
 </td>
 </tr>
 <tr>
@@ -2181,13 +2038,13 @@ Num. groups: school
 Var: school (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.3885
+0.39
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0977
+0.10
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0972
+0.10
 </td>
 </tr>
 <tr>
@@ -2195,13 +2052,13 @@ Var: school (Intercept)
 Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-5.0450
+5.05
 </td>
 <td style="border-bottom: 2px solid black;">
-3.7614
+3.76
 </td>
 <td style="border-bottom: 2px solid black;">
-3.7615
+3.76
 </td>
 </tr>
 <tr>
@@ -2254,14 +2111,18 @@ fit_read_5re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span c
                                                  <span class="dt">optCtrl =</span> <span class="kw">list</span>(<span class="dt">method =</span> <span class="st">&quot;nlminb&quot;</span>,
                                                                 <span class="dt">starttests =</span> <span class="ot">FALSE</span>,
                                                                 <span class="dt">kkt =</span> <span class="ot">FALSE</span>))) </code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_3re, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_3re, 
                      fit_read_5re),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Rand Int&quot;</span>, 
                                        <span class="st">&quot;Rand Int and Slopes&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;MLM: Investigate Random Effects&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">doctype =</span> <span class="ot">FALSE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Investigate Random Effects&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
 MLM: Investigate Random Effects
@@ -2282,20 +2143,10 @@ MLM: Investigate Random Effects
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-5.1872<sup style="vertical-align: 0px;">***</sup>
+5.19 (0.87)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-5.6133<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.8668)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.8727)
+5.61 (0.87)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2303,20 +2154,10 @@ MLM: Investigate Random Effects
 gevocab
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0281
+-0.03 (0.19)
 </td>
 <td style="padding-right: 12px; border: none;">
--0.1378
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.1881)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.1922)
+-0.14 (0.19)
 </td>
 </tr>
 <tr>
@@ -2324,20 +2165,10 @@ gevocab
 age
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0294<sup style="vertical-align: 0px;">***</sup>
+-0.03 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0335<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0080)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0081)
+-0.03 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2345,20 +2176,10 @@ age
 gevocab:age
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0050<sup style="vertical-align: 0px;">**</sup>
+0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0061<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0017)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0018)
+0.01 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -2366,10 +2187,10 @@ gevocab:age
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-43155.4945
+43155.49
 </td>
 <td style="border-top: 1px solid black;">
-43011.6498
+43011.65
 </td>
 </tr>
 <tr>
@@ -2377,10 +2198,10 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-43198.9455
+43198.95
 </td>
 <td style="padding-right: 12px; border: none;">
-43069.5845
+43069.58
 </td>
 </tr>
 <tr>
@@ -2388,10 +2209,10 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--21571.7472
+-21571.75
 </td>
 <td style="padding-right: 12px; border: none;">
--21497.8249
+-21497.82
 </td>
 </tr>
 <tr>
@@ -2421,10 +2242,10 @@ Num. groups: school
 Var: school (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0988
+0.10
 </td>
 <td style="padding-right: 12px; border: none;">
-0.2753
+0.28
 </td>
 </tr>
 <tr>
@@ -2432,10 +2253,10 @@ Var: school (Intercept)
 Var: Residual
 </td>
 <td style="padding-right: 12px; border: none;">
-3.7625
+3.76
 </td>
 <td style="padding-right: 12px; border: none;">
-3.6611
+3.66
 </td>
 </tr>
 <tr>
@@ -2445,7 +2266,7 @@ Var: school gevocab
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0195
+0.02
 </td>
 </tr>
 <tr>
@@ -2455,7 +2276,7 @@ Cov: school (Intercept) gevocab
 <td style="border-bottom: 2px solid black;">
 </td>
 <td style="border-bottom: 2px solid black;">
--0.0631
+-0.06
 </td>
 </tr>
 <tr>
@@ -2499,7 +2320,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_yr)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-204-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-206-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>We are seeming much the same trends, but perhaps more separation between the lines.</p>
 <!-- ========================================================= -->
 </div>
@@ -2556,7 +2377,11 @@ If you get the<code>lmer()</code> message: <strong>Some predictor variables are 
  3rd Qu.: 2970     3rd Qu.: 319752        
  Max.   :10259     Max.   :1149030        </code></pre>
 <p>For now, let us look at the results.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_3ml, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_3ml, 
                      fit_read_6ml, 
                      fit_read_7ml,
                      fit_read_8ml),
@@ -2564,10 +2389,10 @@ If you get the<code>lmer()</code> message: <strong>Some predictor variables are 
                                        <span class="st">&quot;Both Levels&quot;</span>, 
                                        <span class="st">&quot;Cross-Level&quot;</span>,
                                        <span class="st">&quot;3-way&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;MLM: Investigate a Fixed Cross-level Interaction&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">doctype =</span> <span class="ot">FALSE</span>,
-                <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre></div>
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Investigate a Fixed Cross-level Interaction&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
 MLM: Investigate a Fixed Cross-level Interaction
@@ -2594,32 +2419,16 @@ MLM: Investigate a Fixed Cross-level Interaction
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-5.187<sup style="vertical-align: 0px;">***</sup>
+5.19 (0.87)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-5.603<sup style="vertical-align: 0px;">***</sup>
+5.60 (0.88)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-5.517<sup style="vertical-align: 0px;">***</sup>
+5.52 (0.89)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-5.503
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.867)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.878)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.894)
-</td>
-<td style="padding-right: 12px; border: none;">
-(3.111)
+5.50 (3.11)
 </td>
 </tr>
 <tr>
@@ -2627,32 +2436,16 @@ MLM: Investigate a Fixed Cross-level Interaction
 gevocab
 </td>
 <td style="padding-right: 12px; border: none;">
--0.028
+-0.03 (0.19)
 </td>
 <td style="padding-right: 12px; border: none;">
--0.138
+-0.14 (0.19)
 </td>
 <td style="padding-right: 12px; border: none;">
--0.114
+-0.11 (0.20)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.530
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.188)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.192)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.198)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.661)
+0.53 (0.66)
 </td>
 </tr>
 <tr>
@@ -2660,32 +2453,16 @@ gevocab
 age
 </td>
 <td style="padding-right: 12px; border: none;">
--0.029<sup style="vertical-align: 0px;">***</sup>
+-0.03 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.033<sup style="vertical-align: 0px;">***</sup>
+-0.03 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.033<sup style="vertical-align: 0px;">***</sup>
+-0.03 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.033
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.008)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.008)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.008)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.029)
+-0.03 (0.03)
 </td>
 </tr>
 <tr>
@@ -2693,32 +2470,16 @@ age
 gevocab:age
 </td>
 <td style="padding-right: 12px; border: none;">
-0.005<sup style="vertical-align: 0px;">**</sup>
+0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.006<sup style="vertical-align: 0px;">***</sup>
+0.01 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.006<sup style="vertical-align: 0px;">***</sup>
+0.01 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.000
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.002)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.002)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.002)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.006)
+0.00 (0.01)
 </td>
 </tr>
 <tr>
@@ -2728,28 +2489,13 @@ senroll
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.000
+0.00 (0.00)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.000
+0.00 (0.00)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.000
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.000)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.000)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.006)
+0.00 (0.01)
 </td>
 </tr>
 <tr>
@@ -2761,24 +2507,10 @@ gevocab:senroll
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.000
+-0.00 (0.00)
 </td>
 <td style="padding-right: 12px; border: none;">
--0.001
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.000)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.001)
+-0.00 (0.00)
 </td>
 </tr>
 <tr>
@@ -2792,20 +2524,7 @@ age:senroll
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.000
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.000)
+-0.00 (0.00)
 </td>
 </tr>
 <tr>
@@ -2819,20 +2538,7 @@ gevocab:age:senroll
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.000
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.000)
+0.00 (0.00)
 </td>
 </tr>
 <tr>
@@ -2840,16 +2546,16 @@ gevocab:age:senroll
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-43122.569
+43122.57
 </td>
 <td style="border-top: 1px solid black;">
-42981.698
+42981.70
 </td>
 <td style="border-top: 1px solid black;">
-42983.444
+42983.44
 </td>
 <td style="border-top: 1px solid black;">
-42982.851
+42982.85
 </td>
 </tr>
 <tr>
@@ -2857,16 +2563,16 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-43166.020
+43166.02
 </td>
 <td style="padding-right: 12px; border: none;">
-43046.874
+43046.87
 </td>
 <td style="padding-right: 12px; border: none;">
-43055.863
+43055.86
 </td>
 <td style="padding-right: 12px; border: none;">
-43069.753
+43069.75
 </td>
 </tr>
 <tr>
@@ -2874,16 +2580,16 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--21555.284
+-21555.28
 </td>
 <td style="padding-right: 12px; border: none;">
--21481.849
+-21481.85
 </td>
 <td style="padding-right: 12px; border: none;">
--21481.722
+-21481.72
 </td>
 <td style="padding-right: 12px; border: none;">
--21479.426
+-21479.43
 </td>
 </tr>
 <tr>
@@ -2925,16 +2631,16 @@ Num. groups: school
 Var: school (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.098
+0.10
 </td>
 <td style="padding-right: 12px; border: none;">
-0.271
+0.27
 </td>
 <td style="padding-right: 12px; border: none;">
-0.269
+0.27
 </td>
 <td style="padding-right: 12px; border: none;">
-0.269
+0.27
 </td>
 </tr>
 <tr>
@@ -2942,16 +2648,16 @@ Var: school (Intercept)
 Var: Residual
 </td>
 <td style="padding-right: 12px; border: none;">
-3.761
+3.76
 </td>
 <td style="padding-right: 12px; border: none;">
-3.660
+3.66
 </td>
 <td style="padding-right: 12px; border: none;">
-3.661
+3.66
 </td>
 <td style="padding-right: 12px; border: none;">
-3.659
+3.66
 </td>
 </tr>
 <tr>
@@ -2961,13 +2667,13 @@ Var: school gevocab
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.019
+0.02
 </td>
 <td style="padding-right: 12px; border: none;">
-0.019
+0.02
 </td>
 <td style="padding-right: 12px; border: none;">
-0.019
+0.02
 </td>
 </tr>
 <tr>
@@ -2977,13 +2683,13 @@ Cov: school (Intercept) gevocab
 <td style="border-bottom: 2px solid black;">
 </td>
 <td style="border-bottom: 2px solid black;">
--0.062
+-0.06
 </td>
 <td style="border-bottom: 2px solid black;">
--0.062
+-0.06
 </td>
 <td style="border-bottom: 2px solid black;">
--0.061
+-0.06
 </td>
 </tr>
 <tr>
@@ -3025,7 +2731,11 @@ Although there are functions to automatically center and standardize variables, 
 </div>
 <div id="compute-the-grand-means" class="section level3">
 <h3><span class="header-section-number">4.9.1</span> Compute the Grand Means</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_achieve <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_achieve <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(gevocab, age, senroll,
                     <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>,
                     <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
@@ -3119,7 +2829,11 @@ senroll
 8 7895   9085     3.8     -0.69 114  6.47     603     69.59
 9 7896   9085       3     -1.49 106 -1.53     603     69.59</code></pre>
 <p>Compare the summary statistcs:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_achieve_center <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_achieve_center <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(gevocab, gevocab_c, 
                     age,     age_c, 
                     senroll, senroll_c,
@@ -3301,7 +3015,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_c)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-221-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-223-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Notice that the vocab and ages are centered at zero. This makes it hard to read the plot, especially if we are unsure what the means of the variables were.</p>
 <p>Plot the model again, but this time UN-centering the variables by adding back the grand-mean we subtracted prior to fitting the model.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;age_c&quot;</span>),
@@ -3315,7 +3029,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
              <span class="dt">color =</span> age_yrs)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-222-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-224-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Now the plot is back on to the origial variables.</p>
 <!-- ========================================================= -->
 </div>
@@ -3365,7 +3079,11 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 8 7895   9085  6.47     -0.69     603     69.59        0.7 84.4  8.44
 9 7896   9085 -1.53     -1.49     603     69.59        0.7 84.4  8.44</code></pre>
 <p>Compare the summary statistcs:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_achieve_center_scale <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_achieve_center_scale <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(senroll, senroll_c, senroll_ch,
                     ses, ses_t,
                     <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>,
@@ -3480,16 +3198,20 @@ fit_read_12ml_s &lt;-<span class="st"> </span>lme4<span class="op">::</span><spa
 <span class="st">                                      </span>(gevocab_c <span class="op">|</span><span class="st"> </span>school),  
                              <span class="dt">data   =</span> data_achieve_center_scale,
                              <span class="dt">REML  =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_10ml_s, 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_10ml_s, 
                      fit_read_11ml_s, 
                      fit_read_12ml_s),
-          <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;no SES&quot;</span>, 
-                                 <span class="st">&quot;2-way&quot;</span>, 
-                                 <span class="st">&quot;3-way&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;MLM: Investigate More Complex Fixed Interactions&quot;</span>,
-                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,
-                <span class="dt">doctype =</span> <span class="ot">FALSE</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;no SES&quot;</span>, 
+                                       <span class="st">&quot;2-way&quot;</span>, 
+                                       <span class="st">&quot;3-way&quot;</span>),
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Investigate More Complex Fixed Interactions&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
 MLM: Investigate More Complex Fixed Interactions
@@ -3513,26 +3235,13 @@ MLM: Investigate More Complex Fixed Interactions
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-4.3474<sup style="vertical-align: 0px;">***</sup>
+4.35 (0.03)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-3.9449<sup style="vertical-align: 0px;">***</sup>
+3.94 (0.11)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-3.9413<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0325)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.1065)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.1067)
+3.94 (0.11)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3540,26 +3249,13 @@ MLM: Investigate More Complex Fixed Interactions
 gevocab_c
 </td>
 <td style="padding-right: 12px; border: none;">
-0.5193<sup style="vertical-align: 0px;">***</sup>
+0.52 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.6710<sup style="vertical-align: 0px;">***</sup>
+0.67 (0.05)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.6739<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0144)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0512)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0513)
+0.67 (0.05)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3567,26 +3263,13 @@ gevocab_c
 age_c
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0060
+-0.01 (0.00)
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0044
+-0.00 (0.00)
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0082
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0039)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0039)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0137)
+-0.01 (0.01)
 </td>
 </tr>
 <tr>
@@ -3594,26 +3277,13 @@ age_c
 gevocab_c:age_c
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0061<sup style="vertical-align: 0px;">***</sup>
+0.01 (0.00)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0055<sup style="vertical-align: 0px;">**</sup>
+0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0001
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0018)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0018)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0067)
+0.00 (0.01)
 </td>
 </tr>
 <tr>
@@ -3623,22 +3293,10 @@ ses_t
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0571<sup style="vertical-align: 0px;">***</sup>
+0.06 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0576<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0140)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0140)
+0.06 (0.01)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
@@ -3648,22 +3306,10 @@ gevocab_c:ses_t
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0211<sup style="vertical-align: 0px;">**</sup>
+-0.02 (0.01)<sup style="vertical-align: 0px;">**</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
--0.0215<sup style="vertical-align: 0px;">**</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0066)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0067)
+-0.02 (0.01)<sup style="vertical-align: 0px;">**</sup>
 </td>
 </tr>
 <tr>
@@ -3675,18 +3321,7 @@ age_c:ses_t
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0004
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0018)
+0.00 (0.00)
 </td>
 </tr>
 <tr>
@@ -3698,18 +3333,7 @@ gevocab_c:age_c:ses_t
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0007
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0009)
+0.00 (0.00)
 </td>
 </tr>
 <tr>
@@ -3717,13 +3341,13 @@ gevocab_c:age_c:ses_t
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-42979.7109
+42979.71
 </td>
 <td style="border-top: 1px solid black;">
-42928.8135
+42928.81
 </td>
 <td style="border-top: 1px solid black;">
-42932.0461
+42932.05
 </td>
 </tr>
 <tr>
@@ -3731,13 +3355,13 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-43037.6456
+43037.65
 </td>
 <td style="padding-right: 12px; border: none;">
-43001.2319
+43001.23
 </td>
 <td style="padding-right: 12px; border: none;">
-43018.9482
+43018.95
 </td>
 </tr>
 <tr>
@@ -3745,13 +3369,13 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--21481.8555
+-21481.86
 </td>
 <td style="padding-right: 12px; border: none;">
--21454.4067
+-21454.41
 </td>
 <td style="padding-right: 12px; border: none;">
--21454.0231
+-21454.02
 </td>
 </tr>
 <tr>
@@ -3787,13 +3411,13 @@ Num. groups: school
 Var: school (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1004
+0.10
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0788
+0.08
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0785
+0.08
 </td>
 </tr>
 <tr>
@@ -3801,13 +3425,13 @@ Var: school (Intercept)
 Var: school gevocab_c
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0193
+0.02
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0173
+0.02
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0173
+0.02
 </td>
 </tr>
 <tr>
@@ -3815,13 +3439,13 @@ Var: school gevocab_c
 Cov: school (Intercept) gevocab_c
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0242
+0.02
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0311
+0.03
 </td>
 <td style="padding-right: 12px; border: none;">
-0.0311
+0.03
 </td>
 </tr>
 <tr>
@@ -3829,13 +3453,13 @@ Cov: school (Intercept) gevocab_c
 Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-3.6604
+3.66
 </td>
 <td style="border-bottom: 2px solid black;">
-3.6616
+3.66
 </td>
 <td style="border-bottom: 2px solid black;">
-3.6616
+3.66
 </td>
 </tr>
 <tr>
@@ -3873,9 +3497,153 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 </div>
 <div id="table" class="section level3">
 <h3><span class="header-section-number">4.10.4</span> Table</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">texreg</span>(fit_read_11re_s,
-               <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
 
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_11re_s),
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="top" style="margin-bottom:0.3em;">
+MLM: Final Model
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Model 1</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+3.94 (0.11)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+gevocab_c
+</td>
+<td style="padding-right: 12px; border: none;">
+0.67 (0.05)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+age_c
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.00 (0.00)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+ses_t
+</td>
+<td style="padding-right: 12px; border: none;">
+0.06 (0.01)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+gevocab_c:age_c
+</td>
+<td style="padding-right: 12px; border: none;">
+0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+gevocab_c:ses_t
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.02 (0.01)<sup style="vertical-align: 0px;">**</sup>
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+42976.51
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+43048.93
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-21478.26
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+10320
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: school
+</td>
+<td style="padding-right: 12px; border: none;">
+160
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: school (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.08
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: school gevocab_c
+</td>
+<td style="padding-right: 12px; border: none;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: school (Intercept) gevocab_c
+</td>
+<td style="padding-right: 12px; border: none;">
+0.03
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: Residual
+</td>
+<td style="border-bottom: 2px solid black;">
+3.66
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="3">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
 <div id="visualize-the-model-2" class="section level4">
 <h4><span class="header-section-number">4.10.4.1</span> Visualize the Model</h4>
 <p>Recall the scales that the revised variables are now on:</p>
@@ -3906,7 +3674,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Vocabulary Score&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Reading Score</span><span class="ch">\n</span><span class="st">Estimated Marginal Mean&quot;</span>,
        <span class="dt">color =</span> <span class="st">&quot;Student Age&quot;</span>)</code></pre></div>
-<p><img src="eBook_install_files/figure-html/unnamed-chunk-234-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-236-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>There is evidence that higher vocabulary scores correlate with higher reading scores. This relationship os strongest in low SES schools and among older students. This relationship is especially weaker in younger students attending high SES schools.</p>
 <p>See: <span class="citation">Nakagawa and Schielzeth (<a href="references.html#ref-nakagawa2013">2013</a>)</span> for more regarding model <span class="math inline">\(R^2\)</span></p>
 <p>From the <code>sjstats::r2()</code> documentation, for mixed models:</p>
