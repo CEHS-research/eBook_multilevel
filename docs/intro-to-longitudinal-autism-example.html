@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="centering-and-standardizing-explanitory-variables.html">
-<link rel="next" href="sjplot-package.html">
+<link rel="prev" href="sjplot-package.html">
+<link rel="next" href="rct-longitudinal-exercise-and-diet-example.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -306,20 +306,35 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="variance-explained" class="section level1">
-<h1><span class="header-section-number">6</span> Variance Explained</h1>
-<p><span class="citation">Nakagawa and Schielzeth (<a href="references.html#ref-nakagawa2013">2013</a>)</span></p>
-<p><a href="https://ecologyforacrowdedplanet.wordpress.com/2013/08/27/r-squared-in-mixed-models-the-easy-way/" class="uri">https://ecologyforacrowdedplanet.wordpress.com/2013/08/27/r-squared-in-mixed-models-the-easy-way/</a></p>
-<div id="for-generalized-mlms" class="section level2">
-<h2><span class="header-section-number">6.1</span> For Generalized MLMs</h2>
-<p><a href="https://stats.stackexchange.com/questions/111150/calculating-r2-in-mixed-models-using-nakagawa-schielzeths-2013-r2glmm-me" class="uri">https://stats.stackexchange.com/questions/111150/calculating-r2-in-mixed-models-using-nakagawa-schielzeths-2013-r2glmm-me</a></p>
-<p>I am answering by pasting Douglas Bates’s reply in the R-Sig-ME mailing list, on 17 Dec 2014 on the question of <strong>how to calculate an <span class="math inline">\(R^2\)</span> statistic for generalized linear mixed models</strong>, which I believe is required reading for anyone interested in such a thing. Bates is the original author of the <code>lme4</code> package for <span class="math inline">\(R\)</span> and co-author of <code>nlme</code>, as well as co-author of a well-known book on mixed models, and CV will benefit from having the text in an answer, rather than just a link to it.</p>
-<blockquote>
-<p>I must admit to getting a little twitchy when people speak of the “<span class="math inline">\(R^2\)</span> for GLMMs”. <span class="math inline">\(R^2\)</span> for a linear model is well-defined and has many desirable properties. For other models one can define different quantities that reflect some but not all of these properties. But this is not calculating an <span class="math inline">\(R^2\)</span> in the sense of obtaining a number having all the properties that the <span class="math inline">\(R^2\)</span> for linear models does. Usually there are several different ways that such a quantity could be defined. Especially for GLMs and GLMMs before you can define “proportion of response variance explained” you first need to define what you mean by “response variance”. The whole point of GLMs and GLMMs is that a simple sum of squares of deviations does not meaningfully reflect the variability in the response because the variance of an individual response depends on its mean.</p>
-<p>Confusion about what constitutes <span class="math inline">\(R^2\)</span> or degrees of freedom of any of the other quantities associated with linear models as applied to other models comes from confusing the formula with the concept. Although formulas are derived from models the derivation often involves quite sophisticated mathematics. To avoid a potentially confusing derivation and just “cut to the chase” it is easier to present the formulas. But the formula is not the concept. <strong>Generalizing a formula is not equivalent to generalizing the concept.</strong> And those formulas are almost never used in practice, especially for generalized linear models, analysis of variance and random effects. I have a “meta-theorem” that the only quantity actually calculated according to the formulas given in introductory texts is the sample mean.</p>
-<p>It may seem that <strong>I am being a grumpy old man about this, and perhaps I am, but the danger is that people expect an “<span class="math inline">\(R^2\)</span>-like” quantity </strong>to have all the properties of an <span class="math inline">\(R^2\)</span> for linear models. It can’t. There is no way to generalize all the properties to a much more complicated model like a GLMM.</p>
-<p>I was once on the committee reviewing a thesis proposal for Ph.D. candidacy. The proposal was to examine I think 9 different formulas that could be considered ways of computing an <span class="math inline">\(R^2\)</span> for a nonlinear regression model to decide which one was “best”. Of course, this would be done through a simulation study with only a couple of different models and only a few different sets of parameter values for each. My suggestion that this was an entirely meaningless exercise was not greeted warmly.</p>
-</blockquote>
+<div id="intro-to-longitudinal-autism-example" class="section level1">
+<h1><span class="header-section-number">8</span> Intro to Longitudinal: Autism Example</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)
+<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
+<span class="kw">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span>
+<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(RColorBrewer) <span class="co"># nice color palettes for plots</span>
+<span class="kw">library</span>(gridExtra)    <span class="co"># place ggplots together as one plot</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
+<span class="kw">library</span>(car)          <span class="co"># Companion to Applied Regression</span>
+<span class="kw">library</span>(nlme)         <span class="co"># non-linear mixed-effects models</span>
+<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
+<span class="kw">library</span>(lmerTest)     <span class="co"># Tests on lmer objects</span>
+<span class="kw">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for nlme &amp; lmer4</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(optimx)       <span class="co"># Different optimizers to solve mlm&#39;s</span>
+<span class="kw">library</span>(effects)</code></pre></div>
+<div id="the-dataset" class="section level2">
+<h2><span class="header-section-number">8.1</span> The dataset</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/eBook_multilevel/master/data/autism.txt?token=AScXBXahjPlTjqc6ytn9y6vwkwC6D09nks5bvSeiwA%3D%3D&quot;</span>,
+                  <span class="dt">header =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw)</code></pre></div>
+<pre><code>Observations: 612
+Variables: 4
+$ age     &lt;int&gt; 2, 3, 5, 9, 13, 2, 3, 5, 9, 13, 2, 3, 5, 9, 2, 3, 9, 1...
+$ vsae    &lt;int&gt; 6, 7, 18, 25, 27, 17, 18, 12, 18, 24, 12, 14, 38, 114,...
+$ sicdegp &lt;int&gt; 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, ...
+$ childid &lt;int&gt; 1, 1, 1, 1, 1, 3, 3, 3, 3, 3, 4, 4, 4, 4, 19, 19, 19, ...</code></pre>
 
 </div>
 </div>
@@ -328,8 +343,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="centering-and-standardizing-explanitory-variables.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="sjplot-package.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sjplot-package.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rct-longitudinal-exercise-and-diet-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
