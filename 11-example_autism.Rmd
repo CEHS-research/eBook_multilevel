@@ -1,0 +1,40 @@
+# Intro to Longitudinal: Autism Example
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)
+library(haven)        # read in SPSS dataset
+library(furniture)    # nice table1() descriptives
+library(stargazer)    # display nice tables: summary & regression
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(RColorBrewer) # nice color palettes for plots
+library(gridExtra)    # place ggplots together as one plot
+library(psych)        # contains some useful functions, like headTail
+library(car)          # Companion to Applied Regression
+library(nlme)         # non-linear mixed-effects models
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(lmerTest)     # Tests on lmer objects
+library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
+library(sjstats)      # ICC calculations
+library(optimx)       # Different optimizers to solve mlm's
+library(effects)
+```
+
+## The dataset
+
+
+```{r}
+data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/eBook_multilevel/master/data/exercise_diet.txt?token=AScXBcNdbT5roh2XgMae-6vm1fruDo8Bks5bvQJIwA%3D%3D",
+                  header = TRUE, 
+                  sep = ",")
+```
+
