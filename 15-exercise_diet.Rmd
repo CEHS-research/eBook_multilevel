@@ -1,0 +1,302 @@
+# Introduction to Longitudinal: Exercise and Diet Example
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)
+library(haven)        # read in SPSS dataset
+library(furniture)    # nice table1() descriptives
+library(stargazer)    # display nice tables: summary & regression
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(RColorBrewer) # nice color palettes for plots
+library(gridExtra)    # place ggplots together as one plot
+library(psych)        # contains some useful functions, like headTail
+library(car)          # Companion to Applied Regression
+library(nlme)         # non-linear mixed-effects models
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(lmerTest)     # Tests on lmer objects
+library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
+library(sjstats)      # ICC calculations
+library(optimx)       # Different optimizers to solve mlm's
+library(effects)
+```
+
+## The dataset
+
+This comes from a **Randomized Controled Trial**.
+
+```{r}
+data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/eBook_multilevel/master/data/exercise_diet.txt?token=AScXBcNdbT5roh2XgMae-6vm1fruDo8Bks5bvQJIwA%3D%3D",
+                  header = TRUE, 
+                  sep = ",")
+```
+
+```{r}
+tibble::glimpse(data_raw)
+```
+
+
+
+```{r}
+data_long <- data_raw %>% 
+  dplyr::mutate(id = id %>% factor) %>% 
+  dplyr::mutate(exertype = exertype %>% 
+                  factor(levels = 1:3,
+                         labels = c("At Rest",
+                                    "Leisurely Walking",
+                                    "Moderate Running"))) %>% 
+  dplyr::mutate(diet = diet %>% 
+                  factor(levels = 1:2,
+                         labels = c("low-fat",
+                                    "non-fat"))) %>% 
+  dplyr::mutate(time_min = time / 60)
+```
+
+
+
+
+```{r}
+data_long %>% 
+  psych::headTail(top = 10, bottom = 10) %>% 
+  pander::pander(caption = "Raw Data")
+```
+
+## Exploratory Data Analysis
+
+### Demographic Summary
+
+```{r, results='asis'}
+data_long %>% 
+  dplyr::filter(time == 0) %>% 
+  furniture::table1(diet, pulse,
+                    splitby = ~ exertype,
+                    caption = "Baseline Descriptives",
+                    output = "html",
+                    test = TRUE)
+```
+
+### Baseline Summary
+
+```{r}
+data_long %>% 
+  dplyr::filter(time == 0) %>% 
+  dplyr::group_by(exertype, diet) %>% 
+  dplyr::summarise(mean = mean(pulse)) %>% 
+  tidyr::spread(key = diet,
+                value = mean) %>% 
+  pander::pander(caption = "Baseline Pulse, Means")
+  
+```
+
+### Raw Trajectories - Person Profile Plot
+
+#### Connect the dots
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = time_min,
+             y = pulse)) +
+  geom_point() +
+  geom_line(aes(group = id)) +
+  facet_grid(diet ~ exertype) +
+  theme_bw()
+```
+
+#### Loess - Moving Average Smoothers
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = time_min,
+             y = pulse,
+             color = diet)) +
+  geom_line(aes(group = id)) +
+  facet_grid(~ exertype) +
+  theme_bw() +
+  geom_smooth(method = "loess",
+              se = FALSE,
+              size = 2,
+              span = 5) +
+  theme(legend.position = c(0.08, 0.85),
+        legend.background = element_rect(color = "black")) +
+  labs(title = "Raw Pulse Trajectories",
+       subtitle = "By Exercise and Diet Groupings",
+       x = "Time (Minutes Post-Baseline)",
+       y = "Pulse (Beats per Minute)",
+       color = "Diet Plan")
+```
+
+## Multilevel Modeling
+
+### Null Model
+
+```{r}
+fit_lmer_0re <- lme4::lmer(pulse ~ 1 + (1 | id),
+                           data = data_long)
+```
+
+
+```{r, include=FALSE}
+screenreg(fit_lmer_0re)
+```
+
+
+```{r, results='asis'}
+texreg::htmlreg(fit_lmer_0re)
+```
+
+### ICC
+
+```{r}
+sjstats::icc(fit_lmer_0re)
+```
+
+### Add fixed effects: level specific
+
+#### Fit nested models
+
+```{r}
+# Null Model (random intercept only)
+fit_lmer_0ml <- lme4::lmer(pulse ~ 1 + (1 | id),
+                           data = data_long,
+                           REML = FALSE)
+
+# Add quadratic time
+fit_lmer_1ml <- lme4::lmer(pulse ~ time_min + I(time_min^2) + (1 | id),
+                           data = data_long,
+                           REML = FALSE)
+
+# Add main effects for 2 interventions (person-specific, i.e. level-2 factors)
+fit_lmer_2ml <- lme4::lmer(pulse ~ diet + exertype + time_min + I(time_min^2) + (1 | id),
+                           data = data_long,
+                           REML = FALSE)
+
+# Add interaction between level-2 factors
+fit_lmer_3ml <- lme4::lmer(pulse ~ diet*exertype + time_min + I(time_min^2) + (1 | id),
+                           data = data_long,
+                           REML = FALSE)
+
+# Add exercise interacting with [time & time-squared]
+fit_lmer_4ml <- lme4::lmer(pulse ~ diet*exertype + exertype*time_min + exertype*I(time_min^2) + (1 | id),
+                           data = data_long,
+                           REML = FALSE)
+
+# Add diet interacting with [time & time-squared]
+fit_lmer_5ml <- lme4::lmer(pulse ~ diet*exertype*time_min + diet*exertype*I(time_min^2) + (1 | id),
+                           data = data_long,
+                           REML = FALSE)
+```
+
+
+```{r, include=FALSE}
+screenreg(list(fit_lmer_1ml, fit_lmer_2ml, fit_lmer_3ml, fit_lmer_4ml, fit_lmer_5ml))
+```
+
+
+```{r, results='asis'}
+texreg::htmlreg(list(fit_lmer_1ml, 
+                     fit_lmer_2ml, 
+                     fit_lmer_3ml, 
+                     fit_lmer_4ml, 
+                     fit_lmer_5ml))
+```
+
+#### Evaluate Model Fit, i.e. variable significance
+
+```{r}
+anova(fit_lmer_1ml, 
+      fit_lmer_2ml, 
+      fit_lmer_3ml, 
+      fit_lmer_4ml, 
+      fit_lmer_5ml)
+```
+
+
+### Final Model
+
+Refit via REML
+
+```{r}
+fit_lmer_5re <- lme4::lmer(pulse ~ diet*exertype*time_min + 
+                                   diet*exertype*I(time_min^2) + (1 | id),
+                           data = data_long,
+                           REML = TRUE)
+```
+
+
+#### Visualize
+
+```{r}
+sjPlot::plot_model(fit_lmer_5re,
+                   type = "pred",
+                   terms = c("time_min", "diet", "exertype"))
+```
+
+
+```{r}
+effects::Effect(focal.predictors = c("diet", "exertype", "time_min"),
+                mod = fit_lmer_5re) %>% 
+  data.frame %>% 
+  ggplot(aes(x = time_min,
+             y = fit,
+             fill = diet,
+             color = diet)) +
+  geom_line(size = 1.5) +
+  theme_bw() +
+  facet_grid(~ exertype) +
+  theme(legend.position = c(0.08, 0.85),
+        legend.background = element_rect(color = "black")) +
+  labs(title = "Raw Pulse Trajectories",
+       subtitle = "By Exercise and Diet Groupings",
+       x = "Time (Minutes Post-Baseline)",
+       y = "Estimated Marginal Mean\nPulse (Beats per Minute)",
+       fill = "Diet Plan",
+       color = "Diet Plan")
+```
+
+
+```{r}
+effects::Effect(focal.predictors = c("diet", "exertype", "time_min"),
+                mod = fit_lmer_5re,
+                xlevels = list("time_min" = seq(from = 0, 
+                                                to   = 12, 
+                                                by   = 0.5))) %>% 
+  data.frame %>% 
+  dplyr::mutate(diet = fct_rev(diet)) %>%  # reverse the order of the levels
+  ggplot(aes(x = time_min,
+             y = fit)) +
+  geom_ribbon(aes(ymin = fit - se,
+                  ymax = fit + se,
+                  fill = diet),
+              alpha = 0.3) +
+  geom_line(aes(color = diet,
+                linetype = diet),
+                size = 1) +
+  theme_bw() +
+  facet_grid(~ exertype) +
+  theme(legend.position = c(0.12, 0.85),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(2, "cm")) +
+  labs(title = "Raw Pulse Trajectories",
+       subtitle = "By Exercise and Diet Groupings",
+       x = "Time (Minutes Post-Baseline)",
+       y = "Estimated Marginal Mean\nPulse (Beats per Minute)",
+       fill = "Diet Plan",
+       color = "Diet Plan",
+       linetype = "Diet Plan") +
+  scale_color_manual(values = c("gray50", "black")) +
+  scale_fill_manual(values = c("gray50", "black")) +
+  scale_x_continuous(breaks = seq(from = 0, to = 14, by = 5))
+```
+
+
+
+
+
