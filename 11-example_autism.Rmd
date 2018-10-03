@@ -29,15 +29,578 @@ library(optimx)       # Different optimizers to solve mlm's
 library(effects)
 ```
 
-## The dataset
+## Background
+
+ 
+The source:  http://www-personal.umich.edu/~kwelch/ 
+
+
+This data was collected by researchers at the University of Michigan [@anderson2007, @anderson2009] as part of a prospective longitudinal study of 214 children. The children were divided into three diagnostic groups (`bestest2`) when they were 2 years old: Autism (`autism`), Pervasive Developmental Disorder (`pdd`), and non-spectrum children (none in this sample). The study was designed to collect information on each child at approximately 2, 3, 5, 9, and 13 years of age, although not all children were measured for each age. One of the study objectives was to assess the relative influence of the initial diagnostic category, language proficiency at age 2, and other covariates on the developmental trajectories of the socialization (`vsae`) of these children. 
+
+Study participants were children who had had consecutive referrals to one of two autism clinics before the age of 3 years. Social development was assessed at each age using the Vineland Adaptive Behavior Interview survey form, a parent-reported measure of socialization. **VSAE** (Vineland Socialization Age Equivalent), was a combined score that included assessments of interpersonal relationships, play/leisure time activities, and coping skills. Initial language development was assessed using the Sequenced Inventory of Communication Development (SICD) scale; children were placed into one of three groups (`sicdegp`) based on their initial SICD scores on the expressive language subscale at age 2. 
+
+* `childid` Child's identification number for this study
+
+* `sicdegp` Sequenced Inventory of Communication Development group *(an assessment of expressive language development)* - a factor. Levels are `low`, `med`, and `high`
+
+* `age2` Age (in years) centered around age 2 (age at diagnosis)
+
+* `vsae` Vineland Socialization Age Equivalent, Parent-reported measure of socialization, including measures of:
+    + interpersonal relationships 
+    + play/leisure time activities
+    + coping skills
+
+* `gender` Child's gender - a factor. Levels are `male` and `female`
+
+* `race` Child's race - a factor. Levels are `white` and `nonwhite`
+
+* `bestest2` Diagnosis at age 2 - a factor. Levels are `autism` and `pdd` (pervasive developmental disorder)
 
 
 ```{r}
-data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/eBook_multilevel/master/data/autism.txt?token=AScXBXahjPlTjqc6ytn9y6vwkwC6D09nks5bvSeiwA%3D%3D",
-                  header = TRUE)
+data(autism, package = "HLMdiag")
 ```
 
 
 ```{r}
-tibble::glimpse(data_raw)
+tibble::glimpse(autism)
 ```
+
+
+```{r}
+data_long <- autism %>% 
+  dplyr::mutate(childid = childid %>% factor) %>% 
+  dplyr::mutate(age = 2 + age2) %>% 
+  dplyr::select(childid, gender, race, bestest2, sicdegp, age, age2, vsae)
+```
+
+
+```{r}
+data_long %>% 
+  psych::headTail(top = 11, bottom = 6)
+```
+
+
+
+
+## Exploratory Data Analysis
+
+### Demographic Summary
+
+```{r, results="asis"}
+data_long %>% 
+  dplyr::filter(age == 2) %>% 
+  furniture::table1(bestest2, gender, race, 
+                    splitby = ~ sicdegp,
+                    test = TRUE,
+                    output = "html")
+```
+
+
+### Baseline Summary
+
+```{r, results="asis"}
+data_long %>% 
+  dplyr::filter(age == 2) %>% 
+  furniture::table1(vsae, 
+                    splitby = ~ sicdegp,
+                    test = TRUE,
+                    output = "html")
+```
+
+### Person Profile Plots
+
+```{r, fig.width=8, fig.height=6}
+data_long %>% 
+  ggplot(aes(x = age,
+             y = vsae)) +
+  geom_point(size = 0.75) +
+  geom_line(aes(group = childid),
+            alpha = .5,
+            size = 1) +
+  facet_grid(. ~ sicdegp)  +
+  theme_bw() +
+  scale_x_continuous(breaks = c(2, 3, 5, 9, 13))
+```
+
+
+
+## Model 1: Full model with ‘loaded’ mean structure
+
+Take top-down approach: Quadratic regression model, describing `vsae` as a function of `age2`
+
+> Each child has a unique parabolic trajectory over time, with coefficients that vary randomly around fixed-effects defining a mean growth curve for each SICD group.  Since there is no `age` = 0 in our data, we will use the `age2` variables, which is `age` -2,  so that intercept has meaning (mean at baseline age).
+
+
+* Fixed-effects    
+    + `age2` age
+    + `I(age2^2)` quadratic age or age-squared, the `I()` denotes an internal calculated variable
+    + `sicdegp` SICD group (reference group = low)
+    + SICD group x age/age-squared interactions
+
+* Random-effects    
+    + intercep
+    + age and age-squared 
+
+
+### Fit the Model
+
+```{r}
+fit_lmer_1_re <- lmer(vsae ~ age2*sicdegp + I(age2^2)*sicdegp + 
+                        (1 + age2 + I(age2^2) | childid), 
+                      data = autism,
+                      REML = TRUE)
+```
+
+
+### Table of Prameter Estimates
+
+```{r, include = FALSE}
+texreg::screenreg(fit_lmer_1_re, single.row = TRUE)
+```
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_lmer_1_re),
+                caption            = "MLM: Full Model",
+                caption.above      = TRUE,
+                single.row         = TRUE)
+```
+
+
+
+### Plot of the Estimated Marginal Means
+
+Note: the $x-axis$ is the `age2` (age - 2) variable, so it represents time since age 2 (or baseline)
+
+```{r}
+sjPlot::plot_model(fit_lmer_1_re,
+                   type = "pred",
+                   terms = c("age2", "sicdegp"),
+                   title = "Model 1: Loaded Means Structure")
+```
+
+
+
+## Model 2A: Drop Random Intercepts
+
+Note: There seems to be relatively little variation in baseline measurements of VSAE across individuals in the same SICD group, so the variation at age 2 can be attributed to random error, rather than between-subject variation.
+
+This indicates we may want to try removing the random intercepts, while retaining the same fixed- and other random-effects.
+
+This new model implies that children have common initial VSAE value at age 2, given their SICD group.
+
+
+### Fit the Model
+
+```{r}
+fit_lmer_2a_re <- lmer(vsae ~ age2*sicdegp + I(age2^2)*sicdegp + 
+                        (-1 + age2 + I(age2^2) | childid), 
+                      data = autism,
+                      REML = TRUE)
+```
+
+
+### Assess the Signifcance
+
+```{r}
+anova(fit_lmer_1_re, fit_lmer_2a_re, refit = FALSE)
+```
+
+The more complicated model (including random intercepts) does NOT fit better, thus the random intercepts may be removed from the model.  Model 2a is bettern than Model 1
+
+
+
+
+## Model 2B: Drop Random Quadratic Slope
+
+We should formally test the necessity of quadratic age random-effect.
+
+Comparison of nested models with REML-based LRT using a 50:50 mixture χ2-distribution with 1 and 2 df
+Difference of 2 covariance parameters
+
+### Fit the Model
+
+```{r}
+fit_lmer_2b_re <- lmer(vsae ~ age2*sicdegp + I(age2^2)*sicdegp + 
+                        (-1 + age2  | childid), 
+                      REML = TRUE, 
+                      data = autism)
+```
+
+
+### Assess the Signifcance
+
+```{r}
+anova(fit_lmer_2a_re, fit_lmer_2b_re, refit = FALSE)
+```
+
+
+The more complicated model (including random intercepts) DOES fit better, thus the random sopes for both the linear AND the quadratic effect of age should be retained in the model.  Model 2a is better than model 2b
+
+
+
+
+## Model 3: Drop Quadratic Time Fixed Effect
+
+Fit the previous 'best' model via ML, not REML to compare nested model that differe in terms of fixed effects only
+
+### Fit the Models
+
+```{r}
+fit_lmer_2a_ml <- lmer(vsae ~ age2*sicdegp + I(age2^2)*sicdegp + 
+                        (-1 + age2 + I(age2^2) | childid),  
+                      data = autism, 
+                      REML = FALSE)
+
+fit_lmer_3_ml <- lmer(vsae ~ age2*sicdegp  + 
+                        (-1 + age2 + (age2^2) | childid), 
+                      data = autism, 
+                      REML = FALSE)
+```
+
+### Assess the Signifcance
+
+```{r}
+anova(fit_lmer_2a_ml, fit_lmer_3_ml)
+```
+
+
+The more complicated model (including fixed interaction between quadratic time and SICD group) DOES fit better, thus the higher level interaction should be retained in the model.  Model 2a is better than model 3.
+
+
+
+
+
+
+## Final Model
+
+### Table of Parameter Esitmates
+
+
+```{r, include = FALSE}
+texreg::screenreg(fit_lmer_2a_re, single.row = TRUE)
+```
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_lmer_2a_re),
+                caption            = "MLM: Final Model",
+                caption.above      = TRUE,
+                single.row         = TRUE,
+                digits             = 4)
+```
+
+
+
+### Interpretation of Fixed Effects
+
+#### Reference Group: `low` SICD group
+
+* $\gamma_{0}$ = `r  fixef(fit_lmer_2a_re)["(Intercept)"] %>% round(3)` is the estimated marginal mean VSAE score for children in the `low` SICD, at 2 years of age    
+
+* $\gamma_{a}$ = `r  fixef(fit_lmer_2a_re)["age2"] %>% round(3)` and $\gamma_{a^2}$ = `r  fixef(fit_lmer_2a_re)["I(age2^2)"] %>% round(3)` are the fixed effects for age and age-squared on VSAE for children in the `low` SICD  group (change over time)
+
+Thus the equation for the estimated marginal mean VASE trajectory for the `low` SICD group is:
+
+$$
+\begin{align*}
+VASE =& \gamma_{0} + 
+        \gamma_{a}   (AGE - 2) + 
+        \gamma_{a^2} (AGE - 2)^2 \\
+     =& `r  fixef(fit_lmer_2a_re)["(Intercept)"] %>% round(3)` + 
+        `r  fixef(fit_lmer_2a_re)["age2"]        %>% round(3)` (AGE - 2)  + 
+        `r  fixef(fit_lmer_2a_re)["I(age2^2)"]   %>% round(3)` (AGE - 2)^2 \\ 
+\end{align*}
+$$
+
+
+#### First Comparison Group: `medium` SICD group
+
+* $\gamma_{med}$ = `r  fixef(fit_lmer_2a_re)["sicdegpmed"] %>% round(3)` is the DIFFERENCE in the estimated marginal mean VSAE score for children in the `medium` vs. the `low` SICD, at 2 years of age    
+
+* $\gamma_{med:\;a}$ = `r  fixef(fit_lmer_2a_re)["age2:sicdegpmed"] %>% round(3)` and $\gamma_{med:\;a^2}$ = `r  fixef(fit_lmer_2a_re)["sicdegpmed:I(age2^2)"] %>% round(3)` are the DIFFERENCE in the fixed effects for age and age-squared on VSAE for children in the `medium` vs. the `low` SICD  group
+
+Thus the equation for the estimated marginal mean VASE trajectory for the `medium` SICD group is:
+
+$$
+\begin{align*}
+VASE =& (\gamma_{0}   + \gamma_{med}) + 
+        (\gamma_{a}   + \gamma_{med:\;a})  (AGE - 2) + 
+        (\gamma_{a^2} + \gamma_{med:\;a^2})(AGE - 2)^2 \\
+     =& (`r  fixef(fit_lmer_2a_re)["(Intercept)"] %>% round(3)` + 
+         `r  fixef(fit_lmer_2a_re)["sicdegpmed"] %>% round(3)`) + 
+        (`r  fixef(fit_lmer_2a_re)["age2"]            %>% round(3)` + 
+         `r  fixef(fit_lmer_2a_re)["age2:sicdegpmed"] %>% round(3)`)  (AGE - 2) + 
+        (`r  fixef(fit_lmer_2a_re)["I(age2^2)"]            %>% round(3)` + 
+         `r  fixef(fit_lmer_2a_re)["sicdegpmed:I(age2^2)"] %>% round(3)`)(AGE - 2)^2 \\
+     =& `r  (fixef(fit_lmer_2a_re)["(Intercept)"] + 
+             fixef(fit_lmer_2a_re)["sicdegpmed"] ) %>% round(3)` + 
+        `r  (fixef(fit_lmer_2a_re)["age2"] + 
+             fixef(fit_lmer_2a_re)["age2:sicdegpmed"]) %>% round(3)`  (AGE - 2) + 
+        `r  (fixef(fit_lmer_2a_re)["I(age2^2)"] + 
+             fixef(fit_lmer_2a_re)["sicdegpmed:I(age2^2)"]) %>% round(3)` (AGE - 2)^2 \\
+\end{align*}
+$$
+
+
+
+
+#### Second Comparison Group: `high` SICD group
+
+* $\gamma_{hi}$ = `r  fixef(fit_lmer_2a_re)["sicdegphigh"] %>% round(3)` is the DIFFERENCE in the estimated marginal mean VSAE score for children in the `high` vs. the `low` SICD, at 2 years of age    
+
+* $\gamma_{hi:\;a}$ = `r  fixef(fit_lmer_2a_re)["age2:sicdegphigh"] %>% round(3)` and $\gamma_{hi:\;a^2}$ = `r  fixef(fit_lmer_2a_re)["sicdegphigh:I(age2^2)"] %>% round(3)` are the DIFFERENCE in the fixed effects for age and age-squared on VSAE for children in the `high` vs. the `low` SICD  group
+
+Thus the equation for the estimated marginal mean VASE trajectory for the `high` SICD group is:
+
+$$
+\begin{align*}
+VASE =& (\gamma_{0}   + \gamma_{hi}) + 
+        (\gamma_{a}   + \gamma_{hi:\;a})  (AGE - 2) + 
+        (\gamma_{a^2} + \gamma_{hi:\;a^2})(AGE - 2)^2 \\
+     =& (`r  fixef(fit_lmer_2a_re)["(Intercept)"] %>% round(3)` + 
+         `r  fixef(fit_lmer_2a_re)["sicdegphigh"] %>% round(3)`) + 
+        (`r  fixef(fit_lmer_2a_re)["age2"]            %>% round(3)` + 
+         `r  fixef(fit_lmer_2a_re)["age2:sicdegphigh"] %>% round(3)`)  (AGE - 2) + 
+        (`r  fixef(fit_lmer_2a_re)["I(age2^2)"]            %>% round(3)` + 
+         `r  fixef(fit_lmer_2a_re)["sicdegphigh:I(age2^2)"] %>% round(3)`)(AGE - 2)^2 \\
+     =& `r  (fixef(fit_lmer_2a_re)["(Intercept)"] + 
+             fixef(fit_lmer_2a_re)["sicdegphigh"] ) %>% round(3)` + 
+        `r  (fixef(fit_lmer_2a_re)["age2"] + 
+             fixef(fit_lmer_2a_re)["age2:sicdegphigh"]) %>% round(3)`  (AGE - 2) + 
+        `r  (fixef(fit_lmer_2a_re)["I(age2^2)"] + 
+             fixef(fit_lmer_2a_re)["sicdegphigh:I(age2^2)"]) %>% round(3)` (AGE - 2)^2 \\
+\end{align*}
+$$
+
+### Interpretation of Random Effects
+
+```{r}
+lme4::VarCorr(fit_lmer_2a_re)%>% 
+  print(comp = c("Variance", "Std.Dev"),
+        digits = 3)
+```
+
+
+```{r, include=FALSE}
+sjstats::re_var(fit_lmer_2a_re)
+sjstats::re_var(fit_lmer_2a_re) %>% names()
+```
+
+
+**Here a group of observations = a CHILD**
+
+#### Residual Varaince 
+
+**Within-child-variance**
+
+* $e_{ti}$ the residuals associated with observation at time $t$ on child $i$
+
+
+$$
+\sigma^2 = \sigma^2_e 
+         = VAR[e_{ti}] 
+         = `r sjstats::re_var(fit_lmer_2a_re)["_sigma_2"] %>% round(3)`
+$$
+
+
+#### 2 Variance Components
+
+**Between-children slope variances** 
+
+Random LINEAR effect of age variance
+
+* $u_{1i}$ the DIFFERENCE between child $i$'s specific linear component for age and the fixed linear component for age, given their SICD group
+
+$$
+\tau_{11} = \sigma^2_{u1} 
+          = VAR[u_{1i}] 
+          = `r sjstats::re_var(fit_lmer_2a_re)["childid_tau.00"] %>% round(2)`
+$$
+
+Random QUADRATIC effect of age variance
+
+* $u_{2i}$ the DIFFERENCE between child $i$'s specific quadratic component for age and the fixed quadratic component for age, given their SICD group
+
+$$
+\tau_{22} = \sigma^2_{u2} 
+          = VAR[u_{2i}] 
+          = `r sjstats::re_var(fit_lmer_2a_re)["childid.I(age2^2)_tau.11"] %>% round(2)`
+$$
+
+
+#### 1 Covariance (or correlation) Components
+
+
+**Slope-slope covariance** 
+
+Random LINEAR  and Quadratic effect of age covariance: 
+
+* correlation = `r sjstats::re_var(fit_lmer_2a_re)["childid_rho.01"] %>% round(2)`
+
+$$
+\tau_{12} = \sigma^2_{u12} 
+          = COV[u_{1i}, u_{2i}] 
+          = `r sjstats::re_var(fit_lmer_2a_re)["childid.age2_tau.01"] %>% round(2)`
+$$
+
+
+
+
+### Assumption Checking
+
+The residuals are:
+
+* Assumed to be normally, independently, and identically distributed (conditional on other random-effects)    
+
+* Assumed independent of random-effects
+
+$$
+e_{ti}  \sim  N(0, \sigma^2)
+$$
+
+
+
+```{r}
+sjPlot::plot_model(fit_lmer_2a_re, type = "diag")
+```
+
+
+
+### Plot of the Estimated Marginal Means
+
+#### Quick and Default 
+
+Note: the $x-axis$ is the `age2` (age - 2) variable, so it represents time since age 2 (or baseline)
+
+```{r}
+sjPlot::plot_model(fit_lmer_2a_re,
+                   type = "pred",                 # estimated marginal means (no random effects)
+                   terms = c("age2", "sicdegp"),  # 1st = x-axiz, 2nd = seperate lines
+                   title = "Final Model (2a)")    # Optional title
+```
+
+
+
+#### More Customized - Color
+
+This version would look better on a poster or in a slide presentation.
+
+```{r}
+effects::Effect(focal.predictors = c("age2","sicdegp"),  # variables involved in interactions
+                mod = fit_lmer_2a_re,
+                xlevels = list(age2 = seq(from = 0, to = 11, by = .1))) %>%   # add more values to smooth out the prediction lines and ribbons
+  data.frame() %>% 
+  dplyr::mutate(age = age2 + 2) %>%     # trandform back to standard years
+  dplyr::mutate(sicdegp = factor(sicdegp,
+                                 levels = c("high", "med", "low"),
+                                 labels = c("High", "Medium", "Low"))) %>% 
+  ggplot(aes(x = age,
+             y = fit,
+             group = sicdegp)) +
+  geom_ribbon(aes(ymin = lower,        # 95% Confidence Intervals
+                  ymax = upper,
+                  fill = sicdegp),
+              alpha = .3) +
+  geom_line(aes(linetype = sicdegp,
+                color = sicdegp),
+            size = 1) +
+  scale_x_continuous(breaks = c(2, 3, 5, 9, 13)) +                  # mark values that were actually measured
+  scale_y_continuous(breaks = seq(from = 0, to = 120, by = 20)) +
+  scale_linetype_manual(values = c("solid", "longdash", "dotted")) +
+  theme_bw() +
+  theme(legend.position = c(.2, .8),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(2.5, "cm")) +
+  labs(x = "Age, in years",
+       y = "Estimated Marginal Mean\nVineland Socialization Age Equivalent",
+       linetype = "Communication",
+       fill     = "Communication",
+       color    = "Communication")
+```
+
+#### More Customized - Black and White
+
+This version would be better for a publication.
+
+```{r}
+effects::Effect(focal.predictors = c("age2","sicdegp"),
+                mod = fit_lmer_2a_re,
+                xlevels = list(age2 = seq(from = 0, to = 11, by = .1))) %>% 
+  data.frame() %>% 
+  dplyr::mutate(age = age2 + 2) %>% 
+  dplyr::mutate(sicdegp = factor(sicdegp,
+                                 levels = c("high", "med", "low"),
+                                 labels = c("High", "Medium", "Low"))) %>% 
+  ggplot(aes(x = age,
+             y = fit,
+             group = sicdegp)) +
+  geom_ribbon(aes(ymin = lower,
+                  ymax = upper,
+                  fill = sicdegp),
+              alpha = .4) +
+  geom_line(aes(linetype = sicdegp),
+            size = .7) +
+  scale_x_continuous(breaks = c(2, 3, 5, 9, 13)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 120, by = 20)) +
+  scale_linetype_manual(values = c("solid", "longdash", "dotted")) +
+  scale_fill_manual(values = c("gray10", "gray40", "gray60")) +
+  theme_bw() +
+  theme(legend.position = c(.2, .8),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(2, "cm")) +
+  labs(x = "Age, in years",
+       y = "Estimated Marginal Mean\nVineland Socialization Age Equivalent",
+       linetype = "Communication",
+       fill     = "Communication")
+```
+
+
+
+### Blups vs. Fixed Effects
+
+
+```{r}
+data_long %>% 
+  dplyr::mutate(pred_fixed = predict(fit_lmer_2a_re, re.form = NA)) %>% 
+  dplyr::mutate(pred_wrand = predict(fit_lmer_2a_re)) %>% 
+  ggplot(aes(x = age,
+             y = vsae)) +
+  geom_line(aes(y = pred_wrand,
+                group = childid)) +
+  geom_line(aes(y = pred_fixed,
+                group = sicdegp),
+            size = 1.5,
+            color = "blue") +
+  facet_grid(. ~ sicdegp, labeller = "label_both") +
+  theme_bw()
+```
+
+```{r, fig.height=8, fig.width=8}
+data_long %>% 
+  dplyr::mutate(pred_fixed = predict(fit_lmer_2a_re, re.form = NA)) %>% 
+  dplyr::mutate(pred_wrand = predict(fit_lmer_2a_re)) %>% 
+  dplyr::filter(childid %in% sample(levels(data_long$childid), 25)) %>% 
+  ggplot(aes(x = age,
+             y = vsae)) +
+  geom_point() +
+  geom_line(aes(y = pred_wrand),
+            linetype = "longdash") +
+  geom_line(aes(y = pred_fixed,
+                color = sicdegp),
+            linetype = "solid") +
+  facet_wrap(. ~ childid, labeller = "label_both") +
+  theme_bw()
+```
+
+
+
+
+
