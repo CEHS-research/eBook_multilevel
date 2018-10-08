@@ -1164,32 +1164,20 @@ week_5   0.18   0.22   0.46   0.57   0.65   1.00</code></pre>
 <p>Reactive Depression</p>
 </blockquote>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(endog <span class="op">==</span><span class="st"> &quot;Reactive&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;week_&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># just the outcome(s)</span>
-<span class="st">  </span><span class="kw">cor</span>(<span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># correlation matrix</span>
-<span class="st">  </span><span class="kw">round</span>(<span class="dv">2</span>)</code></pre></div>
-<pre><code>       week_0 week_1 week_2 week_3 week_4 week_5
-week_0   1.00   0.59   0.21   0.13   0.01   0.16
-week_1   0.59   1.00   0.28   0.36   0.37   0.51
-week_2   0.21   0.28   1.00   0.55   0.58   0.67
-week_3   0.13   0.36   0.55   1.00   0.75   0.68
-week_4   0.01   0.37   0.58   0.75   1.00   0.83
-week_5   0.16   0.51   0.67   0.68   0.83   1.00</code></pre>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(endog <span class="op">==</span><span class="st"> &quot;Reactive&quot;</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># filter observations for the REACTIVE group</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;week_&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">cor</span>(<span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span>
+<span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(<span class="dt">upper =</span> <span class="st">&quot;ellipse&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-384-1.png" width="576" style="display: block; margin: auto;" /></p>
 <blockquote>
 <p>Endogenous Depression</p>
 </blockquote>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(endog <span class="op">==</span><span class="st"> &quot;Endogenous&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;week_&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># just the outcome(s)</span>
-<span class="st">  </span><span class="kw">cor</span>(<span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># correlation matrix</span>
-<span class="st">  </span><span class="kw">round</span>(<span class="dv">2</span>)</code></pre></div>
-<pre><code>       week_0 week_1 week_2 week_3 week_4 week_5
-week_0   1.00   0.42   0.47   0.44   0.37   0.18
-week_1   0.42   1.00   0.55   0.42   0.23   0.03
-week_2   0.47   0.55   1.00   0.83   0.72   0.35
-week_3   0.44   0.42   0.83   1.00   0.86   0.49
-week_4   0.37   0.23   0.72   0.86   1.00   0.52
-week_5   0.18   0.03   0.35   0.49   0.52   1.00</code></pre>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(endog <span class="op">==</span><span class="st"> &quot;Endogenous&quot;</span>) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># filter observations for the Endogenous group</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;week_&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">cor</span>(<span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span>
+<span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(<span class="dt">upper =</span> <span class="st">&quot;ellipse&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-385-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="multilevel-models---null-or-emptly-models" class="section level2">

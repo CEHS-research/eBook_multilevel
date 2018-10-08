@@ -350,6 +350,7 @@ data_wide %>%
 
 Looking for patterns is always easier with a plot.  All RM or mixed ANOVA assume sphericity or compound symmetry, meaning that all the correlations in the matrix would be the same.  This is not the case for these data.  Instead we see a classic pattern of corralary decay.  Measures taken close in time, say 1 week apart, exhibit the highest degree of correlation.  The farther apart in time that two measures are taken, the less correlated they are.  Note that the adjacent measures become more highly correlated, too.  This can be due to attrition; later time points having a smaller sample size.
 
+
 ```{r}
 data_wide %>% 
   dplyr::select(starts_with("week_")) %>% # just the outcome(s)
@@ -365,10 +366,10 @@ It can be a good ideal to investigate if the groups exhibit a similar pattern in
 
 ```{r}
 data_wide %>% 
-  dplyr::filter(endog == "Reactive") %>% 
-  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
-  cor(use = "pairwise.complete.obs") %>%   # correlation matrix
-  round(2)
+  dplyr::filter(endog == "Reactive") %>%    # filter observations for the REACTIVE group
+  dplyr::select(starts_with("week_")) %>% 
+  cor(use = "pairwise.complete.obs") %>%   
+  corrplot::corrplot.mixed(upper = "ellipse")
 ```
 
 
@@ -376,10 +377,10 @@ data_wide %>%
 
 ```{r}
 data_wide %>% 
-  dplyr::filter(endog == "Endogenous") %>% 
-  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
-  cor(use = "pairwise.complete.obs") %>%   # correlation matrix
-  round(2)
+  dplyr::filter(endog == "Endogenous") %>%    # filter observations for the Endogenous group
+  dplyr::select(starts_with("week_")) %>%
+  cor(use = "pairwise.complete.obs") %>%   
+  corrplot::corrplot.mixed(upper = "ellipse")
 ```
 
 
