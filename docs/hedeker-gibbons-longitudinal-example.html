@@ -1415,9 +1415,11 @@ Var: Residual
 <p>One way to judge a model is to compare the estimated means to the observed means to see how accuratedly they are represented by the model. This excellent fit of the estimated marginal means to the observed data supports the hypothesis that the change in depression across time is LINEAR.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">obs &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(week) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">observed =</span> <span class="kw">mean</span>(hamd, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) 
-
-effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="st">&quot;week&quot;</span>,
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">observed =</span> <span class="kw">mean</span>(hamd, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) </code></pre></div>
+<blockquote>
+<p>Reproduce Table 4.4 on page 55 <span class="citation">(Hedeker and Gibbons <a href="references.html#ref-hedeker2006">2006</a>)</span></p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="st">&quot;week&quot;</span>,
                 <span class="dt">mod =</span> fit_lmer_1re,
                 <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">week =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">5</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
@@ -1425,13 +1427,14 @@ effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt"
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">left_join</span>(obs, <span class="dt">by =</span> <span class="st">&quot;week&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(week, observed, estimated) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">diff =</span> observed <span class="op">-</span><span class="st"> </span>estimated) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>(<span class="dt">caption =</span> <span class="st">&quot;Hedeker and Gibbons&#39;s Table 4.4 on page 55&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">print</span>(<span class="dt">digits =</span> <span class="dv">2</span>)</code></pre></div>
-<pre><code>[1] &quot;\n-----------------------------------------\n week   observed   estimated     diff    \n------ ---------- ----------- -----------\n  0      23.44       23.55      -0.109   \n\n  1      21.84       21.18      0.6652   \n\n  2      18.31       18.8       -0.4928  \n\n  3      16.42       16.42     -0.009553 \n\n  4      13.62       14.05      -0.4303  \n\n  5      11.95       11.67      0.2745   \n-----------------------------------------\n\nTable: Hedeker and Gibbons&#39;s Table 4.4 on page 55\n\n&quot;
-attr(,&quot;class&quot;)
-[1] &quot;knit_asis&quot;
-attr(,&quot;knit_cacheable&quot;)
-[1] NA</code></pre>
+<span class="st">  </span><span class="kw">round</span>(<span class="dv">2</span>)</code></pre></div>
+<pre><code>  week observed estimated  diff
+1    0    23.44     23.55 -0.11
+2    1    21.84     21.18  0.67
+3    2    18.31     18.80 -0.49
+4    3    16.42     16.42 -0.01
+5    4    13.62     14.05 -0.43
+6    5    11.95     11.67  0.27</code></pre>
 </div>
 </div>
 </div>
@@ -1602,18 +1605,18 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_<span class="dv">2</span>,
                    <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-400-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-401-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]
 [[2]]$id</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-400-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-401-2.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 
 [[3]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-400-3.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-401-3.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[4]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-400-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-401-4.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="plot-of-the-estimated-marginal-means-2" class="section level3">
 <h3><span class="header-section-number">9.5.5</span> Plot of the Estimated Marginal Means</h3>
@@ -1622,7 +1625,7 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_<span class="dv">2</span>,
                    <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
                    <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;week&quot;</span>, <span class="st">&quot;endog&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-401-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-402-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

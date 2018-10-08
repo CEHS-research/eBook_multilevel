@@ -485,7 +485,11 @@ One way to judge a model is to compare the estimated means to the observed means
 obs <- data_long %>% 
   dplyr::group_by(week) %>% 
   dplyr::summarise(observed = mean(hamd, na.rm = TRUE)) 
+```
 
+> Reproduce Table 4.4 on page 55 [@hedeker2006]
+
+```{r}
 effects::Effect(focal.predictors = "week",
                 mod = fit_lmer_1re,
                 xlevels = list(week = 0:5)) %>% 
@@ -494,8 +498,7 @@ effects::Effect(focal.predictors = "week",
   dplyr::left_join(obs, by = "week") %>% 
   dplyr::select(week, observed, estimated) %>% 
   dplyr::mutate(diff = observed - estimated) %>% 
-  pander::pander(caption = "Hedeker and Gibbons's Table 4.4 on page 55") %>% 
-  print(digits = 2)
+  round(2)
 ```
 
 
