@@ -11,22 +11,19 @@ knitr::opts_chunk$set(comment     = "",
 ```
 
 ```{r, message=FALSE, error=FALSE}
-library(tidyverse)
-library(haven)        # read in SPSS dataset
+library(tidyverse)    # dplyr, tidyr, ggplot, the pipe, ect.
 library(furniture)    # nice table1() descriptives
 library(stargazer)    # display nice tables: summary & regression
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
-library(RColorBrewer) # nice color palettes for plots
-library(gridExtra)    # place ggplots together as one plot
 library(psych)        # contains some useful functions, like headTail
 library(car)          # Companion to Applied Regression
-library(nlme)         # non-linear mixed-effects models
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
-library(lmerTest)     # Tests on lmer objects
 library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
 library(sjstats)      # ICC calculations
+library(sjPlot)       # Quick predicitive and diagnostic plots 
 library(optimx)       # Different optimizers to solve mlm's
-library(effects)
+library(VIM)          # Visualization and Imputation of Missing Values 
+library(effects)      # Estimated Marginal Means
 ```
 
 ## Background
@@ -58,20 +55,24 @@ Study participants were children who had had consecutive referrals to one of two
 
 
 ```{r}
-data(autism, package = "HLMdiag")
+data(autism, package = "HLMdiag")   # make the dataset 'active' from this package
 ```
 
 
 ```{r}
-tibble::glimpse(autism)
+tibble::glimpse(autism)             # first look at the dataset and its varaibles
 ```
 
+### Long Format
 
 ```{r}
-data_long <- autism %>% 
-  dplyr::mutate(childid = childid %>% factor) %>% 
-  dplyr::mutate(age = 2 + age2) %>% 
-  dplyr::select(childid, gender, race, bestest2, sicdegp, age, age2, vsae)
+data_long <- autism %>%                            # save the dataset as a new name
+  dplyr::mutate(childid = childid %>% factor) %>%  # declare grouping var a factor
+  dplyr::mutate(age = 2 + age2) %>%                # create the original age variable 
+  dplyr::select(childid,                           # choose variables and order to keep
+                gender, race, bestest2, sicdegp, 
+                age, age2, vsae) %>% 
+  dplyr::arrange(childid, age2)                    # sort observations
 ```
 
 
@@ -81,25 +82,97 @@ data_long %>%
 ```
 
 
+### Wide Format
+
+
+```{r}
+data_wide <- data_long %>%           # save the dataset as a new name
+  dplyr::select(-age) %>%            # delete (by deselecting) this variable 
+  tidyr::spread(key = age2,          # name the varaible that specifies how to spread
+                value = vsae,        # name the variable to be spread out
+                sep = "_") %>%       # add to combine the key-variables name before its value
+  dplyr::arrange(childid)            # sort observations
+```
+
+
+Notice the missing values, displayed as `NA`.
+
+```{r}
+data_wide %>% 
+  psych::headTail()
+```
 
 
 ## Exploratory Data Analysis
 
 ### Demographic Summary
 
+
+#### Using the WIDE formatted dataset
+
+Each person's data is only stored on a single line
+
 ```{r, results="asis"}
+# Knit to Website: output = "html" 
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
+data_wide %>% 
+  furniture::table1(bestest2, gender, race,    # variables to summarize
+                    splitby = ~ sicdegp,       # how split into columns
+                    test = TRUE,               # compare the groups
+                    output = "html")           # for website
+```
+
+
+#### Using the LONG formatted dataset
+
+Each person's data is stored on multiple lines, one for each time point.  To ensure the summary table is correct, you must choose a single time point per person.
+
+
+```{r, results="asis"}
+# Knit to Website: output = "html" 
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
 data_long %>% 
-  dplyr::filter(age == 2) %>% 
-  furniture::table1(bestest2, gender, race, 
-                    splitby = ~ sicdegp,
-                    test = TRUE,
-                    output = "html")
+  dplyr::filter(age == 2) %>%                  # restrict to one-line per person
+  furniture::table1(bestest2, gender, race,    # variables to summarize
+                    splitby = ~ sicdegp,       # how split into columns
+                    test = TRUE,               # compare the groups
+                    output = "html")           # for website
 ```
 
 
 ### Baseline Summary
 
+
+<!-- #### Using the WIDE formatted dataset -->
+
+<!-- Each person's data is only stored on a single line -->
+
+<!-- ```{r, results="asis"} -->
+<!-- # Knit to Website: output = "html"  -->
+<!-- # Knit to PDF:     output = "latex2" -->
+<!-- # View on Screen:  output = ""text", or "markdown", "html" -->
+
+<!-- data_wide %>%  -->
+<!--   furniture::table1(age2_0,  -->
+<!--                     splitby = ~ sicdegp, -->
+<!--                     test = TRUE, -->
+<!--                     output = "html") -->
+<!-- ``` -->
+
+
+#### Using the LONG formatted dataset
+
+Each person's data is stored on multiple lines, one for each time point.  To ensure the summary table is correct, you must choose a single time point per person.
+
 ```{r, results="asis"}
+# Knit to Website: output = "html" 
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
 data_long %>% 
   dplyr::filter(age == 2) %>% 
   furniture::table1(vsae, 
@@ -108,10 +181,106 @@ data_long %>%
                     output = "html")
 ```
 
+
+### Missing Data & Attrition
+
+Plot the amount of missing vlaues and the amount of each patter of missing values.
+
+```{r}
+data_wide %>% 
+  VIM::aggr(numbers = TRUE,   # shows the number to the far right
+            prop = FALSE)     # shows counts instead of proportions
+```
+
+
+
+### Means Across Time
+
+#### Using the WIDE formatted dataset
+
+
+> Default = COMPLETE CASES ONLY!!!  
+
+Note - the sample size at each time point is the same, but subjects are only included if they have data at every time point
+
+```{r, results="asis"}
+# Knit to Website: output = "html"
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
+data_wide %>%
+  furniture::table1(age2_0, age2_1, age2_3, age2_7, age2_11,
+                    splitby = ~ sicdegp,
+                    test = TRUE,
+                    na.rm = TRUE,           # default: COMPLETE CASES ONLY!!!!!
+                    output = "html")
+```
+
+
+> Specify All data: 
+
+note -  that the smaple sizes will be different for each time point
+
+```{r, results="asis"}
+# Knit to Website: output = "html"
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
+data_wide %>%
+  furniture::table1(age2_0, age2_1, age2_3, age2_7, age2_11,
+                    splitby = ~ sicdegp,
+                    test = TRUE,
+                    na.rm = FALSE,           # INCLUDES ALL DATA !!!!
+                    output = "html")
+```
+
+#### Using the LONG formatted dataset
+
+Each person's data is stored on multiple lines, one for each time point.
+
+
+> FOR ALL DATA!
+
+```{r}
+data_sum_all <- data_long %>% 
+  dplyr::group_by(sicdegp, age2) %>%              # specify the groups
+  dplyr::summarise(vsae_n    = n(),                      # count of valid scores
+                   vsae_mean = mean(vsae),               # mean score
+                   vsae_sd   = sd(vsae),                 # standard deviation of scores
+                   vsae_sem  = vsae_sd / sqrt(vsae_n))   # stadard error for the mean of scores
+
+data_sum_all
+```
+
+
+
+> FOR COMPLETE CASES ONLY!!!
+
+```{r}
+data_sum_cc <- data_long %>% 
+  dplyr::group_by(childid) %>%        # group-by child
+  dplyr::mutate(child_vsae_n = n()) %>%    # count the number of valid VSAE scores
+  dplyr::filter(child_vsae_n == 5) %>%     # restrict to only thoes children with 5 valid scores
+  dplyr::group_by(sicdegp, age2) %>%              # specify the groups
+  dplyr::summarise(vsae_n    = n(),                      # count of valid scores
+                   vsae_mean = mean(vsae),               # mean score
+                   vsae_sd   = sd(vsae),                 # standard deviation of scores
+                   vsae_sem  = vsae_sd / sqrt(vsae_n))   # stadard error for the mean of scores
+
+data_sum_cc
+```
+
+
 ### Person Profile Plots
+
+Use the data in LONG format
 
 ```{r, fig.width=8, fig.height=6}
 data_long %>% 
+  dplyr::mutate(sicdegp = fct_recode(sicdegp,
+                                     "Low Communication" = "low",
+                                     "Medium Communication" = "med",
+                                     "High Communication" = "high")) %>% 
   ggplot(aes(x = age,
              y = vsae)) +
   geom_point(size = 0.75) +
@@ -120,7 +289,83 @@ data_long %>%
             size = 1) +
   facet_grid(. ~ sicdegp)  +
   theme_bw() +
-  scale_x_continuous(breaks = c(2, 3, 5, 9, 13))
+  scale_x_continuous(breaks = c(2, 3, 5, 9, 13)) +
+  labs(x = "Age of Child, Years",
+       y = "Vineland Socialization Age Equivalent",
+       color = "Sequenced Inventory of Communication Development") +
+  geom_smooth(aes(color = "Flexible"),
+              method = "loess",
+              se = FALSE,) +
+  geom_smooth(aes(color = "Linear"),
+              method = "lm",
+              se = FALSE) +
+  scale_color_manual(name = "Smoother Type: ",
+                     values = c("Flexible" = "blue", 
+                                "Linear"    = "red")) +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
+```
+
+
+### Side-by-side Boxplots
+
+```{r, fig.width=8, fig.height=6}
+data_long %>% 
+  ggplot(aes(x = sicdegp,
+             y = vsae,
+             fill = sicdegp)) +
+  geom_boxplot() +
+  theme_bw() +
+  facet_grid(. ~ age, 
+             labeller = "label_both") +
+  theme(legend.position = "top")
+```
+
+### Means Plots
+
+#### Default `stat_summary`
+
+It is nice that the `stat_summary()` layer computes the standard error for the mean for you using the data in LONG format, but I can't figure out how to connect the lines.
+
+```{r, fig.width=8, fig.height=6}
+data_long %>% 
+  ggplot(aes(x = age,
+             y = vsae,
+             color = sicdegp)) +
+  stat_summary() +                         # default = means and standard error for the mean
+  theme_bw() +
+  scale_x_continuous(breaks = c(2, 3, 5, 9, 13)) +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(-0.25, 1.25),
+        legend.background = element_rect(color = "black"))
+```
+
+#### Manually Summarized
+
+
+
+```{r, fig.width=8, fig.height=6}
+data_sum_all %>% 
+  dplyr::mutate(age = age2 + 2) %>% 
+  ggplot() +
+  aes(x = age,
+      y = vsae_mean,
+      color = sicdegp) +
+  geom_errorbar(aes(ymin = vsae_mean - vsae_sem,
+                    ymax = vsae_mean + vsae_sem),
+                width = .25) +
+  geom_point(aes(shape = sicdegp),
+             size = 3) +
+  geom_line(aes(group = sicdegp)) +
+  theme_bw() +
+  scale_x_continuous(breaks = c(2, 3, 5, 9, 13)) +
+  labs(x = "Age of Child, Years",
+       y = "Vineland Socialization Age Equivalent",
+       color = "Sequenced Inventory of Communication Development:",
+       shape = "Sequenced Inventory of Communication Development:",
+       linetype = "Sequenced Inventory of Communication Development:") +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
 ```
 
 
@@ -148,7 +393,7 @@ Take top-down approach: Quadratic regression model, describing `vsae` as a funct
 ```{r}
 fit_lmer_1_re <- lmer(vsae ~ age2*sicdegp + I(age2^2)*sicdegp + 
                         (1 + age2 + I(age2^2) | childid), 
-                      data = autism,
+                      data = data_long,
                       REML = TRUE)
 ```
 
@@ -199,7 +444,7 @@ This new model implies that children have common initial VSAE value at age 2, gi
 ```{r}
 fit_lmer_2a_re <- lmer(vsae ~ age2*sicdegp + I(age2^2)*sicdegp + 
                         (-1 + age2 + I(age2^2) | childid), 
-                      data = autism,
+                      data = data_long,
                       REML = TRUE)
 ```
 
@@ -228,7 +473,7 @@ Difference of 2 covariance parameters
 fit_lmer_2b_re <- lmer(vsae ~ age2*sicdegp + I(age2^2)*sicdegp + 
                         (-1 + age2  | childid), 
                       REML = TRUE, 
-                      data = autism)
+                      data = data_long)
 ```
 
 
@@ -253,12 +498,12 @@ Fit the previous 'best' model via ML, not REML to compare nested model that diff
 ```{r}
 fit_lmer_2a_ml <- lmer(vsae ~ age2*sicdegp + I(age2^2)*sicdegp + 
                         (-1 + age2 + I(age2^2) | childid),  
-                      data = autism, 
+                      data = data_long, 
                       REML = FALSE)
 
 fit_lmer_3_ml <- lmer(vsae ~ age2*sicdegp  + 
                         (-1 + age2 + (age2^2) | childid), 
-                      data = autism, 
+                      data = data_long, 
                       REML = FALSE)
 ```
 
@@ -553,7 +798,7 @@ effects::Effect(focal.predictors = c("age2","sicdegp"),
   scale_linetype_manual(values = c("solid", "longdash", "dotted")) +
   scale_fill_manual(values = c("gray10", "gray40", "gray60")) +
   theme_bw() +
-  theme(legend.position = c(.2, .8),
+  theme(legend.position = c(.15, .8),
         legend.background = element_rect(color = "black"),
         legend.key.width = unit(2, "cm")) +
   labs(x = "Age, in years",
@@ -566,38 +811,78 @@ effects::Effect(focal.predictors = c("age2","sicdegp"),
 
 ### Blups vs. Fixed Effects
 
+**BLUP** = Best Linear Unbiased Predictor
+
+A BLUP is the specific prediction for an individual supject, showin by black lines below.  This includes the fixed effects as well as the specific random effects for a given individual.  
+
+Comparatively, the blue lines below display the predictions for fixed effects only.
+
 
 ```{r}
 data_long %>% 
-  dplyr::mutate(pred_fixed = predict(fit_lmer_2a_re, re.form = NA)) %>% 
-  dplyr::mutate(pred_wrand = predict(fit_lmer_2a_re)) %>% 
-  ggplot(aes(x = age,
+  dplyr::mutate(sicdegp = fct_recode(sicdegp,
+                                     "Low Communication" = "low",
+                                     "Medium Communication" = "med",
+                                     "High Communication" = "high")) %>% 
+  dplyr::mutate(pred_fixed = predict(fit_lmer_2a_re, re.form = NA)) %>% # fixed effects only
+  dplyr::mutate(pred_wrand = predict(fit_lmer_2a_re)) %>%               # fixed and random effects together
+  ggplot(aes(x = age2,
              y = vsae)) +
-  geom_line(aes(y = pred_wrand,
-                group = childid)) +
-  geom_line(aes(y = pred_fixed,
-                group = sicdegp),
-            size = 1.5,
-            color = "blue") +
-  facet_grid(. ~ sicdegp, labeller = "label_both") +
-  theme_bw()
+  geom_line(aes(y = pred_wrand,           # BLUP = fixed and random effects together
+                group = childid,
+                color = "BLUP",
+                size  = "BLUP")) +
+  geom_line(aes(y = pred_fixed,           # fixed effects only
+                group = sicdegp,
+                color = "Fixed",
+                size  = "Fixed")) +
+  scale_color_manual(name = "Model: ",
+                     values = c("BLUP"  = "black",
+                                "Fixed" = "blue")) +
+  scale_size_manual(name = "Model: ",
+                    values = c("BLUP"  = .5,
+                               "Fixed" = 1.5)) +
+  facet_grid(. ~ sicdegp) +
+  theme_bw() +
+  labs(x = "Age, in years",
+       y = "Estimated Marginal Mean\nVineland Socialization Age Equivalent") +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(1.5, "cm"))
 ```
+
+
+
 
 ```{r, fig.height=8, fig.width=8}
 data_long %>% 
   dplyr::mutate(pred_fixed = predict(fit_lmer_2a_re, re.form = NA)) %>% 
   dplyr::mutate(pred_wrand = predict(fit_lmer_2a_re)) %>% 
-  dplyr::filter(childid %in% sample(levels(data_long$childid), 25)) %>% 
+  dplyr::filter(childid %in% sample(levels(data_long$childid), 25)) %>%  # 25 randomly sampled children
   ggplot(aes(x = age,
              y = vsae)) +
-  geom_point() +
-  geom_line(aes(y = pred_wrand),
-            linetype = "longdash") +
+  geom_point(aes(color = sicdegp),
+             size = 3) +
+  geom_line(aes(y = pred_wrand,
+                linetype = "BLUP",
+                size     = "BLUP"),
+            color = "black") +
   geom_line(aes(y = pred_fixed,
-                color = sicdegp),
-            linetype = "solid") +
+                color = sicdegp,
+                linetype = "Fixed",
+                size     = "Fixed")) +
+  scale_linetype_manual(name = "Model: ",
+                        values = c("BLUP"  = "longdash",
+                                   "Fixed" = "solid")) +
+  scale_size_manual(name = "Model: ",
+                    values = c("BLUP"  = .5,
+                               "Fixed" = 1)) +
   facet_wrap(. ~ childid, labeller = "label_both") +
-  theme_bw()
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "Age, in years",
+       y = "Estimated Marginal Mean\nVineland Socialization Age Equivalent",
+       color = "Communication:")
 ```
 
 

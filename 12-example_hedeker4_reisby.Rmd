@@ -1,0 +1,567 @@
+# Hedeker & Gibbons: Longitudinal Example
+
+```{r}
+library(tidyverse)    # dplyr, tidyr, ggplot, the pipe, ect.
+library(haven)        # read in SPSS dataset
+library(furniture)    # nice table1() descriptives
+library(stargazer)    # display nice tables: summary & regression
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(psych)        # contains some useful functions, like headTail
+library(car)          # Companion to Applied Regression
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
+library(sjstats)      # ICC calculations
+library(sjPlot)       # Quick predicitive and diagnostic plots 
+library(optimx)       # Different optimizers to solve mlm's
+library(VIM)          # Visualization and Imputation of Missing Values 
+library(effects)      # Estimated Marginal Means
+```
+
+
+## Background
+
+Riesby and associates (Riesby et al., 1977) examined the relationship between Imipramine (IMI) and Desipramine (DMI) plasma levels and clinical response in 66 depressed inpatients (37 endogenous and 29 non-endogenous).  The IMI and DMI measures were only taken in the later weeks and are not used here.
+
+Dependent or outcome variable:   
+
+* `hamd` Hamilton Depression Scores (HD)
+    
+    
+Independent or predictor variables:  
+
+* `endog` Prepression Diagnosis 
+    + endogenous  
+    + non-endogenous/reactive 
+    
+* IMI (imipramine) drug-plasma levels (µg/l)     
+    + antidepressant given 225 mg/day, weeks 3-6   
+    
+* DMI (desipramine) drug-plasma levels (µg/l)
+    + metabolite of imipramine
+
+
+```{r}
+data_raw <- haven::read_spss("http://www.uic.edu/~hedeker/riesby.sav") %>%         # read from teh webpage 
+  dplyr::select(-intrcpt, -endweek)                                                # de-select or delete some variables 
+```
+
+
+```{r}
+data_raw %>% 
+  psych::headTail(top = 11, bottom = 8)
+```
+
+### Long Format
+
+
+```{r}
+data_long <- data_raw %>%                                        # save the dataset as a new name
+  dplyr::filter(!is.na(hamd)) %>%                                # remove NA or missing scores
+  dplyr::mutate(id = factor(id)) %>%                             # declare grouping var a factor
+  dplyr::mutate(endog = factor(endog,                            # attach labels to a grouping variable
+                               levels = c(0, 1),                 # order of the levels should match levels
+                               labels = c("Reactive",            # order matters!
+                                          "Endogenous"))) %>% 
+  dplyr::select(id, week, endog, hamd) %>%                       # select the order of variables to include
+  dplyr::arrange(id, week)                                       # sort observations 
+```
+
+
+```{r}
+data_long %>% 
+  psych::headTail(top = 11, bottom = 8)
+```
+
+### Wide Format
+
+
+```{r}
+data_wide <- data_long %>%     # save the dataset as a new name
+  tidyr::spread(key = week,    # name the varaible that specifies how to spread
+                value = hamd,  # name the variable to be spread out
+                sep = "_")     # add to combine the key-variables name before its value
+```
+
+
+Notice the missing values, displayed as `NA`.
+
+```{r}
+data_wide %>% 
+  psych::headTail()
+```
+
+
+
+## Exploratory Data Analysis
+
+### Diagnosis Group
+
+```{r, results="asis"}
+# Knit to Website: output = "html"
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
+data_long %>% 
+  dplyr::filter(week == 0) %>% 
+  furniture::table1("Depression Type" = endog,
+                    output = "html")
+```
+
+### Missing Data & Attrition
+
+Plot the amount of missing vlaues and the amount of each patter of missing values.
+
+```{r}
+data_wide %>% 
+  VIM::aggr(numbers = TRUE,   # shows the number to the far right
+            prop = FALSE)     # shows counts instead of proportions
+```
+
+
+
+### Depression Over Time, by Group
+
+
+#### Table of Means
+
+> Default = COMPLETE CASES ONLY!!!  
+
+Note - the sample size at each time point is the same, but subjects are only included if they have data at every time point
+
+```{r, results='asis'}
+# Knit to Website: output = "html"
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
+data_wide %>%          
+  furniture::table1(week_0, week_1, week_2, 
+                    week_3, week_4, week_5,
+                    splitby = ~ endog,
+                    test = TRUE,
+                    na.rm = TRUE,              # default: COMPLETE CASES ONLY!!!!!
+                    output = "html")           
+```
+
+
+
+> Specify All data: 
+
+note -  that the smaple sizes will be different for each time point
+
+```{r, results='asis'}
+# Knit to Website: output = "html"
+# Knit to PDF:     output = "latex2"
+# View on Screen:  output = ""text", or "markdown", "html"
+
+data_wide %>%          
+  furniture::table1(week_0, week_1, week_2, 
+                    week_3, week_4, week_5,
+                    splitby = ~ endog,
+                    test = TRUE,
+                    na.rm = FALSE,           # INCLUDES ALL DATA !!!!
+                    output = "html")   
+```
+
+
+#### Using the LONG formatted dataset
+
+Each person's data is stored on multiple lines, one for each time point.
+
+
+> FOR ALL DATA!
+
+```{r}
+data_sum_all <- data_long %>% 
+  dplyr::group_by(endog, week) %>%                # specify the groups
+  dplyr::summarise(hamd_n    = n(),                      # count of valid scores
+                   hamd_mean = mean(hamd),               # mean score
+                   hamd_sd   = sd(hamd),                 # standard deviation of scores
+                   hamd_sem  = hamd_sd / sqrt(hamd_n))   # stadard error for the mean of scores
+
+data_sum_all
+```
+
+
+
+> FOR COMPLETE CASES ONLY!!!
+
+```{r}
+data_sum_cc <- data_long %>% 
+  dplyr::group_by(id) %>%               # group-by participant
+  dplyr::mutate(person_vsae_n = n()) %>%    # count the number of valid VSAE scores
+  dplyr::filter(person_vsae_n == 6) %>%     # restrict to only thoes children with 5 valid scores
+  dplyr::group_by(endog, week) %>%                # specify the groups
+  dplyr::summarise(hamd_n    = n(),                      # count of valid scores
+                   hamd_mean = mean(hamd),               # mean score
+                   hamd_sd   = sd(hamd),                 # standard deviation of scores
+                   hamd_sem  = hamd_sd / sqrt(hamd_n))   # stadard error for the mean of scores
+
+data_sum_cc
+```
+
+
+
+
+
+
+#### Person-Profile Plot or Spaghetti Plot
+
+Use the data in LONG format.
+
+A scatterplot of all observations of depression scores over time, joining the dots of each individual's data.
+
+> NOTE: Not all lines have a point for every week!
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = week,
+             y = hamd)) +
+  geom_point() +
+  geom_line(aes(group = id))   # join points that belong to the same "id"
+```
+
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = week,
+             y = hamd,
+             color = endog)) +    # color points and lines by the "endog" variable
+  geom_point() +
+  geom_line(aes(group = id))
+```
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = week,
+             y = hamd)) +
+  geom_point() +
+  geom_line(aes(group = id)) +
+  facet_grid( ~ endog)            # side-by-side pandels by the "endog" variable
+```
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = week %>% factor(),
+             y = hamd)) +
+  geom_boxplot() +                   # compare center and spread
+  facet_grid( ~ endog)           
+```
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = week %>% factor(),
+             y = hamd)) +
+  geom_violin() +                   # similar to boxplots to show distribution
+  facet_grid( ~ endog)           
+```
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = week,
+             y = hamd)) +
+  geom_point() +
+  geom_line(aes(group = id)) +
+  facet_grid( ~ endog) +
+  geom_smooth() +                     # DEFAULTS: method = "loess", se = TRUE, color = "blue"
+  geom_smooth(method = "lm",
+              se = FALSE,
+              color = "hot pink")
+```
+
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = week,
+             y = hamd)) +
+  geom_point() +
+  geom_line(aes(group = id)) +
+  facet_grid( ~ endog) +
+  geom_smooth(aes(color = "Flexible"),
+              method = "loess",
+              se = FALSE,) +
+  geom_smooth(aes(color = "Linear"),
+              method = "lm",
+              se = FALSE) +
+  scale_color_manual(name = "Smoother Type: ",
+                     values = c("Flexible" = "blue", 
+                                "Linear"    = "red")) +
+  theme_bw() +
+  theme(legend.position = "bottom")
+```
+
+
+
+## Patterns in the Outcome Over Time
+
+### Variance-Covariance
+
+#### Full Matrix
+
+* Variances are down the diagonal    
+     + Increasing variance over time violates the ANOVA assumption of *homogeity of variance*
+     
+```{r}
+data_wide %>% 
+  dplyr::select(starts_with("week_")) %>%  # just the outcome(s)
+  cov(use = "complete.obs")  %>%           # covariance matrix, LIST-wise deletion
+  round(3)
+```
+
+```{r}
+data_wide %>% 
+  dplyr::select(starts_with("week_")) %>%  # just the outcome(s)
+  cov(use = "pairwise.complete.obs")  %>%  # covariance matrix, PAIR-wise deletion
+  round(3)
+```
+
+#### Just Variances
+
+Notice the variance in scores increases over time, which is seen in the side-by-side boxplots.
+
+```{r}
+data_wide %>% 
+  dplyr::select(starts_with("week_")) %>%  # just the outcome(s)
+  cov(use = "pairwise.complete.obs")  %>%  # covariance matrix, PAIR-wise deletion
+  diag()                                   #  extracts just the variances
+```
+
+### Correlation
+
+#### Full Matrix
+
+Pairwise relationships are easier to eye-ball magnitude when presented as correlations, rather than covariances, due to the relative scale.
+
+```{r}
+data_wide %>% 
+  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
+  cor(use = "complete.obs") %>%           # correlation matrix - LIST-wise deletion
+  round(2)                                
+```
+
+```{r}
+data_wide %>% 
+  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
+  cor(use = "pairwise.complete.obs") %>%   # correlation matrix - PAIR-wise deletion
+  round(2)                                
+```
+
+
+#### Visualization
+
+Looking for patterns is always easier with a plot.  All RM or mixed ANOVA assume sphericity or compound symmetry, meaning that all the correlations in the matrix would be the same.  This is not the case for these data.  Instead we see a classic pattern of corralary decay.  Measures taken close in time, say 1 week apart, exhibit the highest degree of correlation.  The farther apart in time that two measures are taken, the less correlated they are.  Note that the adjacent measures become more highly correlated, too.  This can be due to attrition; later time points having a smaller sample size.
+
+```{r}
+data_wide %>% 
+  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
+  cor(use = "pairwise.complete.obs") %>%   # correlation matrix
+  corrplot::corrplot.mixed(upper = "ellipse")
+```
+
+### For Each Group 
+
+It can be a good ideal to investigate if the groups exhibit a similar pattern in correlation.
+
+> Reactive Depression
+
+```{r}
+data_wide %>% 
+  dplyr::filter(endog == "Reactive") %>% 
+  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
+  cor(use = "pairwise.complete.obs") %>%   # correlation matrix
+  round(2)
+```
+
+
+> Endogenous Depression
+
+```{r}
+data_wide %>% 
+  dplyr::filter(endog == "Endogenous") %>% 
+  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
+  cor(use = "pairwise.complete.obs") %>%   # correlation matrix
+  round(2)
+```
+
+
+
+
+
+## Multilevel Models - Null or Emptly Models
+
+
+### Heiarchical Null: Fixed Intercepts with Random Intercepts
+
+For purely nested or heiarchical designs we often start by fitting a null model with only a fixed intercept and random intercept variance.
+
+```{r}
+fit_lmer_0re <- lme4::lmer(hamd ~ 1 + (1|id), 
+                    data = data_long,
+                    REML = TRUE)
+```
+
+
+#### Caluclate the ICC
+
+
+```{r}
+sjstats::icc(fit_lmer_0re)
+```
+
+Interpretation:  Over 26% of the variance in depression scores is attributable to person-to-person differenences.
+
+###  Longitudinal Null: Fixed Intercepts and Time with Random Intercepts
+
+Since this situation deals with longitudinal data, it is more appropriate to start off including our time variable in the null model as a fixed effect only.
+
+```{r}
+fit_lmer_1re <- lme4::lmer(hamd ~ week + (1|id), 
+                    data = data_long,
+                    REML = TRUE)
+```
+
+#### Caluclate the ICC
+
+```{r}
+sjstats::icc(fit_lmer_1re)
+```
+
+Interpretation:  Nearly HALF of the variance in depression scores not explained by the linear effect of time is attributable to person-to-person differences.  Thus, subjects display considerable heterogeneity in depression levels.
+
+This value of 46% is an oversimplification of the correlation matrix above.
+
+### Single-Level Null: No Random Effects
+
+To compare, fit the single level regression model
+
+```{r}
+fit_lm_1 <- lm(hamd ~ week,
+               data = data_long)
+```
+
+
+
+```{r, include = FALSE}
+texreg::screenreg(list(fit_lm_1, fit_lmer_1re))
+```
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_lm_1, fit_lmer_1re),
+                custom.model.names = c("ML 1 Level", "MLM 2 Levels"),
+                caption = "MLM: Longitudinal Null Models",
+                caption.above = TRUE)
+```
+
+
+For the multilevel model, the Wald tests indicated the fixed intercept is significant (no surprized that the depressions scores are not zero at baseline).  More of note is the significance of the fixed effect of time.  This signifies that depression scores are declining over time.  On average, patients are improving across time, by an average of 2.4 points a week.
+
+
+Note: the fixed estimates are very similar for the two models, but the stnadard errors are different.  Additionally, whereas the single-level regression lumps all remaining variance together ($\sigma^2$), the multilevel model seperates it into within-subjects ($\sigma^2_{u0}$ or $\tau_{00}$) and between-subjects variance ($\sigma^2_{e}$ or $\sigma^2$).
+
+#### Compare Residual Variance
+
+```{r}
+sigma(fit_lm_1)^2
+```
+
+
+```{r}
+sjstats::re_var(fit_lmer_1re)  # in longitudinal data, a group of observations = a participant or person
+```
+
+> "One statistician's error term is another's career!"
+>
+> @hedeker2006, page 56
+
+
+
+One way to judge a model is to compare the estimated means to the observed means to see how accuratedly they are represented by the model.  This excellent fit of the estimated marginal means to the observed data supports the hypothesis that the change in depression across time is LINEAR.
+
+```{r}
+obs <- data_long %>% 
+  dplyr::group_by(week) %>% 
+  dplyr::summarise(observed = mean(hamd, na.rm = TRUE)) 
+
+effects::Effect(focal.predictors = "week",
+                mod = fit_lmer_1re,
+                xlevels = list(week = 0:5)) %>% 
+  data.frame() %>% 
+  dplyr::rename(estimated = fit) %>% 
+  dplyr::left_join(obs, by = "week") %>% 
+  dplyr::select(week, observed, estimated) %>% 
+  dplyr::mutate(diff = observed - estimated) %>% 
+  pander::pander(caption = "Hedeker and Gibbons's Table 4.4 on page 55") %>% 
+  print(digits = 2)
+```
+
+
+
+
+
+
+## Multilevel Models: Theory Driven Model
+
+### Fit RI and RIAS Models
+
+The researcher specifically wants to know if the trajectory over time differs for the two types of depression.  This translates into a fixed effects interaction between time and group.  
+
+> Start by comapreing random intercepts only (RI) to a random intercetps and slopes (RIAS) model. 
+
+```{r}
+fit_lmer_1 <- lme4::lmer(hamd ~ week*endog + (1|id), # MLM-RI
+                    data = data_long,
+                    REML = TRUE)
+
+fit_lmer_2 <- lme4::lmer(hamd ~ week*endog + (week|id), # MLM-RIAS
+                    data = data_long,
+                    REML = TRUE)
+```
+
+
+### Assess the Signifcance
+
+```{r}
+anova(fit_lmer_1, fit_lmer_2, refit = FALSE)
+```
+
+The more complicated model (RAIS) is supported.
+
+### Table of Prameter Estimates
+
+```{r, include = FALSE}
+texreg::screenreg(fit_lmer_2, single.row = TRUE)
+```
+
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(fit_lmer_2, single.row = TRUE)
+```
+
+### Model Assumptions
+
+Use residual plots to look for violations of the model assumptions.
+
+```{r}
+sjPlot::plot_model(fit_lmer_2,
+                   type = "diag")
+```
+
+
+### Plot of the Estimated Marginal Means
+
+#### Quick and Default 
+
+```{r}
+sjPlot::plot_model(fit_lmer_2,
+                   type = "pred",
+                   terms = c("week", "endog"))
+```
+
+
