@@ -392,7 +392,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="the-dataset" class="section level2">
 <h2><span class="header-section-number">10.1</span> The dataset</h2>
 <p>This comes from a <strong>Randomized Controled Trial</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/eBook_multilevel/master/data/exercise_diet.txt?token=AScXBcNdbT5roh2XgMae-6vm1fruDo8Bks5bvQJIwA%3D%3D&quot;</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/eBook_multilevel/master/data/exercise_diet.txt?token=AScXBY80grQdF66G9yRwtPX2qTXK86WLks5bxltawA%3D%3D&quot;</span>,
                   <span class="dt">header =</span> <span class="ot">TRUE</span>, 
                   <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw)</code></pre></div>
@@ -646,7 +646,7 @@ $ time     &lt;int&gt; 0, 228, 296, 639, 0, 56, 434, 538, 0, 150, 295, 541, ...<
                     <span class="dt">test =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-409">Table 10.1: </span>Baseline Descriptives
+<span id="tab:unnamed-chunk-414">Table 10.1: </span>Baseline Descriptives
 </caption>
 <thead>
 <tr>
@@ -813,7 +813,7 @@ pulse
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">facet_grid</span>(diet <span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-411-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-416-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="loess---moving-average-smoothers" class="section level4">
 <h4><span class="header-section-number">10.2.3.2</span> Loess - Moving Average Smoothers</h4>
@@ -835,7 +835,7 @@ pulse
        <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Pulse (Beats per Minute)&quot;</span>,
        <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-412-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-417-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1818,7 +1818,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_5re,
                    <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
                    <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;time_min&quot;</span>, <span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-422-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-427-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),
                 <span class="dt">mod =</span> fit_lmer_5re) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span>
@@ -1837,7 +1837,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
        <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,
        <span class="dt">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,
        <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-423-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-428-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),
                 <span class="dt">mod =</span> fit_lmer_5re,
                 <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="st">&quot;time_min&quot;</span> =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, 
@@ -1869,7 +1869,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">14</span>, <span class="dt">by =</span> <span class="dv">5</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-424-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-429-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
