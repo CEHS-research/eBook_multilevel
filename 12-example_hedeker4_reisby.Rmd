@@ -1,5 +1,16 @@
 # Hedeker & Gibbons: Longitudinal Example
 
+
+```{r, echo=FALSE}
+library(pander)
+
+panderOptions('digits', 2)
+panderOptions('round', 2)
+panderOptions('keep.trailing.zeros', TRUE)
+panderOptions('keep.line.breaks', TRUE)
+```
+
+
 ```{r}
 library(tidyverse)    # dplyr, tidyr, ggplot, the pipe, ect.
 library(haven)        # read in SPSS dataset
@@ -20,7 +31,7 @@ library(effects)      # Estimated Marginal Means
 
 ## Background
 
-Riesby and associates (Riesby et al., 1977) examined the relationship between Imipramine (IMI) and Desipramine (DMI) plasma levels and clinical response in 66 depressed inpatients (37 endogenous and 29 non-endogenous).  The IMI and DMI measures were only taken in the later weeks and are not used here.
+Starting in chapter 4, @hedeker2006 details analysis of a psychiatric study described by @reisby1977.  This study focues on the relationship between Imipramine (IMI) and Desipramine (DMI) plasma levels and clinical response in 66 depressed inpatients (37 endogenous and 29 non-endogenous).  The IMI and DMI measures were only taken in the later weeks, but are not used here.
 
 Dependent or outcome variable:   
 
@@ -387,90 +398,187 @@ data_wide %>%
 
 
 
-## Multilevel Models - Null or Emptly Models
+## MLM - Null or Emptly Models
 
 
-### Heiarchical Null: Fixed Intercepts with Random Intercepts
+###  Fit the model
 
-For purely nested or heiarchical designs we often start by fitting a null model with only a fixed intercept and random intercept variance.
+> Random Intercepts, with Fixed Intercept and Time Slope (i.e. Trend)....@hedeker2006 section 4.3.5, starting on page 55
+
+Since this situation deals with longitudinal data, it is more appropriate to start off including the time variable in the null model as a fixed effect only.
 
 ```{r}
-fit_lmer_0re <- lme4::lmer(hamd ~ 1 + (1|id), 
-                    data = data_long,
-                    REML = TRUE)
+fit_lmer_week_RI_reml <- lme4::lmer(hamd ~ week + (1|id), 
+                                    data = data_long,
+                                    REML = TRUE)
 ```
 
 
-#### Caluclate the ICC
-
-
-```{r}
-sjstats::icc(fit_lmer_0re)
-```
-
-Interpretation:  Over 26% of the variance in depression scores is attributable to person-to-person differenences.
-
-###  Longitudinal Null: Fixed Intercepts and Time with Random Intercepts
-
-Since this situation deals with longitudinal data, it is more appropriate to start off including our time variable in the null model as a fixed effect only.
-
-```{r}
-fit_lmer_1re <- lme4::lmer(hamd ~ week + (1|id), 
-                    data = data_long,
-                    REML = TRUE)
-```
-
-#### Caluclate the ICC
-
-```{r}
-sjstats::icc(fit_lmer_1re)
-```
-
-Interpretation:  Nearly HALF of the variance in depression scores not explained by the linear effect of time is attributable to person-to-person differences.  Thus, subjects display considerable heterogeneity in depression levels.
-
-This value of 46% is an oversimplification of the correlation matrix above.
-
-### Single-Level Null: No Random Effects
-
-To compare, fit the single level regression model
-
-```{r}
-fit_lm_1 <- lm(hamd ~ week,
-               data = data_long)
-```
-
-
+### Table of Parameter Estimates
 
 ```{r, include = FALSE}
-texreg::screenreg(list(fit_lm_1, fit_lmer_1re))
+texreg::screenreg(fit_lmer_week_RI_reml, single.row = TRUE)
 ```
 
-```{r, results='asis'}
+
+```{r mlmRI, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
 
-texreg::htmlreg(list(fit_lm_1, fit_lmer_1re),
-                custom.model.names = c("ML 1 Level", "MLM 2 Levels"),
+texreg::htmlreg(fit_lmer_week_RI_reml, 
+                single.row = TRUE,
+                caption = "MLM: Random Intercepts Null Model fit w/REML",
+                caption.above = TRUE,
+                custom.note = "Reproduction of Hedeker's table 4.3 on page 55, except using REML here instead of ML")
+```
+
+
+On average, patients start off with HDRS scores of `r fixef(fit_lmer_week_RI_reml)["(Intercept)"] %>% round(2)` and then change by `r fixef(fit_lmer_week_RI_reml)["week"] %>% round(2)` points each week.  This weekly improvement of about 2 points a week is statistically significant via the Wald test.
+
+
+
+### Estimated Marginal Means Plot
+
+> Multilevel model on page 55 [@hedeker2006]
+
+$$
+\hat{y} = `r fixef(fit_lmer_week_RI_reml)["(Intercept)"] %>% round(3)` + 
+          `r fixef(fit_lmer_week_RI_reml)["week"] %>% round(3)` week
+$$
+
+
+The fastest way to plot a model is to use the `sjPlot::plot_model()` function.
+
+```{r}
+sjPlot::plot_model(fit_lmer_week_RI_reml,
+                   type = "pred",
+                   terms = c("week"))
+```
+
+
+### Estimated Marginal Means and Emperical Bayes Plots
+
+With a bit more code we can plot not only the **marginal model** (fixed effects only), but add the Best Linear Unbiased Predictions (**BLUP**s) or person-specific specific models (both fixed and random effects).
+
+```{r}
+data_long %>% 
+  dplyr::mutate(pred_fixed = predict(fit_lmer_week_RI_reml, re.form = NA)) %>% # fixed effects only
+  dplyr::mutate(pred_wrand = predict(fit_lmer_week_RI_reml)) %>%               # fixed and random effects together
+  ggplot(aes(x = week,
+             y = hamd,
+             group = id)) +
+  geom_line(aes(y        = pred_wrand,
+                color    = "BLUP",
+                size     = "BLUP",
+                linetype = "BLUP")) +
+  geom_line(aes(y        = pred_fixed,
+                color    = "Marginal",
+                size     = "Marginal",
+                linetype = "Marginal")) +
+  theme_bw() +
+  scale_color_manual(name   = "Type of Prediction",
+                     values = c("BLUP"     = "gray50",
+                                "Marginal" = "blue"))  +
+  scale_size_manual(name    = "Type of Prediction",
+                    values = c("BLUP"      = .5,
+                                "Marginal" = 1.25))  +
+  scale_linetype_manual(name   = "Type of Prediction",
+                        values = c("BLUP"     = "longdash",
+                                   "Marginal" = "solid"))  +
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "Weeks Since Baseline",
+       y = "Hamilton Depression Scores")
+```
+
+Notice that in this model, all the BLUPs are parallel.  That is becuase we are only letting the intercept vary from person-to-person while keeping the effect of time (slope) constant.
+
+
+
+> Reproduce Table 4.4 on page 55 [@hedeker2006]
+
+One way to judge a model is to compare the estimated means to the observed means to see how accuratedly they are represented by the model.  This excellent fit of the estimated marginal means to the observed data supports the hypothesis that the change in depression across time is LINEAR.
+
+```{r}
+obs <- data_long %>% 
+  dplyr::group_by(week) %>% 
+  dplyr::summarise(observed = mean(hamd, na.rm = TRUE)) 
+
+effects::Effect(focal.predictors = "week",
+                mod = fit_lmer_week_RI_reml,
+                xlevels = list(week = 0:5)) %>% 
+  data.frame() %>% 
+  dplyr::rename(estimated = fit) %>% 
+  dplyr::left_join(obs, by = "week") %>% 
+  dplyr::select(week, observed, estimated) %>% 
+  dplyr::mutate(diff = observed - estimated) %>% 
+  pander::pander(caption = "Observed and Estimated Means")
+```
+
+
+
+### Intra-individual Correlation (ICC)
+
+```{r}
+sjstats::icc(fit_lmer_week_RI_reml)
+```
+
+**Interpretation**  Nearly HALF of the variance in depression scores not explained by the linear effect of time is attributable to person-to-person differences.  Thus, subjects display considerable heterogeneity in depression levels.
+
+This value of 46% is an oversimplification of the correlation matrix above.
+
+
+
+### Compare to the Single-Level Null: No Random Effects
+
+> Simple Linear Regression, @hedeker2006
+
+To compare, fit the single level regression model
+
+```{r}
+fit_lm_week_ml <- lm(hamd ~ week,
+               data = data_long)
+```
+
+#### Table of Parameter Estimates
+
+```{r, include = FALSE}
+texreg::screenreg(list(fit_lm_week_ml, fit_lmer_week_RI_reml))
+```
+
+```{r olsvsmlm, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_lm_week_ml, fit_lmer_week_RI_reml),
+                custom.model.names = c("Single-Level", "Multilevel"),
                 caption = "MLM: Longitudinal Null Models",
-                caption.above = TRUE)
+                caption.above = TRUE,
+                custom.note = "The singel-level model treats are observations as being independent and unrelated to each other, even if they were made on the same person.")
 ```
 
 
 For the multilevel model, the Wald tests indicated the fixed intercept is significant (no surprized that the depressions scores are not zero at baseline).  More of note is the significance of the fixed effect of time.  This signifies that depression scores are declining over time.  On average, patients are improving across time, by an average of 2.4 points a week.
 
 
-Note: the fixed estimates are very similar for the two models, but the stnadard errors are different.  Additionally, whereas the single-level regression lumps all remaining variance together ($\sigma^2$), the multilevel model seperates it into within-subjects ($\sigma^2_{u0}$ or $\tau_{00}$) and between-subjects variance ($\sigma^2_{e}$ or $\sigma^2$).
 
-#### Compare Residual Variance
+#### Residual Variance
+
+
+Note: the fixed estimates are very similar for the two models, but the standard errors are different.  Additionally, whereas the single-level regression lumps all remaining variance together ($\sigma^2$), the multilevel model seperates it into within-subjects ($\sigma^2_{u0}$ or $\tau_{00}$) and between-subjects variance ($\sigma^2_{e}$ or $\sigma^2$).
+
 
 ```{r}
-sigma(fit_lm_1)^2
+sigma(fit_lm_week_ml)^2
 ```
 
 
 ```{r}
-sjstats::re_var(fit_lmer_1re)  # in longitudinal data, a group of observations = a participant or person
+sjstats::re_var(fit_lmer_week_RI_reml)  # in longitudinal data, a group of observations = a participant or person
 ```
 
 > "One statistician's error term is another's career!"
@@ -479,93 +587,451 @@ sjstats::re_var(fit_lmer_1re)  # in longitudinal data, a group of observations =
 
 
 
-One way to judge a model is to compare the estimated means to the observed means to see how accuratedly they are represented by the model.  This excellent fit of the estimated marginal means to the observed data supports the hypothesis that the change in depression across time is LINEAR.
+
+
+
+
+## MLM: Add Random Slope for Time (i.e. Trend)
+
+### Fit the Model
 
 ```{r}
-obs <- data_long %>% 
-  dplyr::group_by(week) %>% 
-  dplyr::summarise(observed = mean(hamd, na.rm = TRUE)) 
+fit_lmer_week_RIAS_reml <- lme4::lmer(hamd ~ week + (week|id), #     MLM-RIAS
+                                      data = data_long,
+                                      REML = TRUE)
 ```
 
-> Reproduce Table 4.4 on page 55 [@hedeker2006]
-
-```{r}
-effects::Effect(focal.predictors = "week",
-                mod = fit_lmer_1re,
-                xlevels = list(week = 0:5)) %>% 
-  data.frame() %>% 
-  dplyr::rename(estimated = fit) %>% 
-  dplyr::left_join(obs, by = "week") %>% 
-  dplyr::select(week, observed, estimated) %>% 
-  dplyr::mutate(diff = observed - estimated) %>% 
-  round(2)
-```
-
-
-
-
-
-
-## Multilevel Models: Theory Driven Model
-
-### Fit RI and RIAS Models
-
-The researcher specifically wants to know if the trajectory over time differs for the two types of depression.  This translates into a fixed effects interaction between time and group.  
-
-> Start by comapreing random intercepts only (RI) to a random intercetps and slopes (RIAS) model. 
-
-```{r}
-fit_lmer_1 <- lme4::lmer(hamd ~ week*endog + (1|id), # MLM-RI
-                    data = data_long,
-                    REML = TRUE)
-
-fit_lmer_2 <- lme4::lmer(hamd ~ week*endog + (week|id), # MLM-RIAS
-                    data = data_long,
-                    REML = TRUE)
-```
-
-
-### Assess the Signifcance
-
-```{r}
-anova(fit_lmer_1, fit_lmer_2, refit = FALSE)
-```
-
-The more complicated model (RAIS) is supported.
 
 ### Table of Prameter Estimates
 
 ```{r, include = FALSE}
-texreg::screenreg(fit_lmer_2, single.row = TRUE)
+texreg::screenreg(list(fit_lmer_week_RI_reml, fit_lmer_week_RIAS_reml), single.row = TRUE)
 ```
 
 
-```{r, results='asis'}
+```{r mlmRS, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
 
-texreg::htmlreg(fit_lmer_2, single.row = TRUE)
-```
-
-### Model Assumptions
-
-Use residual plots to look for violations of the model assumptions.
-
-```{r}
-sjPlot::plot_model(fit_lmer_2,
-                   type = "diag")
+texreg::htmlreg(list(fit_lmer_week_RI_reml, 
+                     fit_lmer_week_RIAS_reml),
+                custom.model.names = c("Random Intercepts",
+                                       " And Random Slopes"),
+                caption = "MLM: Null models fit w/REML",
+                caption.above = TRUE,
+                custom.note = "Hedeker table 4.4 on page 55 and table 4.5 on page 58, except using REML here instead of ML")
 ```
 
 
-### Plot of the Estimated Marginal Means
+Visually, we can see that the unexplained or residual variance is less (12.21 vs 19.10) for the model that includes person-specific slopes (trajectories over time).
 
-#### Quick and Default 
+Note: the negative covariance between random intercepts and random slopes ($\sigma_{u01} = \tau_{01} = -1.48$): 
+
+> "This suggests that patients who are initially more depressed (i.e. greater intercepts) improve at a greater rate (i.e. more pronounced negative slopes).  An alternative explainatio, though,is that of a floor effect due to the HDRS rating scale.  Simply put, patients with less depressed intitial scores have a more limited range of lower scores than those with higher initial scores."
+>
+> @hedeker2006, page 58
+
+
+### Likelihood Ratio Test
 
 ```{r}
-sjPlot::plot_model(fit_lmer_2,
+anova(fit_lmer_week_RI_reml, fit_lmer_week_RIAS_reml, 
+      model.names = c("RI", "RIAS"),
+      refit = FALSE) %>% 
+  pander::pander(caption = "LRT: Assess Significance of Random Slopes")
+```
+
+Including the random slope for time significantly improved the model fit via the formal **Likelihood Ratio Test**.  This rejects the assumption of compound symmetry.
+
+
+### Estimated Marginal Means Plot
+
+```{r}
+sjPlot::plot_model(fit_lmer_week_RIAS_reml,
                    type = "pred",
-                   terms = c("week", "endog"))
+                   terms = c("week"))
 ```
+
+Adding the random slopes didn't change the estimates for the fixed effects much.
+
+
+### Estimated Marginal Means and Emperical Bayes Plots
+
+```{r}
+data_long %>% 
+  dplyr::mutate(pred_fixed = predict(fit_lmer_week_RIAS_reml, re.form = NA)) %>% # fixed effects only
+  dplyr::mutate(pred_wrand = predict(fit_lmer_week_RIAS_reml)) %>%               # fixed and random effects together
+  ggplot(aes(x = week,
+             y = hamd,
+             group = id)) +
+  geom_line(aes(y        = pred_wrand,
+                color    = "BLUP",
+                size     = "BLUP",
+                linetype = "BLUP")) +
+  geom_line(aes(y        = pred_fixed,
+                color    = "Marginal",
+                size     = "Marginal",
+                linetype = "Marginal")) +
+  theme_bw() +
+  scale_color_manual(name   = "Type of Prediction",
+                     values = c("BLUP"     = "gray50",
+                                "Marginal" = "blue"))  +
+  scale_size_manual(name    = "Type of Prediction",
+                    values = c("BLUP"      = .5,
+                                "Marginal" = 1.25))  +
+  scale_linetype_manual(name   = "Type of Prediction",
+                        values = c("BLUP"     = "longdash",
+                                   "Marginal" = "solid"))  +
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "Weeks Since Baseline",
+       y = "Hamilton Depression Scores")
+```
+
+BLUPs are also refered to as **Empirical Bayes Estimates** and may be extracted from a model fit.  In this cases there will be a specific intercept (`(Intercept)`) and time slope (`week`) for each individual or person (`id`).
+
+#### Fixed Effects 
+
+Marginal Model = within-subject effects
+
+
+```{r}
+fixef(fit_lmer_week_RIAS_reml)
+```
+
+
+#### Random Effects
+
+between-subjects effects
+
+
+```{r}
+ranef(fit_lmer_week_RIAS_reml)$id %>% 
+  head()
+```
+
+#### BLUPs or Empirical Bayes Estimates
+
+fixed effects + random effects
+
+```{r}
+coef(fit_lmer_week_RIAS_reml)$id %>% 
+  head()
+```
+
+
+We can create a scatterplot of these to see the correlation between them.
+
+```{r}
+coef(fit_lmer_week_RIAS_reml)$id %>% 
+  ggplot(aes(x = week,
+             y = `(Intercept)`)) +
+  geom_point() +
+  geom_hline(yintercept = fixef(fit_lmer_week_RIAS_reml)["(Intercept)"],
+             linetype = "dashed") +
+  geom_vline(xintercept = fixef(fit_lmer_week_RIAS_reml)["week"],
+             linetype = "dashed") +
+  geom_smooth(method = "lm") +
+  labs(title = "Hedeker's Figure 4.4 on page 59",
+       subtitle = "Reisby data: Estimated random effects",
+       x = "Week Change in Depression",
+       y = "Baseline Depression Level") 
+  
+```
+
+
+## MLM: Coding of Time
+
+So far we have used the variable `week` to denote time as weeks since baseline = `week` $\in 0, 1, 2, 3, 4, 5$
+
+
+```{r}
+data_long_wc <- data_long %>% 
+  dplyr::mutate(weekc = week - 2.5)
+
+head(data_long_wc)
+```
+
+### Fit the Model
+
+```{r}
+fit_lmer_week_RIAS_reml_wc <- lme4::lmer(hamd ~ weekc + (weekc|id), #     MLM-RIAS
+                                        data = data_long_wc,
+                                        REML = TRUE)
+```
+
+### Table of Parameter Estimates
+
+```{r, include = FALSE}
+texreg::screenreg(list(fit_lmer_week_RIAS_reml, fit_lmer_week_RIAS_reml_wc), single.row = TRUE)
+```
+
+
+```{r mlmwc, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_lmer_week_RIAS_reml, 
+                     fit_lmer_week_RIAS_reml_wc),
+                custom.model.names = c("Random Intercepts",
+                                       " And Random Slopes"),
+                caption = "MLM: Null models fit w/REML",
+                caption.above = TRUE,
+                custom.note = "Hedeker table table 4.5 on page 58 and table 4.6 on page 61, except using REML here instead of ML")
+```
+
+* Unchanged    
+    + model fit: AIC, BIC, -2LL, residual variance    
+    + fixed effect of week    
+    + variance for random intercepts     
+    
+* Changed    
+    + fixed intercept    
+    + variance for random slopes   
+    + covariance between random intercepts and random slopes
+
+### Estimated Marginal Means and Emperical Bayes Plots
+
+```{r}
+data_long_wc %>% 
+  dplyr::mutate(pred_fixed = predict(fit_lmer_week_RIAS_reml_wc, re.form = NA)) %>% # fixed effects only
+  dplyr::mutate(pred_wrand = predict(fit_lmer_week_RIAS_reml_wc)) %>%               # fixed and random effects together
+  ggplot(aes(x = weekc,
+             y = hamd,
+             group = id)) +
+  geom_line(aes(y        = pred_wrand,
+                color    = "BLUP",
+                size     = "BLUP",
+                linetype = "BLUP")) +
+  geom_line(aes(y        = pred_fixed,
+                color    = "Marginal",
+                size     = "Marginal",
+                linetype = "Marginal")) +
+  theme_bw() +
+  scale_color_manual(name   = "Type of Prediction",
+                     values = c("BLUP"     = "gray50",
+                                "Marginal" = "blue"))  +
+  scale_size_manual(name    = "Type of Prediction",
+                    values = c("BLUP"      = .5,
+                                "Marginal" = 1.25))  +
+  scale_linetype_manual(name   = "Type of Prediction",
+                        values = c("BLUP"     = "longdash",
+                                   "Marginal" = "solid"))  +
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "Weeks Centered at Mid-study",
+       y = "Hamilton Depression Scores")
+```
+
+Again, centering time doesn't change the interpretation at all.
+
+
+
+
+
+
+
+## MLM: Effect of DIagnosis on Time Trends (Fixed Interaction)
+
+
+The researcher specifically wants to know if the trajectory over time differs for the two types of depression.  This translates into a fixed effects interaction between time and group.  
+
+> Start by comapring random intercepts only (RI) to a random intercetps and slopes (RIAS) model. 
+
+### Fit the Models
+
+```{r}
+fit_lmer_week_RIAS_ml <- lme4::lmer(hamd ~ week + (week|id), 
+                                    data = data_long,
+                                    REML = FALSE)
+
+fit_lmer_wkdx_RIAS_ml <- lme4::lmer(hamd ~ week*endog + (week|id), 
+                                    data = data_long,
+                                    REML = FALSE)
+```
+
+
+### Estimated Marginal Meanse Plot
+
+```{r}
+sjPlot::plot_model(fit_lmer_wkdx_RIAS_ml,
+                   type = "pred",
+                   terms = c("week", "endog"),
+                   title = "Hedeker's Table 4.7 on page 64")
+```
+
+### Likelihood Ratio Test
+
+```{r}
+anova(fit_lmer_week_RIAS_ml, fit_lmer_wkdx_RIAS_ml, 
+      model.names = c("Just Time", "Time X Dx")) %>% 
+  pander::pander(caption = "LRT: Assess Significance of Diagnosis Moderation of Trend")
+```
+
+The more complicated model (including the moderating effect of diagnosis) is NOT supported.
+
+
+
+
+
+## MLM: Quadratic Trend
+
+### Fit the Model
+
+```{r}
+fit_lmer_quad_RIAS_ml <- lme4::lmer(hamd ~ week + I(week^2) + (week+ I(week^2)|id), 
+                                    data = data_long,
+                                    REML = FALSE)
+```
+
+
+### Table of Parameter Estimates
+
+```{r, include = FALSE}
+texreg::screenreg(list(fit_lmer_week_RIAS_ml, fit_lmer_quad_RIAS_ml), single.row = TRUE)
+```
+
+
+```{r mlmquad, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_lmer_week_RIAS_ml,
+                     fit_lmer_quad_RIAS_ml),
+                custom.model.names = c("Linear Trend",
+                                       "QUadratic Trend"),
+                caption = "MLM: RIAS models fit w/ML",
+                caption.above = TRUE,
+                custom.note = "Hedeker table 4.5 on page 58 and table 5.1 on page 84")
+```
+
+### Likelihood Ratio Test
+
+
+```{r}
+anova(fit_lmer_week_RIAS_ml, fit_lmer_quad_RIAS_ml)
+```
+
+Even though the Wald test did not find the quadratic fixed time trend to be significant at the population level (marginal), the LRT finds that including the quadratic terms improves the model's fit.  
+
+
+
+
+### Estimated Marginal Means Plot
+
+```{r}
+fixef(fit_lmer_quad_RIAS_ml)
+```
+
+
+```{r}
+sjPlot::plot_model(fit_lmer_quad_RIAS_ml,
+                   type = "pred",
+                   terms = "week")
+```
+
+At the population level, the curviture is very slight.
+
+
+### BLUPs or Emperical Bayes Estimates
+
+```{r}
+coef(fit_lmer_quad_RIAS_ml)$id
+```
+
+For Illustration, two cases have been hand selected: `id` = 115 and 610.
+
+```{r}
+fun_115 <- function(week){
+  coef(fit_lmer_quad_RIAS_ml)$id["115", "(Intercept)"] +
+  coef(fit_lmer_quad_RIAS_ml)$id["115", "week"] * week +
+  coef(fit_lmer_quad_RIAS_ml)$id["115", "I(week^2)"] * week^2
+}
+
+
+fun_610 <- function(week){
+  coef(fit_lmer_quad_RIAS_ml)$id["610", "(Intercept)"] +
+  coef(fit_lmer_quad_RIAS_ml)$id["610", "week"] * week +
+  coef(fit_lmer_quad_RIAS_ml)$id["610", "I(week^2)"] * week^2
+}
+```
+
+
+
+```{r, fig.cap="Two Example BLUPS for two different participants"}
+data_long %>% 
+  dplyr::mutate(pred_fixed = predict(fit_lmer_quad_RIAS_ml, re.form = NA)) %>% # fixed effects only
+  dplyr::mutate(pred_wrand = predict(fit_lmer_quad_RIAS_ml)) %>%               # fixed and random effects together
+  ggplot(aes(x = week,
+             y = hamd,
+             group = id)) +
+  stat_function(fun = fun_115) +          # add cure for ID = 115
+  stat_function(fun = fun_610) +          # add cure for ID = 610
+  geom_line(aes(y        = pred_fixed),
+                color    = "blue",
+                size     = 1.25)  +
+  theme_bw() +
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "Weeks Since Baseline",
+       y = "Hamilton Depression Scores",
+       title = "Similar to Hedeker's Figure 5.3 on page 84",
+       subtitle = "Marginal Mean show in thinker blue")
+```
+
+These two individuals have quite different curvitures and illustrated how this type of curvatures in person-specific trajectories may end up cancelling each other out to arive at a fairly linear marginal model.
+
+
+### Estimated Marginal Means and Emperical Bayes Plots
+ 
+Note: although the BLUPs are shown for all participants, the predictions are just connects and are therefore slightly jagged and now smoother like the lines on the plot above.
+
+```{r, fig.cap = "EStimated curvilinear trends"}
+data_long %>% 
+  dplyr::mutate(pred_fixed = predict(fit_lmer_quad_RIAS_ml, re.form = NA)) %>% # fixed effects only
+  dplyr::mutate(pred_wrand = predict(fit_lmer_quad_RIAS_ml)) %>%               # fixed and random effects together
+  ggplot(aes(x = week,
+             y = hamd,
+             group = id)) +
+  geom_line(aes(y        = pred_wrand,
+                color    = "BLUP",
+                size     = "BLUP",
+                linetype = "BLUP")) +
+  geom_line(aes(y        = pred_fixed,
+                color    = "Marginal",
+                size     = "Marginal",
+                linetype = "Marginal")) +
+  theme_bw() +
+  scale_color_manual(name   = "Type of Prediction",
+                     values = c("BLUP"     = "gray50",
+                                "Marginal" = "blue"))  +
+  scale_size_manual(name    = "Type of Prediction",
+                    values = c("BLUP"      = .5,
+                                "Marginal" = 1.25))  +
+  scale_linetype_manual(name   = "Type of Prediction",
+                        values = c("BLUP"     = "longdash",
+                                   "Marginal" = "solid"))  +
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "Weeks Since Baseline",
+       y = "Hamilton Depression Scores",
+       title = "Hedeker's Figure 5.4 on page 85")
+```
+
+At the person-level, the curviture is very diverse (heterogeneous).  Some individuals have accelerating downward tend while other have accelerating upward trends.  
+
+Th improvement that the curvilinear model provides in describing change across time is perhaps modest.
+
 
 
