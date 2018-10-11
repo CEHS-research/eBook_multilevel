@@ -575,11 +575,7 @@ Endogenous
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>VIM<span class="op">::</span><span class="kw">aggr</span>(<span class="dt">numbers =</span> <span class="ot">TRUE</span>,   <span class="co"># shows the number to the far right</span>
             <span class="dt">prop =</span> <span class="ot">FALSE</span>)     <span class="co"># shows counts instead of proportions</span></code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-367-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-371-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-372-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="depression-over-time-by-group" class="section level3">
 <h3><span class="header-section-number">9.2.3</span> Depression Over Time, by Group</h3>
@@ -1039,53 +1035,33 @@ data_sum_cc</code></pre></div>
              <span class="dt">y =</span> hamd)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id))   <span class="co"># join points that belong to the same &quot;id&quot;</span></code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-372-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-376-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-377-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> week,
              <span class="dt">y =</span> hamd,
              <span class="dt">color =</span> endog)) <span class="op">+</span><span class="st">    </span><span class="co"># color points and lines by the &quot;endog&quot; variable</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id))</code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-373-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-377-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-378-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> week,
              <span class="dt">y =</span> hamd)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">facet_grid</span>( <span class="op">~</span><span class="st"> </span>endog)            <span class="co"># side-by-side pandels by the &quot;endog&quot; variable</span></code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-374-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-378-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-379-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> week <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(),
              <span class="dt">y =</span> hamd)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st">                   </span><span class="co"># compare center and spread</span>
 <span class="st">  </span><span class="kw">facet_grid</span>( <span class="op">~</span><span class="st"> </span>endog)           </code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-375-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-379-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-380-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> week <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(),
              <span class="dt">y =</span> hamd)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_violin</span>() <span class="op">+</span><span class="st">                   </span><span class="co"># similar to boxplots to show distribution</span>
 <span class="st">  </span><span class="kw">facet_grid</span>( <span class="op">~</span><span class="st"> </span>endog)           </code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-376-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-380-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-381-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> week,
              <span class="dt">y =</span> hamd)) <span class="op">+</span>
@@ -1096,11 +1072,7 @@ data_sum_cc</code></pre></div>
 <span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
               <span class="dt">se =</span> <span class="ot">FALSE</span>,
               <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>)</code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-377-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-381-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-382-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> week,
              <span class="dt">y =</span> hamd)) <span class="op">+</span>
@@ -1118,11 +1090,7 @@ data_sum_cc</code></pre></div>
                                 <span class="st">&quot;Linear&quot;</span>    =<span class="st"> &quot;red&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-378-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-382-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-383-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1207,11 +1175,7 @@ week_5   0.18   0.22   0.46   0.57   0.65   1.00</code></pre>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;week_&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># just the outcome(s)</span>
 <span class="st">  </span><span class="kw">cor</span>(<span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># correlation matrix</span>
 <span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(<span class="dt">upper =</span> <span class="st">&quot;ellipse&quot;</span>)</code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-384-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-388-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-389-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="for-each-group" class="section level3">
@@ -1225,11 +1189,7 @@ week_5   0.18   0.22   0.46   0.57   0.65   1.00</code></pre>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;week_&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">cor</span>(<span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span>
 <span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(<span class="dt">upper =</span> <span class="st">&quot;ellipse&quot;</span>)</code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-385-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-389-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-390-1.png" width="576" style="display: block; margin: auto;" /></p>
 <blockquote>
 <p>Endogenous Depression</p>
 </blockquote>
@@ -1238,11 +1198,7 @@ week_5   0.18   0.22   0.46   0.57   0.65   1.00</code></pre>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;week_&quot;</span>)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">cor</span>(<span class="dt">use =</span> <span class="st">&quot;pairwise.complete.obs&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span>
 <span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(<span class="dt">upper =</span> <span class="st">&quot;ellipse&quot;</span>)</code></pre></div>
-<<<<<<< HEAD
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-386-1.png" width="576" style="display: block; margin: auto;" /></p>
-=======
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-390-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-391-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="mlm---null-or-emptly-models" class="section level2">
@@ -1374,7 +1330,7 @@ Var: Residual
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_week_RI_reml,
                    <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
                    <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;week&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-389-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-394-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="estimated-marginal-means-and-emperical-bayes-plots" class="section level3">
 <h3><span class="header-section-number">9.4.4</span> Estimated Marginal Means and Emperical Bayes Plots</h3>
@@ -1409,7 +1365,7 @@ Var: Residual
         <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Weeks Since Baseline&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Hamilton Depression Scores&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-390-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-395-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Notice that in this model, all the BLUPs are parallel. That is becuase we are only letting the intercept vary from person-to-person while keeping the effect of time (slope) constant.</p>
 <blockquote>
 <p>Reproduce Table 4.4 on page 55 <span class="citation">(Hedeker and Gibbons <a href="references.html#ref-hedeker2006">2006</a>)</span></p>
@@ -1887,7 +1843,6 @@ Cov: id (Intercept) week
 <p><span class="citation">Hedeker and Gibbons (<a href="references.html#ref-hedeker2006">2006</a>)</span>, page 58</p>
 </blockquote>
 </div>
-<<<<<<< HEAD
 <div id="likelihood-ratio-test" class="section level3">
 <h3><span class="header-section-number">9.5.3</span> Likelihood Ratio Test</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_week_RI_reml, fit_lmer_week_RIAS_reml, 
@@ -1946,34 +1901,13 @@ Cov: id (Intercept) week
 </tbody>
 </table>
 <p>Including the random slope for time significantly improved the model fit via the formal <strong>Likelihood Ratio Test</strong>. This rejects the assumption of compound symmetry.</p>
-=======
-<div id="model-assumptions" class="section level3">
-<h3><span class="header-section-number">9.5.4</span> Model Assumptions</h3>
-<p>Use residual plots to look for violations of the model assumptions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_<span class="dv">2</span>,
-                   <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-406-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]
-[[2]]$id</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-406-2.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-
-[[3]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-406-3.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[4]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-406-4.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
 </div>
 <div id="estimated-marginal-means-plot-1" class="section level3">
 <h3><span class="header-section-number">9.5.4</span> Estimated Marginal Means Plot</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_week_RIAS_reml,
                    <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
-<<<<<<< HEAD
                    <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;week&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-400-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-405-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Adding the random slopes didn’t change the estimates for the fixed effects much.</p>
 </div>
 <div id="estimated-marginal-means-and-emperical-bayes-plots-1" class="section level3">
@@ -2008,7 +1942,7 @@ Cov: id (Intercept) week
         <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Weeks Since Baseline&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Hamilton Depression Scores&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-401-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-406-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>BLUPs are also refered to as <strong>Empirical Bayes Estimates</strong> and may be extracted from a model fit. In this cases there will be a specific intercept (<code>(Intercept)</code>) and time slope (<code>week</code>) for each individual or person (<code>id</code>).</p>
 <div id="fixed-effects-1" class="section level4">
 <h4><span class="header-section-number">9.5.5.1</span> Fixed Effects</h4>
@@ -2056,7 +1990,7 @@ Cov: id (Intercept) week
        <span class="dt">subtitle =</span> <span class="st">&quot;Reisby data: Estimated random effects&quot;</span>,
        <span class="dt">x =</span> <span class="st">&quot;Week Change in Depression&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Baseline Depression Level&quot;</span>) </code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-405-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-410-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -2065,10 +1999,6 @@ Cov: id (Intercept) week
 <p>So far we have used the variable <code>week</code> to denote time as weeks since baseline = <code>week</code> <span class="math inline">\(\in 0, 1, 2, 3, 4, 5\)</span></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long_wc &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">weekc =</span> week <span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>)
-=======
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;week&quot;</span>, <span class="st">&quot;endog&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-407-1.png" width="576" style="display: block; margin: auto;" /></p>
->>>>>>> master
 
 <span class="kw">head</span>(data_long_wc)</code></pre></div>
 <pre><code># A tibble: 6 x 5
@@ -2348,7 +2278,7 @@ Cov: id (Intercept) weekc
         <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Weeks Centered at Mid-study&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Hamilton Depression Scores&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-409-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-414-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Again, centering time doesn’t change the interpretation at all.</p>
 </div>
 </div>
@@ -2374,7 +2304,7 @@ fit_lmer_wkdx_RIAS_ml &lt;-<span class="st"> </span>lme4<span class="op">::</spa
                    <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
                    <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;week&quot;</span>, <span class="st">&quot;endog&quot;</span>),
                    <span class="dt">title =</span> <span class="st">&quot;Hedeker&#39;s Table 4.7 on page 64&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-411-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-416-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="likelihood-ratio-test-1" class="section level3">
 <h3><span class="header-section-number">9.7.3</span> Likelihood Ratio Test</h3>
@@ -2694,7 +2624,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_quad_RIAS_ml,
                    <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
                    <span class="dt">terms =</span> <span class="st">&quot;week&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-417-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-422-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>At the population level, the curviture is very slight.</p>
 </div>
 <div id="blups-or-emperical-bayes-estimates" class="section level3">
@@ -2800,8 +2730,8 @@ fun_<span class="dv">610</span> &lt;-<span class="st"> </span><span class="cf">f
        <span class="dt">y =</span> <span class="st">&quot;Hamilton Depression Scores&quot;</span>,
        <span class="dt">title =</span> <span class="st">&quot;Similar to Hedeker&#39;s Figure 5.3 on page 84&quot;</span>,
        <span class="dt">subtitle =</span> <span class="st">&quot;Marginal Mean show in thinker blue&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-420"></span>
-<img src="eBook_multilevel_files/figure-html/unnamed-chunk-420-1.png" alt="Two Example BLUPS for two different participants" width="576" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-425"></span>
+<img src="eBook_multilevel_files/figure-html/unnamed-chunk-425-1.png" alt="Two Example BLUPS for two different participants" width="576" />
 <p class="caption">
 Figure 9.1: Two Example BLUPS for two different participants
 </p>
@@ -2842,8 +2772,8 @@ Figure 9.1: Two Example BLUPS for two different participants
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Weeks Since Baseline&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Hamilton Depression Scores&quot;</span>,
        <span class="dt">title =</span> <span class="st">&quot;Hedeker&#39;s Figure 5.4 on page 85&quot;</span>)</code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-421"></span>
-<img src="eBook_multilevel_files/figure-html/unnamed-chunk-421-1.png" alt="EStimated curvilinear trends" width="576" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-426"></span>
+<img src="eBook_multilevel_files/figure-html/unnamed-chunk-426-1.png" alt="EStimated curvilinear trends" width="576" />
 <p class="caption">
 Figure 9.2: EStimated curvilinear trends
 </p>
