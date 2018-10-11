@@ -283,7 +283,7 @@ fit_lmer_3_re <- lme4::lmer(gpa ~ semc + hrs + highgpa + sex + (1|student),
 
 
 fit_lmer_4_re <- lme4::lmer(gpa ~ semc + hrs + highgpa + sex + (semc|student),
-                            datscrea = data_long,
+                            data = data_long,
                             REML = TRUE)
 ```
 
