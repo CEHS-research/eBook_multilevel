@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
+  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs.">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="EQM_v1_cover.png" />
+  <meta property="og:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="github-repo" content="cehs-research/eBook_wrangle" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  
+  <meta name="twitter:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="twitter:image" content="EQM_v1_cover.png" />
+
+<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett">
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="hedeker-gibbons-longitudinal-example.html">
+<link rel="next" href="rct-longitudinal-exercise-and-diet-example.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="heading.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Vol. 5: Multilevel Models</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#blocked-notes"><i class="fa fa-check"></i>Blocked Notes</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-output"><i class="fa fa-check"></i>Code and Output</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#the-authors"><i class="fa fa-check"></i>The Authors</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#why-choose-r"><i class="fa fa-check"></i>Why choose R ?</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fyi"><i class="fa fa-check"></i>FYI</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="formula-warehouse.html"><a href="formula-warehouse.html"><i class="fa fa-check"></i><b>1</b> Formula Warehouse</a><ul>
+<li class="chapter" data-level="1.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#data-notation"><i class="fa fa-check"></i><b>1.1</b> Data Notation</a></li>
+<li class="chapter" data-level="1.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#single-level-regression-analysis"><i class="fa fa-check"></i><b>1.2</b> Single-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.2.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#the-only-equation"><i class="fa fa-check"></i><b>1.2.1</b> The Only Equation</a></li>
+<li class="chapter" data-level="1.2.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#parameters"><i class="fa fa-check"></i><b>1.2.2</b> Parameters</a></li>
+<li class="chapter" data-level="1.2.3" data-path="formula-warehouse.html"><a href="formula-warehouse.html#assumptions-to-check"><i class="fa fa-check"></i><b>1.2.3</b> Assumptions to Check</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="formula-warehouse.html"><a href="formula-warehouse.html#multi-level-regression-analysis"><i class="fa fa-check"></i><b>1.3</b> Multi-level Regression Analysis</a><ul>
+<li class="chapter" data-level="1.3.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#level-1-regression-equation-level-2-regression-equations-random-intercepts-random-slopes-merging-the-equations-combinded-multilevel-regression-equation-parameters-intraclass-correlation-icc-two-level-models-three-level-models-proporion-of-variance-explianed-level-1-variance-explained-snijders-and-bosker-raudenbush-and-bryk-level-2-variance-explined-snijders-and-bosker-raudenbush-and-bryk-using-latex-for-equation-typesetting"><i class="fa fa-check"></i><b>1.3.1</b> Level 1 Regression Equation* ### Level 2 Regression Equations #### Random Intercepts: #### Random Slopes #### Merging the Equations ### Combinded, Multilevel Regression Equation ### Parameters ## Intraclass Correlation (ICC) ### Two Level Models ### Three Level Models ## Proporion of Variance Explianed ### Level 1 Variance Explained #### Snijders and Bosker #### Raudenbush and Bryk ### Level 2 Variance Explined #### Snijders and Bosker #### Raudenbush and Bryk ## Using <span class="math inline">\(\LaTeX\)</span> for Equation Typesetting</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html"><i class="fa fa-check"></i><b>2</b> Intro 2-level Model Example: Pupil Popularity</a><ul>
+<li class="chapter" data-level="2.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#background"><i class="fa fa-check"></i><b>2.1</b> Background</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#unique-identifiers"><i class="fa fa-check"></i><b>2.1.1</b> Unique Identifiers</a></li>
+<li class="chapter" data-level="2.1.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#structure-and-variables"><i class="fa fa-check"></i><b>2.1.2</b> Structure and variables</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>2.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="2.2.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#summarize-descriptive-statistics"><i class="fa fa-check"></i><b>2.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="2.2.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#visualizations-of-raw-data"><i class="fa fa-check"></i><b>2.2.2</b> Visualizations of Raw Data</a></li>
+<li class="chapter" data-level="2.2.3" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#consider-clustering"><i class="fa fa-check"></i><b>2.2.3</b> Consider Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#single-level-regression-analysis-1"><i class="fa fa-check"></i><b>2.3</b> Single-level Regression Analysis</a><ul>
+<li class="chapter" data-level="2.3.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#null-model"><i class="fa fa-check"></i><b>2.3.1</b> Null Model</a></li>
+<li class="chapter" data-level="2.3.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#add-predictors-to-the-model"><i class="fa fa-check"></i><b>2.3.2</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="2.3.3" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#compare-fixed-effects"><i class="fa fa-check"></i><b>2.3.3</b> Compare Fixed Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#multi-level-regression-analysis-1"><i class="fa fa-check"></i><b>2.4</b> Multi-level Regression Analysis</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#intercept-only-or-null-model"><i class="fa fa-check"></i><b>2.4.1</b> Intercept-only or Null Model</a></li>
+<li class="chapter" data-level="2.4.2" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#intraclass-correlation-icc"><i class="fa fa-check"></i><b>2.4.2</b> Intraclass Correlation (ICC)</a></li>
+<li class="chapter" data-level="2.4.3" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#add-predictors-to-the-model-1"><i class="fa fa-check"></i><b>2.4.3</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="2.4.4" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#testing-random-components"><i class="fa fa-check"></i><b>2.4.4</b> Testing Random Components</a></li>
+<li class="chapter" data-level="2.4.5" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#testing-cross-level-interactions"><i class="fa fa-check"></i><b>2.4.5</b> Testing Cross-Level Interactions</a></li>
+<li class="chapter" data-level="2.4.6" data-path="intro-2-level-model-example-pupil-popularity.html"><a href="intro-2-level-model-example-pupil-popularity.html#final-model"><i class="fa fa-check"></i><b>2.4.6</b> Final Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html"><i class="fa fa-check"></i><b>3</b> Intro 3-Level Model Example: Nurse’s Stress Intervention</a><ul>
+<li class="chapter" data-level="3.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#background-1"><i class="fa fa-check"></i><b>3.1</b> Background</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#unique-identifiers-1"><i class="fa fa-check"></i><b>3.1.1</b> Unique Identifiers</a></li>
+<li class="chapter" data-level="3.1.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#centering-variables"><i class="fa fa-check"></i><b>3.1.2</b> Centering Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#exploratory-data-analysis-1"><i class="fa fa-check"></i><b>3.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#summarize-descriptive-statistics-1"><i class="fa fa-check"></i><b>3.2.1</b> Summarize Descriptive Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#mlm-null-model"><i class="fa fa-check"></i><b>3.3</b> MLM: Null Model</a></li>
+<li class="chapter" data-level="3.4" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#estimate-the-icc"><i class="fa fa-check"></i><b>3.4</b> Estimate the ICC</a></li>
+<li class="chapter" data-level="3.5" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#mlm-add-fixed-effects"><i class="fa fa-check"></i><b>3.5</b> MLM: Add Fixed Effects</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#fit-the-model-5"><i class="fa fa-check"></i><b>3.5.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.5.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#assess-significance"><i class="fa fa-check"></i><b>3.5.2</b> Assess Significance</a></li>
+<li class="chapter" data-level="3.5.3" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#centering-variables-1"><i class="fa fa-check"></i><b>3.5.3</b> Centering Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#mlm-add-random-slope"><i class="fa fa-check"></i><b>3.6</b> MLM: Add Random Slope</a><ul>
+<li class="chapter" data-level="3.6.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#fit-the-model-6"><i class="fa fa-check"></i><b>3.6.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.6.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#assess-significance-1"><i class="fa fa-check"></i><b>3.6.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#mlm-add-cross-level-interaction"><i class="fa fa-check"></i><b>3.7</b> MLM: Add Cross-Level Interaction</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#fit-the-model-7"><i class="fa fa-check"></i><b>3.7.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="3.7.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#assess-significance-2"><i class="fa fa-check"></i><b>3.7.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#final-model-1"><i class="fa fa-check"></i><b>3.8</b> Final Model</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#fit-the-model-8"><i class="fa fa-check"></i><b>3.8.1</b> Fit the model</a></li>
+<li class="chapter" data-level="3.8.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#table-of-estimated-parameters"><i class="fa fa-check"></i><b>3.8.2</b> Table of Estimated Parameters</a></li>
+<li class="chapter" data-level="3.8.3" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#visualization-estimated-marginal-means-plot"><i class="fa fa-check"></i><b>3.8.3</b> Visualization: Estimated Marginal Means Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#interpretation-6"><i class="fa fa-check"></i><b>3.9</b> Interpretation</a><ul>
+<li class="chapter" data-level="3.9.1" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#strength"><i class="fa fa-check"></i><b>3.9.1</b> Strength</a></li>
+<li class="chapter" data-level="3.9.2" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#weakness"><i class="fa fa-check"></i><b>3.9.2</b> Weakness</a></li>
+</ul></li>
+<li class="chapter" data-level="3.10" data-path="intro-3-level-model-example-nurses-stress-intervention.html"><a href="intro-3-level-model-example-nurses-stress-intervention.html#reproduction-of-table-2.5"><i class="fa fa-check"></i><b>3.10</b> Reproduction of Table 2.5</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><i class="fa fa-check"></i><b>4</b> Intro Centering and Scaling Example: Reading Achievement (2-levels only)</a><ul>
+<li class="chapter" data-level="4.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#background-2"><i class="fa fa-check"></i><b>4.1</b> Background</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#sample-structure"><i class="fa fa-check"></i><b>4.1.1</b> Sample Structure</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#exploratory-data-analysis-2"><i class="fa fa-check"></i><b>4.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#summarize-descriptive-statistics-2"><i class="fa fa-check"></i><b>4.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="4.2.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#visualization-of-raw-data"><i class="fa fa-check"></i><b>4.2.2</b> Visualization of Raw Data</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#single-level-regression"><i class="fa fa-check"></i><b>4.3</b> Single-Level Regression</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#fit-nested-models-2"><i class="fa fa-check"></i><b>4.3.1</b> Fit Nested Models</a></li>
+<li class="chapter" data-level="4.3.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#visualize-the-interaction"><i class="fa fa-check"></i><b>4.3.2</b> Visualize the Interaction</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-1-null-model-only-fixed-and-random-intercepts"><i class="fa fa-check"></i><b>4.4</b> MLM - Step 1: Null Model, only fixed and random intercepts</a><ul>
+<li class="chapter" data-level="4.4.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#fit-the-model-9"><i class="fa fa-check"></i><b>4.4.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="4.4.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#estimate-the-icc-1"><i class="fa fa-check"></i><b>4.4.2</b> Estimate the ICC</a></li>
+</ul></li>
+<li class="chapter" data-level="4.5" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-2-add-lower-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>4.5</b> MLM - Step 2: Add Lower-level explanatory variables, fixed, ML</a><ul>
+<li class="chapter" data-level="4.5.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#add-pupils-vocab-score-as-a-fixed-effects-predictor"><i class="fa fa-check"></i><b>4.5.1</b> Add pupil’s vocab score as a fixed effects predictor</a></li>
+<li class="chapter" data-level="4.5.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#investigate-more-level-1-predictors"><i class="fa fa-check"></i><b>4.5.2</b> Investigate More Level 1 Predictors</a></li>
+</ul></li>
+<li class="chapter" data-level="4.6" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-3-higher-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>4.6</b> MLM - Step 3: Higher-level explanatory variables, fixed, ML</a><ul>
+<li class="chapter" data-level="4.6.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#assess-significance-of-effects-2"><i class="fa fa-check"></i><b>4.6.1</b> Assess Significance of Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="4.7" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-4-explanatory-variables-predict-slopes-random-reml"><i class="fa fa-check"></i><b>4.7</b> MLM - Step 4: Explanatory variables predict Slopes, random, REML</a></li>
+<li class="chapter" data-level="4.8" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#mlm---step-5-cross-level-interactions-between-explanatory-variables---fixed-ml"><i class="fa fa-check"></i><b>4.8</b> MLM - Step 5: Cross-Level interactions between explanatory variables - fixed, ML</a></li>
+<li class="chapter" data-level="4.9" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#centering-predictors-change-center"><i class="fa fa-check"></i><b>4.9</b> Centering Predictors: Change Center</a><ul>
+<li class="chapter" data-level="4.9.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#compute-the-grand-means"><i class="fa fa-check"></i><b>4.9.1</b> Compute the Grand Means</a></li>
+<li class="chapter" data-level="4.9.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#use-centered-variables"><i class="fa fa-check"></i><b>4.9.2</b> Use Centered Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.10" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>4.10</b> Rescaling Predictors: Change Units or Standardize</a><ul>
+<li class="chapter" data-level="4.10.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#scale-varaibles"><i class="fa fa-check"></i><b>4.10.1</b> Scale Varaibles</a></li>
+<li class="chapter" data-level="4.10.2" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#use-scaled-variables"><i class="fa fa-check"></i><b>4.10.2</b> Use Scaled Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.11" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>4.11</b> Final Model</a><ul>
+<li class="chapter" data-level="4.11.1" data-path="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html"><a href="intro-centering-and-scaling-example-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>4.11.1</b> Table</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html"><i class="fa fa-check"></i><b>5</b> Centering and Standardizing Explanitory Variables</a><ul>
+<li class="chapter" data-level="5.1" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#background-3"><i class="fa fa-check"></i><b>5.1</b> Background</a></li>
+<li class="chapter" data-level="5.2" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#grand-mean-centering-and-standardizing-variables"><i class="fa fa-check"></i><b>5.2</b> Grand-Mean-Centering and Standardizing Variables</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#grand-mean-centering"><i class="fa fa-check"></i><b>5.2.1</b> Grand-Mean-Centering</a></li>
+<li class="chapter" data-level="5.2.2" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#standardizing"><i class="fa fa-check"></i><b>5.2.2</b> Standardizing</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#ri-only-random-intercepts"><i class="fa fa-check"></i><b>5.3</b> RI = ONLY Random Intercepts</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#fit-mlm-with-all-3-versions-of-the-predictor"><i class="fa fa-check"></i><b>5.3.1</b> Fit MLM with all 3 versions of the predictor</a></li>
+<li class="chapter" data-level="5.3.2" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#investigating-a-mlm-ri-model"><i class="fa fa-check"></i><b>5.3.2</b> Investigating a MLM-RI Model</a></li>
+<li class="chapter" data-level="5.3.3" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#comapre-the-centered-version"><i class="fa fa-check"></i><b>5.3.3</b> Comapre the Centered Version</a></li>
+<li class="chapter" data-level="5.3.4" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#comapre-the-standardized-version"><i class="fa fa-check"></i><b>5.3.4</b> Comapre the Standardized Version</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#rias-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>5.4</b> RIAS = Random Intercepts AND Slopes</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#fit-mlm-with-all-3-versions-of-the-predictor-1"><i class="fa fa-check"></i><b>5.4.1</b> Fit MLM with all 3 versions of the predictor</a></li>
+<li class="chapter" data-level="5.4.2" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#investigating-a-mlm-ri-model-1"><i class="fa fa-check"></i><b>5.4.2</b> Investigating a MLM-RI Model</a></li>
+<li class="chapter" data-level="5.4.3" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#comapre-the-centered-version-1"><i class="fa fa-check"></i><b>5.4.3</b> Comapre the Centered Version</a></li>
+<li class="chapter" data-level="5.4.4" data-path="centering-and-standardizing-explanitory-variables.html"><a href="centering-and-standardizing-explanitory-variables.html#comapre-the-standardized-version-1"><i class="fa fa-check"></i><b>5.4.4</b> Comapre the Standardized Version</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>6</b> Variance Explained</a><ul>
+<li class="chapter" data-level="6.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>6.1</b> For Generalized MLMs</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="sjplot-package.html"><a href="sjplot-package.html"><i class="fa fa-check"></i><b>7</b> sjPlot Package</a><ul>
+<li class="chapter" data-level="7.1" data-path="sjplot-package.html"><a href="sjplot-package.html#plotting-coefficients"><i class="fa fa-check"></i><b>7.1</b> Plotting Coefficients</a><ul>
+<li class="chapter" data-level="7.1.1" data-path="sjplot-package.html"><a href="sjplot-package.html#fixed-effects"><i class="fa fa-check"></i><b>7.1.1</b> Fixed Effects</a></li>
+<li class="chapter" data-level="7.1.2" data-path="sjplot-package.html"><a href="sjplot-package.html#random-effects"><i class="fa fa-check"></i><b>7.1.2</b> Random Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="7.2" data-path="sjplot-package.html"><a href="sjplot-package.html#plotting-marginal-effects"><i class="fa fa-check"></i><b>7.2</b> Plotting Marginal Effects</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="sjplot-package.html"><a href="sjplot-package.html#predicted-values"><i class="fa fa-check"></i><b>7.2.1</b> Predicted Values</a></li>
+<li class="chapter" data-level="7.2.2" data-path="sjplot-package.html"><a href="sjplot-package.html#effect-plots"><i class="fa fa-check"></i><b>7.2.2</b> Effect Plots</a></li>
+<li class="chapter" data-level="7.2.3" data-path="sjplot-package.html"><a href="sjplot-package.html#interaction-plots"><i class="fa fa-check"></i><b>7.2.3</b> Interaction Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="sjplot-package.html"><a href="sjplot-package.html#model-diagnostics"><i class="fa fa-check"></i><b>7.3</b> Model Diagnostics</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="sjplot-package.html"><a href="sjplot-package.html#slope-of-coefficentes"><i class="fa fa-check"></i><b>7.3.1</b> Slope of Coefficentes</a></li>
+<li class="chapter" data-level="7.3.2" data-path="sjplot-package.html"><a href="sjplot-package.html#residuals"><i class="fa fa-check"></i><b>7.3.2</b> Residuals</a></li>
+<li class="chapter" data-level="7.3.3" data-path="sjplot-package.html"><a href="sjplot-package.html#diagnostics"><i class="fa fa-check"></i><b>7.3.3</b> Diagnostics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html"><i class="fa fa-check"></i><b>8</b> Intro to Longitudinal: Autism Example</a><ul>
+<li class="chapter" data-level="8.1" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#background-4"><i class="fa fa-check"></i><b>8.1</b> Background</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#long-format"><i class="fa fa-check"></i><b>8.1.1</b> Long Format</a></li>
+<li class="chapter" data-level="8.1.2" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#wide-format"><i class="fa fa-check"></i><b>8.1.2</b> Wide Format</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#exploratory-data-analysis-3"><i class="fa fa-check"></i><b>8.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#demographic-summary"><i class="fa fa-check"></i><b>8.2.1</b> Demographic Summary</a></li>
+<li class="chapter" data-level="8.2.2" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#baseline-summary"><i class="fa fa-check"></i><b>8.2.2</b> Baseline Summary</a></li>
+<li class="chapter" data-level="8.2.3" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#missing-data-attrition"><i class="fa fa-check"></i><b>8.2.3</b> Missing Data &amp; Attrition</a></li>
+<li class="chapter" data-level="8.2.4" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#means-across-time"><i class="fa fa-check"></i><b>8.2.4</b> Means Across Time</a></li>
+<li class="chapter" data-level="8.2.5" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#person-profile-plots"><i class="fa fa-check"></i><b>8.2.5</b> Person Profile Plots</a></li>
+<li class="chapter" data-level="8.2.6" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#side-by-side-boxplots"><i class="fa fa-check"></i><b>8.2.6</b> Side-by-side Boxplots</a></li>
+<li class="chapter" data-level="8.2.7" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#means-plots"><i class="fa fa-check"></i><b>8.2.7</b> Means Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#model-1-full-model-with-loaded-mean-structure"><i class="fa fa-check"></i><b>8.3</b> Model 1: Full model with ‘loaded’ mean structure</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#fit-the-model-10"><i class="fa fa-check"></i><b>8.3.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="8.3.2" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#table-of-prameter-estimates"><i class="fa fa-check"></i><b>8.3.2</b> Table of Prameter Estimates</a></li>
+<li class="chapter" data-level="8.3.3" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#plot-of-the-estimated-marginal-means"><i class="fa fa-check"></i><b>8.3.3</b> Plot of the Estimated Marginal Means</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#model-2a-drop-random-intercepts"><i class="fa fa-check"></i><b>8.4</b> Model 2A: Drop Random Intercepts</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#fit-the-model-11"><i class="fa fa-check"></i><b>8.4.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="8.4.2" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#assess-the-signifcance"><i class="fa fa-check"></i><b>8.4.2</b> Assess the Signifcance</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#model-2b-drop-random-quadratic-slope"><i class="fa fa-check"></i><b>8.5</b> Model 2B: Drop Random Quadratic Slope</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#fit-the-model-12"><i class="fa fa-check"></i><b>8.5.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="8.5.2" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#assess-the-signifcance-1"><i class="fa fa-check"></i><b>8.5.2</b> Assess the Signifcance</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#model-3-drop-quadratic-time-fixed-effect"><i class="fa fa-check"></i><b>8.6</b> Model 3: Drop Quadratic Time Fixed Effect</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#fit-the-models"><i class="fa fa-check"></i><b>8.6.1</b> Fit the Models</a></li>
+<li class="chapter" data-level="8.6.2" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#assess-the-signifcance-2"><i class="fa fa-check"></i><b>8.6.2</b> Assess the Signifcance</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#final-model-3"><i class="fa fa-check"></i><b>8.7</b> Final Model</a><ul>
+<li class="chapter" data-level="8.7.1" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#table-of-parameter-esitmates"><i class="fa fa-check"></i><b>8.7.1</b> Table of Parameter Esitmates</a></li>
+<li class="chapter" data-level="8.7.2" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#interpretation-of-fixed-effects"><i class="fa fa-check"></i><b>8.7.2</b> Interpretation of Fixed Effects</a></li>
+<li class="chapter" data-level="8.7.3" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#interpretation-of-random-effects"><i class="fa fa-check"></i><b>8.7.3</b> Interpretation of Random Effects</a></li>
+<li class="chapter" data-level="8.7.4" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#assumption-checking"><i class="fa fa-check"></i><b>8.7.4</b> Assumption Checking</a></li>
+<li class="chapter" data-level="8.7.5" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#plot-of-the-estimated-marginal-means-1"><i class="fa fa-check"></i><b>8.7.5</b> Plot of the Estimated Marginal Means</a></li>
+<li class="chapter" data-level="8.7.6" data-path="intro-to-longitudinal-autism-example.html"><a href="intro-to-longitudinal-autism-example.html#blups-vs.fixed-effects"><i class="fa fa-check"></i><b>8.7.6</b> Blups vs. Fixed Effects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html"><i class="fa fa-check"></i><b>9</b> Hedeker &amp; Gibbons: Longitudinal Example</a><ul>
+<li class="chapter" data-level="9.1" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#background-5"><i class="fa fa-check"></i><b>9.1</b> Background</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#long-format-1"><i class="fa fa-check"></i><b>9.1.1</b> Long Format</a></li>
+<li class="chapter" data-level="9.1.2" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#wide-format-1"><i class="fa fa-check"></i><b>9.1.2</b> Wide Format</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#exploratory-data-analysis-4"><i class="fa fa-check"></i><b>9.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#diagnosis-group"><i class="fa fa-check"></i><b>9.2.1</b> Diagnosis Group</a></li>
+<li class="chapter" data-level="9.2.2" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#missing-data-attrition-1"><i class="fa fa-check"></i><b>9.2.2</b> Missing Data &amp; Attrition</a></li>
+<li class="chapter" data-level="9.2.3" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#depression-over-time-by-group"><i class="fa fa-check"></i><b>9.2.3</b> Depression Over Time, by Group</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#patterns-in-the-outcome-over-time"><i class="fa fa-check"></i><b>9.3</b> Patterns in the Outcome Over Time</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#variance-covariance"><i class="fa fa-check"></i><b>9.3.1</b> Variance-Covariance</a></li>
+<li class="chapter" data-level="9.3.2" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#correlation"><i class="fa fa-check"></i><b>9.3.2</b> Correlation</a></li>
+<li class="chapter" data-level="9.3.3" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#for-each-group"><i class="fa fa-check"></i><b>9.3.3</b> For Each Group</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#mlm---null-or-emptly-models"><i class="fa fa-check"></i><b>9.4</b> MLM - Null or Emptly Models</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#fit-the-model-13"><i class="fa fa-check"></i><b>9.4.1</b> Fit the model</a></li>
+<li class="chapter" data-level="9.4.2" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#table-of-parameter-estimates"><i class="fa fa-check"></i><b>9.4.2</b> Table of Parameter Estimates</a></li>
+<li class="chapter" data-level="9.4.3" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#estimated-marginal-means-plot"><i class="fa fa-check"></i><b>9.4.3</b> Estimated Marginal Means Plot</a></li>
+<li class="chapter" data-level="9.4.4" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#estimated-marginal-means-and-emperical-bayes-plots"><i class="fa fa-check"></i><b>9.4.4</b> Estimated Marginal Means and Emperical Bayes Plots</a></li>
+<li class="chapter" data-level="9.4.5" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#intra-individual-correlation-icc"><i class="fa fa-check"></i><b>9.4.5</b> Intra-individual Correlation (ICC)</a></li>
+<li class="chapter" data-level="9.4.6" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#compare-to-the-single-level-null-no-random-effects"><i class="fa fa-check"></i><b>9.4.6</b> Compare to the Single-Level Null: No Random Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#mlm-add-random-slope-for-time-i.e.trend"><i class="fa fa-check"></i><b>9.5</b> MLM: Add Random Slope for Time (i.e. Trend)</a><ul>
+<li class="chapter" data-level="9.5.1" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#fit-the-model-14"><i class="fa fa-check"></i><b>9.5.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="9.5.2" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#table-of-prameter-estimates-1"><i class="fa fa-check"></i><b>9.5.2</b> Table of Prameter Estimates</a></li>
+<li class="chapter" data-level="9.5.3" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#likelihood-ratio-test"><i class="fa fa-check"></i><b>9.5.3</b> Likelihood Ratio Test</a></li>
+<li class="chapter" data-level="9.5.4" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#estimated-marginal-means-plot-1"><i class="fa fa-check"></i><b>9.5.4</b> Estimated Marginal Means Plot</a></li>
+<li class="chapter" data-level="9.5.5" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#estimated-marginal-means-and-emperical-bayes-plots-1"><i class="fa fa-check"></i><b>9.5.5</b> Estimated Marginal Means and Emperical Bayes Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="9.6" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#mlm-coding-of-time"><i class="fa fa-check"></i><b>9.6</b> MLM: Coding of Time</a><ul>
+<li class="chapter" data-level="9.6.1" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#fit-the-model-15"><i class="fa fa-check"></i><b>9.6.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="9.6.2" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#table-of-parameter-estimates-2"><i class="fa fa-check"></i><b>9.6.2</b> Table of Parameter Estimates</a></li>
+<li class="chapter" data-level="9.6.3" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#estimated-marginal-means-and-emperical-bayes-plots-2"><i class="fa fa-check"></i><b>9.6.3</b> Estimated Marginal Means and Emperical Bayes Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#mlm-effect-of-diagnosis-on-time-trends-fixed-interaction"><i class="fa fa-check"></i><b>9.7</b> MLM: Effect of DIagnosis on Time Trends (Fixed Interaction)</a><ul>
+<li class="chapter" data-level="9.7.1" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#fit-the-models-1"><i class="fa fa-check"></i><b>9.7.1</b> Fit the Models</a></li>
+<li class="chapter" data-level="9.7.2" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#estimated-marginal-meanse-plot"><i class="fa fa-check"></i><b>9.7.2</b> Estimated Marginal Meanse Plot</a></li>
+<li class="chapter" data-level="9.7.3" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#likelihood-ratio-test-1"><i class="fa fa-check"></i><b>9.7.3</b> Likelihood Ratio Test</a></li>
+</ul></li>
+<li class="chapter" data-level="9.8" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#mlm-quadratic-trend"><i class="fa fa-check"></i><b>9.8</b> MLM: Quadratic Trend</a><ul>
+<li class="chapter" data-level="9.8.1" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#fit-the-model-16"><i class="fa fa-check"></i><b>9.8.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="9.8.2" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#table-of-parameter-estimates-3"><i class="fa fa-check"></i><b>9.8.2</b> Table of Parameter Estimates</a></li>
+<li class="chapter" data-level="9.8.3" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#likelihood-ratio-test-2"><i class="fa fa-check"></i><b>9.8.3</b> Likelihood Ratio Test</a></li>
+<li class="chapter" data-level="9.8.4" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#estimated-marginal-means-plot-2"><i class="fa fa-check"></i><b>9.8.4</b> Estimated Marginal Means Plot</a></li>
+<li class="chapter" data-level="9.8.5" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#blups-or-emperical-bayes-estimates"><i class="fa fa-check"></i><b>9.8.5</b> BLUPs or Emperical Bayes Estimates</a></li>
+<li class="chapter" data-level="9.8.6" data-path="hedeker-gibbons-longitudinal-example.html"><a href="hedeker-gibbons-longitudinal-example.html#estimated-marginal-means-and-emperical-bayes-plots-3"><i class="fa fa-check"></i><b>9.8.6</b> Estimated Marginal Means and Emperical Bayes Plots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="hox-ch-5-longitudinal-example-student-gpa.html"><a href="hox-ch-5-longitudinal-example-student-gpa.html"><i class="fa fa-check"></i><b>10</b> Hox ch 5: Longitudinal Example - student GPA</a><ul>
+<li class="chapter" data-level="10.1" data-path="hox-ch-5-longitudinal-example-student-gpa.html"><a href="hox-ch-5-longitudinal-example-student-gpa.html#background-6"><i class="fa fa-check"></i><b>10.1</b> Background</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html"><i class="fa fa-check"></i><b>11</b> RCT Longitudinal: Exercise and Diet Example</a><ul>
+<li class="chapter" data-level="11.1" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#the-dataset"><i class="fa fa-check"></i><b>11.1</b> The dataset</a></li>
+<li class="chapter" data-level="11.2" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#exploratory-data-analysis-5"><i class="fa fa-check"></i><b>11.2</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#demographic-summary-1"><i class="fa fa-check"></i><b>11.2.1</b> Demographic Summary</a></li>
+<li class="chapter" data-level="11.2.2" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#baseline-summary-1"><i class="fa fa-check"></i><b>11.2.2</b> Baseline Summary</a></li>
+<li class="chapter" data-level="11.2.3" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#raw-trajectories---person-profile-plot"><i class="fa fa-check"></i><b>11.2.3</b> Raw Trajectories - Person Profile Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#multilevel-modeling"><i class="fa fa-check"></i><b>11.3</b> Multilevel Modeling</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#null-model-1"><i class="fa fa-check"></i><b>11.3.1</b> Null Model</a></li>
+<li class="chapter" data-level="11.3.2" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#icc"><i class="fa fa-check"></i><b>11.3.2</b> ICC</a></li>
+<li class="chapter" data-level="11.3.3" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#add-fixed-effects-level-specific"><i class="fa fa-check"></i><b>11.3.3</b> Add fixed effects: level specific</a></li>
+<li class="chapter" data-level="11.3.4" data-path="rct-longitudinal-exercise-and-diet-example.html"><a href="rct-longitudinal-exercise-and-diet-example.html#final-model-4"><i class="fa fa-check"></i><b>11.3.4</b> Final Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="hox-ch-5-longitudinal-example---student-gpa" class="section level1">
+<h1><span class="header-section-number">10</span> Hox ch 5: Longitudinal Example - student GPA</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># dplyr, tidyr, ggplot, the pipe, ect.</span>
+<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
+<span class="kw">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span>
+<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
+<span class="kw">library</span>(car)          <span class="co"># Companion to Applied Regression</span>
+<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
+<span class="kw">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for nlme &amp; lmer4</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span>
+<span class="kw">library</span>(optimx)       <span class="co"># Different optimizers to solve mlm&#39;s</span>
+<span class="kw">library</span>(VIM)          <span class="co"># Visualization and Imputation of Missing Values </span>
+<span class="kw">library</span>(effects)      <span class="co"># Estimated Marginal Means</span>
+<span class="kw">library</span>(naniar)       <span class="co"># Summaries and Visualisations for Missing Data</span></code></pre></div>
+<div id="background-6" class="section level2">
+<h2><span class="header-section-number">10.1</span> Background</h2>
+<div class="rmdlink">
+<p>
+The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edition”</strong> <span class="citation"><span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></span> has a companion <a href="https://multilevel-analysis.sites.uu.nl/">website</a> which includes links to all the data files used throughout the book (housed on the <a href="https://github.com/MultiLevelAnalysis">book’s GitHub repository</a>).
+</p>
+</div>
+<p>The following example is used through out <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>’s chapater 5.</p>
+<blockquote>
+<p>From <strong>Appendix E</strong>:</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%205/GPA2/gpa2.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span>
+
+tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw) </code></pre></div>
+<pre><code>Observations: 200
+Variables: 16
+$ student  &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16...
+$ sex      &lt;fct&gt; female, male, female, male, male, female, male, femal...
+$ highgpa  &lt;dbl&gt; 2.8, 2.5, 2.5, 3.8, 3.1, 2.9, 2.3, 3.9, 2.0, 2.8, 3.9...
+$ gpa1     &lt;dbl&gt; 2.3, 2.2, 2.4, 2.5, 2.8, 2.5, 2.4, 2.8, 2.8, 2.8, 2.6...
+$ gpa2     &lt;dbl&gt; 2.1, 2.5, 2.9, 2.7, 2.8, 2.4, 2.4, 2.8, 2.7, 2.8, 2.9...
+$ gpa3     &lt;dbl&gt; 3.0, 2.6, 3.0, 2.4, 2.8, 2.4, 2.8, 3.1, 2.7, 3.0, 3.2...
+$ gpa4     &lt;dbl&gt; 3.0, 2.6, 2.8, 2.7, 3.0, 2.3, 2.6, 3.3, 3.1, 2.7, 3.6...
+$ gpa5     &lt;dbl&gt; 3.0, 3.0, 3.3, 2.9, 2.9, 2.7, 3.0, 3.3, 3.1, 3.0, 3.6...
+$ gpa6     &lt;dbl&gt; 3.3, 2.8, 3.4, 2.7, 3.1, 2.8, 3.0, 3.4, 3.5, 3.0, 3.8...
+$ job1     &lt;fct&gt; 2 hours, 2 hours, 2 hours, 3 hours, 2 hours, 2 hours,...
+$ job2     &lt;fct&gt; 2 hours, 3 hours, 2 hours, 2 hours, 2 hours, 3 hours,...
+$ job3     &lt;fct&gt; 2 hours, 2 hours, 2 hours, 2 hours, 2 hours, 3 hours,...
+$ job4     &lt;fct&gt; 2 hours, 2 hours, 3 hours, 2 hours, 2 hours, 2 hours,...
+$ job5     &lt;fct&gt; 2 hours, 2 hours, 2 hours, 2 hours, 2 hours, 3 hours,...
+$ job6     &lt;fct&gt; 2 hours, 2 hours, 2 hours, 2 hours, 2 hours, 3 hours,...
+$ admitted &lt;fct&gt; yes, no, yes, no, yes, no, yes, yes, NA, yes, NA, yes...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">student =</span> <span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;job&quot;</span>)),        <span class="co"># choose the &#39;job&#39; variables</span>
+                   stringi<span class="op">::</span>stri_sub,               <span class="co"># extract a part of the text</span>
+                   <span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st">            </span><span class="co"># we only want the first &#39;spot&#39;</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(<span class="kw">starts_with</span>(<span class="st">&quot;job&quot;</span>)),        <span class="co"># choose the &#39;job&#39; variables</span>
+                   as.numeric) 
+
+psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</code></pre></div>
+<pre><code>  student    sex highgpa gpa1 gpa2 gpa3 gpa4 gpa5 gpa6 job1 job2 job3 job4
+1       1 female     2.8  2.3  2.1    3    3    3  3.3    2    2    2    2
+2       2   male     2.5  2.2  2.5  2.6  2.6    3  2.8    2    3    2    2
+3       3 female     2.5  2.4  2.9    3  2.8  3.3  3.4    2    2    2    3
+4       4   male     3.8  2.5  2.7  2.4  2.7  2.9  2.7    3    2    2    2
+5    &lt;NA&gt;   &lt;NA&gt;     ...  ...  ...  ...  ...  ...  ...  ...  ...  ...  ...
+6     197 female     2.1  2.9  2.5  2.8  3.2  3.3  3.8    2    2    3    2
+7     198   male       4  2.5  2.9    3  3.2  3.3  3.4    2    2    2    2
+8     199 female     2.3  2.6  2.3  2.7  2.7  2.8  2.8    2    2    3    2
+9     200   male     3.4  2.8  3.2  3.4  3.5  3.3  3.4    2    2    2    2
+  job5 job6 admitted
+1    2    2      yes
+2    2    2       no
+3    2    2      yes
+4    2    2       no
+5  ...  ...     &lt;NA&gt;
+6    2    2     &lt;NA&gt;
+7    1    2     &lt;NA&gt;
+8    2    3      yes
+9    1    1     &lt;NA&gt;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">long</span>(<span class="kw">c</span>(<span class="st">&quot;gpa1&quot;</span>, <span class="st">&quot;gpa2&quot;</span>, <span class="st">&quot;gpa3&quot;</span>, <span class="st">&quot;gpa4&quot;</span>, <span class="st">&quot;gpa5&quot;</span>, <span class="st">&quot;gpa6&quot;</span>),   <span class="co"># first set of 6 existing variables</span>
+                  <span class="kw">c</span>(<span class="st">&quot;job1&quot;</span>, <span class="st">&quot;job2&quot;</span>, <span class="st">&quot;job3&quot;</span>, <span class="st">&quot;job4&quot;</span>, <span class="st">&quot;job5&quot;</span>, <span class="st">&quot;job6&quot;</span>),   <span class="co"># second set of 6 existing variables</span>
+                  <span class="dt">v.names =</span> <span class="kw">c</span>(<span class="st">&quot;gpa&quot;</span>, <span class="st">&quot;job&quot;</span>),                           <span class="co"># names of the newly created varaibles</span>
+                  <span class="dt">id =</span> <span class="st">&quot;student&quot;</span>) <span class="op">%&gt;%</span><span class="st">                                  </span><span class="co"># the variable that identifies sets of observations</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(student, time)
+
+psych<span class="op">::</span><span class="kw">headTail</span>(data_long, <span class="dt">top =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>     student    sex highgpa admitted time gpa job
+1          1 female     2.8      yes    1 2.3   2
+2          1 female     2.8      yes    2 2.1   2
+3          1 female     2.8      yes    3   3   2
+4          1 female     2.8      yes    4   3   2
+5          1 female     2.8      yes    5   3   2
+6          1 female     2.8      yes    6 3.3   2
+7          2   male     2.5       no    1 2.2   2
+8          2   male     2.5       no    2 2.5   3
+9          2   male     2.5       no    3 2.6   2
+10         2   male     2.5       no    4 2.6   2
+...     &lt;NA&gt;   &lt;NA&gt;     ...     &lt;NA&gt;  ... ... ...
+1197     200   male     3.4     &lt;NA&gt;    3 3.4   2
+1198     200   male     3.4     &lt;NA&gt;    4 3.5   2
+1199     200   male     3.4     &lt;NA&gt;    5 3.3   1
+1200     200   male     3.4     &lt;NA&gt;    6 3.4   1</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="hedeker-gibbons-longitudinal-example.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="rct-longitudinal-exercise-and-diet-example.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section",
+"toc_depth": 3
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

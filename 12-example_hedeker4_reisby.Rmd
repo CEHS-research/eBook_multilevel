@@ -26,6 +26,7 @@ library(sjPlot)       # Quick predicitive and diagnostic plots
 library(optimx)       # Different optimizers to solve mlm's
 library(VIM)          # Visualization and Imputation of Missing Values 
 library(effects)      # Estimated Marginal Means
+library(naniar)       # Summaries and Visualisations for Missing Data
 ```
 
 
@@ -122,11 +123,31 @@ data_long %>%
 
 Plot the amount of missing vlaues and the amount of each patter of missing values.
 
+#### `VIM` package
+
 ```{r}
 data_wide %>% 
   VIM::aggr(numbers = TRUE,   # shows the number to the far right
             prop = FALSE)     # shows counts instead of proportions
 ```
+
+
+
+#### `naniar` package
+
+
+```{r}
+data_wide %>% 
+  naniar::gg_miss_upset(sets = c("week_0_NA",
+                                 "week_1_NA",
+                                 "week_2_NA",
+                                 "week_3_NA",
+                                 "week_4_NA",
+                                 "week_5_NA"),
+                        keep.order = TRUE) 
+```
+
+
 
 
 

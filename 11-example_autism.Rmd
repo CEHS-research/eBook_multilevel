@@ -67,13 +67,14 @@ tibble::glimpse(autism)             # first look at the dataset and its varaible
 ### Long Format
 
 ```{r}
-data_long <- autism %>%                            # save the dataset as a new name
-  dplyr::mutate(childid = childid %>% factor) %>%  # declare grouping var a factor
-  dplyr::mutate(age = 2 + age2) %>%                # create the original age variable 
-  dplyr::select(childid,                           # choose variables and order to keep
+data_long <- autism %>%                                    # save the dataset as a new name
+  dplyr::mutate(childid = childid %>% factor) %>%          # declare grouping var a factor
+  dplyr::mutate(age = 2 + age2) %>%                        # create the original age variable (unequally spaced)
+  dplyr::mutate(obs = age %>% factor %>% as.numeric) %>%   # Observation Number = 1, 2, 3, 4, 5 (equally spaced)
+  dplyr::select(childid,                                   # choose variables and order to keep
                 gender, race, bestest2, sicdegp, 
-                age, age2, vsae) %>% 
-  dplyr::arrange(childid, age2)                    # sort observations
+                obs, age, age2, vsae) %>% 
+  dplyr::arrange(childid, age2)                            # sort observations
 ```
 
 
@@ -88,7 +89,7 @@ data_long %>%
 
 ```{r}
 data_wide <- data_long %>%           # save the dataset as a new name
-  dplyr::select(-age) %>%            # delete (by deselecting) this variable 
+  dplyr::select(-age, -obs) %>%      # delete (by deselecting) this variable 
   tidyr::spread(key = age2,          # name the varaible that specifies how to spread
                 value = vsae,        # name the variable to be spread out
                 sep = "_") %>%       # add to combine the key-variables name before its value
@@ -311,6 +312,8 @@ data_sum_cc
 
 Use the data in LONG format
 
+#### Unequally Spaced
+
 ```{r, fig.width=8, fig.height=6}
 data_long %>% 
   dplyr::mutate(sicdegp = fct_recode(sicdegp,
@@ -341,6 +344,39 @@ data_long %>%
   theme(legend.position = "bottom",
         legend.key.width = unit(2, "cm"))
 ```
+
+#### Equally Spaced
+
+```{r, fig.width=8, fig.height=6}
+data_long %>% 
+  dplyr::mutate(sicdegp = fct_recode(sicdegp,
+                                     "Low Communication" = "low",
+                                     "Medium Communication" = "med",
+                                     "High Communication" = "high")) %>% 
+  ggplot(aes(x = obs,
+             y = vsae)) +
+  geom_point(size = 0.75) +
+  geom_line(aes(group = childid),
+            alpha = .5,
+            size = 1) +
+  facet_grid(. ~ sicdegp)  +
+  theme_bw() +
+  labs(x = "Observation Number",
+       y = "Vineland Socialization Age Equivalent",
+       color = "Sequenced Inventory of Communication Development") +
+  geom_smooth(aes(color = "Flexible"),
+              method = "loess",
+              se = FALSE,) +
+  geom_smooth(aes(color = "Linear"),
+              method = "lm",
+              se = FALSE) +
+  scale_color_manual(name = "Smoother Type: ",
+                     values = c("Flexible" = "blue", 
+                                "Linear"    = "red")) +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(2, "cm"))
+```
+
 
 
 ### Side-by-side Boxplots
@@ -378,8 +414,25 @@ data_long %>%
         legend.background = element_rect(color = "black"))
 ```
 
-#### Manually Summarized
 
+```{r, fig.width=8, fig.height=6}
+data_long %>% 
+  ggplot(aes(x = obs,
+             y = vsae,
+             color = sicdegp)) +
+  stat_summary() +                       # default: points at MEAN and extend vertically 1 standard error for the mean
+  stat_summary(fun.y = "mean",           # plot the means
+               geom = "line") +          # ...and connect with lines
+  theme_bw() +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(-0.25, 1.25),
+        legend.background = element_rect(color = "black"))
+```
+
+
+
+
+#### Manually Summarized
 
 
 ```{r, fig.width=8, fig.height=6}
