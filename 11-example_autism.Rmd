@@ -1,4 +1,4 @@
-# Intro to Longitudinal: Autism Example
+# Longitudinal Intro:  Example - Autism
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(comment     = "",
@@ -11,20 +11,20 @@ knitr::opts_chunk$set(comment     = "",
 ```
 
 ```{r, message=FALSE, error=FALSE}
-library(tidyverse)    # dplyr, tidyr, ggplot, the pipe, ect.
+library(tidyverse)    # all things tidy
+library(pander)       # nice looking genderal tabulations
 library(furniture)    # nice table1() descriptives
-library(stargazer)    # display nice tables: summary & regression
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 library(psych)        # contains some useful functions, like headTail
-library(car)          # Companion to Applied Regression
-library(lme4)         # Linear, generalized linear, & nonlinear mixed models
-library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
 library(sjstats)      # ICC calculations
 library(sjPlot)       # Quick predicitive and diagnostic plots 
-library(optimx)       # Different optimizers to solve mlm's
-library(VIM)          # Visualization and Imputation of Missing Values 
 library(effects)      # Estimated Marginal Means
+library(VIM)          # Visualization and Imputation of Missing Values 
 library(naniar)       # Summaries and Visualisations for Missing Data
+
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+
+library(HLMdiag)      # package with the dataset
 ```
 
 ## Background

@@ -1,4 +1,4 @@
-# RCT Longitudinal: Exercise and Diet Example
+# Longitudinal MLM: RCT - Exercise and Diet
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(comment     = "",
@@ -11,22 +11,16 @@ knitr::opts_chunk$set(comment     = "",
 ```
 
 ```{r, message=FALSE, error=FALSE}
-library(tidyverse)
-library(haven)        # read in SPSS dataset
+library(tidyverse)    # all things tidy
+library(pander)       # nice looking genderal tabulations
 library(furniture)    # nice table1() descriptives
-library(stargazer)    # display nice tables: summary & regression
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
-library(RColorBrewer) # nice color palettes for plots
-library(gridExtra)    # place ggplots together as one plot
 library(psych)        # contains some useful functions, like headTail
-library(car)          # Companion to Applied Regression
-library(nlme)         # non-linear mixed-effects models
-library(lme4)         # Linear, generalized linear, & nonlinear mixed models
-library(lmerTest)     # Tests on lmer objects
-library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
 library(sjstats)      # ICC calculations
-library(optimx)       # Different optimizers to solve mlm's
-library(effects)
+library(sjPlot)       # Visualization for Models
+library(effects)      # Effec displays for Models
+
+library(lme4)         # non-linear mixed-effects models
 ```
 
 ## The dataset
@@ -34,7 +28,7 @@ library(effects)
 This comes from a **Randomized Controled Trial**.
 
 ```{r}
-data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/eBook_multilevel/master/data/exercise_diet.txt?token=AScXBY80grQdF66G9yRwtPX2qTXK86WLks5bxltawA%3D%3D",
+data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/data/master/MLM/exercise_diet.txt",
                   header = TRUE, 
                   sep = ",")
 ```

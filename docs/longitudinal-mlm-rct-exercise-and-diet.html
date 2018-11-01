@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="variance-explained.html">
-<link rel="next" href="longitudinal-intro-example-autism.html">
+<link rel="prev" href="longitudinal-mlm-hox-ch-5-student-gpa.html">
+<link rel="next" href="gee-continuous-outcome-beat-the-blues.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -430,69 +430,486 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sjplot-package" class="section level1">
-<h1><span class="header-section-number">7</span> sjPlot Package</h1>
-<div class="figure">
-<img src="images/header_sjPlot.png" />
-
-</div>
-<div class="rmdlink">
-<p>
-<a href="http://www.danielluedecke.de/">Daniel Lüdecke</a> is German researcher that has put together several GREAT packages, including <code>sjPlot</code> which we will detail here. Documentation can be found at: <a href="http://www.strengejacke.de/sjPlot/index.html" class="uri">http://www.strengejacke.de/sjPlot/index.html</a>
-</p>
-</div>
+<div id="longitudinal-mlm-rct---exercise-and-diet" class="section level1">
+<h1><span class="header-section-number">11</span> Longitudinal MLM: RCT - Exercise and Diet</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
+<span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
 <span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(sjPlot)       <span class="co"># Visualization for Models</span>
+<span class="kw">library</span>(effects)      <span class="co"># Effec displays for Models</span>
 
-<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed modelsts models</span>
-
-<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
-
-<span class="kw">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span></code></pre></div>
-<p>Read the SPSS data in with the <code>haven</code> package and prepare it (see previous chapter).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0&quot;</span>)
-
-data_achieve_center_scale &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(id, region, corp, school, class), factor) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gender =</span> gender <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">classize =</span> classize <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;12-17&quot;</span>, <span class="st">&quot;18-21&quot;</span>, 
-                                    <span class="st">&quot;22-26&quot;</span>, <span class="st">&quot;&gt;26&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, region, corp, school, class,           <span class="co"># Identifiers</span>
-                gender, age, geread, gevocab,              <span class="co"># Pupil-level vars</span>
-                classize,                                  <span class="co"># Class-Level vars</span>
-                senroll, ses) <span class="op">%&gt;%</span><span class="st">                          </span><span class="co"># School-level vars</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gevocab_c =</span> gevocab <span class="op">-</span><span class="st"> </span><span class="fl">4.4938</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age_c     =</span> age     <span class="op">-</span><span class="st"> </span><span class="fl">107.5290</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_c =</span> senroll <span class="op">-</span><span class="st"> </span><span class="fl">533.4148</span>) <span class="op">%&gt;%</span><span class="st">  </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_ch =</span> senroll_c <span class="op">/</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st">        </span><span class="co"># centered AND divided by one hundred</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">ses_t      =</span> ses <span class="op">/</span><span class="st"> </span><span class="dv">10</span>)                   <span class="co"># JUST divide by ten</span></code></pre></div>
-<p>Fit the final model (see previous chapter)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_read_11re_s &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab_c<span class="op">*</span>age_c <span class="op">+</span><span class="st"> </span>gevocab_c<span class="op">*</span>ses_t <span class="op">+</span><span class="st">   </span><span class="co"># 2 2-way interactions</span>
-<span class="st">                                      </span>(gevocab_c <span class="op">|</span><span class="st"> </span>school),  
-                             <span class="dt">data   =</span> data_achieve_center_scale,
-                             <span class="dt">REML   =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
-<span class="co"># Knit to PDF:     texreg::texreg()</span>
-<span class="co"># View on Screen:  texreg::screenreg()</span>
-
-texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_11re_s),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Final&quot;</span>), 
-                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,
-                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<span class="kw">library</span>(lme4)         <span class="co"># non-linear mixed-effects models</span></code></pre></div>
+<div id="the-dataset" class="section level2">
+<h2><span class="header-section-number">11.1</span> The dataset</h2>
+<p>This comes from a <strong>Randomized Controled Trial</strong>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/data/master/MLM/exercise_diet.txt&quot;</span>,
+                  <span class="dt">header =</span> <span class="ot">TRUE</span>, 
+                  <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw)</code></pre></div>
+<pre><code>Observations: 120
+Variables: 5
+$ id       &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5,...
+$ exertype &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+$ diet     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
+$ pulse    &lt;int&gt; 90, 92, 93, 93, 90, 92, 93, 93, 97, 97, 94, 94, 80, 8...
+$ time     &lt;int&gt; 0, 228, 296, 639, 0, 56, 434, 538, 0, 150, 295, 541, ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> id <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">exertype =</span> exertype <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,
+                         <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;At Rest&quot;</span>,
+                                    <span class="st">&quot;Leisurely Walking&quot;</span>,
+                                    <span class="st">&quot;Moderate Running&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">diet =</span> diet <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,
+                         <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;low-fat&quot;</span>,
+                                    <span class="st">&quot;non-fat&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">time_min =</span> time <span class="op">/</span><span class="st"> </span><span class="dv">60</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>(<span class="dt">top =</span> <span class="dv">10</span>, <span class="dt">bottom =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>(<span class="dt">caption =</span> <span class="st">&quot;Raw Data&quot;</span>)</code></pre></div>
+<table style="width:96%;">
+<caption>Raw Data</caption>
+<colgroup>
+<col width="13%" />
+<col width="6%" />
+<col width="26%" />
+<col width="13%" />
+<col width="11%" />
+<col width="9%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">id</th>
+<th align="center">exertype</th>
+<th align="center">diet</th>
+<th align="center">pulse</th>
+<th align="center">time</th>
+<th align="center">time_min</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>1</strong></td>
+<td align="center">1</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">90</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2</strong></td>
+<td align="center">1</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">92</td>
+<td align="center">228</td>
+<td align="center">3.8</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>3</strong></td>
+<td align="center">1</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">93</td>
+<td align="center">296</td>
+<td align="center">4.93</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>4</strong></td>
+<td align="center">1</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">93</td>
+<td align="center">639</td>
+<td align="center">10.65</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>5</strong></td>
+<td align="center">2</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">90</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>6</strong></td>
+<td align="center">2</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">92</td>
+<td align="center">56</td>
+<td align="center">0.93</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>7</strong></td>
+<td align="center">2</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">93</td>
+<td align="center">434</td>
+<td align="center">7.23</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>8</strong></td>
+<td align="center">2</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">93</td>
+<td align="center">538</td>
+<td align="center">8.97</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>9</strong></td>
+<td align="center">3</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">97</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>10</strong></td>
+<td align="center">3</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">97</td>
+<td align="center">150</td>
+<td align="center">2.5</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>…</strong></td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>111</strong></td>
+<td align="center">28</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">140</td>
+<td align="center">263</td>
+<td align="center">4.38</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>112</strong></td>
+<td align="center">28</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">143</td>
+<td align="center">588</td>
+<td align="center">9.8</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>113</strong></td>
+<td align="center">29</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">94</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>114</strong></td>
+<td align="center">29</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">135</td>
+<td align="center">164</td>
+<td align="center">2.73</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>115</strong></td>
+<td align="center">29</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">130</td>
+<td align="center">353</td>
+<td align="center">5.88</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>116</strong></td>
+<td align="center">29</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">137</td>
+<td align="center">560</td>
+<td align="center">9.33</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>117</strong></td>
+<td align="center">30</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">99</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>118</strong></td>
+<td align="center">30</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">111</td>
+<td align="center">114</td>
+<td align="center">1.9</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>119</strong></td>
+<td align="center">30</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">140</td>
+<td align="center">362</td>
+<td align="center">6.03</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>120</strong></td>
+<td align="center">30</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">148</td>
+<td align="center">501</td>
+<td align="center">8.35</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="exploratory-data-analysis-5" class="section level2">
+<h2><span class="header-section-number">11.2</span> Exploratory Data Analysis</h2>
+<div id="demographic-summary-1" class="section level3">
+<h3><span class="header-section-number">11.2.1</span> Demographic Summary</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(diet, pulse,
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>exertype,
+                    <span class="dt">caption =</span> <span class="st">&quot;Baseline Descriptives&quot;</span>,
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>,
+                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<table>
+<caption>
+<span id="tab:unnamed-chunk-468">Table 11.1: </span>Baseline Descriptives
+</caption>
+<thead>
+<tr>
+<th>
+</th>
+<th>
+At Rest
+</th>
+<th>
+Leisurely Walking
+</th>
+<th>
+Moderate Running
+</th>
+<th>
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+n = 10
+</td>
+<td>
+n = 10
+</td>
+<td>
+n = 10
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+diet
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+1
+</td>
+</tr>
+<tr>
+<td>
+low-fat
+</td>
+<td>
+5 (50%)
+</td>
+<td>
+5 (50%)
+</td>
+<td>
+5 (50%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+non-fat
+</td>
+<td>
+5 (50%)
+</td>
+<td>
+5 (50%)
+</td>
+<td>
+5 (50%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+pulse
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.129
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+90.7 (6.3)
+</td>
+<td>
+93.1 (6.3)
+</td>
+<td>
+96.1 (4.5)
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="baseline-summary-1" class="section level3">
+<h3><span class="header-section-number">11.2.2</span> Baseline Summary</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(exertype, diet) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(pulse)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> diet,
+                <span class="dt">value =</span> mean) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>(<span class="dt">caption =</span> <span class="st">&quot;Baseline Pulse, Means&quot;</span>)</code></pre></div>
+<table style="width:56%;">
+<caption>Baseline Pulse, Means</caption>
+<colgroup>
+<col width="27%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">exertype</th>
+<th align="center">low-fat</th>
+<th align="center">non-fat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">At Rest</td>
+<td align="center">90</td>
+<td align="center">92</td>
+</tr>
+<tr class="even">
+<td align="center">Leisurely Walking</td>
+<td align="center">91</td>
+<td align="center">96</td>
+</tr>
+<tr class="odd">
+<td align="center">Moderate Running</td>
+<td align="center">94</td>
+<td align="center">98</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-trajectories---person-profile-plot" class="section level3">
+<h3><span class="header-section-number">11.2.3</span> Raw Trajectories - Person Profile Plot</h3>
+<div id="connect-the-dots" class="section level4">
+<h4><span class="header-section-number">11.2.3.1</span> Connect the dots</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,
+             <span class="dt">y =</span> pulse)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(diet <span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-470-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="loess---moving-average-smoothers" class="section level4">
+<h4><span class="header-section-number">11.2.3.2</span> Loess - Moving Average Smoothers</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,
+             <span class="dt">y =</span> pulse,
+             <span class="dt">color =</span> diet)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,
+              <span class="dt">se =</span> <span class="ot">FALSE</span>,
+              <span class="dt">size =</span> <span class="dv">2</span>,
+              <span class="dt">span =</span> <span class="dv">5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.08</span>, <span class="fl">0.85</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Pulse (Beats per Minute)&quot;</span>,
+       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-471-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="multilevel-modeling" class="section level2">
+<h2><span class="header-section-number">11.3</span> Multilevel Modeling</h2>
+<div id="null-model-1" class="section level3">
+<h3><span class="header-section-number">11.3.1</span> Null Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_0re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                           <span class="dt">data =</span> data_long)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(fit_lmer_0re)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="top" style="margin-bottom:0.3em;">
-MLM: Final Model
+<caption align="bottom" style="margin-top:0.3em;">
+Statistical models
 </caption>
 <tr>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
 <b></b>
 </th>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>Final</b>
+<b>Model 1</b>
 </th>
 </tr>
 <tr>
@@ -500,47 +917,14 @@ MLM: Final Model
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-3.94 (0.11)<sup style="vertical-align: 0px;">***</sup>
+102.13<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-gevocab_c
 </td>
 <td style="padding-right: 12px; border: none;">
-0.67 (0.05)<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-age_c
-</td>
-<td style="padding-right: 12px; border: none;">
--0.00 (0.00)
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-ses_t
-</td>
-<td style="padding-right: 12px; border: none;">
-0.06 (0.01)<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-gevocab_c:age_c
-</td>
-<td style="padding-right: 12px; border: none;">
-0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-gevocab_c:ses_t
-</td>
-<td style="padding-right: 12px; border: none;">
--0.02 (0.01)<sup style="vertical-align: 0px;">**</sup>
+(2.54)
 </td>
 </tr>
 <tr>
@@ -548,7 +932,7 @@ gevocab_c:ses_t
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-42976.51
+963.89
 </td>
 </tr>
 <tr>
@@ -556,7 +940,7 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-43048.93
+972.25
 </td>
 </tr>
 <tr>
@@ -564,7 +948,7 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--21478.26
+-478.95
 </td>
 </tr>
 <tr>
@@ -572,39 +956,23 @@ Log Likelihood
 Num. obs.
 </td>
 <td style="padding-right: 12px; border: none;">
-10320
+120
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-Num. groups: school
+Num. groups: id
 </td>
 <td style="padding-right: 12px; border: none;">
-160
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Var: school (Intercept)
-</td>
-<td style="padding-right: 12px; border: none;">
-0.08
+30
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-Var: school gevocab_c
+Var: id (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.02
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Cov: school (Intercept) gevocab_c
-</td>
-<td style="padding-right: 12px; border: none;">
-0.03
+165.84
 </td>
 </tr>
 <tr>
@@ -612,7 +980,7 @@ Cov: school (Intercept) gevocab_c
 Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-3.66
+109.39
 </td>
 </tr>
 <tr>
@@ -621,166 +989,942 @@ Var: Residual
 </td>
 </tr>
 </table>
-<p>Now we will show some of the things the <code>sjPlot</code> package can do!</p>
-<div id="plotting-coefficients" class="section level2">
-<h2><span class="header-section-number">7.1</span> Plotting Coefficients</h2>
-<p>Select <code>terms</code> that should be plotted. All other term are removed from the output.</p>
-<p>Note that the term names must match the names of the model’s coefficients. For factors, this means that the variable name is suffixed with the related factor level, and each category counts as one term. E.g. <code>rm.terms = &quot;t_name [2,3]&quot;</code> would remove the terms <code>t_name2</code> and <code>t_name3</code> (assuming that the variable t_name is categorical and has at least the factor levels 2 and 3).</p>
-<p>Another example for the iris-dataset: <code>terms = &quot;Species&quot;</code> would not work, instead you would write <code>terms = &quot;Species [versicolor, virginica]&quot;</code> to remove these two levels, or <code>terms = &quot;Speciesversicolor&quot;</code> if you just want to remove the level versicolor from the plot.</p>
-<div id="fixed-effects" class="section level3">
-<h3><span class="header-section-number">7.1.1</span> Fixed Effects</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-302-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>,
-                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-303-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-304-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>Determines in which way estimates are sorted in the plot with the option: <code>sort.est =</code></p>
-<ul>
-<li>If <code>NULL</code> (default), no sorting is done and estimates are sorted in the same order as they appear in the model formula.<br />
-</li>
-<li>If <code>TRUE</code>, estimates are sorted in descending order, with highest estimate at the top.<br />
-</li>
-<li>If <code>sort.est = &quot;sort.all&quot;</code>, estimates are re-sorted for each coefficient (only applies if <code>type = &quot;re&quot;</code> and <code>grid = FALSE</code>), i.e. the estimates of the random effects for each predictor are sorted and plotted to an own plot.<br />
-</li>
-<li>If <code>type = &quot;re&quot;</code>, specify a predictor’s / coefficient’s name to sort estimates according to this random effect.</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
-                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-305-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
-                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>,
-                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-306-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>Plots standardized beta values, however, standardization follows <span class="citation">Gelman (<a href="references.html#ref-gelman2008">2008</a>)</span> suggestion, rescaling the estimates by dividing them by two standard deviations instead of just one. Resulting coefficients are then directly comparable for untransformed <strong>binary predictors</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std2&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
-<div id="random-effects" class="section level3">
-<h3><span class="header-section-number">7.1.2</span> Random Effects</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-308-1.png" width="288" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>,
-                   <span class="dt">grid =</span> <span class="ot">FALSE</span>,
-                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-1.png" width="288" style="display: block; margin: auto;" /></p>
+<div id="icc" class="section level3">
+<h3><span class="header-section-number">11.3.2</span> ICC</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(fit_lmer_0re)</code></pre></div>
 <pre><code>
-[[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-2.png" width="288" style="display: block; margin: auto;" /></p>
-</div>
-</div>
-<div id="plotting-marginal-effects" class="section level2">
-<h2><span class="header-section-number">7.2</span> Plotting Marginal Effects</h2>
-<p>Here <code>terms</code> indicates for which terms marginal effects should be displayed. At least one term is required to calculate effects, maximum length is three terms, where the second and third term indicate the groups, i.e. predictions of first term are grouped by the levels of the second (and third) term.</p>
-<p><code>terms</code> may also indicate higher order terms (e.g. interaction terms).</p>
-<p>Indicating levels in square brackets allows for selecting only specific groups. Term name and levels in brackets must be separated by a whitespace character, e.g. <code>terms = c(&quot;age&quot;, &quot;education [1,3]&quot;)</code>.</p>
-<p>It is also possible to specify a range of numeric values for the predictions with a colon, for instance <code>terms = c(&quot;education [1,3]&quot;, &quot;age [30:50]&quot;)</code>.</p>
-<p>Furthermore, it is possible to specify a function name. Values for predictions will then be transformed, e.g. <code>terms = &quot;income [exp]&quot;</code>. This is useful when model predictors were transformed for fitting the model and should be <strong>back-transformed</strong> to the original scale for predictions.</p>
-<p>Finally, using pretty for numeric variables (e.g. <code>terms = &quot;age [pretty]&quot;</code>) calculates a pretty range of values for the term, roughly of proportional length to the term’s value range. For more details, see the documentation for the <code>ggpredict</code> package.</p>
-<div id="predicted-values" class="section level3">
-<h3><span class="header-section-number">7.2.1</span> Predicted Values</h3>
-<p>Based on (i.e. is a wrapper for): <code>ggeffects::ggpredict()</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-310-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>The <code>pred.type =</code> option only applies for Marginal Effects plots with <strong>mixed effects models</strong>. Indicates whether predicted values should be <strong>conditioned on random effects</strong> (<code>pred.type = &quot;re&quot;</code>) or fixed effects only (<code>pred.type = &quot;fe&quot;</code>, the default). For details, see documentation of the type-argument in <code>ggpredict()</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
-                   <span class="dt">pred.type =</span> <span class="st">&quot;re&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="effect-plots" class="section level3">
-<h3><span class="header-section-number">7.2.2</span> Effect Plots</h3>
-<p>Based on (i.e. is a wrapper for): <code>ggeffects::ggeffect()</code></p>
-<p>Similar to <code>type = &quot;pred&quot;</code>, however, discrete predictors are held constant at their proportions (not reference level). See the <code>ggeffect</code> package documentation for details.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;eff&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="interaction-plots" class="section level3">
-<h3><span class="header-section-number">7.2.3</span> Interaction Plots</h3>
-<p>A shortcut for marginal effects plots, where <em>interaction terms are automatically detected</em> and used as terms-argument.</p>
-<p>Furthermore, if the moderator variable (the second - and third - term in an interaction) is continuous, <code>type = &quot;int&quot;</code> automatically chooses useful values based on the mdrt.values-argument, which are passed to terms. Then, <code>ggpredict</code> is called.</p>
-<p><code>type = &quot;int&quot;</code> plots the interaction term that appears:</p>
-<ul>
-<li><strong>first</strong> in the formula along the x-axis, while the</li>
-<li><strong>second</strong> (and possibly third) variable in an interaction is used as grouping factor(s) (moderating variable).</li>
-</ul>
-<p>Use <code>type = &quot;pred&quot;</code> or <code>type = &quot;eff&quot;</code> and specify a certain order in the terms-argument to indicate which variable(s) should be used as moderator.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-2.png" width="576" style="display: block; margin: auto;" /></p>
-<p>The <code>mdrt.values =</code> option indicates which values of the <strong>moderator variable</strong> should be used when plotting interaction terms (i.e. <code>type = &quot;int&quot;</code>).</p>
-<ul>
-<li><p><code>minmax</code> (default) minimum and maximum values (lower and upper bounds) of the moderator are used to plot the interaction between independent variable and moderator(s).</p></li>
-<li><p><code>meansd</code> uses the mean value of the moderator as well as one standard deviation below and above mean value to plot the effect of the moderator on the independent variable (following the convention suggested by Cohen and Cohen and popularized by Aiken and West (1991), i.e. using the mean, the value one standard deviation above, and the value one standard deviation below the mean as values of the moderator, see Grace-Martin K: 3 Tips to Make Interpreting Moderation Effects Easier).</p></li>
-<li><p><code>zeromax</code> is similar to the <code>minmax</code> option, however, <span class="math inline">\(0\)</span> is always used as minimum value for the moderator. This may be useful for predictors that don’t have an empirical zero-value, but absence of moderation should be simulated by using <span class="math inline">\(0\)</span> as minimum.</p></li>
-<li><p><code>quart</code> calculates and uses the quartiles (lower, median and upper) of the moderator value.</p></li>
-<li><p><code>all</code> uses all values of the moderator variable.</p></li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>,
-                   <span class="dt">mdrt.values =</span> <span class="st">&quot;meansd&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-2.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-</div>
-<div id="model-diagnostics" class="section level2">
-<h2><span class="header-section-number">7.3</span> Model Diagnostics</h2>
-<p>Note: For mixed models, the diagnostic plots like linear relationship or check for Homoscedasticity, do not take the uncertainty of random effects into account, but is only based on the fixed effects part of the model.</p>
-<div id="slope-of-coefficentes" class="section level3">
-<h3><span class="header-section-number">7.3.1</span> Slope of Coefficentes</h3>
-<p>Slope of coefficients for each single predictor, against the response (linear relationship between each model term and response).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;slope&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="residuals" class="section level3">
-<h3><span class="header-section-number">7.3.2</span> Residuals</h3>
-<p>Slope of coefficients for each single predictor, against the residuals (linear relationship between each model term and residuals).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;resid&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-316-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="diagnostics" class="section level3">
-<h3><span class="header-section-number">7.3.3</span> Diagnostics</h3>
-<p>Check model assumptions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]
-[[2]]$school</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-2.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
+Linear mixed model
 
-[[3]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-3.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[4]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-4.png" width="576" style="display: block; margin: auto;" /></p>
+Family : gaussian (identity)
+Formula: pulse ~ 1 + (1 | id)
 
+  ICC (id): 0.6025</code></pre>
+</div>
+<div id="add-fixed-effects-level-specific" class="section level3">
+<h3><span class="header-section-number">11.3.3</span> Add fixed effects: level specific</h3>
+<div id="fit-nested-models-3" class="section level4">
+<h4><span class="header-section-number">11.3.3.1</span> Fit nested models</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Null Model (random intercept only)</span>
+fit_lmer_0ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                           <span class="dt">data =</span> data_long,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># Add quadratic time</span>
+fit_lmer_1ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>time_min <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                           <span class="dt">data =</span> data_long,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># Add main effects for 2 interventions (person-specific, i.e. level-2 factors)</span>
+fit_lmer_2ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet <span class="op">+</span><span class="st"> </span>exertype <span class="op">+</span><span class="st"> </span>time_min <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                           <span class="dt">data =</span> data_long,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># Add interaction between level-2 factors</span>
+fit_lmer_3ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype <span class="op">+</span><span class="st"> </span>time_min <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                           <span class="dt">data =</span> data_long,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># Add exercise interacting with [time &amp; time-squared]</span>
+fit_lmer_4ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype <span class="op">+</span><span class="st"> </span>exertype<span class="op">*</span>time_min <span class="op">+</span><span class="st"> </span>exertype<span class="op">*</span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                           <span class="dt">data =</span> data_long,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># Add diet interacting with [time &amp; time-squared]</span>
+fit_lmer_5ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype<span class="op">*</span>time_min <span class="op">+</span><span class="st"> </span>diet<span class="op">*</span>exertype<span class="op">*</span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                           <span class="dt">data =</span> data_long,
+                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_lmer_1ml, 
+                     fit_lmer_2ml, 
+                     fit_lmer_3ml, 
+                     fit_lmer_4ml, 
+                     fit_lmer_5ml))</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+Statistical models
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Model 1</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Model 2</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Model 3</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Model 4</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Model 5</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+94.05<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+79.30<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+82.15<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+89.89<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+89.81<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(2.71)
+</td>
+<td style="padding-right: 12px; border: none;">
+(2.46)
+</td>
+<td style="padding-right: 12px; border: none;">
+(2.64)
+</td>
+<td style="padding-right: 12px; border: none;">
+(2.69)
+</td>
+<td style="padding-right: 12px; border: none;">
+(2.78)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+time_min
+</td>
+<td style="padding-right: 12px; border: none;">
+3.57<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+3.58<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+3.44<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.24
+</td>
+<td style="padding-right: 12px; border: none;">
+0.37
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.65)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.64)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.64)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.62)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.87)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+I(time_min^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.21<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.21<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.20<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.01
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.03
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.06)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.06)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.06)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.05)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.09)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+dietnon-fat
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+8.36<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+2.89
+</td>
+<td style="padding-right: 12px; border: none;">
+1.99
+</td>
+<td style="padding-right: 12px; border: none;">
+2.11
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(2.21)
+</td>
+<td style="padding-right: 12px; border: none;">
+(3.36)
+</td>
+<td style="padding-right: 12px; border: none;">
+(3.45)
+</td>
+<td style="padding-right: 12px; border: none;">
+(3.89)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+exertypeLeisurely Walking
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+5.20
+</td>
+<td style="padding-right: 12px; border: none;">
+3.81
+</td>
+<td style="padding-right: 12px; border: none;">
+0.84
+</td>
+<td style="padding-right: 12px; border: none;">
+1.40
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(2.70)
+</td>
+<td style="padding-right: 12px; border: none;">
+(3.34)
+</td>
+<td style="padding-right: 12px; border: none;">
+(3.78)
+</td>
+<td style="padding-right: 12px; border: none;">
+(3.92)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+exertypeModerate Running
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+26.43<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+19.71<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.53
+</td>
+<td style="padding-right: 12px; border: none;">
+5.71
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(2.70)
+</td>
+<td style="padding-right: 12px; border: none;">
+(3.34)
+</td>
+<td style="padding-right: 12px; border: none;">
+(3.77)
+</td>
+<td style="padding-right: 12px; border: none;">
+(3.92)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+dietnon-fat:exertypeLeisurely Walking
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+2.83
+</td>
+<td style="padding-right: 12px; border: none;">
+3.70
+</td>
+<td style="padding-right: 12px; border: none;">
+2.53
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(4.73)
+</td>
+<td style="padding-right: 12px; border: none;">
+(4.86)
+</td>
+<td style="padding-right: 12px; border: none;">
+(5.50)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+dietnon-fat:exertypeModerate Running
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+13.47<sup style="vertical-align: 0px;">**</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+14.02<sup style="vertical-align: 0px;">**</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+3.99
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(4.74)
+</td>
+<td style="padding-right: 12px; border: none;">
+(4.86)
+</td>
+<td style="padding-right: 12px; border: none;">
+(5.50)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+exertypeLeisurely Walking:time_min
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+1.17
+</td>
+<td style="padding-right: 12px; border: none;">
+1.09
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.87)
+</td>
+<td style="padding-right: 12px; border: none;">
+(1.17)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+exertypeModerate Running:time_min
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+8.19<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+5.77<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.90)
+</td>
+<td style="padding-right: 12px; border: none;">
+(1.20)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+exertypeLeisurely Walking:I(time_min^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.07
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.08
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.08)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.11)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+exertypeModerate Running:I(time_min^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.48<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.33<sup style="vertical-align: 0px;">**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.08)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.11)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+dietnon-fat:time_min
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.17
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(1.14)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+dietnon-fat:I(time_min^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.10)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+dietnon-fat:exertypeLeisurely Walking:time_min
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.21
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(1.56)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+dietnon-fat:exertypeModerate Running:time_min
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+4.42<sup style="vertical-align: 0px;">**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(1.61)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+dietnon-fat:exertypeLeisurely Walking:I(time_min^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.14)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+dietnon-fat:exertypeModerate Running:I(time_min^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.27
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.15)
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+927.70
+</td>
+<td style="border-top: 1px solid black;">
+884.96
+</td>
+<td style="border-top: 1px solid black;">
+881.11
+</td>
+<td style="border-top: 1px solid black;">
+785.34
+</td>
+<td style="border-top: 1px solid black;">
+769.23
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+941.64
+</td>
+<td style="padding-right: 12px; border: none;">
+907.26
+</td>
+<td style="padding-right: 12px; border: none;">
+908.99
+</td>
+<td style="padding-right: 12px; border: none;">
+824.36
+</td>
+<td style="padding-right: 12px; border: none;">
+824.98
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-458.85
+</td>
+<td style="padding-right: 12px; border: none;">
+-434.48
+</td>
+<td style="padding-right: 12px; border: none;">
+-430.56
+</td>
+<td style="padding-right: 12px; border: none;">
+-378.67
+</td>
+<td style="padding-right: 12px; border: none;">
+-364.62
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+120
+</td>
+<td style="padding-right: 12px; border: none;">
+120
+</td>
+<td style="padding-right: 12px; border: none;">
+120
+</td>
+<td style="padding-right: 12px; border: none;">
+120
+</td>
+<td style="padding-right: 12px; border: none;">
+120
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: id
+</td>
+<td style="padding-right: 12px; border: none;">
+30
+</td>
+<td style="padding-right: 12px; border: none;">
+30
+</td>
+<td style="padding-right: 12px; border: none;">
+30
+</td>
+<td style="padding-right: 12px; border: none;">
+30
+</td>
+<td style="padding-right: 12px; border: none;">
+30
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: id (Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+167.58
+</td>
+<td style="padding-right: 12px; border: none;">
+19.46
+</td>
+<td style="padding-right: 12px; border: none;">
+11.03
+</td>
+<td style="padding-right: 12px; border: none;">
+24.13
+</td>
+<td style="padding-right: 12px; border: none;">
+25.64
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: Residual
+</td>
+<td style="border-bottom: 2px solid black;">
+67.47
+</td>
+<td style="border-bottom: 2px solid black;">
+67.47
+</td>
+<td style="border-bottom: 2px solid black;">
+67.52
+</td>
+<td style="border-bottom: 2px solid black;">
+20.95
+</td>
+<td style="border-bottom: 2px solid black;">
+15.32
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="7">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+</div>
+<div id="evaluate-model-fit-i.e.variable-significance" class="section level4">
+<h4><span class="header-section-number">11.3.3.2</span> Evaluate Model Fit, i.e. variable significance</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_1ml, 
+      fit_lmer_2ml, 
+      fit_lmer_3ml, 
+      fit_lmer_4ml, 
+      fit_lmer_5ml)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_1ml: pulse ~ time_min + I(time_min^2) + (1 | id)
+fit_lmer_2ml: pulse ~ diet + exertype + time_min + I(time_min^2) + (1 | id)
+fit_lmer_3ml: pulse ~ diet * exertype + time_min + I(time_min^2) + (1 | id)
+fit_lmer_4ml: pulse ~ diet * exertype + exertype * time_min + exertype * I(time_min^2) + 
+fit_lmer_4ml:     (1 | id)
+fit_lmer_5ml: pulse ~ diet * exertype * time_min + diet * exertype * I(time_min^2) + 
+fit_lmer_5ml:     (1 | id)
+             Df    AIC    BIC  logLik deviance   Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_1ml  5 927.70 941.64 -458.85   917.70                          
+fit_lmer_2ml  8 884.96 907.26 -434.48   868.96  48.742      3  1.480e-10
+fit_lmer_3ml 10 881.11 908.99 -430.56   861.11   7.847      2    0.01977
+fit_lmer_4ml 14 785.34 824.36 -378.67   757.34 103.776      4  &lt; 2.2e-16
+fit_lmer_5ml 20 769.23 824.98 -364.62   729.23  28.108      6  8.968e-05
+                
+fit_lmer_1ml    
+fit_lmer_2ml ***
+fit_lmer_3ml *  
+fit_lmer_4ml ***
+fit_lmer_5ml ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+</div>
+<div id="final-model-4" class="section level3">
+<h3><span class="header-section-number">11.3.4</span> Final Model</h3>
+<p>Refit via REML</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_5re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype<span class="op">*</span>time_min <span class="op">+</span><span class="st"> </span>
+<span class="st">                                   </span>diet<span class="op">*</span>exertype<span class="op">*</span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                           <span class="dt">data =</span> data_long,
+                           <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div id="visualize" class="section level4">
+<h4><span class="header-section-number">11.3.4.1</span> Visualize</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_5re,
+                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;time_min&quot;</span>, <span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-481-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),
+                <span class="dt">mod =</span> fit_lmer_5re) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,
+             <span class="dt">y =</span> fit,
+             <span class="dt">fill =</span> diet,
+             <span class="dt">color =</span> diet)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.08</span>, <span class="fl">0.85</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,
+       <span class="dt">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,
+       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-482-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),
+                <span class="dt">mod =</span> fit_lmer_5re,
+                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="st">&quot;time_min&quot;</span> =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, 
+                                                <span class="dt">to   =</span> <span class="dv">12</span>, 
+                                                <span class="dt">by   =</span> <span class="fl">0.5</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">diet =</span> <span class="kw">fct_rev</span>(diet)) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># reverse the order of the levels</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,
+             <span class="dt">y =</span> fit)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> fit <span class="op">-</span><span class="st"> </span>se,
+                  <span class="dt">ymax =</span> fit <span class="op">+</span><span class="st"> </span>se,
+                  <span class="dt">fill =</span> diet),
+              <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> diet,
+                <span class="dt">linetype =</span> diet),
+                <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.85</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
+        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,
+       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,
+       <span class="dt">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,
+       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>,
+       <span class="dt">linetype =</span> <span class="st">&quot;Diet Plan&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">14</span>, <span class="dt">by =</span> <span class="dv">5</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-483-1.png" width="576" style="display: block; margin: auto;" /></p>
+
+</div>
 </div>
 </div>
 </div>
@@ -789,8 +1933,8 @@ Var: Residual
           </div>
         </div>
       </div>
-<a href="variance-explained.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="longitudinal-intro-example-autism.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="longitudinal-mlm-hox-ch-5-student-gpa.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="gee-continuous-outcome-beat-the-blues.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

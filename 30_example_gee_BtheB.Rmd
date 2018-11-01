@@ -1,0 +1,501 @@
+# GEE, Continuous Outcome: Beat the Blues
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)    # all things tidy
+library(pander)       # nice looking genderal tabulations
+library(furniture)    # nice table1() descriptives
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(psych)        # contains some useful functions, like headTail
+
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+
+library(corrplot)     # Vizualize correlation matrix
+library(gee)          # Genderalized Estimation Equation Solver
+library(geepack)      # Genderalized Estimation Equation Package 
+library(MuMIn)        # Multi-Model Inference (caluclate QIC)
+
+library(HSAUR)        # package with the dataset
+```
+
+## Prepare and get to know the dataset
+
+### Read in the data
+
+This data set is in the **HSAUR** package.  It is from a clinical trial of an interactive multimedia program called 'Beat the Blues'. The variables are as follows:   
+
+  * `drug` did the patient take anti-depressant drugs (No or Yes)    
+  * `length`  the length of the current episode of depression, a factor with levels:    
+    + "<6m" *less than six months*     
+    + ">6m" *more than six months*   
+  * `treatment` treatment group, a factor with levels:   
+    + "TAU" *treatment as usual*     
+    + "BtheB" *Beat the Blues*    
+  * `bdi.pre` Beck Depression Inventory II, before treatment    
+  * `bdi.2m` Beck Depression Inventory II, after 2 months    
+  * `bdi.4m` Beck Depression Inventory II, after 4 months    
+  * `bdi.6m` Beck Depression Inventory II, after 6 months    
+  * `bdi.8m` Beck Depression Inventory II, after 8 months    
+
+
+```{r}
+data(BtheB, package = "HSAUR")
+
+BtheB %>% 
+  psych::headTail()
+```
+
+
+### Tidy up the dataset
+
+```{r}
+btb_wide <- BtheB %>% 
+  dplyr::mutate(id = row_number()) %>%           # create a new variable to ID participants
+  dplyr::select(id, treatment,                   # specify that ID variable is first
+                bdi.pre, bdi.2m, bdi.4m, bdi.6m, bdi.8m)
+```
+
+
+```{r, results='asis'}
+btb_wide %>% 
+  furniture::table1(bdi.pre, bdi.2m, bdi.4m, bdi.6m, bdi.8m,
+                    splitby = ~ treatment,
+                    test = TRUE,
+                    output = "html")
+```
+
+### Restructure to long format
+
+```{r}
+btb_long <- btb_wide %>% 
+  tidyr::gather(key   = month,
+                value = bdi,
+                starts_with("bdi")) %>% 
+  dplyr::mutate(month = case_when(month == "bdi.pre" ~ 0,
+                                  month == "bdi.2m"  ~ 2,
+                                  month == "bdi.4m"  ~ 4,
+                                  month == "bdi.6m"  ~ 6,
+                                  month == "bdi.8m"  ~ 8)) %>% 
+  dplyr::filter(complete.cases(id, bdi, treatment, month)) %>% 
+  dplyr::arrange(id, month) %>% 
+  dplyr::select(id, treatment, month, bdi)
+```
+
+
+```{r}
+btb_long %>% 
+  psych::headTail(top = 10, bottom = 10) 
+```
+
+
+### Visualize: Person-profile Plots
+
+Create spaghetti plots of the raw, observed data
+
+```{r}
+btb_long %>% 
+  ggplot(aes(x = month,
+             y = bdi)) +
+  geom_point() +
+  geom_line(aes(group = id), 
+            size = 1, 
+            alpha = 0.3) +
+  geom_smooth(method = "lm") +
+  facet_grid(.~ treatment) +
+  theme_bw() +
+  labs(title = "BtheB - Observed Data Across Time with LM Smoother")
+```
+
+
+
+```{r}
+btb_long %>% 
+  ggplot(aes(x = month,
+             y = bdi,
+             color = treatment,
+             fill = treatment)) +
+  geom_smooth(method = "lm") +
+  theme_bw() +
+  labs(title = "BtheB - Observed Data: Linear Smoothers Across Time")
+```
+
+### Calculate the Observed Correlation Structure
+
+
+```{r}
+bdi_corr <- btb_wide %>% 
+  dplyr::select(starts_with("bdi")) %>% 
+  stats::cor(use="pairwise.complete.obs")
+
+bdi_corr
+```
+
+
+### Plot the correlation matrix to get a better feel for the pattern
+
+```{r}
+corrplot::corrplot.mixed(bdi_corr)
+```
+
+
+
+
+## Multiple Regression (OLS)
+
+This ignores any correlation between repeated measures on the same individual and treats all observations as independent.
+
+### Fit the model and view the output in a table
+
+```{r}
+btb_lm <- stats::lm(bdi ~ treatment + month,
+                    data = btb_long)
+```
+
+
+```{r, include=FALSE}
+texreg::screenreg(btb_lm)
+```
+
+### Parameter Estimates
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(btb_lm,
+                custom.model.names = "OLS")
+```
+
+### Plot the model predictions
+
+```{r}
+effects::Effect(focal.predictors = c("treatment", "month"), 
+                mod = btb_lm) %>% 
+  data.frame %>% 
+  dplyr::mutate(treatment = fct_reorder2(treatment, month, fit)) %>%  
+  ggplot(aes(x = month,
+             y = fit,
+             color = treatment,
+             fill = treatment)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower,
+                  ymax = upper), alpha = 0.3) +
+  theme_bw() +
+  labs(title = "BtheB - Predictions from a Linear Model (lm)") +
+  theme(legend.position = c(1, 1),
+        legend.justification = c(1.1, 1.1),
+        legend.background = element_rect(color = "black"))
+```
+
+
+## Multilevel Models (MLM)
+
+### Fit the model and compare to the prior model
+
+
+```{r}
+btb_lmer_RI   <- lme4::lmer(bdi ~ treatment + month + (1 | id), 
+                            data = btb_long, 
+                            REML = TRUE)
+
+btb_lmer_RIAS <- lme4::lmer(bdi ~ treatment + month + (month | id), 
+                            data = btb_long, 
+                            REML = TRUE)
+```
+
+```{r, include=FALSE}
+texreg::screenreg(list(btb_lm, btb_lmer_RI, btb_lmer_RIAS), 
+          custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"))
+```
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(btb_lm, btb_lmer_RI, btb_lmer_RIAS), 
+                custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"))
+```
+
+### Likelihood Ratio Test
+
+
+```{r}
+anova(btb_lmer_RI, 
+      btb_lmer_RIAS, 
+      refit = FALSE)
+```
+
+
+### Plot the model predictions
+
+```{r}
+effects::Effect(c("treatment", "month"), mod = btb_lmer_RI) %>% 
+  data.frame %>%   
+  dplyr::mutate(treatment = fct_reorder2(treatment, month, fit)) %>%
+  ggplot(aes(x = month,
+             y = fit,
+             color = treatment,
+             fill = treatment)) +
+  geom_line() +
+  geom_ribbon(aes(ymin = lower,
+                  ymax = upper), alpha = 0.3) +
+  theme_bw() +
+  labs(title = "BtheB - Predictions from a Multilevel Model (lmer)") +
+  theme(legend.justification = c(0, 0),
+        legend.position = c(0, 0),
+        legend.background = element_rect(color = "black"))
+```
+
+
+
+
+## General Estimating Equations, GEE
+
+
+### Fit the models and compare to the prior model
+
+Use the `gee()` function from the **gee** package for the results to be used in a `texreg()` table.
+
+```{r}
+btb_gee_in <- gee::gee(bdi ~ treatment + month, 
+                       data = btb_long, 
+                       id = id, 
+                       family = gaussian, 
+                       corstr = 'independence')
+
+btb_gee_ex <- gee::gee(bdi ~ treatment + month, 
+                       data = btb_long, 
+                       id = id, 
+                       family = gaussian, 
+                       corstr = 'exchangeable')
+
+# The AR-1 fails if any subjects have only 1 observation
+# to use this one, we would need to remove participants with only 1 BDI
+# btb_gee_ar <- gee(bdi ~ treatment + month, 
+#                  data = btb_long, 
+#                  id = id, 
+#                  family = gaussian, 
+#                  corstr = 'AR-M',
+#                  Mv = 1)
+
+btb_gee_un <- gee::gee(bdi ~ treatment + month, 
+                       data = btb_long, 
+                       id = id, 
+                       family = gaussian, 
+                       corstr = 'unstructured')
+```
+
+
+
+
+
+### Parameter Estimates
+
+```{r, include=FALSE}
+texreg::screenreg(list(btb_lm, 
+                      btb_lmer_RI, 
+                      btb_gee_in, 
+                      btb_gee_ex, 
+                      btb_gee_un))
+```
+
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(btb_lm, 
+                      btb_lmer_RI, 
+                      btb_gee_in, 
+                      btb_gee_ex, 
+                      btb_gee_un),
+                  custom.model.names = c("OLS", 
+                                        "MLM-RI", 
+                                        "GEE-in", 
+                                        "GEE-ex", 
+                                        "GEE-un"))
+```
+
+
+
+
+
+#### Re-Fit Models
+
+Use the `geeglm()` function from the **geepack** package for the results to be used in a `anova()` table.
+
+
+```{r}
+btb_geeglm_in <- geeglm(bdi ~ treatment + month, 
+                        data = btb_long, 
+                        id = id,
+                        wave = month,
+                        family = gaussian, 
+                        corstr = 'independence')
+
+btb_geeglm_ex <- geeglm(bdi ~ treatment + month, 
+                        data = btb_long, 
+                        id = id, 
+                        wave = month,
+                        family = gaussian, 
+                        corstr = 'exchangeable')
+
+
+btb_geeglm_ar <- geeglm(bdi ~ treatment + month, 
+                        data = btb_long, 
+                        id = id, 
+                        wave = month,
+                        family = gaussian, 
+                        corstr = 'ar1')
+
+btb_geeglm_un <- geeglm(bdi ~ treatment + month, 
+                        data = btb_long, 
+                        id = id,
+                        wave = month,
+                        family = gaussian, 
+                        corstr = 'unstructured')
+```
+
+
+### Can't Use the Likelihood Ratio Test
+
+The `anova()` function is used to compare nested models for parameters (fixed effects), not correlation structures.
+
+```{r}
+anova(btb_geeglm_in, btb_geeglm_ex)
+anova(btb_geeglm_in, btb_geeglm_ar)
+anova(btb_geeglm_in, btb_geeglm_un)
+```
+
+
+
+### Variaous QIC Measures of Fit
+
+References:
+
+* Pan, W. 2001. Akaike's information criterion in generalized estimating equations. Biometrics 57:120-125. https://onlinelibrary.wiley.com/doi/abs/10.1111/j.0006-341X.2001.00120.x 
+
+* Burnham, K. P. and D. R. Anderson. 2002. Model selection and multimodel inference: a practical information-theoretic approach. Second edition. Springer Science and Business Media, Inc., New York.
+https://cds.cern.ch/record/1608735/files/9780387953649_TOC.pdf 
+
+
+
+The `QIC()` is one way to **try** to measure model fit.  You can enter more than one model into a single function call.
+
+QIC(I) based on independence model  <-- suggested by Pan (Biometric, March 2001), asymptotically unbiased estimator (choose the correlation stucture that produces the smallest QIC(I), p122)
+
+```{r}
+MuMIn::QIC(btb_geeglm_in, 
+           btb_geeglm_ex, 
+           btb_geeglm_ar, 
+           btb_geeglm_un, 
+           typeR = FALSE) # default
+```
+
+
+QIC(R) is based on quasi-likelihood of a working correlation R model, can **NOT** be used to select the working correlation matrix.
+
+```{r}
+MuMIn::QIC(btb_geeglm_in, 
+           btb_geeglm_ex, 
+           btb_geeglm_ar, 
+           btb_geeglm_un, 
+           typeR = TRUE)    # NOT the default
+```
+
+
+QIC_U(R) approximates QIC(R), and while both are useful for variable selection, they can NOT be applied to select the working correlation matrix.
+
+```{r}
+MuMIn::QICu(btb_geeglm_in, 
+            btb_geeglm_ex, 
+            btb_geeglm_ar, 
+            btb_geeglm_un) 
+```
+
+
+
+
+
+```{r}
+MuMIn::model.sel(btb_geeglm_in, 
+                 btb_geeglm_ex, 
+                 btb_geeglm_ar, 
+                 btb_geeglm_un, 
+                 rank = "QIC")    #sorts the best to the TOP, uses QIC(I)
+```
+
+
+
+
+
+
+### Plot the model predictions
+
+Do not worry about confidence intervals.
+
+```{r}
+expand.grid(treatment = levels(btb_long$treatment),
+            month = seq(from = 0, to = 8, by = 2)) %>%  
+  mutate(fit_in = predict(btb_geeglm_in,
+                       newdata = .,
+                       type = "response")) %>% 
+  mutate(fit_ex = predict(btb_geeglm_ex,
+                       newdata = .,
+                       type = "response")) %>% 
+  mutate(fit_ar = predict(btb_geeglm_ar,
+                       newdata = .,
+                       type = "response")) %>% 
+  mutate(fit_un = predict(btb_geeglm_un,
+                       newdata = .,
+                       type = "response")) %>% 
+  gather(key = variable,
+         value = fit,
+         starts_with("fit")) %>% 
+  separate(col = variable,
+           into = c("junk", "covR")) %>% 
+  select(-junk) %>% 
+  mutate(covR = factor(covR, 
+                       levels = c("un", "ar", "ex", "in"),
+                       labels = c("Unstructured",
+                                  "Auto-Regressive",
+                                  "Compound Symetry",
+                                  "Independence"))) %>% 
+  ggplot(aes(x = month,
+             y = fit,
+             linetype = treatment)) +
+  geom_line(alpha = 0.6) +
+  theme_bw() +
+  labs(title    = "BtheB - Predictions from four GEE models (geeglm)",
+       linetype = "Treatment",
+       color    = "Corelation\nStructure",
+       size     = "Corelation\nStructure") +
+  scale_linetype_manual(values = c("solid", "longdash")) +
+  scale_size_manual(values     = c(2, 1, 1, 1)) +
+  scale_color_manual(values    = c("red", 
+                                   "dodgerblue",
+                                   "blue",
+                                   "darkgreen")) +
+  theme(legend.key.width = unit(1, "cm")) +
+  facet_wrap(~ covR)
+```
+
+
+
+
+
+
+
+

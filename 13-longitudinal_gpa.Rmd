@@ -1,4 +1,4 @@
-# Hox ch 5: Longitudinal Example - student GPA
+# Longitudinal MLM: Hox ch 5 - student GPA
 
 
 ```{r, echo=FALSE}
@@ -12,21 +12,18 @@ panderOptions('keep.line.breaks', TRUE)
 
 
 ```{r}
-library(tidyverse)    # dplyr, tidyr, ggplot, the pipe, ect.
-library(haven)        # read in SPSS dataset
+library(tidyverse)    # all things tidy
+library(pander)       # nice looking genderal tabulations
 library(furniture)    # nice table1() descriptives
-library(stargazer)    # display nice tables: summary & regression
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 library(psych)        # contains some useful functions, like headTail
-library(car)          # Companion to Applied Regression
-library(lme4)         # Linear, generalized linear, & nonlinear mixed models
-library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
 library(sjstats)      # ICC calculations
-library(sjPlot)       # Quick predicitive and diagnostic plots 
-library(optimx)       # Different optimizers to solve mlm's
-library(VIM)          # Visualization and Imputation of Missing Values 
-library(effects)      # Estimated Marginal Means
-library(naniar)       # Summaries and Visualisations for Missing Data
+library(sjPlot)       # Visualization for Models
+library(effects)      # Effec displays for Models
+
+library(lme4)         # non-linear mixed-effects models
+
+library(haven)        # read in SPSS dataset
 ```
 
 

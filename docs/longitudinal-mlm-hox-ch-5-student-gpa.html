@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="variance-explained.html">
-<link rel="next" href="longitudinal-intro-example-autism.html">
+<link rel="prev" href="longitudinal-mlm-hedeker-gibbons-depression.html">
+<link rel="next" href="longitudinal-mlm-rct-exercise-and-diet.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -430,356 +430,691 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sjplot-package" class="section level1">
-<h1><span class="header-section-number">7</span> sjPlot Package</h1>
-<div class="figure">
-<img src="images/header_sjPlot.png" />
+<div id="longitudinal-mlm-hox-ch-5---student-gpa" class="section level1">
+<h1><span class="header-section-number">10</span> Longitudinal MLM: Hox ch 5 - student GPA</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
+<span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
+<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(sjPlot)       <span class="co"># Visualization for Models</span>
+<span class="kw">library</span>(effects)      <span class="co"># Effec displays for Models</span>
 
-</div>
+<span class="kw">library</span>(lme4)         <span class="co"># non-linear mixed-effects models</span>
+
+<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span></code></pre></div>
+<div id="background-6" class="section level2">
+<h2><span class="header-section-number">10.1</span> Background</h2>
 <div class="rmdlink">
 <p>
-<a href="http://www.danielluedecke.de/">Daniel Lüdecke</a> is German researcher that has put together several GREAT packages, including <code>sjPlot</code> which we will detail here. Documentation can be found at: <a href="http://www.strengejacke.de/sjPlot/index.html" class="uri">http://www.strengejacke.de/sjPlot/index.html</a>
+The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edition”</strong> <span class="citation"><span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></span> has a companion <a href="https://multilevel-analysis.sites.uu.nl/">website</a> which includes links to all the data files used throughout the book (housed on the <a href="https://github.com/MultiLevelAnalysis">book’s GitHub repository</a>).
 </p>
 </div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
-<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<p>The following example is used through out <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>’s chapater 5.</p>
+<p>The GPA for 200 college students were followed for 6 consecutive semesters (simulated). Job status was also measured as number of hours worked for the same size occations. Time-invariant covariates are the student’s gender and high school GPA. The variable <code>admitted</code> will not be used.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%205/GPA2/gpa2long.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span>
 
-<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed modelsts models</span>
+tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw) </code></pre></div>
+<pre><code>Observations: 1,200
+Variables: 7
+$ student  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3,...
+$ occas    &lt;fct&gt; year 1 semester 1, year 1 semester 2, year 2 semester...
+$ gpa      &lt;dbl&gt; 2.3, 2.1, 3.0, 3.0, 3.0, 3.3, 2.2, 2.5, 2.6, 2.6, 3.0...
+$ job      &lt;fct&gt; 2 hours, 2 hours, 2 hours, 2 hours, 2 hours, 2 hours,...
+$ sex      &lt;fct&gt; female, female, female, female, female, female, male,...
+$ highgpa  &lt;dbl&gt; 2.8, 2.8, 2.8, 2.8, 2.8, 2.8, 2.5, 2.5, 2.5, 2.5, 2.5...
+$ admitted &lt;fct&gt; yes, yes, yes, yes, yes, yes, no, no, no, no, no, no,...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(occas, job) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">table</span>(<span class="dt">useNA =</span> <span class="st">&quot;always&quot;</span>)</code></pre></div>
+<pre><code>                   job
+occas               no job 1 hour 2 hours 3 hours 4 or more hours &lt;NA&gt;
+  year 1 semester 1      0      0     172      28               0    0
+  year 1 semester 2      0      0     169      31               0    0
+  year 2 semester 1      0      7     159      34               0    0
+  year 2 semester 2      0      5     169      26               0    0
+  year 3 semester 1      0     18     150      32               0    0
+  year 3 semester 2      0     22     148      30               0    0
+  &lt;NA&gt;                   0      0       0       0               0    0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">student =</span> <span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sem =</span> <span class="kw">case_when</span>(occas <span class="op">==</span><span class="st"> &quot;year 1 semester 1&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 1 semester 2&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 2 semester 1&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">3</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 2 semester 2&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">4</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 3 semester 1&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">5</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 3 semester 2&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">6</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">semc =</span> sem <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">job =</span> <span class="kw">fct_drop</span>(job)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">hrs =</span> <span class="kw">case_when</span>(job <span class="op">==</span><span class="st"> &quot;no job&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,
+                                job <span class="op">==</span><span class="st"> &quot;1 hour&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+                                job <span class="op">==</span><span class="st"> &quot;2 hours&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,
+                                job <span class="op">==</span><span class="st"> &quot;3 hours&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">3</span>,
+                                job <span class="op">==</span><span class="st"> &quot;4 or more hours&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">4</span>)) <span class="op">%&gt;%</span><span class="st">  </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(student, sex, highgpa, sem, semc, job, hrs, gpa) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(student, sem)
 
-<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
+psych<span class="op">::</span><span class="kw">headTail</span>(data_long, <span class="dt">top =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>   student    sex highgpa sem semc     job hrs gpa
+1        1 female     2.8   1    0 2 hours   2 2.3
+2        1 female     2.8   2    1 2 hours   2 2.1
+3        1 female     2.8   3    2 2 hours   2   3
+4        1 female     2.8   4    3 2 hours   2   3
+5        1 female     2.8   5    4 2 hours   2   3
+6        1 female     2.8   6    5 2 hours   2 3.3
+7        2   male     2.5   1    0 2 hours   2 2.2
+8        2   male     2.5   2    1 3 hours   3 2.5
+9        2   male     2.5   3    2 2 hours   2 2.6
+10       2   male     2.5   4    3 2 hours   2 2.6
+11    &lt;NA&gt;   &lt;NA&gt;     ... ...  ...    &lt;NA&gt; ... ...
+12     200   male     3.4   3    2 2 hours   2 3.4
+13     200   male     3.4   4    3 2 hours   2 3.5
+14     200   male     3.4   5    4  1 hour   1 3.3
+15     200   male     3.4   6    5  1 hour   1 3.4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">wide</span>(<span class="dt">v.names =</span> <span class="kw">c</span>(<span class="st">&quot;job&quot;</span>, <span class="st">&quot;hrs&quot;</span>, <span class="st">&quot;gpa&quot;</span>),
+                  <span class="dt">timevar =</span> <span class="st">&quot;sem&quot;</span>,
+                  <span class="dt">id =</span> <span class="st">&quot;student&quot;</span>)
 
-<span class="kw">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span></code></pre></div>
-<p>Read the SPSS data in with the <code>haven</code> package and prepare it (see previous chapter).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0&quot;</span>)
 
-data_achieve_center_scale &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(id, region, corp, school, class), factor) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gender =</span> gender <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">classize =</span> classize <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;12-17&quot;</span>, <span class="st">&quot;18-21&quot;</span>, 
-                                    <span class="st">&quot;22-26&quot;</span>, <span class="st">&quot;&gt;26&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, region, corp, school, class,           <span class="co"># Identifiers</span>
-                gender, age, geread, gevocab,              <span class="co"># Pupil-level vars</span>
-                classize,                                  <span class="co"># Class-Level vars</span>
-                senroll, ses) <span class="op">%&gt;%</span><span class="st">                          </span><span class="co"># School-level vars</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gevocab_c =</span> gevocab <span class="op">-</span><span class="st"> </span><span class="fl">4.4938</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age_c     =</span> age     <span class="op">-</span><span class="st"> </span><span class="fl">107.5290</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_c =</span> senroll <span class="op">-</span><span class="st"> </span><span class="fl">533.4148</span>) <span class="op">%&gt;%</span><span class="st">  </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_ch =</span> senroll_c <span class="op">/</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st">        </span><span class="co"># centered AND divided by one hundred</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">ses_t      =</span> ses <span class="op">/</span><span class="st"> </span><span class="dv">10</span>)                   <span class="co"># JUST divide by ten</span></code></pre></div>
-<p>Fit the final model (see previous chapter)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_read_11re_s &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab_c<span class="op">*</span>age_c <span class="op">+</span><span class="st"> </span>gevocab_c<span class="op">*</span>ses_t <span class="op">+</span><span class="st">   </span><span class="co"># 2 2-way interactions</span>
-<span class="st">                                      </span>(gevocab_c <span class="op">|</span><span class="st"> </span>school),  
-                             <span class="dt">data   =</span> data_achieve_center_scale,
-                             <span class="dt">REML   =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
-<span class="co"># Knit to PDF:     texreg::texreg()</span>
-<span class="co"># View on Screen:  texreg::screenreg()</span>
-
-texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_11re_s),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Final&quot;</span>), 
-                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,
-                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<table cellspacing="0" align="center" style="border: none;">
-<caption align="top" style="margin-bottom:0.3em;">
-MLM: Final Model
-</caption>
+psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</code></pre></div>
+<pre><code>     student    sex highgpa semc   job.1 hrs.1 gpa.1   job.2 hrs.2 gpa.2
+1          1 female     2.8    0 2 hours     2   2.3 2 hours     2   2.1
+7          2   male     2.5    0 2 hours     2   2.2 3 hours     3   2.5
+13         3 female     2.5    0 2 hours     2   2.4 2 hours     2   2.9
+19         4   male     3.8    0 3 hours     3   2.5 2 hours     2   2.7
+...     &lt;NA&gt;   &lt;NA&gt;     ...  ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...
+1177     197 female     2.1    0 2 hours     2   2.9 2 hours     2   2.5
+1183     198   male       4    0 2 hours     2   2.5 2 hours     2   2.9
+1189     199 female     2.3    0 2 hours     2   2.6 2 hours     2   2.3
+1195     200   male     3.4    0 2 hours     2   2.8 2 hours     2   3.2
+       job.3 hrs.3 gpa.3   job.4 hrs.4 gpa.4   job.5 hrs.5 gpa.5   job.6
+1    2 hours     2     3 2 hours     2     3 2 hours     2     3 2 hours
+7    2 hours     2   2.6 2 hours     2   2.6 2 hours     2     3 2 hours
+13   2 hours     2     3 3 hours     3   2.8 2 hours     2   3.3 2 hours
+19   2 hours     2   2.4 2 hours     2   2.7 2 hours     2   2.9 2 hours
+...     &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;
+1177 3 hours     3   2.8 2 hours     2   3.2 2 hours     2   3.3 2 hours
+1183 2 hours     2     3 2 hours     2   3.2  1 hour     1   3.3 2 hours
+1189 3 hours     3   2.7 2 hours     2   2.7 2 hours     2   2.8 3 hours
+1195 2 hours     2   3.4 2 hours     2   3.5  1 hour     1   3.3  1 hour
+     hrs.6 gpa.6
+1        2   3.3
+7        2   2.8
+13       2   3.4
+19       2   2.7
+...    ...   ...
+1177     2   3.8
+1183     2   3.4
+1189     3   2.8
+1195     1   3.4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(highgpa, gpa.<span class="dv">1</span>, job.<span class="dv">1</span>, hrs.<span class="dv">1</span>,
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sex,
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>,
+                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<table>
+<thead>
 <tr>
-<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b></b>
+<th>
 </th>
-<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>Final</b>
+<th>
+male
+</th>
+<th>
+female
+</th>
+<th>
+P-Value
 </th>
 </tr>
+</thead>
+<tbody>
 <tr>
-<td style="padding-right: 12px; border: none;">
-(Intercept)
+<td>
 </td>
-<td style="padding-right: 12px; border: none;">
-3.94 (0.11)<sup style="vertical-align: 0px;">***</sup>
+<td>
+n = 95
+</td>
+<td>
+n = 105
+</td>
+<td>
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;">
-gevocab_c
+<td>
+highgpa
 </td>
-<td style="padding-right: 12px; border: none;">
-0.67 (0.05)<sup style="vertical-align: 0px;">***</sup>
+<td>
 </td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-age_c
+<td>
 </td>
-<td style="padding-right: 12px; border: none;">
--0.00 (0.00)
+<td>
+0.309
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;">
-ses_t
+<td>
 </td>
-<td style="padding-right: 12px; border: none;">
-0.06 (0.01)<sup style="vertical-align: 0px;">***</sup>
+<td>
+3.0 (0.6)
 </td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-gevocab_c:age_c
+<td>
+2.9 (0.6)
 </td>
-<td style="padding-right: 12px; border: none;">
-0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
+<td>
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;">
-gevocab_c:ses_t
+<td>
+gpa 1
 </td>
-<td style="padding-right: 12px; border: none;">
--0.02 (0.01)<sup style="vertical-align: 0px;">**</sup>
+<td>
 </td>
-</tr>
-<tr>
-<td style="border-top: 1px solid black;">
-AIC
+<td>
 </td>
-<td style="border-top: 1px solid black;">
-42976.51
+<td>
+0.095
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;">
-BIC
+<td>
 </td>
-<td style="padding-right: 12px; border: none;">
-43048.93
+<td>
+2.6 (0.3)
 </td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Log Likelihood
+<td>
+2.6 (0.3)
 </td>
-<td style="padding-right: 12px; border: none;">
--21478.26
+<td>
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;">
-Num. obs.
+<td>
+job 1
 </td>
-<td style="padding-right: 12px; border: none;">
-10320
+<td>
 </td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Num. groups: school
+<td>
 </td>
-<td style="padding-right: 12px; border: none;">
-160
+<td>
+0.192
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;">
-Var: school (Intercept)
+<td>
+1 hour
 </td>
-<td style="padding-right: 12px; border: none;">
-0.08
+<td>
+0 (0%)
 </td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Var: school gevocab_c
+<td>
+0 (0%)
 </td>
-<td style="padding-right: 12px; border: none;">
-0.02
+<td>
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;">
-Cov: school (Intercept) gevocab_c
+<td>
+2 hours
 </td>
-<td style="padding-right: 12px; border: none;">
-0.03
+<td>
+78 (82.1%)
 </td>
-</tr>
-<tr>
-<td style="border-bottom: 2px solid black;">
-Var: Residual
+<td>
+94 (89.5%)
 </td>
-<td style="border-bottom: 2px solid black;">
-3.66
+<td>
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;" colspan="3">
-<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+<td>
+3 hours
+</td>
+<td>
+17 (17.9%)
+</td>
+<td>
+11 (10.5%)
+</td>
+<td>
 </td>
 </tr>
+<tr>
+<td>
+hrs 1
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.137
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.2 (0.4)
+</td>
+<td>
+2.1 (0.3)
+</td>
+<td>
+</td>
+</tr>
+</tbody>
 </table>
-<p>Now we will show some of the things the <code>sjPlot</code> package can do!</p>
-<div id="plotting-coefficients" class="section level2">
-<h2><span class="header-section-number">7.1</span> Plotting Coefficients</h2>
-<p>Select <code>terms</code> that should be plotted. All other term are removed from the output.</p>
-<p>Note that the term names must match the names of the model’s coefficients. For factors, this means that the variable name is suffixed with the related factor level, and each category counts as one term. E.g. <code>rm.terms = &quot;t_name [2,3]&quot;</code> would remove the terms <code>t_name2</code> and <code>t_name3</code> (assuming that the variable t_name is categorical and has at least the factor levels 2 and 3).</p>
-<p>Another example for the iris-dataset: <code>terms = &quot;Species&quot;</code> would not work, instead you would write <code>terms = &quot;Species [versicolor, virginica]&quot;</code> to remove these two levels, or <code>terms = &quot;Speciesversicolor&quot;</code> if you just want to remove the level versicolor from the plot.</p>
-<div id="fixed-effects" class="section level3">
-<h3><span class="header-section-number">7.1.1</span> Fixed Effects</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-302-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>,
-                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-303-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-304-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>Determines in which way estimates are sorted in the plot with the option: <code>sort.est =</code></p>
-<ul>
-<li>If <code>NULL</code> (default), no sorting is done and estimates are sorted in the same order as they appear in the model formula.<br />
-</li>
-<li>If <code>TRUE</code>, estimates are sorted in descending order, with highest estimate at the top.<br />
-</li>
-<li>If <code>sort.est = &quot;sort.all&quot;</code>, estimates are re-sorted for each coefficient (only applies if <code>type = &quot;re&quot;</code> and <code>grid = FALSE</code>), i.e. the estimates of the random effects for each predictor are sorted and plotted to an own plot.<br />
-</li>
-<li>If <code>type = &quot;re&quot;</code>, specify a predictor’s / coefficient’s name to sort estimates according to this random effect.</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
-                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-305-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
-                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>,
-                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-306-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>Plots standardized beta values, however, standardization follows <span class="citation">Gelman (<a href="references.html#ref-gelman2008">2008</a>)</span> suggestion, rescaling the estimates by dividing them by two standard deviations instead of just one. Resulting coefficients are then directly comparable for untransformed <strong>binary predictors</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std2&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(gpa.<span class="dv">1</span>, gpa.<span class="dv">2</span>, gpa.<span class="dv">3</span>, gpa.<span class="dv">4</span>, gpa.<span class="dv">5</span>, gpa.<span class="dv">6</span>,
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sex,
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th>
+male
+</th>
+<th>
+female
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+n = 95
+</td>
+<td>
+n = 105
+</td>
+</tr>
+<tr>
+<td>
+gpa 1
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.6 (0.3)
+</td>
+<td>
+2.6 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 2
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.7 (0.3)
+</td>
+<td>
+2.8 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 3
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.7 (0.4)
+</td>
+<td>
+2.9 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 4
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.8 (0.4)
+</td>
+<td>
+3.0 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 5
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.9 (0.4)
+</td>
+<td>
+3.1 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 6
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+3.0 (0.4)
+</td>
+<td>
+3.2 (0.4)
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="random-effects" class="section level3">
-<h3><span class="header-section-number">7.1.2</span> Random Effects</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-308-1.png" width="288" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>,
-                   <span class="dt">grid =</span> <span class="ot">FALSE</span>,
-                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-1.png" width="288" style="display: block; margin: auto;" /></p>
+<div id="mlm" class="section level2">
+<h2><span class="header-section-number">10.2</span> MLM</h2>
+<div id="null-models-and-icc" class="section level3">
+<h3><span class="header-section-number">10.2.1</span> Null Models and ICC</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_0_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(fit_lmer_0_re)</code></pre></div>
 <pre><code>
-[[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-2.png" width="288" style="display: block; margin: auto;" /></p>
-</div>
-</div>
-<div id="plotting-marginal-effects" class="section level2">
-<h2><span class="header-section-number">7.2</span> Plotting Marginal Effects</h2>
-<p>Here <code>terms</code> indicates for which terms marginal effects should be displayed. At least one term is required to calculate effects, maximum length is three terms, where the second and third term indicate the groups, i.e. predictions of first term are grouped by the levels of the second (and third) term.</p>
-<p><code>terms</code> may also indicate higher order terms (e.g. interaction terms).</p>
-<p>Indicating levels in square brackets allows for selecting only specific groups. Term name and levels in brackets must be separated by a whitespace character, e.g. <code>terms = c(&quot;age&quot;, &quot;education [1,3]&quot;)</code>.</p>
-<p>It is also possible to specify a range of numeric values for the predictions with a colon, for instance <code>terms = c(&quot;education [1,3]&quot;, &quot;age [30:50]&quot;)</code>.</p>
-<p>Furthermore, it is possible to specify a function name. Values for predictions will then be transformed, e.g. <code>terms = &quot;income [exp]&quot;</code>. This is useful when model predictors were transformed for fitting the model and should be <strong>back-transformed</strong> to the original scale for predictions.</p>
-<p>Finally, using pretty for numeric variables (e.g. <code>terms = &quot;age [pretty]&quot;</code>) calculates a pretty range of values for the term, roughly of proportional length to the term’s value range. For more details, see the documentation for the <code>ggpredict</code> package.</p>
-<div id="predicted-values" class="section level3">
-<h3><span class="header-section-number">7.2.1</span> Predicted Values</h3>
-<p>Based on (i.e. is a wrapper for): <code>ggeffects::ggpredict()</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-310-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>The <code>pred.type =</code> option only applies for Marginal Effects plots with <strong>mixed effects models</strong>. Indicates whether predicted values should be <strong>conditioned on random effects</strong> (<code>pred.type = &quot;re&quot;</code>) or fixed effects only (<code>pred.type = &quot;fe&quot;</code>, the default). For details, see documentation of the type-argument in <code>ggpredict()</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
-                   <span class="dt">pred.type =</span> <span class="st">&quot;re&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="effect-plots" class="section level3">
-<h3><span class="header-section-number">7.2.2</span> Effect Plots</h3>
-<p>Based on (i.e. is a wrapper for): <code>ggeffects::ggeffect()</code></p>
-<p>Similar to <code>type = &quot;pred&quot;</code>, however, discrete predictors are held constant at their proportions (not reference level). See the <code>ggeffect</code> package documentation for details.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;eff&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="interaction-plots" class="section level3">
-<h3><span class="header-section-number">7.2.3</span> Interaction Plots</h3>
-<p>A shortcut for marginal effects plots, where <em>interaction terms are automatically detected</em> and used as terms-argument.</p>
-<p>Furthermore, if the moderator variable (the second - and third - term in an interaction) is continuous, <code>type = &quot;int&quot;</code> automatically chooses useful values based on the mdrt.values-argument, which are passed to terms. Then, <code>ggpredict</code> is called.</p>
-<p><code>type = &quot;int&quot;</code> plots the interaction term that appears:</p>
-<ul>
-<li><strong>first</strong> in the formula along the x-axis, while the</li>
-<li><strong>second</strong> (and possibly third) variable in an interaction is used as grouping factor(s) (moderating variable).</li>
-</ul>
-<p>Use <code>type = &quot;pred&quot;</code> or <code>type = &quot;eff&quot;</code> and specify a certain order in the terms-argument to indicate which variable(s) should be used as moderator.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-2.png" width="576" style="display: block; margin: auto;" /></p>
-<p>The <code>mdrt.values =</code> option indicates which values of the <strong>moderator variable</strong> should be used when plotting interaction terms (i.e. <code>type = &quot;int&quot;</code>).</p>
-<ul>
-<li><p><code>minmax</code> (default) minimum and maximum values (lower and upper bounds) of the moderator are used to plot the interaction between independent variable and moderator(s).</p></li>
-<li><p><code>meansd</code> uses the mean value of the moderator as well as one standard deviation below and above mean value to plot the effect of the moderator on the independent variable (following the convention suggested by Cohen and Cohen and popularized by Aiken and West (1991), i.e. using the mean, the value one standard deviation above, and the value one standard deviation below the mean as values of the moderator, see Grace-Martin K: 3 Tips to Make Interpreting Moderation Effects Easier).</p></li>
-<li><p><code>zeromax</code> is similar to the <code>minmax</code> option, however, <span class="math inline">\(0\)</span> is always used as minimum value for the moderator. This may be useful for predictors that don’t have an empirical zero-value, but absence of moderation should be simulated by using <span class="math inline">\(0\)</span> as minimum.</p></li>
-<li><p><code>quart</code> calculates and uses the quartiles (lower, median and upper) of the moderator value.</p></li>
-<li><p><code>all</code> uses all values of the moderator variable.</p></li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>,
-                   <span class="dt">mdrt.values =</span> <span class="st">&quot;meansd&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-2.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-</div>
-<div id="model-diagnostics" class="section level2">
-<h2><span class="header-section-number">7.3</span> Model Diagnostics</h2>
-<p>Note: For mixed models, the diagnostic plots like linear relationship or check for Homoscedasticity, do not take the uncertainty of random effects into account, but is only based on the fixed effects part of the model.</p>
-<div id="slope-of-coefficentes" class="section level3">
-<h3><span class="header-section-number">7.3.1</span> Slope of Coefficentes</h3>
-<p>Slope of coefficients for each single predictor, against the response (linear relationship between each model term and response).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;slope&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="residuals" class="section level3">
-<h3><span class="header-section-number">7.3.2</span> Residuals</h3>
-<p>Slope of coefficients for each single predictor, against the residuals (linear relationship between each model term and residuals).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;resid&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-316-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="diagnostics" class="section level3">
-<h3><span class="header-section-number">7.3.3</span> Diagnostics</h3>
-<p>Check model assumptions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]
-[[2]]$school</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-2.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
+Linear mixed model
 
-[[3]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-3.png" width="576" style="display: block; margin: auto;" /></p>
+Family : gaussian (identity)
+Formula: gpa ~ 1 + (1 | student)
+
+  ICC (student): 0.3693</code></pre>
+<p>Over a third of the variance in the 6 GPA measures is variance between individuals, and about two-thirds is variance within individuals across time.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_1_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(fit_lmer_1_re)</code></pre></div>
 <pre><code>
-[[4]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-4.png" width="576" style="display: block; margin: auto;" /></p>
+Linear mixed model
+
+Family : gaussian (identity)
+Formula: gpa ~ semc + (1 | student)
+
+  ICC (student): 0.5231</code></pre>
+<p>After accounting for the linear change in GPA over semesters, about half of the remaining variance in GPA scores is attributable person-to-person differences.</p>
+</div>
+<div id="fixed-effects-2" class="section level3">
+<h3><span class="header-section-number">10.2.2</span> Fixed Effects</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_0_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+fit_lmer_1_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+
+fit_lmer_2_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+
+fit_lmer_3_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">screenreg</span>(<span class="kw">list</span>(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml),
+          <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre></div>
+<pre><code>
+================================================================================
+                          Model 1       Model 2       Model 3       Model 4     
+--------------------------------------------------------------------------------
+(Intercept)                  2.865 ***     2.599 ***     2.970 ***     2.641 ***
+                            (0.019)       (0.022)       (0.044)       (0.098)   
+semc                                       0.106 ***     0.102 ***     0.102 ***
+                                          (0.004)       (0.004)       (0.004)   
+hrs                                                     -0.171 ***    -0.172 ***
+                                                        (0.018)       (0.018)   
+highgpa                                                                0.085 ** 
+                                                                      (0.028)   
+sexfemale                                                              0.147 ***
+                                                                      (0.033)   
+--------------------------------------------------------------------------------
+AIC                        919.456       401.649       318.399       296.760    
+BIC                        934.726       422.009       343.849       332.390    
+Log Likelihood            -456.728      -196.825      -154.200      -141.380    
+Num. obs.                 1200          1200          1200          1200        
+Num. groups: student       200           200           200           200        
+Var: student (Intercept)     0.057         0.063         0.052         0.045    
+Var: Residual                0.098         0.058         0.055         0.055    
+================================================================================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_0_ml: gpa ~ 1 + (1 | student)
+fit_lmer_1_ml: gpa ~ semc + (1 | student)
+fit_lmer_2_ml: gpa ~ semc + hrs + (1 | student)
+fit_lmer_3_ml: gpa ~ semc + hrs + highgpa + sex + (1 | student)
+              Df    AIC    BIC  logLik deviance   Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_0_ml  3 919.46 934.73 -456.73   913.46                          
+fit_lmer_1_ml  4 401.65 422.01 -196.82   393.65 519.807      1  &lt; 2.2e-16
+fit_lmer_2_ml  5 318.40 343.85 -154.20   308.40  85.250      1  &lt; 2.2e-16
+fit_lmer_3_ml  7 296.76 332.39 -141.38   282.76  25.639      2  2.707e-06
+                 
+fit_lmer_0_ml    
+fit_lmer_1_ml ***
+fit_lmer_2_ml ***
+fit_lmer_3_ml ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="variance-explained-by-linear-time-at-level-one" class="section level3">
+<h3><span class="header-section-number">10.2.3</span> Variance Explained by linear TIME at Level ONE</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">re_var</span>(fit_lmer_0_ml)  <span class="co"># baseilne</span></code></pre></div>
+<pre><code>      Within-group-variance:    0.098
+     Between-group-variance:    0.057 (student)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">re_var</span>(fit_lmer_1_ml)  <span class="co"># model to compare</span></code></pre></div>
+<pre><code>      Within-group-variance:    0.058
+     Between-group-variance:    0.063 (student)</code></pre>
+<div id="raudenbush-and-bryk-2" class="section level4">
+<h4><span class="header-section-number">10.2.3.1</span> Raudenbush and Bryk</h4>
+<ul>
+<li>Explained variance is a proportion of first-level variance only</li>
+<li>A good option when the multilevel sampling process is is close to two-stage simple random sampling</li>
+</ul>
+<div class="genericEq">
+<p>
+<strong>Raudenbush and Bryk Approximate Formula - Level 1 </strong> <em>approximate</em> <span class="math display"><span class="math display">\[
+approx \;R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
+             {\sigma^2_{e-BL} }
+\tag{Hox 4.8}
+\]</span></span>
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="fl">0.098</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.058</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.098</span></code></pre></div>
+<pre><code>[1] 0.4081633</code></pre>
+</div>
+<div id="snijders-and-bosker-2" class="section level4">
+<h4><span class="header-section-number">10.2.3.2</span> Snijders and Bosker</h4>
+<div class="genericEq">
+<p>
+<strong>Snijders and Bosker Formula - Level 1 </strong>
+</p>
+<p>
+Random Intercepts Models Only, <em>address potential negative <span class="math inline"><span class="math inline">\(R^2\)</span></span> issue</em> <span class="math display"><span class="math display">\[
+R^2_1 = 1 - \frac{\sigma^2_{e-MC} + \sigma^2_{u0-MC}}
+                 {\sigma^2_{e-BL} + \sigma^2_{u0-BL}}
+\]</span></span>
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="fl">0.058</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.063</span>)<span class="op">/</span>(<span class="fl">0.098</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.057</span>)</code></pre></div>
+<pre><code>[1] 0.2193548</code></pre>
+</div>
+</div>
+<div id="variance-explained-by-linear-time-at-level-two" class="section level3">
+<h3><span class="header-section-number">10.2.4</span> Variance Explained by linear TIME at Level TWO</h3>
+<div id="raudenbush-and-bryk-3" class="section level4">
+<h4><span class="header-section-number">10.2.4.1</span> Raudenbush and Bryk</h4>
+<div class="genericEq">
+<p>
+<strong>Raudenbush and Bryk Approximate Formula - Level 2 </strong> <span class="math display"><span class="math display">\[
+approx \; R^2_s = \frac{\sigma^2_{u0-BL} - \sigma^2_{u0-MC}}
+             {\sigma^2_{u0-BL} }
+\tag{Hox 4.9}
+\]</span></span>
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="fl">0.057</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.063</span>)<span class="op">/</span><span class="st"> </span><span class="fl">0.057</span></code></pre></div>
+<pre><code>[1] -0.1052632</code></pre>
+<p>YIKES! Negative Variance explained!</p>
+</div>
+<div id="snijders-and-bosker-3" class="section level4">
+<h4><span class="header-section-number">10.2.4.2</span> Snijders and Bosker</h4>
+<div class="genericEq">
+<p>
+<strong>Snijders and Bosker Formula Extended - Level 2 </strong> <span class="math display"><span class="math display">\[
+R^2_2 = 1 - \frac{\frac{\sigma^2_{e-MC}}{B} + \sigma^2_{u0-MC}}
+                 {\frac{\sigma^2_{e-BL}}{B} + \sigma^2_{u0-BL}}
+\]</span></span>
+</p>
+<p>
+<span class="math inline"><span class="math inline">\(B\)</span></span> is the average size of the Level 2 units. Technically, you should use the <em>harmonic mean</em>, but unless the clusters differ greatly in size, it doesn’t make a huge difference.
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="fl">0.058</span><span class="op">/</span><span class="dv">6</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.063</span>) <span class="op">/</span><span class="st"> </span>(<span class="fl">0.098</span><span class="op">/</span><span class="dv">6</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.057</span>)</code></pre></div>
+<pre><code>[1] 0.009090909</code></pre>
+<p>Reason: The intercept only model overestimates the variance at the occasion level and underestimates the variance at the subject level (se chapter 4 of <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>)</p>
+</div>
+</div>
+<div id="random-effects-2" class="section level3">
+<h3><span class="header-section-number">10.2.5</span> Random Effects</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_3_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)
+
+
+fit_lmer_4_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_3_re, fit_lmer_4_re, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_3_re: gpa ~ semc + hrs + highgpa + sex + (1 | student)
+fit_lmer_4_re: gpa ~ semc + hrs + highgpa + sex + (semc | student)
+              Df    AIC    BIC  logLik deviance Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_3_re  7 328.84 364.47 -157.42   314.84                        
+fit_lmer_4_re  9 219.93 265.75 -100.97   201.94 112.9      2  &lt; 2.2e-16
+                 
+fit_lmer_3_re    
+fit_lmer_4_re ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="cross-level-interaction" class="section level3">
+<h3><span class="header-section-number">10.2.6</span> Cross-Level Interaction</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_4_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+fit_lmer_4_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)
+
+
+
+fit_lmer_5_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>semc<span class="op">:</span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+fit_lmer_5_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>semc<span class="op">:</span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(fit_lmer_4_ml, fit_lmer_5_ml, fit_lmer_5_re))</code></pre></div>
+<pre><code>
+====================================================================
+                               Model 1      Model 2      Model 3    
+--------------------------------------------------------------------
+(Intercept)                       2.56 ***     2.58 ***     2.58 ***
+                                 (0.09)       (0.09)       (0.09)   
+semc                              0.10 ***     0.09 ***     0.09 ***
+                                 (0.01)       (0.01)       (0.01)   
+hrs                              -0.13 ***    -0.13 ***    -0.13 ***
+                                 (0.02)       (0.02)       (0.02)   
+highgpa                           0.09 ***     0.09 ***     0.09 ***
+                                 (0.03)       (0.03)       (0.03)   
+sexfemale                         0.12 ***     0.08 *       0.08 *  
+                                 (0.03)       (0.03)       (0.03)   
+semc:sexfemale                                 0.03 **      0.03 ** 
+                                              (0.01)       (0.01)   
+--------------------------------------------------------------------
+AIC                             188.12       182.97       182.97    
+BIC                             233.93       233.87       233.87    
+Log Likelihood                  -85.06       -81.49       -81.49    
+Num. obs.                      1200         1200         1200       
+Num. groups: student            200          200          200       
+Var: student (Intercept)          0.04         0.04         0.04    
+Var: student semc                 0.00         0.00         0.00    
+Cov: student (Intercept) semc    -0.00        -0.00        -0.00    
+Var: Residual                     0.04         0.04         0.04    
+====================================================================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_4_ml, fit_lmer_5_ml)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_4_ml: gpa ~ semc + hrs + highgpa + sex + (semc | student)
+fit_lmer_5_ml: gpa ~ semc + hrs + highgpa + sex + semc:sex + (semc | student)
+              Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_4_ml  9 188.12 233.93 -85.059   170.12                         
+fit_lmer_5_ml 10 182.97 233.87 -81.486   162.97 7.1464      1   0.007511
+                
+fit_lmer_4_ml   
+fit_lmer_5_ml **
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_5_re,
+                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;semc&quot;</span>, <span class="st">&quot;sex&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-461-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -789,8 +1124,8 @@ Var: Residual
           </div>
         </div>
       </div>
-<a href="variance-explained.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="longitudinal-intro-example-autism.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="longitudinal-mlm-hedeker-gibbons-depression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="longitudinal-mlm-rct-exercise-and-diet.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
