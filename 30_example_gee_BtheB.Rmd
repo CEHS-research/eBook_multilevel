@@ -60,7 +60,8 @@ BtheB %>%
 ```{r}
 btb_wide <- BtheB %>% 
   dplyr::mutate(id = row_number()) %>%           # create a new variable to ID participants
-  dplyr::select(id, treatment,                   # specify that ID variable is first
+  dplyr::select(id, treatment,                    # specify that ID variable is first
+                drug, length,
                 bdi.pre, bdi.2m, bdi.4m, bdi.6m, bdi.8m)
 ```
 
@@ -79,15 +80,14 @@ btb_wide %>%
 btb_long <- btb_wide %>% 
   tidyr::gather(key   = month,
                 value = bdi,
-                starts_with("bdi")) %>% 
-  dplyr::mutate(month = case_when(month == "bdi.pre" ~ 0,
-                                  month == "bdi.2m"  ~ 2,
+                bdi.2m, bdi.4m, bdi.6m, bdi.8m) %>% 
+  dplyr::mutate(month = case_when(month == "bdi.2m"  ~ 2,
                                   month == "bdi.4m"  ~ 4,
                                   month == "bdi.6m"  ~ 6,
                                   month == "bdi.8m"  ~ 8)) %>% 
   dplyr::filter(complete.cases(id, bdi, treatment, month)) %>% 
   dplyr::arrange(id, month) %>% 
-  dplyr::select(id, treatment, month, bdi)
+  dplyr::select(id, treatment, drug, length, bdi.pre, month, bdi)
 ```
 
 
@@ -110,9 +110,45 @@ btb_long %>%
             size = 1, 
             alpha = 0.3) +
   geom_smooth(method = "lm") +
-  facet_grid(.~ treatment) +
   theme_bw() +
-  labs(title = "BtheB - Observed Data Across Time with LM Smoother")
+  facet_grid(.~ treatment) +
+  labs(title = "BtheB - Observed Data Across Time with LM Smoother",
+       subtitle = "Seperate by Treatment")
+```
+
+
+```{r}
+btb_long %>% 
+  ggplot(aes(x = month,
+             y = bdi)) +
+  geom_point() +
+  geom_line(aes(group = id), 
+            size = 1, 
+            alpha = 0.3) +
+  geom_smooth(method = "lm") +
+  facet_grid(drug~ treatment, labeller = label_both) +
+  theme_bw() +
+  labs(title = "BtheB - Observed Data Across Time with LM Smoother",
+       subtitle = "Seperate by Treatment & Antidepressant Use")
+```
+
+```{r}
+btb_long %>% 
+  ggplot(aes(x = month,
+             y = bdi)) +
+  geom_point() +
+  geom_line(aes(group = id,
+                color = length), 
+            size = 1, 
+            alpha = 0.3) +
+  geom_smooth(aes(color = length),
+              method = "lm",
+              size = 1.25,
+              se = FALSE) +
+  facet_grid(drug~ treatment, labeller = label_both) +
+  theme_bw() +
+  labs(title = "BtheB - Observed Data Across Time with LM Smoother",
+       subtitle = "Seperate by Treatment, Antidepressant Use, & Length of Current Episode")
 ```
 
 
@@ -125,7 +161,8 @@ btb_long %>%
              fill = treatment)) +
   geom_smooth(method = "lm") +
   theme_bw() +
-  labs(title = "BtheB - Observed Data: Linear Smoothers Across Time")
+  labs(title = "BtheB - Predictions from TWO Seperate Single Simple Linear Models (lm)",
+       subtitle = "Assumes Independence of Repeated Measures")
 ```
 
 ### Calculate the Observed Correlation Structure
@@ -153,45 +190,60 @@ corrplot::corrplot.mixed(bdi_corr)
 
 This ignores any correlation between repeated measures on the same individual and treats all observations as independent.
 
-### Fit the model and view the output in a table
+### Fit the models
 
 ```{r}
-btb_lm <- stats::lm(bdi ~ treatment + month,
+btb_lm_1 <- stats::lm(bdi ~ bdi.pre + length + drug + treatment + month,
+                    data = btb_long)
+
+btb_lm_2 <- stats::lm(bdi ~ bdi.pre + length + drug + treatment*month,
+                    data = btb_long)
+
+btb_lm_3 <- stats::lm(bdi ~ bdi.pre + length + drug + treatment + drug*month,
+                    data = btb_long)
+
+btb_lm_4 <- stats::lm(bdi ~ bdi.pre + length + drug*treatment*month,
                     data = btb_long)
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(btb_lm)
-```
+### Parameter Estimates Table
 
-### Parameter Estimates
+
+```{r, include=FALSE}
+texreg::screenreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4))
+```
 
 ```{r, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
 
-texreg::htmlreg(btb_lm,
-                custom.model.names = "OLS")
+texreg::htmlreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4),
+                caption = "OLS")
 ```
 
 ### Plot the model predictions
 
 ```{r}
 effects::Effect(focal.predictors = c("treatment", "month"), 
-                mod = btb_lm) %>% 
+                mod = btb_lm_1) %>% 
   data.frame %>% 
   dplyr::mutate(treatment = fct_reorder2(treatment, month, fit)) %>%  
   ggplot(aes(x = month,
-             y = fit,
-             color = treatment,
-             fill = treatment)) +
-  geom_line() +
+             y = fit)) +
+  geom_line(aes(color = treatment)) +
   geom_ribbon(aes(ymin = lower,
-                  ymax = upper), alpha = 0.3) +
+                  ymax = upper,
+                  fill = treatment), 
+              alpha = 0.3) +
+  geom_ribbon(aes(ymin = fit - se,
+                  ymax = fit + se,
+                  fill = treatment), 
+              alpha = 0.3) +
   theme_bw() +
-  labs(title = "BtheB - Predictions from a Linear Model (lm)") +
+  labs(title = "BtheB - Predictions from a Single Linear Model (lm)",
+       subtitle = "Assumes Independence of Repeated Measures") +
   theme(legend.position = c(1, 1),
         legend.justification = c(1.1, 1.1),
         legend.background = element_rect(color = "black"))
@@ -200,21 +252,24 @@ effects::Effect(focal.predictors = c("treatment", "month"),
 
 ## Multilevel Models (MLM)
 
-### Fit the model and compare to the prior model
+### Fit the models
 
 
 ```{r}
-btb_lmer_RI   <- lme4::lmer(bdi ~ treatment + month + (1 | id), 
+btb_lmer_RI   <- lme4::lmer(bdi ~ bdi.pre + length + drug + treatment + month + (1 | id), 
                             data = btb_long, 
                             REML = TRUE)
 
-btb_lmer_RIAS <- lme4::lmer(bdi ~ treatment + month + (month | id), 
+btb_lmer_RIAS <- lme4::lmer(bdi ~ bdi.pre + length + drug + treatment + month + (month | id), 
                             data = btb_long, 
                             REML = TRUE)
 ```
 
+
+### Parameter Estimates Table
+
 ```{r, include=FALSE}
-texreg::screenreg(list(btb_lm, btb_lmer_RI, btb_lmer_RIAS), 
+texreg::screenreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
           custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"))
 ```
 
@@ -226,6 +281,7 @@ texreg::screenreg(list(btb_lm, btb_lmer_RI, btb_lmer_RIAS),
 texreg::htmlreg(list(btb_lm, btb_lmer_RI, btb_lmer_RIAS), 
                 custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"))
 ```
+
 
 ### Likelihood Ratio Test
 
@@ -240,20 +296,22 @@ anova(btb_lmer_RI,
 ### Plot the model predictions
 
 ```{r}
-effects::Effect(c("treatment", "month"), mod = btb_lmer_RI) %>% 
+effects::Effect(c("treatment", "month", "drug"), 
+                mod = btb_lmer_RI) %>% 
   data.frame %>%   
   dplyr::mutate(treatment = fct_reorder2(treatment, month, fit)) %>%
   ggplot(aes(x = month,
-             y = fit,
-             color = treatment,
-             fill = treatment)) +
-  geom_line() +
+             y = fit)) +
+  geom_line(aes(color = treatment)) +
   geom_ribbon(aes(ymin = lower,
-                  ymax = upper), alpha = 0.3) +
+                  ymax = upper,
+                  fill = treatment), 
+              alpha = 0.3) +
   theme_bw() +
+  facet_grid(.~ drug, labeller = label_both) +
   labs(title = "BtheB - Predictions from a Multilevel Model (lmer)") +
-  theme(legend.justification = c(0, 0),
-        legend.position = c(0, 0),
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
         legend.background = element_rect(color = "black"))
 ```
 
@@ -263,18 +321,18 @@ effects::Effect(c("treatment", "month"), mod = btb_lmer_RI) %>%
 ## General Estimating Equations, GEE
 
 
-### Fit the models and compare to the prior model
+### Fit the models
 
 Use the `gee()` function from the **gee** package for the results to be used in a `texreg()` table.
 
 ```{r}
-btb_gee_in <- gee::gee(bdi ~ treatment + month, 
+btb_gee_in <- gee::gee(bdi ~ bdi.pre + length + drug + treatment + month, 
                        data = btb_long, 
                        id = id, 
                        family = gaussian, 
                        corstr = 'independence')
 
-btb_gee_ex <- gee::gee(bdi ~ treatment + month, 
+btb_gee_ex <- gee::gee(bdi ~ bdi.pre + length + drug + treatment + month, 
                        data = btb_long, 
                        id = id, 
                        family = gaussian, 
@@ -282,28 +340,37 @@ btb_gee_ex <- gee::gee(bdi ~ treatment + month,
 
 # The AR-1 fails if any subjects have only 1 observation
 # to use this one, we would need to remove participants with only 1 BDI
-# btb_gee_ar <- gee(bdi ~ treatment + month, 
-#                  data = btb_long, 
-#                  id = id, 
-#                  family = gaussian, 
+# btb_gee_ar <- gee(bdi ~ bdi.pre + length + drug + treatment + month,
+#                  data = btb_long,
+#                  id = id,
+#                  family = gaussian,
 #                  corstr = 'AR-M',
 #                  Mv = 1)
 
-btb_gee_un <- gee::gee(bdi ~ treatment + month, 
+btb_gee_un <- gee::gee(bdi ~ bdi.pre + length + drug + treatment + month, 
                        data = btb_long, 
                        id = id, 
                        family = gaussian, 
                        corstr = 'unstructured')
 ```
 
+```{r}
+summary(btb_gee_in)
+```
+
+```{r}
+summary(btb_gee_ex)
+```
 
 
+```{r}
+summary(btb_gee_un)
+```
 
-
-### Parameter Estimates
+### Parameter Estimates Table
 
 ```{r, include=FALSE}
-texreg::screenreg(list(btb_lm, 
+texreg::screenreg(list(btb_lm_1, 
                       btb_lmer_RI, 
                       btb_gee_in, 
                       btb_gee_ex, 
@@ -332,20 +399,20 @@ texreg::htmlreg(list(btb_lm,
 
 
 
-#### Re-Fit Models
+### Re-Fit Models
 
 Use the `geeglm()` function from the **geepack** package for the results to be used in a `anova()` table.
 
 
 ```{r}
-btb_geeglm_in <- geeglm(bdi ~ treatment + month, 
+btb_geeglm_in <- geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
                         data = btb_long, 
                         id = id,
                         wave = month,
                         family = gaussian, 
                         corstr = 'independence')
 
-btb_geeglm_ex <- geeglm(bdi ~ treatment + month, 
+btb_geeglm_ex <- geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
                         data = btb_long, 
                         id = id, 
                         wave = month,
@@ -353,14 +420,14 @@ btb_geeglm_ex <- geeglm(bdi ~ treatment + month,
                         corstr = 'exchangeable')
 
 
-btb_geeglm_ar <- geeglm(bdi ~ treatment + month, 
+btb_geeglm_ar <- geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
                         data = btb_long, 
                         id = id, 
                         wave = month,
                         family = gaussian, 
                         corstr = 'ar1')
 
-btb_geeglm_un <- geeglm(bdi ~ treatment + month, 
+btb_geeglm_un <- geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
                         data = btb_long, 
                         id = id,
                         wave = month,
@@ -444,11 +511,20 @@ MuMIn::model.sel(btb_geeglm_in,
 
 ### Plot the model predictions
 
+```{r}
+summary(btb_long)
+```
+
+
+
 Do not worry about confidence intervals.
 
 ```{r}
-expand.grid(treatment = levels(btb_long$treatment),
-            month = seq(from = 0, to = 8, by = 2)) %>%  
+expand.grid(bdi.pre = 23,
+            length = "<6m",
+            drug = "No",
+            treatment = levels(btb_long$treatment),
+            month = seq(from = 2, to = 8, by = 2)) %>%  
   mutate(fit_in = predict(btb_geeglm_in,
                        newdata = .,
                        type = "response")) %>% 
@@ -479,9 +555,7 @@ expand.grid(treatment = levels(btb_long$treatment),
   geom_line(alpha = 0.6) +
   theme_bw() +
   labs(title    = "BtheB - Predictions from four GEE models (geeglm)",
-       linetype = "Treatment",
-       color    = "Corelation\nStructure",
-       size     = "Corelation\nStructure") +
+       linetype = "Treatment") +
   scale_linetype_manual(values = c("solid", "longdash")) +
   scale_size_manual(values     = c(2, 1, 1, 1)) +
   scale_color_manual(values    = c("red", 

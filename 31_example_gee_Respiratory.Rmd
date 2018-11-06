@@ -1,0 +1,317 @@
+# GEE, Binary Outcome: Respiratory Illness
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)    # all things tidy
+library(pander)       # nice looking genderal tabulations
+library(furniture)    # nice table1() descriptives
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(psych)        # contains some useful functions, like headTail
+
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+
+library(corrplot)     # Vizualize correlation matrix
+library(gee)          # Genderalized Estimation Equation Solver
+library(geepack)      # Genderalized Estimation Equation Package 
+library(MuMIn)        # Multi-Model Inference (caluclate QIC)
+
+library(HSAUR)        # package with the dataset
+```
+
+## Prepare and get to know the dataset
+
+### Read in the data
+
+This data set is in the **HSAUR** package. 
+
+```{r}
+data("respiratory", package = "HSAUR")
+
+str(respiratory)
+
+psych::headTail(respiratory)
+```
+
+### Wide Format
+
+```{r}
+data_wide <- respiratory %>% 
+  tidyr::spread(key = month,
+                value = status,
+                sep = "_") %>% 
+  dplyr::rename("BL_status" = "month_0") %>% 
+  dplyr::arrange(subject) %>% 
+  dplyr::select(subject, centre, sex, age, treatment, BL_status, starts_with("month"))  
+
+str(data_wide)
+
+psych::headTail(data_wide)
+```
+
+### Long Format
+
+```{r}
+data_long <- data_wide%>% 
+  tidyr::gather(key = month,
+                value = status,
+                starts_with("month")) %>% 
+  dplyr::mutate(month = str_sub(month, start = -1) %>% as.numeric) %>% 
+  dplyr::mutate(status = case_when(status == "poor" ~ 0,
+                                   status == "good" ~ 1)) %>% 
+  dplyr::arrange(subject, month) %>% 
+  dplyr::select(subject, centre, sex, age, treatment, BL_status, month, status) 
+
+
+str(data_long)
+
+psych::headTail(data_long)
+```
+
+
+## Exploratory Data Analysis
+
+### Summary Statustics
+
+#### Demographics and Baseline Measure
+
+
+```{r}
+data_wide %>% 
+  furniture::table1(centre, sex, age, BL_status, 
+                    splitby = ~ treatment,
+                    output = "html")
+```
+
+#### Status  Over Time
+
+```{r}
+data_wide %>% 
+  furniture::table1(month_1, month_2, month_3, month_4, 
+                    splitby = ~ treatment,
+                    output = "html")
+```
+
+
+```{r}
+data_month_trt_prop <- data_long %>% 
+  dplyr::group_by(treatment, month) %>% 
+  dplyr::summarise(n = n(),
+                   prop_good = mean(status),
+                   prop_sd = sd(status),
+                   prop_se = prop_sd/n)
+
+psych::headTail(data_month_trt_prop)
+```
+
+
+### Visualization
+
+#### Status Over Time
+
+
+```{r}
+data_month_trt_prop %>% 
+  ggplot(aes(x = month,
+             y = prop_good,
+             group = treatment,
+             color = treatment)) +
+  geom_errorbar(aes(ymin = prop_good - prop_se,
+                    ymax = prop_good + prop_se),
+                width = .25) +
+  geom_point() +
+  geom_line() +
+  theme_bw()
+```
+
+## Logisitc Regression
+
+
+```{r}
+resp_glm <- glm(status ~ centre + treatment + sex + BL_status + I(age-33) + I((age-33)^2),
+                data = data_long,
+                family = binomial(link = "logit"))
+
+summary(resp_glm)
+```
+
+
+```{r}
+sjPlot::tab_model(resp_glm)
+```
+
+
+## GEE
+
+### Indepdendence
+
+```{r}
+resp_gee_in <- gee::gee(status ~ centre + treatment + sex + BL_status + I(age-33) + I((age-33)^2),
+                        data = data_long,
+                        family = binomial(link = "logit"),
+                        id = subject,
+                        corstr = "independence",
+                        scale.fix = TRUE,
+                        scale.value = 1)
+
+summary(resp_gee_in)
+```
+
+The results for GEE fit with the independence correlation structure produces results that are nearly identical to the GLM model.
+
+The robust (sandwhich) standard errors are however much larger than the naive stadard errors
+
+
+### Exchangeable
+
+```{r}
+resp_gee_ex <- gee::gee(status ~ centre + treatment + sex + BL_status + I(age-33) + I((age-33)^2),
+                        data = data_long,
+                        family = binomial(link = "logit"),
+                        id = subject,
+                        corstr = "exchangeable",
+                        scale.fix = TRUE,
+                        scale.value = 1)
+
+summary(resp_gee_ex)
+```
+
+Notice that the naive stadard errors are more similar to the robust (sandwhich) standard errors, supporting that this is a better fitting model
+
+### Paramgeter Estimates Table
+
+The GEE models display the robus (sandwhich) standard errors.
+
+
+```{r}
+texreg::screenreg(list(resp_glm, resp_gee_in, resp_gee_ex),
+                  custom.model.names = c("GLM", "GEE-INDEP", "GEE-EXCH"),
+                  caption = "Estimates = log odds ratios",
+                  digits = 4)
+```
+
+Comparing the two GEE models: parameters are identical and so are the robust (sandwhich) standard errors.
+
+
+
+```{r}
+summary(resp_gee_ex) %>% names
+```
+
+```{r}
+summary(resp_gee_ex)$coeff
+```
+
+
+```{r}
+resp_gee_ex %>% coef() %>% exp()
+```
+
+
+
+```{r}
+summary(resp_gee_ex)$coeff["treatmenttreatment", "Estimate"]
+```
+
+```{r}
+OR_trt_EST <- summary(resp_gee_ex)$coeff["treatmenttreatment", "Estimate"] %>% exp()
+OR_trt_EST
+```
+
+
+```{r}
+OR_Trt_SE <- summary(resp_gee_ex)$coeff["treatmenttreatment", "Robust S.E."] %>% exp
+OR_Trt_SE
+```
+
+```{r}
+OR_trt_EST + c(-1, +1)*1.96*OR_Trt_SE
+```
+
+
+
+
+
+
+### Refit with the `geepack` package
+
+
+```{r}
+resp_geeglm_ex <- geepack::geeglm(status ~ centre + treatment + sex + BL_status + I(age-33) + I((age-33)^2),
+                        data = data_long,
+                        family = binomial(link = "logit"),
+                        id = subject,
+                        waves = month,
+                        corstr = "exchangeable")
+```
+
+
+```{r}
+summary(resp_geeglm_ex)
+```
+
+```{r}
+resp_geeglm_ex %>% coef() %>% exp()
+```
+
+
+
+
+
+
+
+### Visualize the Model
+
+```{r}
+summary(data_long)
+```
+
+```{r}
+expand.grid(centre = "1",
+            treatment = levels(data_long$treatment),
+            sex = "female",
+            age = seq(from = 11, to = 68, by = 1),
+            BL_status = levels(data_long$BL_status)) %>% 
+  dplyr::mutate(fit = predict(resp_geeglm_ex,
+                              newdata = .,
+                              type = "response")) %>% 
+  ggplot(aes(x = age,
+             y = fit,
+             linetype = treatment)) +
+  geom_line() +
+  theme_bw() + 
+  facet_grid(.~ BL_status) +
+  labs(x = "Age, years",
+       y = "Predicted Probability of GOOD Respiratory Status",
+       title = "For Females at Center 1")
+```
+
+
+```{r}
+expand.grid(centre = "2",
+            treatment = levels(data_long$treatment),
+            sex = "male",
+            age = seq(from = 11, to = 68, by = 1),
+            BL_status = levels(data_long$BL_status)) %>% 
+  dplyr::mutate(fit = predict(resp_geeglm_ex,
+                              newdata = .,
+                              type = "response")) %>% 
+  ggplot(aes(x = age,
+             y = fit,
+             linetype = treatment)) +
+  geom_line() +
+  theme_bw() + 
+  facet_grid(.~ BL_status) +
+  labs(x = "Age, years",
+       y = "Predicted Probability of GOOD Respiratory Status",
+       title = "For Males at Center 2")
+```
+
