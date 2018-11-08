@@ -1,0 +1,329 @@
+# GEE, Count Outcome: Epilepsy
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)    # all things tidy
+library(pander)       # nice looking genderal tabulations
+library(furniture)    # nice table1() descriptives
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(psych)        # contains some useful functions, like headTail
+
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+
+library(corrplot)     # Vizualize correlation matrix
+library(gee)          # Genderalized Estimation Equation Solver
+library(geepack)      # Genderalized Estimation Equation Package 
+library(MuMIn)        # Multi-Model Inference (caluclate QIC)
+
+library(HSAUR)        # package with the dataset
+```
+
+## Prepare and get to know the dataset
+
+### Read in the data
+
+This data set is in the **HSAUR** package. 
+
+In this clinical trial, 59 patients suffering from epilepsy were randomized to groups receiving either the anti-epileptic drug "Progabide"" or a placebo in addition to standard chemotherapy. The numbers of seizures suffered in each of four, two-week periods were recorded for each patient along with a baseline seizure count for the 8 weeks prior to being randomized to treatment and age. The main question of interest is whether taking progabide reduced the number of epileptic seizures compared with placebo.
+
+* Indicator2    
+    + `subject` the patient ID, a factor with levels 1 to 59    
+    + `period` treatment period, an ordered factor with levels 1 to 4
+
+* Main predictor or independent variable of interest    
+    + `treatment` the treatment group, a factor with levels placebo and Progabide
+
+* Outcome or dependent variable    
+    +`seizure.rate` the number of seizures (2-weeks)
+
+* Time-invariant Covariate    
+    + `age` the age of the patient    
+    + `base` the number of seizures before the trial (8 weeks)
+
+
+
+```{r}
+data("epilepsy", package = "HSAUR")
+```
+
+
+Problem:  The outcome (`seizure.rate`) were counts over a TWO-week period and we would like to interpret the results in terms of effects on the WEEKLY rate.
+
+* If we divide the values by TWO to get weekly rates, the outcome might be a decimal number
+* The Poisson distribution may only be used for whole numbers (not deciamls)
+
+Solution:  We need to include an `offset` term in the model that indicates the LOG DURATION of each period.
+
+* Every observation period is exactly 2 weeks in this experiment
+* Create a variable in the original dataset that is equal to the  LOG DURATION (`per = log(2)`)
+* To the formula for the `glm()` or `gee()`, add: ` + offset(per)`
+
+
+
+### Long Format
+
+```{r}
+data_long <- epilepsy %>% 
+  dplyr::select(subject, age, treatment, base, period, seizure.rate) %>% 
+  dplyr::mutate(per = log(2)) %>% 
+  dplyr::mutate(base_wk = base/8)
+
+str(data_long)
+
+psych::headTail(data_long, top = 10, bottom = 6)
+```
+
+
+
+### Wide Format
+
+```{r}
+data_wide <- data_long %>% 
+  tidyr::spread(key = period,
+                value = seizure.rate,
+                sep = "_") %>% 
+  dplyr::arrange(subject)
+
+str(data_wide)
+
+psych::headTail(data_wide)
+```
+
+## Exploratory Data Analysis
+
+### Summarize
+
+#### Demographics and Baseline
+
+```{r}
+data_wide %>% 
+  furniture::table1(age, base,
+                    splitby = ~ treatment,
+                    test = TRUE,
+                    type = "full",
+                    output = "markdown")
+```
+
+#### Outcome Across Time
+
+> Note: The Poisson distribution specifies that the **MEAN = VARIANCE**
+
+In this dataset, the variance is much larger than the mean, at all time points for both groups.  This is evidence of **overdispersion** and suggest the scale parameter should be **greater than one**.
+
+```{r}
+data_long %>% 
+  dplyr::group_by(treatment, period) %>% 
+  dplyr::summarise(N = n(),
+                   M = mean(seizure.rate),
+                   VAR = var(seizure.rate),
+                   SD = sd(seizure.rate)) %>% 
+  pander::pander()
+```
+
+#### Correlation Across Time
+
+Raw Scale
+
+```{r}
+data_long %>% 
+  dplyr::select(subject, period, seizure.rate ) %>% 
+  tidyr::spread(key = period,
+                value = seizure.rate ) %>% 
+  dplyr::select(-subject) %>% 
+  cor() %>% 
+  corrplot::corrplot.mixed()
+```
+
+Log Scale
+
+```{r}
+data_long %>% 
+  dplyr::mutate(rate_wk = log(seizure.rate + 1)) %>% 
+  dplyr::select(subject, period, rate_wk) %>% 
+  tidyr::spread(key = period,
+                value = rate_wk) %>% 
+  dplyr::select(-subject) %>% 
+  cor() %>% 
+  corrplot::corrplot.mixed()
+```
+
+
+
+### Visualize
+
+#### Oucome on the Raw Scale
+
+There appear to be quite a few extreme values or outliers, particularly for the Progabide group during period one.
+
+Since the outcome is truely a **COUNT**, we will model it with a **Poisson** distribution combined with a **LOG** link.
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = period,
+             y = seizure.rate)) +
+  geom_boxplot() +
+  theme_bw() +
+  facet_grid(.~ treatment)
+```
+
+To investigate possible outliers, we should transform the outcome with the `log` function first.  
+
+> Note: Since some participants reported no seizures during a two week period and the `log(0)` is **unndefinded**, we must add some amount to the values before transforming.  Here we have chosen to add the value of $1$.
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = period,
+             y = log(seizure.rate + 1))) +
+  geom_boxplot() +
+  theme_bw() +
+  facet_grid(.~ treatment)
+```
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = period,
+             y = log(seizure.rate + 1))) +
+  geom_line(aes(group = subject)) +
+  theme_bw() +
+  facet_grid(.~ treatment)
+```
+
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = period,
+             y = log(seizure.rate + 1))) +
+  geom_smooth(aes(group = subject),
+              method = "lm",
+              se = FALSE) +
+  geom_smooth(aes(group = 1),
+              color = "red",
+              size = 1.5,
+              method = "lm",
+              se = FALSE) +
+  theme_bw() +
+  facet_grid(.~ treatment)
+```
+
+
+## GLM: Poisson Regression
+
+
+```{r}
+fit_glm <- glm(seizure.rate ~ base + age + treatment + offset(per),
+               data = data_long,
+               family = poisson(link = "log"))
+
+summary(fit_glm)
+```
+
+## Generalized Estimating Equations (GEE)
+
+
+### Match GLM
+
+* correlation structure: `independence`
+* scale parameter = $1$
+
+```{r}
+fit_gee_ind_s1 <- gee::gee(seizure.rate ~ base + age + treatment + offset(per),
+                           data = data_long,
+                           family = poisson(link = "log"),
+                           id = subject,
+                           corstr = "independence",
+                           scale.fix = TRUE,
+                           scale.value = 1)
+
+summary(fit_gee_ind_s1)
+```
+
+* The estimates and the naive standard errors match the GLM exactly.  
+
+* The naive SE's are much smaller (*half*) than the robust (sandwich) SE's, suggesting a poor fit.
+
+
+### Change Correlation Sturucture
+
+* correlation structure: `exchangeable`
+* scale parameter = $1$
+
+```{r}
+fit_gee_exc_s1 <- gee::gee(seizure.rate ~ base + age + treatment + offset(per),
+                           data = data_long,
+                           family = poisson(link = "log"),
+                           id = subject,
+                           corstr = "exchangeable",
+                           scale.fix = TRUE,
+                           scale.value = 1)
+
+summary(fit_gee_exc_s1)
+```
+
+* Although the estimated beta parameters are not much different, the naive SE's are some closer to the robust SE's.
+
+### Estimate the Scale Parameter
+
+* correlation structure: `exchangeable`
+* scale parameter = *freely estimated*
+
+```{r}
+fit_gee_exc_sf <- gee::gee(seizure.rate ~ base + age + treatment + offset(per),
+                           data = data_long,
+                           family = poisson(link = "log"),
+                           id = subject,
+                           corstr = "exchangeable",
+                           scale.fix = FALSE)
+
+summary(fit_gee_exc_sf)
+```
+
+* The naive SE's are much closer inline with the robust SE's.
+
+* The sclae parameter is estimated to be much larger than $1$.
+
+
+### Compare
+
+
+```{r, include=FALSE}
+texreg::screenreg(list(fit_glm, fit_gee_ind_s1, fit_gee_exc_s1, fit_gee_exc_sf),
+                  digits = 3)
+```
+
+
+
+```{r, results="asis"}
+texreg::htmlreg(list(fit_glm, 
+                     fit_gee_ind_s1, 
+                     fit_gee_exc_s1, 
+                     fit_gee_exc_sf),
+                custom.model.names = c("GLM",
+                                       "GEE-Indep(1)",
+                                       "GEE-Exchg(1)",
+                                       "GEE-Exchg(free)"),
+                digits = 3)
+```
+
+
+> CONCLUSION:
+>
+> There is no evidence that Progabide effects the weekly rate of epileptic seizures.
+
+
+
+
+
+
+
+
+
+

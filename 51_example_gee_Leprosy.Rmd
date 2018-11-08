@@ -1,0 +1,106 @@
+# GEE, Count Outcome: Antibiotics for Leprosy
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)    # all things tidy
+library(pander)       # nice looking genderal tabulations
+library(furniture)    # nice table1() descriptives
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(psych)        # contains some useful functions, like headTail
+
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+
+library(corrplot)     # Vizualize correlation matrix
+library(gee)          # Genderalized Estimation Equation Solver
+library(geepack)      # Genderalized Estimation Equation Package 
+library(MuMIn)        # Multi-Model Inference (caluclate QIC)
+```
+
+## Prepare and get to know the dataset
+
+### Read in the data
+
+https://content.sph.harvard.edu/fitzmaur/ala/
+
+
+Data on count of leprosy bacilli pre- and post-treatment from a clinical trial of antibiotics for leprosy.
+
+
+Source: Table 14.2.1 (page 422) in Snedecor, G.W. and Cochran, W.G. (1967). 
+Statistical Methods, (6th edn). Ames, Iowa: Iowa State University Press
+With permission of Iowa State University Press.
+
+Reference: Snedecor, G.W. and Cochran, W.G. (1967). Statistical Methods, (6th edn). 
+Ames, Iowa: Iowa State University Press
+
+
+Description:
+
+The dataset consists of count data from a placebo-controlled clinical trial of 30 patients with leprosy at the Eversley Childs Sanitorium in the Philippines. Participants in the study were randomized to either of two  antibiotics (denoted treatment drug A and B) or to a placebo (denoted treatment  drug C). Prior to receiving treatment, baseline data on the number of leprosy bacilli at six sites of the body where the bacilli tend to congregate were recorded for each patient. After several months of treatment, the number of leprosy bacilli at six sites of the body were recorded a second time. The outcome variable is the total count of the number of leprosy bacilli at the six sites.
+
+In this study, the question of main scientific interest is whether treatment with antibiotics (drugs A and B) reduces the abundance of leprosy bacilli at the six sites of the body when compared to placebo (drug C). 
+
+
+Variable List:
+
+Drug, Pre-Treatment Bacilli Count, Post-Treatment Bacilli Count.
+
+```{r}
+data_raw <- tibble::tribble(
+  ~drug, ~count_pre, ~count_post,
+  "A",      11,     6,    "B",       6,     0,    "C",      16,    13,
+  "A",       8,     0,    "B",       6,     2,    "C",      13,    10,
+  "A",       5,     2,    "B",       7,     3,    "C",      11,    18,
+  "A",      14,     8,    "B",       8,     1,    "C",       9,     5,
+  "A",      19,    11,    "B",      18,    18,    "C",      21,    23,
+  "A",       6,     4,    "B",       8,     4,    "C",      16,    12,
+  "A",      10,    13,    "B",      19,    14,    "C",      12,     5,
+  "A",       6,     1,    "B",       8,     9,    "C",      12,    16,
+  "A",      11,     8,    "B",       5,     1,    "C",       7,     1,
+  "A",       3,     0,    "B",      15,     9,    "C",      12,    20)
+```
+
+
+```{r}
+data_wide <- data_raw %>% 
+  dplyr::mutate(drug = factor(drug)) %>% 
+  dplyr::mutate(id = row_number()) %>% 
+  dplyr::select(id, drug, count_pre, count_post)
+
+data_wide
+```
+
+
+```{r}
+data_long <- data_wide %>% 
+  tidyr::gather(key = obs,
+                value = count,
+                starts_with("count")) %>% 
+  dplyr::mutate(time = case_when(obs == "count_pre" ~ 0,
+                                 obs == "count_post" ~ 1)) %>% 
+  dplyr::select(id, drug, time, count)
+
+data_long
+```
+
+
+
+```{r}
+glm(count~ time*drug,
+    data = data_long)
+```
+
+
+
+
+
+
