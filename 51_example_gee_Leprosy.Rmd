@@ -56,7 +56,7 @@ The dataset maybe downloaded from: https://content.sph.harvard.edu/fitzmaur/ala/
 
 
 
-Data on count of leprosy bacilli pre- and post-treatment from a clinical trial of antibiotics for leprosy.
+> Data on count of leprosy bacilli pre- and post-treatment from a clinical trial of antibiotics for leprosy.
 
 
 Source: Table 14.2.1 (page 422) in Snedecor, G.W. and Cochran, W.G. (1967).  Statistical Methods, (6th edn). Ames, Iowa: Iowa State University Press 
@@ -74,9 +74,17 @@ The dataset consists of count data from a placebo-controlled clinical trial of 3
 In this study, the question of main scientific interest is whether treatment with antibiotics (drugs A and B) reduces the abundance of leprosy bacilli at the six sites of the body when compared to placebo (drug C). 
 
 
-**Variable List:**
+**Variables:**
 
-Drug, Pre-Treatment Bacilli Count, Post-Treatment Bacilli Count.
+* Outcome or dependent variable(s) 
+
+    + `count.pre` Pre-Treatment Bacilli Count
+    + `count.post` Post-Treatment Bacilli Count
+
+* Main predictor or independent variable of interest   
+
+    + `drug` the treatment group: antibiotics (drugs A and B) or placebo (drug C)
+
 
 ```{r}
 data_raw <- tibble::tribble(

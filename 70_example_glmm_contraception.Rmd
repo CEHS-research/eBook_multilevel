@@ -1,0 +1,329 @@
+# GLMM, Binary Outcome: Antibiotics for Leprosy
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+## Packages
+
+### CRAN
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)    # all things tidy
+library(pander)       # nice looking genderal tabulations
+library(furniture)    # nice table1() descriptives
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(psych)        # contains some useful functions, like headTail
+
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(effects)      # Plotting estimated marginal means
+
+library(corrplot)     # Vizualize correlation matrix
+library(gee)          # Genderalized Estimation Equation Solver
+library(geepack)      # Genderalized Estimation Equation Package 
+library(MuMIn)        # Multi-Model Inference (caluclate QIC)
+```
+
+
+### GitHub
+
+Helper `extract` functions for exponentiating parameters form generalized regression models within a `texreg` table of model parameters.
+
+```{r, message=FALSE, error=FALSE}
+# install.packages("devtools")
+# library(devtools)
+# install_github("SarBearSchwartz/texreghelpr")
+
+library(texreghelpr)
+```
+
+
+## Prepare and get to know the dataset
+
+> Data on Amenorrhea from Clinical Trial of Contracepting Women.
+
+**Source:** 
+
+Table 1 (page 168) of Machin et al. (1988).
+With permission of Elsevier.
+
+**Reference:** 
+
+Machin D, Farley T, Busca B, Campbell M and d'Arcangues C. (1988). Assessing changes in vaginal bleeding patterns in contracepting women. Contraception, 38, 165-179.
+
+**Description:**
+
+The data are from a longitudinal clinical trial of contracepting women. In this trial women received an injection of either 100 mg or 150 mg of depot-medroxyprogesterone acetate (DMPA) on the day of randomization  and three additional injections at 90-day intervals. There was a final follow-up visit 90 days after the fourth injection, i.e., one year after the first injection. Throughout the study each woman completed a menstrual diary that recorded any vaginal bleeding pattern disturbances. The diary data were used to determine whether a women experienced *amenorrhea*, the absence of menstrual bleeding for a specified number of days.  A total of 1151 women completed the menstrual diaries and the diary data were used to generate a binary sequence for each woman according to whether or not she had experienced **amenorrhea in the four successive three month intervals**. 
+
+In clinical trials of modern hormonal contraceptives, pregnancy is exceedingly rare (and would be regarded as a failure of the contraceptive method), and is not the main outcome of interest in this study. Instead, the outcome of interest is a binary response indicating whether a woman experienced amenorrhea in the four successive three month intervals. A feature of this clinical trial is that there was **substantial dropout**. More than one third of the women dropped out before the completion of the trial.
+
+**Variable List:**
+
+* Indicators   
+
+    + `id` participant identification
+    + `occasion` denotes the four 90-day periods
+    
+* Outcome or dependent variable    
+
+    + `amenorrhea` Amenorrhea Status: 1=Amenorrhea, 0=No Amenorrhea
+    
+* Main predictor or independent variable of interest   
+
+    + `dose` 0 = Low (100 mg), 1 = High (150 mg)
+
+
+### Read in the data
+
+
+```{r}
+data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/data/master/MLM/RCTcontraception.txt", header=TRUE)
+
+str(data_raw)
+
+psych::headTail(data_raw, top = 10)
+```
+
+### Long Format
+
+```{r}
+data_long <- data_raw %>% 
+  dplyr::mutate(id = factor(id)) %>% 
+  dplyr::mutate(dose = factor(dose,
+                              levels = c("0", "1"),
+                              labels = c("Low", "High"))) %>% 
+  dplyr::mutate(time = occasion - 1) %>% 
+  dplyr::mutate(amenorrhea = amenorrhea %>%       # outcome needs to be numeric
+                  as.character() %>% 
+                  as.numeric()) %>% 
+  dplyr::filter(complete.cases(amenorrhea)) %>%   # dump missing occations
+  dplyr::arrange(id, time)
+
+str(data_long)
+
+psych::headTail(data_long, bottom = 10)
+```
+
+
+### Wide Format
+
+
+```{r}
+data_wide <- data_long %>% 
+  dplyr::select(-time) %>% 
+  tidyr::spread(key = occasion,
+                value = amenorrhea,
+                sep = "_")
+
+str(data_wide)
+
+psych::headTail(data_wide, bottom = 10)
+```
+
+
+## Exploratory Data Analysis
+
+### Summary Statistics
+
+```{r}
+data_summary <- data_long %>% 
+  dplyr::group_by(dose, occasion) %>% 
+  dplyr::summarise(N = n(),
+                   M = mean(amenorrhea),
+                   SD = sd(amenorrhea),
+                   SE = SD/sqrt(N))
+
+data_summary
+```
+
+### Visualize
+
+```{r}
+data_summary %>% 
+  ggplot(aes(x = occasion,
+             y = M,
+             fill = dose)) +
+  geom_col(position = "dodge") +
+  theme_bw() +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(-0.1, 1.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "90-day windows",
+       y = "Observed Proportion of Amenorrhea",
+       fill = "Dosage") +
+  scale_x_continuous(breaks = 1:4,
+                     labels = c("First",
+                                "Second",
+                                "Third",
+                                "Fourth"))
+```
+
+
+```{r}
+data_summary %>% 
+  ggplot(aes(x = occasion,
+             y = M,
+             color = dose %>% fct_rev())) +
+  geom_errorbar(aes(ymin = M - SE,
+                    ymax = M + SE),
+                width = .3,
+                position = position_dodge(width = .25)) +
+  geom_point(position = position_dodge(width = .25)) +
+  geom_line(position = position_dodge(width = .25)) +
+  theme_bw() +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(-0.1, 1.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "90-day windows",
+       y = "Observed Proportion of Amenorrhea",
+       color = "Dosage") +
+  scale_x_continuous(breaks = 1:4,
+                     labels = c("First",
+                                "Second",
+                                "Third",
+                                "Fourth"))
+```
+
+
+## Genderalized Linear Mided Effects Models (GLMM)
+
+### Fit Models
+
+```{r}
+fit_1 <- lme4::glmer(amenorrhea ~ time*dose + (1 | id),
+                     data = data_long,
+                     family = binomial(link = "logit"))
+
+fit_2 <- lme4::glmer(amenorrhea ~ time + dose + (1 | id),
+                     data = data_long,
+                     family = binomial(link = "logit"))
+```
+
+
+#### Compare via LRT
+
+Should the interaction be included?  No.
+
+```{r}
+anova(fit_1, fit_2)
+```
+
+
+### Table of Model Parameteres
+
+#### Logit Scale
+
+```{r, inlcude=FALSE}
+texreg::screenreg(list(fit_1, fit_2),
+                  single.row = TRUE)
+```
+
+```{r, inlcude=FALSE}
+texreg::screenreg(list(fit_1, fit_2),
+                  ci.force = TRUE,
+                  single.row = TRUE)
+```
+
+#### Odds ratio scale
+
+```{r, inlcude=FALSE}
+texreg::screenreg(list(extract_glmer_exp(fit_1), 
+                       extract_glmer_exp(fit_2)),
+                  ci.test = 1,
+                  single.row = TRUE)
+```
+
+
+
+### Visualize the Model
+
+#### Scale = Logit
+
+```{r}
+effects::Effect(focal.predictors = c("dose", "time"),
+                xlevels = list(time = seq(from = 0, to = 3, by = .1)),
+                mod = fit_2,
+                transform = NULL) %>% 
+  data.frame %>% 
+  ggplot(aes(x = time,
+             y = fit)) +
+  geom_hline(yintercept = 0,         # reference line
+             color = "gray",
+             size = 1.5) +
+  geom_ribbon(aes(ymin = fit - se,   # Mean +/- 1 SEM
+                  ymax = fit + se,
+                  fill = dose),
+              alpha = .2) +
+  geom_line(aes(color = dose),
+            size = 1.5) +
+  theme_bw() +
+  labs(y = "Logit Scale")
+```
+
+
+#### Scale = Probability
+
+```{r}
+effects::Effect(focal.predictors = c("dose", "time"),
+                xlevels = list(time = seq(from = 0, to = 3, by = .1)),
+                mod = fit_2) %>% 
+  data.frame %>% 
+  ggplot(aes(x = time,
+             y = fit)) +
+  geom_hline(yintercept = c(0, 0.5, 1),         # reference lines
+             color = "gray",
+             size = 1.5) +
+  geom_ribbon(aes(ymin = fit - se,
+                  ymax = fit + se,
+                  fill = dose),
+              alpha = .2) +
+  geom_line(aes(color = dose),
+            size = 1.5) +
+  theme_bw() +
+  labs(y = "Predicted Probability")
+```
+
+Remove the error bands:
+
+```{r}
+effects::Effect(focal.predictors = c("dose", "time"),
+                xlevels = list(time = seq(from = 0, to = 3, by = .1)),
+                mod = fit_2) %>% 
+  data.frame %>% 
+  ggplot(aes(x = time,
+             y = fit)) +
+  geom_hline(yintercept = c(0, 0.5),         # reference lines
+             color = "gray",
+             size = 1.5) +
+  # geom_ribbon(aes(ymin = fit - se,
+  #                 ymax = fit + se,
+  #                 fill = dose),
+  #             alpha = .2) +
+  geom_line(aes(linetype = dose),
+            size = 1) +
+  theme_bw() +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(-0.1, 1.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "90-day Window",
+       y = "Predicted Probability of Amenorrhea",
+       linetype = "Dosage") +
+  scale_x_continuous(breaks = 0:3,
+                     labels = c("First",
+                                "Second",
+                                "Third",
+                                "Fourth"))
+```
+
+
+
+
