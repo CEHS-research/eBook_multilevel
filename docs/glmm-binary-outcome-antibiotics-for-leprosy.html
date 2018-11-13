@@ -495,10 +495,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="16.3.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#summary-statistics-2"><i class="fa fa-check"></i><b>16.3.1</b> Summary Statistics</a></li>
 <li class="chapter" data-level="16.3.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#visualize-4"><i class="fa fa-check"></i><b>16.3.2</b> Visualize</a></li>
 </ul></li>
-<li class="chapter" data-level="16.4" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#genderalized-linear-mided-effects-models-glmm"><i class="fa fa-check"></i><b>16.4</b> Genderalized Linear Mided Effects Models (GLMM)</a><ul>
+<li class="chapter" data-level="16.4" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#generalized-linear-mixed-effects-models-glmm---basic"><i class="fa fa-check"></i><b>16.4</b> Generalized Linear Mixed Effects Models (GLMM) - Basic</a><ul>
 <li class="chapter" data-level="16.4.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#fit-models"><i class="fa fa-check"></i><b>16.4.1</b> Fit Models</a></li>
 <li class="chapter" data-level="16.4.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#table-of-model-parameteres"><i class="fa fa-check"></i><b>16.4.2</b> Table of Model Parameteres</a></li>
 <li class="chapter" data-level="16.4.3" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#visualize-the-model-4"><i class="fa fa-check"></i><b>16.4.3</b> Visualize the Model</a></li>
+</ul></li>
+<li class="chapter" data-level="16.5" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#generalized-linear-mixed-effects-models-glmm---advanced"><i class="fa fa-check"></i><b>16.5</b> Generalized Linear Mixed Effects Models (GLMM) - Advanced</a><ul>
+<li class="chapter" data-level="16.5.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#adaptive-gauss-hermite-quadrature-increase-the-number-of-quadrature-points"><i class="fa fa-check"></i><b>16.5.1</b> Adaptive Gauss-Hermite Quadrature: Increase the number of quadrature points</a></li>
+<li class="chapter" data-level="16.5.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#laplace-approximation-switch-to-the-nelder_mead-optimizer"><i class="fa fa-check"></i><b>16.5.2</b> Laplace Approximation: switch to the Nelder_Mead optimizer</a></li>
+<li class="chapter" data-level="16.5.3" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#laplace-approximation-switch-to-the-l-bfgs-b-method"><i class="fa fa-check"></i><b>16.5.3</b> Laplace Approximation: Switch to the <code>L-BFGS-B</code> method</a></li>
+<li class="chapter" data-level="16.5.4" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#laplace-approximation-switch-to-the-nlminb-method"><i class="fa fa-check"></i><b>16.5.4</b> Laplace Approximation: Switch to the <code>nlminb</code> method</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
@@ -537,10 +543,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
 <span class="kw">library</span>(effects)      <span class="co"># Plotting estimated marginal means</span>
 
-<span class="kw">library</span>(corrplot)     <span class="co"># Vizualize correlation matrix</span>
-<span class="kw">library</span>(gee)          <span class="co"># Genderalized Estimation Equation Solver</span>
-<span class="kw">library</span>(geepack)      <span class="co"># Genderalized Estimation Equation Package </span>
-<span class="kw">library</span>(MuMIn)        <span class="co"># Multi-Model Inference (caluclate QIC)</span></code></pre></div>
+<span class="kw">library</span>(optimx)       <span class="co"># Unify and streamline optimization capabilities in R</span></code></pre></div>
 </div>
 <div id="github-3" class="section level3">
 <h3><span class="header-section-number">16.1.2</span> GitHub</h3>
@@ -754,8 +757,8 @@ data_summary</code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-606-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
-<div id="genderalized-linear-mided-effects-models-glmm" class="section level2">
-<h2><span class="header-section-number">16.4</span> Genderalized Linear Mided Effects Models (GLMM)</h2>
+<div id="generalized-linear-mixed-effects-models-glmm---basic" class="section level2">
+<h2><span class="header-section-number">16.4</span> Generalized Linear Mixed Effects Models (GLMM) - Basic</h2>
 <div id="fit-models" class="section level3">
 <h3><span class="header-section-number">16.4.1</span> Fit Models</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_<span class="dv">1</span> &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">glmer</span>(amenorrhea <span class="op">~</span><span class="st"> </span>time<span class="op">*</span>dose <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
@@ -782,69 +785,430 @@ fit_1  5 3932 3963  -1961     3922  0.69      1       0.41</code></pre>
 <h3><span class="header-section-number">16.4.2</span> Table of Model Parameteres</h3>
 <div id="logit-scale" class="section level4">
 <h4><span class="header-section-number">16.4.2.1</span> Logit Scale</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(fit_<span class="dv">1</span>, fit_<span class="dv">2</span>),
-                  <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>
-=============================================================
-                     Model 1              Model 2            
--------------------------------------------------------------
-(Intercept)             -2.55 (0.17) ***     -2.61 (0.16) ***
-time                     0.87 (0.07) ***      0.91 (0.05) ***
-doseHigh                 0.39 (0.21)          0.50 (0.16) ** 
-time:doseHigh            0.08 (0.09)                         
--------------------------------------------------------------
-AIC                   3932.14              3930.83           
-BIC                   3963.11              3955.61           
-Log Likelihood       -1961.07             -1961.42           
-Num. obs.             3616                 3616              
-Num. groups: id       1151                 1151              
-Var: id (Intercept)      4.26                 4.24           
-=============================================================
-*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(fit_<span class="dv">1</span>, fit_<span class="dv">2</span>),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_<span class="dv">1</span>, fit_<span class="dv">2</span>),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;with&quot;</span>, <span class="st">&quot;without&quot;</span>),
+                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                <span class="dt">caption =</span> <span class="st">&quot;MLM Parameter Estimates: Inclusion of Interaction (SE and p-values)&quot;</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+MLM Parameter Estimates: Inclusion of Interaction (SE and p-values)
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>with</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>without</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+-2.55 (0.17)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-2.61 (0.16)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+time
+</td>
+<td style="padding-right: 12px; border: none;">
+0.87 (0.07)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.91 (0.05)<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+doseHigh
+</td>
+<td style="padding-right: 12px; border: none;">
+0.39 (0.21)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.50 (0.16)<sup style="vertical-align: 0px;">**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+time:doseHigh
+</td>
+<td style="padding-right: 12px; border: none;">
+0.08 (0.09)
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+3932.14
+</td>
+<td style="border-top: 1px solid black;">
+3930.83
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+3963.11
+</td>
+<td style="padding-right: 12px; border: none;">
+3955.61
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-1961.07
+</td>
+<td style="padding-right: 12px; border: none;">
+-1961.42
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: id
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: id (Intercept)
+</td>
+<td style="border-bottom: 2px solid black;">
+4.26
+</td>
+<td style="border-bottom: 2px solid black;">
+4.24
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="4">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_<span class="dv">1</span>, fit_<span class="dv">2</span>),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;with&quot;</span>, <span class="st">&quot;without&quot;</span>),
                   <span class="dt">ci.force =</span> <span class="ot">TRUE</span>,
-                  <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>
-=========================================================================
-                     Model 1                    Model 2                  
--------------------------------------------------------------------------
-(Intercept)             -2.55 [-2.89; -2.22] *     -2.61 [-2.92; -2.30] *
-time                     0.87 [ 0.74;  1.01] *      0.91 [ 0.81;  1.02] *
-doseHigh                 0.39 [-0.01;  0.79]        0.50 [ 0.17;  0.82] *
-time:doseHigh            0.08 [-0.10;  0.26]                             
--------------------------------------------------------------------------
-AIC                   3932.14                    3930.83                 
-BIC                   3963.11                    3955.61                 
-Log Likelihood       -1961.07                   -1961.42                 
-Num. obs.             3616                       3616                    
-Num. groups: id       1151                       1151                    
-Var: id (Intercept)      4.26                       4.24                 
-=========================================================================
-* 0 outside the confidence interval</code></pre>
+                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                <span class="dt">caption =</span> <span class="st">&quot;MLM Parameter Estimates: Inclusion of Interaction (95% CI&#39;s)&quot;</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+MLM Parameter Estimates: Inclusion of Interaction (95% CI’s)
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>with</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>without</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+-2.55 [-2.89; -2.22]<sup style="vertical-align: 0px;">*</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-2.61 [-2.92; -2.30]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+time
+</td>
+<td style="padding-right: 12px; border: none;">
+0.87 [0.74; 1.01]<sup style="vertical-align: 0px;">*</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.91 [0.81; 1.02]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+doseHigh
+</td>
+<td style="padding-right: 12px; border: none;">
+0.39 [-0.01; 0.79]
+</td>
+<td style="padding-right: 12px; border: none;">
+0.50 [0.17; 0.82]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+time:doseHigh
+</td>
+<td style="padding-right: 12px; border: none;">
+0.08 [-0.10; 0.26]
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+3932.14
+</td>
+<td style="border-top: 1px solid black;">
+3930.83
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+3963.11
+</td>
+<td style="padding-right: 12px; border: none;">
+3955.61
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-1961.07
+</td>
+<td style="padding-right: 12px; border: none;">
+-1961.42
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: id
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: id (Intercept)
+</td>
+<td style="border-bottom: 2px solid black;">
+4.26
+</td>
+<td style="border-bottom: 2px solid black;">
+4.24
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="4">
+<span style="font-size:0.8em"><sup>*</sup> 0 outside the confidence interval</span>
+</td>
+</tr>
+</table>
 </div>
 <div id="odds-ratio-scale" class="section level4">
 <h4><span class="header-section-number">16.4.2.2</span> Odds ratio scale</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(<span class="kw">extract_glmer_exp</span>(fit_<span class="dv">1</span>), 
-                       <span class="kw">extract_glmer_exp</span>(fit_<span class="dv">2</span>)),
-                  <span class="dt">ci.test =</span> <span class="dv">1</span>,
-                  <span class="dt">single.row =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>
-=====================================================================
-                     Model 1                  Model 2                
----------------------------------------------------------------------
-(Intercept)              0.08 [0.06; 0.11] *      0.07 [0.05; 0.10] *
-time                     2.40 [2.08; 2.75] *      2.49 [2.24; 2.77] *
-doseHigh                 1.48 [0.98; 2.22]        1.64 [1.19; 2.27] *
-time:doseHigh            1.08 [0.90; 1.30]                           
----------------------------------------------------------------------
-AIC                   3932.14                  3930.83               
-BIC                   3963.11                  3955.61               
-Log Likelihood       -1961.07                 -1961.42               
-Num. obs.             3616                     3616                  
-Num. groups: id       1151                     1151                  
-Var: id (Intercept)      4.26                     4.24               
-=====================================================================
-* 1 outside the confidence interval</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
+<span class="co"># Knit to PDF:     texreg::texreg()</span>
+<span class="co"># View on Screen:  texreg::screenreg()</span>
+
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(<span class="kw">extract_glmer_exp</span>(fit_<span class="dv">1</span>), 
+                     <span class="kw">extract_glmer_exp</span>(fit_<span class="dv">2</span>)),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;with&quot;</span>, <span class="st">&quot;without&quot;</span>),
+                <span class="dt">ci.test =</span> <span class="dv">1</span>,
+                <span class="dt">ci.force =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                <span class="dt">caption =</span> <span class="st">&quot;MLM Parameter Estimates: Inclusion of Interaction (95% CI&#39;s)&quot;</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+MLM Parameter Estimates: Inclusion of Interaction (95% CI’s)
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>with</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>without</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.08 [0.06; 0.11]<sup style="vertical-align: 0px;">*</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.07 [0.05; 0.10]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+time
+</td>
+<td style="padding-right: 12px; border: none;">
+2.40 [2.08; 2.75]<sup style="vertical-align: 0px;">*</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+2.49 [2.24; 2.77]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+doseHigh
+</td>
+<td style="padding-right: 12px; border: none;">
+1.48 [0.98; 2.22]
+</td>
+<td style="padding-right: 12px; border: none;">
+1.64 [1.19; 2.27]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+time:doseHigh
+</td>
+<td style="padding-right: 12px; border: none;">
+1.08 [0.90; 1.30]
+</td>
+<td style="padding-right: 12px; border: none;">
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+3932.14
+</td>
+<td style="border-top: 1px solid black;">
+3930.83
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+3963.11
+</td>
+<td style="padding-right: 12px; border: none;">
+3955.61
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-1961.07
+</td>
+<td style="padding-right: 12px; border: none;">
+-1961.42
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: id
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: id (Intercept)
+</td>
+<td style="border-bottom: 2px solid black;">
+4.26
+</td>
+<td style="border-bottom: 2px solid black;">
+4.24
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="4">
+<span style="font-size:0.8em"><sup>*</sup> 1 outside the confidence interval</span>
+</td>
+</tr>
+</table>
 </div>
 </div>
 <div id="visualize-the-model-4" class="section level3">
@@ -869,7 +1233,7 @@ Var: id (Intercept)      4.26                     4.24
             <span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Logit Scale&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-612-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-615-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="scale-probability" class="section level4">
 <h4><span class="header-section-number">16.4.3.2</span> Scale = Probability</h4>
@@ -890,7 +1254,7 @@ Var: id (Intercept)      4.26                     4.24
             <span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Predicted Probability&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-613-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-616-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Remove the error bands:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;dose&quot;</span>, <span class="st">&quot;time&quot;</span>),
                 <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">time =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">3</span>, <span class="dt">by =</span> .<span class="dv">1</span>)),
@@ -898,13 +1262,9 @@ Var: id (Intercept)      4.26                     4.24
 <span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time,
              <span class="dt">y =</span> fit)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>),         <span class="co"># reference lines</span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>),       
              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
              <span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span>
-<span class="st">  </span><span class="co"># geom_ribbon(aes(ymin = fit - se,</span>
-<span class="st">  </span><span class="co">#                 ymax = fit + se,</span>
-<span class="st">  </span><span class="co">#                 fill = dose),</span>
-<span class="st">  </span><span class="co">#             alpha = .2) +</span>
 <span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> dose),
             <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
@@ -914,15 +1274,379 @@ Var: id (Intercept)      4.26                     4.24
         <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;90-day Window&quot;</span>,
        <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of Amenorrhea&quot;</span>,
-       <span class="dt">linetype =</span> <span class="st">&quot;Dosage&quot;</span>) <span class="op">+</span>
+       <span class="dt">linetype =</span> <span class="st">&quot;Dosage:&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>,
                      <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;First&quot;</span>,
                                 <span class="st">&quot;Second&quot;</span>,
                                 <span class="st">&quot;Third&quot;</span>,
                                 <span class="st">&quot;Fourth&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-614-1.png" width="576" style="display: block; margin: auto;" /></p>
-
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-617-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
+</div>
+</div>
+<div id="generalized-linear-mixed-effects-models-glmm---advanced" class="section level2">
+<h2><span class="header-section-number">16.5</span> Generalized Linear Mixed Effects Models (GLMM) - Advanced</h2>
+<p>From the documentation:</p>
+<p>The <code>lme4::glmer()</code> function fits a generalized linear mixed model, which incorporates both fixed-effects parameters and random effects in a linear predictor, <strong>via maximum likelihood</strong>. The linear predictor is related to the conditional mean of the response through the inverse link function defined in the GLM family.</p>
+<p>The expression for the likelihood of a mixed-effects model is an integral over the random effects space. For a linear mixed-effects model (LMM), as fit by lmer, this integral can be evaluated exactly. For a GLMM the <strong>integral must be approximated</strong>. The most reliable approximation for GLMMs is adaptive <strong>Gauss-Hermite quadrature</strong>, at present implemented only for models with a single scalar random effect. The <code>nAGQ</code> argument controls the number of nodes in the quadrature formula. A model with a single, scalar random-effects term could reasonably use up to 25 quadrature points per scalar integral.</p>
+<p>The <code>lme4::lmerControl()</code> function includes an argument for the <code>optimizer</code>, which is the name of a optimizing function(s). IT is a character vector or list of functions: length 1 for lmer or glmer, possibly length 2 for glmer). The built-in optimizers are <strong>Nelder_Mead</strong> and <strong>bobyqa</strong> (from the minqa package). Other minimizing functions are allows (constraints do apply).</p>
+<p>Special provisions are made for <strong>bobyqa</strong>, <strong>Nelder_Mead</strong>, and optimizers wrapped in the <code>optimx</code> package; to use the optimx optimizers (including <strong>L-BFGS-B</strong> from base <code>optim</code> and <code>nlminb</code>), pass the method argument to <code>optim</code> in the <code>optCtrl</code> argument (you may also need to load the <code>optimx</code> package manually using <code>library(optimx)</code>.</p>
+<div id="adaptive-gauss-hermite-quadrature-increase-the-number-of-quadrature-points" class="section level3">
+<h3><span class="header-section-number">16.5.1</span> Adaptive Gauss-Hermite Quadrature: Increase the number of quadrature points</h3>
+<blockquote>
+<p><code>nAGQ</code> (integer scalar) the number of points per axis for evaluating the adaptive Gauss-Hermite approximation to the log-likelihood. Defaults to 1, corresponding to the Laplace approximation. Values greater than 1 produce greater accuracy in the evaluation of the log-likelihood at the expense of speed. A value of zero uses a faster but less exact form of parameter estimation for GLMMs by optimizing the random effects and the fixed-effects coefficients in the penalized iteratively reweighted least squares step. (See Details.)</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_3a &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">glmer</span>(amenorrhea <span class="op">~</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>time<span class="op">:</span>dose <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time<span class="op">^</span><span class="dv">2</span>)<span class="op">:</span>dose <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                     <span class="dt">data =</span> data_long,
+                     <span class="dt">nAGQ =</span> <span class="dv">50</span>,             <span class="co"># increase the number of points</span>
+                     <span class="dt">family =</span> binomial)</code></pre></div>
+</div>
+<div id="laplace-approximation-switch-to-the-nelder_mead-optimizer" class="section level3">
+<h3><span class="header-section-number">16.5.2</span> Laplace Approximation: switch to the Nelder_Mead optimizer</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_3b &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">glmer</span>(amenorrhea <span class="op">~</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>time<span class="op">:</span>dose <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time<span class="op">^</span><span class="dv">2</span>)<span class="op">:</span>dose <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                     <span class="dt">data =</span> data_long,
+                     <span class="dt">control =</span> <span class="kw">glmerControl</span>(<span class="dt">optimizer =</span><span class="st">&quot;Nelder_Mead&quot;</span>),
+                     <span class="dt">family =</span> binomial)</code></pre></div>
+</div>
+<div id="laplace-approximation-switch-to-the-l-bfgs-b-method" class="section level3">
+<h3><span class="header-section-number">16.5.3</span> Laplace Approximation: Switch to the <code>L-BFGS-B</code> method</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_3c &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">glmer</span>(amenorrhea <span class="op">~</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>time<span class="op">:</span>dose <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time<span class="op">^</span><span class="dv">2</span>)<span class="op">:</span>dose <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                     <span class="dt">data =</span> data_long,
+                     <span class="dt">control =</span> <span class="kw">glmerControl</span>(<span class="dt">optimizer =</span><span class="st">&#39;optimx&#39;</span>, <span class="dt">optCtrl=</span><span class="kw">list</span>(<span class="dt">method=</span><span class="st">&#39;L-BFGS-B&#39;</span>)),
+                     <span class="dt">family =</span> binomial)</code></pre></div>
+</div>
+<div id="laplace-approximation-switch-to-the-nlminb-method" class="section level3">
+<h3><span class="header-section-number">16.5.4</span> Laplace Approximation: Switch to the <code>nlminb</code> method</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_3d &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">glmer</span>(amenorrhea <span class="op">~</span><span class="st"> </span>time <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>time<span class="op">:</span>dose <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time<span class="op">^</span><span class="dv">2</span>)<span class="op">:</span>dose <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
+                     <span class="dt">data =</span> data_long,
+                     <span class="dt">control =</span> <span class="kw">glmerControl</span>(<span class="dt">optimizer =</span><span class="st">&#39;optimx&#39;</span>, <span class="dt">optCtrl=</span><span class="kw">list</span>(<span class="dt">method=</span><span class="st">&#39;nlminb&#39;</span>)),
+                     <span class="dt">family =</span> binomial)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_3a, fit_3b, fit_3c, fit_3d),
+                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;nAGQ&quot;</span>, <span class="st">&quot;Nelder_Mead&quot;</span>,
+                                       <span class="st">&quot;L BFGS B&quot;</span>, <span class="st">&quot;nlminb&quot;</span>),
+                <span class="dt">caption =</span> <span class="st">&quot;GLMM: Various methods of ML approximation&quot;</span>,
+                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+GLMM: Various methods of ML approximation
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>nAGQ</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>Nelder_Mead</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>L BFGS B</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>nlminb</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+(Intercept)
+</td>
+<td style="padding-right: 12px; border: none;">
+-2.4829<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-2.4604<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-2.4601<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-2.4604<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1416)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1397)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1397)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1397)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+time
+</td>
+<td style="padding-right: 12px; border: none;">
+0.7714<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.7561<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.7558<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.7561<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2026)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1985)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1985)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.1985)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+I(time^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0346
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0340
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0341
+</td>
+<td style="padding-right: 12px; border: none;">
+0.0340
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0667)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0655)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0655)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0655)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+time:doseHigh
+</td>
+<td style="padding-right: 12px; border: none;">
+0.8920<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.8861<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.8860<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.8861<sup style="vertical-align: 0px;">***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2574)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2513)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2513)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.2513)
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+I(time^2):doseHigh
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.2599<sup style="vertical-align: 0px;">**</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.2579<sup style="vertical-align: 0px;">**</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.2579<sup style="vertical-align: 0px;">**</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.2579<sup style="vertical-align: 0px;">**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0895)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0879)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0879)
+</td>
+<td style="padding-right: 12px; border: none;">
+(0.0879)
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+AIC
+</td>
+<td style="border-top: 1px solid black;">
+3879.4906
+</td>
+<td style="border-top: 1px solid black;">
+3925.1127
+</td>
+<td style="border-top: 1px solid black;">
+3925.1128
+</td>
+<td style="border-top: 1px solid black;">
+3925.1127
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+BIC
+</td>
+<td style="padding-right: 12px; border: none;">
+3916.6493
+</td>
+<td style="padding-right: 12px; border: none;">
+3962.2715
+</td>
+<td style="padding-right: 12px; border: none;">
+3962.2715
+</td>
+<td style="padding-right: 12px; border: none;">
+3962.2715
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Log Likelihood
+</td>
+<td style="padding-right: 12px; border: none;">
+-1933.7453
+</td>
+<td style="padding-right: 12px; border: none;">
+-1956.5564
+</td>
+<td style="padding-right: 12px; border: none;">
+-1956.5564
+</td>
+<td style="padding-right: 12px; border: none;">
+-1956.5564
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. obs.
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+<td style="padding-right: 12px; border: none;">
+3616
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: id
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+<td style="padding-right: 12px; border: none;">
+1151
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Var: id (Intercept)
+</td>
+<td style="border-bottom: 2px solid black;">
+5.0794
+</td>
+<td style="border-bottom: 2px solid black;">
+4.3478
+</td>
+<td style="border-bottom: 2px solid black;">
+4.3494
+</td>
+<td style="border-bottom: 2px solid black;">
+4.3479
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="6">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
+</td>
+</tr>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;dose&quot;</span>, <span class="st">&quot;time&quot;</span>),
+                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">time =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">3</span>, <span class="dt">by =</span> .<span class="dv">1</span>)),
+                <span class="dt">mod =</span> fit_3d) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time,
+             <span class="dt">y =</span> fit)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.5</span>),       
+             <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
+             <span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> dose),
+            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),
+        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">1.1</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
+        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;90-day Window&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of Amenorrhea&quot;</span>,
+       <span class="dt">linetype =</span> <span class="st">&quot;Dosage:&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">3</span>,
+                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;First&quot;</span>,
+                                <span class="st">&quot;Second&quot;</span>,
+                                <span class="st">&quot;Third&quot;</span>,
+                                <span class="st">&quot;Fourth&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-624-1.png" width="576" style="display: block; margin: auto;" /></p>
+
 </div>
 </div>
 </div>

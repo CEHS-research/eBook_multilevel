@@ -24,10 +24,7 @@ library(psych)        # contains some useful functions, like headTail
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(effects)      # Plotting estimated marginal means
 
-library(corrplot)     # Vizualize correlation matrix
-library(gee)          # Genderalized Estimation Equation Solver
-library(geepack)      # Genderalized Estimation Equation Package 
-library(MuMIn)        # Multi-Model Inference (caluclate QIC)
+library(optimx)       # Unify and streamline optimization capabilities in R
 ```
 
 
@@ -193,7 +190,7 @@ data_summary %>%
 ```
 
 
-## Genderalized Linear Mided Effects Models (GLMM)
+## Generalized Linear Mixed Effects Models (GLMM) - Basic
 
 ### Fit Models
 
@@ -221,26 +218,68 @@ anova(fit_1, fit_2)
 
 #### Logit Scale
 
-```{r, inlcude=FALSE}
+```{r, include=FALSE}
 texreg::screenreg(list(fit_1, fit_2),
                   single.row = TRUE)
 ```
 
-```{r, inlcude=FALSE}
+
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_1, fit_2),
+                custom.model.names = c("with", "without"),
+                single.row = TRUE,
+                caption = "MLM Parameter Estimates: Inclusion of Interaction (SE and p-values)")
+```
+
+
+
+
+```{r, include=FALSE}
 texreg::screenreg(list(fit_1, fit_2),
                   ci.force = TRUE,
                   single.row = TRUE)
 ```
 
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(fit_1, fit_2),
+                custom.model.names = c("with", "without"),
+                  ci.force = TRUE,
+                single.row = TRUE,
+                caption = "MLM Parameter Estimates: Inclusion of Interaction (95% CI's)")
+```
+
+
 #### Odds ratio scale
 
-```{r, inlcude=FALSE}
+```{r, include=FALSE}
 texreg::screenreg(list(extract_glmer_exp(fit_1), 
                        extract_glmer_exp(fit_2)),
                   ci.test = 1,
                   single.row = TRUE)
 ```
 
+
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(extract_glmer_exp(fit_1), 
+                     extract_glmer_exp(fit_2)),
+                custom.model.names = c("with", "without"),
+                ci.test = 1,
+                ci.force = TRUE,
+                single.row = TRUE,
+                caption = "MLM Parameter Estimates: Inclusion of Interaction (95% CI's)")
+```
 
 
 ### Visualize the Model
@@ -300,13 +339,9 @@ effects::Effect(focal.predictors = c("dose", "time"),
   data.frame %>% 
   ggplot(aes(x = time,
              y = fit)) +
-  geom_hline(yintercept = c(0, 0.5),         # reference lines
+  geom_hline(yintercept = c(0, 0.5),       
              color = "gray",
              size = 1.5) +
-  # geom_ribbon(aes(ymin = fit - se,
-  #                 ymax = fit + se,
-  #                 fill = dose),
-  #             alpha = .2) +
   geom_line(aes(linetype = dose),
             size = 1) +
   theme_bw() +
@@ -316,7 +351,7 @@ effects::Effect(focal.predictors = c("dose", "time"),
         legend.key.width = unit(1.5, "cm")) +
   labs(x = "90-day Window",
        y = "Predicted Probability of Amenorrhea",
-       linetype = "Dosage") +
+       linetype = "Dosage:") +
   scale_x_continuous(breaks = 0:3,
                      labels = c("First",
                                 "Second",
@@ -326,4 +361,96 @@ effects::Effect(focal.predictors = c("dose", "time"),
 
 
 
+## Generalized Linear Mixed Effects Models (GLMM) - Advanced
 
+From the documentation:
+
+The `lme4::glmer()` function fits a generalized linear mixed model, which incorporates both fixed-effects parameters and random effects in a linear predictor, **via maximum likelihood**. The linear predictor is related to the conditional mean of the response through the inverse link function defined in the GLM family.
+
+The expression for the likelihood of a mixed-effects model is an integral over the random effects space. For a linear mixed-effects model (LMM), as fit by lmer, this integral can be evaluated exactly. For a GLMM the **integral must be approximated**. The most reliable approximation for GLMMs is adaptive **Gauss-Hermite quadrature**, at present implemented only for models with a single scalar random effect. The `nAGQ` argument controls the number of nodes in the quadrature formula. A model with a single, scalar random-effects term could reasonably use up to 25 quadrature points per scalar integral.
+
+The `lme4::lmerControl()` function includes an argument for the `optimizer`, which is the name of a optimizing function(s). IT is a character vector or list of functions: length 1 for lmer or glmer, possibly length 2 for glmer). The built-in optimizers are **Nelder_Mead** and **bobyqa** (from the minqa package). Other minimizing functions are allows (constraints do apply).
+
+Special provisions are made for **bobyqa**, **Nelder_Mead**, and optimizers wrapped in the `optimx` package; to use the optimx optimizers (including **L-BFGS-B** from base `optim` and `nlminb`), pass the method argument to `optim` in the `optCtrl` argument (you may also need to load the `optimx` package manually using `library(optimx)`.
+
+
+### Adaptive Gauss-Hermite Quadrature: Increase the number of quadrature points
+
+> `nAGQ` (integer scalar) the number of points per axis for evaluating the adaptive Gauss-Hermite approximation to the log-likelihood. Defaults to 1, corresponding to the Laplace approximation. Values greater than 1 produce greater accuracy in the evaluation of the log-likelihood at the expense of speed. A value of zero uses a faster but less exact form of parameter estimation for GLMMs by optimizing the random effects and the fixed-effects coefficients in the penalized iteratively reweighted least squares step. (See Details.)
+
+```{r}
+fit_3a <- lme4::glmer(amenorrhea ~ time + I(time^2) + time:dose + I(time^2):dose + (1 | id),
+                     data = data_long,
+                     nAGQ = 50,             # increase the number of points
+                     family = binomial)
+```
+
+### Laplace Approximation: switch to the Nelder_Mead optimizer
+
+```{r}
+fit_3b <- lme4::glmer(amenorrhea ~ time + I(time^2) + time:dose + I(time^2):dose + (1 | id),
+                     data = data_long,
+                     control = glmerControl(optimizer ="Nelder_Mead"),
+                     family = binomial)
+```
+
+### Laplace Approximation: Switch to the `L-BFGS-B` method
+
+```{r, message = TRUE, error=TRUE}
+fit_3c <- lme4::glmer(amenorrhea ~ time + I(time^2) + time:dose + I(time^2):dose + (1 | id),
+                     data = data_long,
+                     control = glmerControl(optimizer ='optimx', optCtrl=list(method='L-BFGS-B')),
+                     family = binomial)
+```
+
+### Laplace Approximation: Switch to the `nlminb` method
+
+```{r}
+fit_3d <- lme4::glmer(amenorrhea ~ time + I(time^2) + time:dose + I(time^2):dose + (1 | id),
+                     data = data_long,
+                     control = glmerControl(optimizer ='optimx', optCtrl=list(method='nlminb')),
+                     family = binomial)
+```
+
+
+```{r, include=FALSE}
+texreg::screenreg(list(fit_3a, fit_3b, fit_3c, fit_3d),
+                  digits = 4)
+```
+
+```{r, results="asis"}
+texreg::htmlreg(list(fit_3a, fit_3b, fit_3c, fit_3d),
+                custom.model.names = c("nAGQ", "Nelder_Mead",
+                                       "L BFGS B", "nlminb"),
+                caption = "GLMM: Various methods of ML approximation",
+                digits = 4)
+```
+
+
+
+```{r}
+effects::Effect(focal.predictors = c("dose", "time"),
+                xlevels = list(time = seq(from = 0, to = 3, by = .1)),
+                mod = fit_3d) %>% 
+  data.frame %>% 
+  ggplot(aes(x = time,
+             y = fit)) +
+  geom_hline(yintercept = c(0, 0.5),       
+             color = "gray",
+             size = 1.5) +
+  geom_line(aes(linetype = dose),
+            size = 1) +
+  theme_bw() +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(-0.1, 1.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "90-day Window",
+       y = "Predicted Probability of Amenorrhea",
+       linetype = "Dosage:") +
+  scale_x_continuous(breaks = 0:3,
+                     labels = c("First",
+                                "Second",
+                                "Third",
+                                "Fourth"))
+```
