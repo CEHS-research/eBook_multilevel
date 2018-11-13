@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="variance-explained.html">
-<link rel="next" href="longitudinal-intro-example-autism.html">
+<link rel="prev" href="gee-count-outcome-epilepsy.html">
+<link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -474,356 +474,102 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="sjplot-package" class="section level1">
-<h1><span class="header-section-number">7</span> sjPlot Package</h1>
-<div class="figure">
-<img src="images/header_sjPlot.png" />
-
-</div>
-<div class="rmdlink">
-<p>
-<a href="http://www.danielluedecke.de/">Daniel Lüdecke</a> is German researcher that has put together several GREAT packages, including <code>sjPlot</code> which we will detail here. Documentation can be found at: <a href="http://www.strengejacke.de/sjPlot/index.html" class="uri">http://www.strengejacke.de/sjPlot/index.html</a>
-</p>
-</div>
+<div id="gee-count-outcome-antibiotics-for-leprosy" class="section level1">
+<h1><span class="header-section-number">15</span> GEE, Count Outcome: Antibiotics for Leprosy</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
+<span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
 <span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
 
-<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed modelsts models</span>
+<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
 
-<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
+<span class="kw">library</span>(corrplot)     <span class="co"># Vizualize correlation matrix</span>
+<span class="kw">library</span>(gee)          <span class="co"># Genderalized Estimation Equation Solver</span>
+<span class="kw">library</span>(geepack)      <span class="co"># Genderalized Estimation Equation Package </span>
+<span class="kw">library</span>(MuMIn)        <span class="co"># Multi-Model Inference (caluclate QIC)</span></code></pre></div>
+<div id="prepare-and-get-to-know-the-dataset-3" class="section level2">
+<h2><span class="header-section-number">15.1</span> Prepare and get to know the dataset</h2>
+<div id="read-in-the-data-3" class="section level3">
+<h3><span class="header-section-number">15.1.1</span> Read in the data</h3>
+<p><a href="https://content.sph.harvard.edu/fitzmaur/ala/" class="uri">https://content.sph.harvard.edu/fitzmaur/ala/</a></p>
+<p>Data on count of leprosy bacilli pre- and post-treatment from a clinical trial of antibiotics for leprosy.</p>
+<p>Source: Table 14.2.1 (page 422) in Snedecor, G.W. and Cochran, W.G. (1967). Statistical Methods, (6th edn). Ames, Iowa: Iowa State University Press With permission of Iowa State University Press.</p>
+<p>Reference: Snedecor, G.W. and Cochran, W.G. (1967). Statistical Methods, (6th edn). Ames, Iowa: Iowa State University Press</p>
+<p>Description:</p>
+<p>The dataset consists of count data from a placebo-controlled clinical trial of 30 patients with leprosy at the Eversley Childs Sanitorium in the Philippines. Participants in the study were randomized to either of two antibiotics (denoted treatment drug A and B) or to a placebo (denoted treatment drug C). Prior to receiving treatment, baseline data on the number of leprosy bacilli at six sites of the body where the bacilli tend to congregate were recorded for each patient. After several months of treatment, the number of leprosy bacilli at six sites of the body were recorded a second time. The outcome variable is the total count of the number of leprosy bacilli at the six sites.</p>
+<p>In this study, the question of main scientific interest is whether treatment with antibiotics (drugs A and B) reduces the abundance of leprosy bacilli at the six sites of the body when compared to placebo (drug C).</p>
+<p>Variable List:</p>
+<p>Drug, Pre-Treatment Bacilli Count, Post-Treatment Bacilli Count.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>tibble<span class="op">::</span><span class="kw">tribble</span>(
+  <span class="op">~</span>drug, <span class="op">~</span>count_pre, <span class="op">~</span>count_post,
+  <span class="st">&quot;A&quot;</span>,      <span class="dv">11</span>,     <span class="dv">6</span>,    <span class="st">&quot;B&quot;</span>,       <span class="dv">6</span>,     <span class="dv">0</span>,    <span class="st">&quot;C&quot;</span>,      <span class="dv">16</span>,    <span class="dv">13</span>,
+  <span class="st">&quot;A&quot;</span>,       <span class="dv">8</span>,     <span class="dv">0</span>,    <span class="st">&quot;B&quot;</span>,       <span class="dv">6</span>,     <span class="dv">2</span>,    <span class="st">&quot;C&quot;</span>,      <span class="dv">13</span>,    <span class="dv">10</span>,
+  <span class="st">&quot;A&quot;</span>,       <span class="dv">5</span>,     <span class="dv">2</span>,    <span class="st">&quot;B&quot;</span>,       <span class="dv">7</span>,     <span class="dv">3</span>,    <span class="st">&quot;C&quot;</span>,      <span class="dv">11</span>,    <span class="dv">18</span>,
+  <span class="st">&quot;A&quot;</span>,      <span class="dv">14</span>,     <span class="dv">8</span>,    <span class="st">&quot;B&quot;</span>,       <span class="dv">8</span>,     <span class="dv">1</span>,    <span class="st">&quot;C&quot;</span>,       <span class="dv">9</span>,     <span class="dv">5</span>,
+  <span class="st">&quot;A&quot;</span>,      <span class="dv">19</span>,    <span class="dv">11</span>,    <span class="st">&quot;B&quot;</span>,      <span class="dv">18</span>,    <span class="dv">18</span>,    <span class="st">&quot;C&quot;</span>,      <span class="dv">21</span>,    <span class="dv">23</span>,
+  <span class="st">&quot;A&quot;</span>,       <span class="dv">6</span>,     <span class="dv">4</span>,    <span class="st">&quot;B&quot;</span>,       <span class="dv">8</span>,     <span class="dv">4</span>,    <span class="st">&quot;C&quot;</span>,      <span class="dv">16</span>,    <span class="dv">12</span>,
+  <span class="st">&quot;A&quot;</span>,      <span class="dv">10</span>,    <span class="dv">13</span>,    <span class="st">&quot;B&quot;</span>,      <span class="dv">19</span>,    <span class="dv">14</span>,    <span class="st">&quot;C&quot;</span>,      <span class="dv">12</span>,     <span class="dv">5</span>,
+  <span class="st">&quot;A&quot;</span>,       <span class="dv">6</span>,     <span class="dv">1</span>,    <span class="st">&quot;B&quot;</span>,       <span class="dv">8</span>,     <span class="dv">9</span>,    <span class="st">&quot;C&quot;</span>,      <span class="dv">12</span>,    <span class="dv">16</span>,
+  <span class="st">&quot;A&quot;</span>,      <span class="dv">11</span>,     <span class="dv">8</span>,    <span class="st">&quot;B&quot;</span>,       <span class="dv">5</span>,     <span class="dv">1</span>,    <span class="st">&quot;C&quot;</span>,       <span class="dv">7</span>,     <span class="dv">1</span>,
+  <span class="st">&quot;A&quot;</span>,       <span class="dv">3</span>,     <span class="dv">0</span>,    <span class="st">&quot;B&quot;</span>,      <span class="dv">15</span>,     <span class="dv">9</span>,    <span class="st">&quot;C&quot;</span>,      <span class="dv">12</span>,    <span class="dv">20</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">drug =</span> <span class="kw">factor</span>(drug)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">row_number</span>()) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, drug, count_pre, count_post)
 
-<span class="kw">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span></code></pre></div>
-<p>Read the SPSS data in with the <code>haven</code> package and prepare it (see previous chapter).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0&quot;</span>)
+data_wide</code></pre></div>
+<pre><code># A tibble: 30 x 4
+      id drug  count_pre count_post
+   &lt;int&gt; &lt;fct&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+ 1     1 A            11          6
+ 2     2 B             6          0
+ 3     3 C            16         13
+ 4     4 A             8          0
+ 5     5 B             6          2
+ 6     6 C            13         10
+ 7     7 A             5          2
+ 8     8 B             7          3
+ 9     9 C            11         18
+10    10 A            14          8
+# ... with 20 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(<span class="dt">key =</span> obs,
+                <span class="dt">value =</span> count,
+                <span class="kw">starts_with</span>(<span class="st">&quot;count&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">time =</span> <span class="kw">case_when</span>(obs <span class="op">==</span><span class="st"> &quot;count_pre&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,
+                                 obs <span class="op">==</span><span class="st"> &quot;count_post&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, drug, time, count)
 
-data_achieve_center_scale &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(id, region, corp, school, class), factor) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gender =</span> gender <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">classize =</span> classize <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;12-17&quot;</span>, <span class="st">&quot;18-21&quot;</span>, 
-                                    <span class="st">&quot;22-26&quot;</span>, <span class="st">&quot;&gt;26&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, region, corp, school, class,           <span class="co"># Identifiers</span>
-                gender, age, geread, gevocab,              <span class="co"># Pupil-level vars</span>
-                classize,                                  <span class="co"># Class-Level vars</span>
-                senroll, ses) <span class="op">%&gt;%</span><span class="st">                          </span><span class="co"># School-level vars</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gevocab_c =</span> gevocab <span class="op">-</span><span class="st"> </span><span class="fl">4.4938</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age_c     =</span> age     <span class="op">-</span><span class="st"> </span><span class="fl">107.5290</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_c =</span> senroll <span class="op">-</span><span class="st"> </span><span class="fl">533.4148</span>) <span class="op">%&gt;%</span><span class="st">  </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_ch =</span> senroll_c <span class="op">/</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st">        </span><span class="co"># centered AND divided by one hundred</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">ses_t      =</span> ses <span class="op">/</span><span class="st"> </span><span class="dv">10</span>)                   <span class="co"># JUST divide by ten</span></code></pre></div>
-<p>Fit the final model (see previous chapter)</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_read_11re_s &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab_c<span class="op">*</span>age_c <span class="op">+</span><span class="st"> </span>gevocab_c<span class="op">*</span>ses_t <span class="op">+</span><span class="st">   </span><span class="co"># 2 2-way interactions</span>
-<span class="st">                                      </span>(gevocab_c <span class="op">|</span><span class="st"> </span>school),  
-                             <span class="dt">data   =</span> data_achieve_center_scale,
-                             <span class="dt">REML   =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
-<span class="co"># Knit to PDF:     texreg::texreg()</span>
-<span class="co"># View on Screen:  texreg::screenreg()</span>
+data_long</code></pre></div>
+<pre><code># A tibble: 60 x 4
+      id drug   time count
+   &lt;int&gt; &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     1 A         0    11
+ 2     2 B         0     6
+ 3     3 C         0    16
+ 4     4 A         0     8
+ 5     5 B         0     6
+ 6     6 C         0    13
+ 7     7 A         0     5
+ 8     8 B         0     7
+ 9     9 C         0    11
+10    10 A         0    14
+# ... with 50 more rows</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">glm</span>(count<span class="op">~</span><span class="st"> </span>time<span class="op">*</span>drug,
+    <span class="dt">data =</span> data_long)</code></pre></div>
+<pre><code>
+Call:  glm(formula = count ~ time * drug, data = data_long)
 
-texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_11re_s),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Final&quot;</span>), 
-                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,
-                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<table cellspacing="0" align="center" style="border: none;">
-<caption align="top" style="margin-bottom:0.3em;">
-MLM: Final Model
-</caption>
-<tr>
-<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b></b>
-</th>
-<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>Final</b>
-</th>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-(Intercept)
-</td>
-<td style="padding-right: 12px; border: none;">
-3.94 (0.11)<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-gevocab_c
-</td>
-<td style="padding-right: 12px; border: none;">
-0.67 (0.05)<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-age_c
-</td>
-<td style="padding-right: 12px; border: none;">
--0.00 (0.00)
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-ses_t
-</td>
-<td style="padding-right: 12px; border: none;">
-0.06 (0.01)<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-gevocab_c:age_c
-</td>
-<td style="padding-right: 12px; border: none;">
-0.01 (0.00)<sup style="vertical-align: 0px;">**</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-gevocab_c:ses_t
-</td>
-<td style="padding-right: 12px; border: none;">
--0.02 (0.01)<sup style="vertical-align: 0px;">**</sup>
-</td>
-</tr>
-<tr>
-<td style="border-top: 1px solid black;">
-AIC
-</td>
-<td style="border-top: 1px solid black;">
-42976.51
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-BIC
-</td>
-<td style="padding-right: 12px; border: none;">
-43048.93
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Log Likelihood
-</td>
-<td style="padding-right: 12px; border: none;">
--21478.26
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Num. obs.
-</td>
-<td style="padding-right: 12px; border: none;">
-10320
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Num. groups: school
-</td>
-<td style="padding-right: 12px; border: none;">
-160
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Var: school (Intercept)
-</td>
-<td style="padding-right: 12px; border: none;">
-0.08
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Var: school gevocab_c
-</td>
-<td style="padding-right: 12px; border: none;">
-0.02
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Cov: school (Intercept) gevocab_c
-</td>
-<td style="padding-right: 12px; border: none;">
-0.03
-</td>
-</tr>
-<tr>
-<td style="border-bottom: 2px solid black;">
-Var: Residual
-</td>
-<td style="border-bottom: 2px solid black;">
-3.66
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;" colspan="3">
-<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
-</td>
-</tr>
-</table>
-<p>Now we will show some of the things the <code>sjPlot</code> package can do!</p>
-<div id="plotting-coefficients" class="section level2">
-<h2><span class="header-section-number">7.1</span> Plotting Coefficients</h2>
-<p>Select <code>terms</code> that should be plotted. All other term are removed from the output.</p>
-<p>Note that the term names must match the names of the model’s coefficients. For factors, this means that the variable name is suffixed with the related factor level, and each category counts as one term. E.g. <code>rm.terms = &quot;t_name [2,3]&quot;</code> would remove the terms <code>t_name2</code> and <code>t_name3</code> (assuming that the variable t_name is categorical and has at least the factor levels 2 and 3).</p>
-<p>Another example for the iris-dataset: <code>terms = &quot;Species&quot;</code> would not work, instead you would write <code>terms = &quot;Species [versicolor, virginica]&quot;</code> to remove these two levels, or <code>terms = &quot;Speciesversicolor&quot;</code> if you just want to remove the level versicolor from the plot.</p>
-<div id="fixed-effects" class="section level3">
-<h3><span class="header-section-number">7.1.1</span> Fixed Effects</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-302-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>,
-                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-303-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-304-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>Determines in which way estimates are sorted in the plot with the option: <code>sort.est =</code></p>
-<ul>
-<li>If <code>NULL</code> (default), no sorting is done and estimates are sorted in the same order as they appear in the model formula.<br />
-</li>
-<li>If <code>TRUE</code>, estimates are sorted in descending order, with highest estimate at the top.<br />
-</li>
-<li>If <code>sort.est = &quot;sort.all&quot;</code>, estimates are re-sorted for each coefficient (only applies if <code>type = &quot;re&quot;</code> and <code>grid = FALSE</code>), i.e. the estimates of the random effects for each predictor are sorted and plotted to an own plot.<br />
-</li>
-<li>If <code>type = &quot;re&quot;</code>, specify a predictor’s / coefficient’s name to sort estimates according to this random effect.</li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
-                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-305-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,
-                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>,
-                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-306-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>Plots standardized beta values, however, standardization follows <span class="citation">Gelman (<a href="references.html#ref-gelman2008">2008</a>)</span> suggestion, rescaling the estimates by dividing them by two standard deviations instead of just one. Resulting coefficients are then directly comparable for untransformed <strong>binary predictors</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;std2&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="random-effects" class="section level3">
-<h3><span class="header-section-number">7.1.2</span> Random Effects</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-308-1.png" width="288" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>,
-                   <span class="dt">grid =</span> <span class="ot">FALSE</span>,
-                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-1.png" width="288" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-2.png" width="288" style="display: block; margin: auto;" /></p>
-</div>
-</div>
-<div id="plotting-marginal-effects" class="section level2">
-<h2><span class="header-section-number">7.2</span> Plotting Marginal Effects</h2>
-<p>Here <code>terms</code> indicates for which terms marginal effects should be displayed. At least one term is required to calculate effects, maximum length is three terms, where the second and third term indicate the groups, i.e. predictions of first term are grouped by the levels of the second (and third) term.</p>
-<p><code>terms</code> may also indicate higher order terms (e.g. interaction terms).</p>
-<p>Indicating levels in square brackets allows for selecting only specific groups. Term name and levels in brackets must be separated by a whitespace character, e.g. <code>terms = c(&quot;age&quot;, &quot;education [1,3]&quot;)</code>.</p>
-<p>It is also possible to specify a range of numeric values for the predictions with a colon, for instance <code>terms = c(&quot;education [1,3]&quot;, &quot;age [30:50]&quot;)</code>.</p>
-<p>Furthermore, it is possible to specify a function name. Values for predictions will then be transformed, e.g. <code>terms = &quot;income [exp]&quot;</code>. This is useful when model predictors were transformed for fitting the model and should be <strong>back-transformed</strong> to the original scale for predictions.</p>
-<p>Finally, using pretty for numeric variables (e.g. <code>terms = &quot;age [pretty]&quot;</code>) calculates a pretty range of values for the term, roughly of proportional length to the term’s value range. For more details, see the documentation for the <code>ggpredict</code> package.</p>
-<div id="predicted-values" class="section level3">
-<h3><span class="header-section-number">7.2.1</span> Predicted Values</h3>
-<p>Based on (i.e. is a wrapper for): <code>ggeffects::ggpredict()</code></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-310-1.png" width="576" style="display: block; margin: auto;" /></p>
-<p>The <code>pred.type =</code> option only applies for Marginal Effects plots with <strong>mixed effects models</strong>. Indicates whether predicted values should be <strong>conditioned on random effects</strong> (<code>pred.type = &quot;re&quot;</code>) or fixed effects only (<code>pred.type = &quot;fe&quot;</code>, the default). For details, see documentation of the type-argument in <code>ggpredict()</code> function.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
-                   <span class="dt">pred.type =</span> <span class="st">&quot;re&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="effect-plots" class="section level3">
-<h3><span class="header-section-number">7.2.2</span> Effect Plots</h3>
-<p>Based on (i.e. is a wrapper for): <code>ggeffects::ggeffect()</code></p>
-<p>Similar to <code>type = &quot;pred&quot;</code>, however, discrete predictors are held constant at their proportions (not reference level). See the <code>ggeffect</code> package documentation for details.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;eff&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="interaction-plots" class="section level3">
-<h3><span class="header-section-number">7.2.3</span> Interaction Plots</h3>
-<p>A shortcut for marginal effects plots, where <em>interaction terms are automatically detected</em> and used as terms-argument.</p>
-<p>Furthermore, if the moderator variable (the second - and third - term in an interaction) is continuous, <code>type = &quot;int&quot;</code> automatically chooses useful values based on the mdrt.values-argument, which are passed to terms. Then, <code>ggpredict</code> is called.</p>
-<p><code>type = &quot;int&quot;</code> plots the interaction term that appears:</p>
-<ul>
-<li><strong>first</strong> in the formula along the x-axis, while the</li>
-<li><strong>second</strong> (and possibly third) variable in an interaction is used as grouping factor(s) (moderating variable).</li>
-</ul>
-<p>Use <code>type = &quot;pred&quot;</code> or <code>type = &quot;eff&quot;</code> and specify a certain order in the terms-argument to indicate which variable(s) should be used as moderator.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-2.png" width="576" style="display: block; margin: auto;" /></p>
-<p>The <code>mdrt.values =</code> option indicates which values of the <strong>moderator variable</strong> should be used when plotting interaction terms (i.e. <code>type = &quot;int&quot;</code>).</p>
-<ul>
-<li><p><code>minmax</code> (default) minimum and maximum values (lower and upper bounds) of the moderator are used to plot the interaction between independent variable and moderator(s).</p></li>
-<li><p><code>meansd</code> uses the mean value of the moderator as well as one standard deviation below and above mean value to plot the effect of the moderator on the independent variable (following the convention suggested by Cohen and Cohen and popularized by Aiken and West (1991), i.e. using the mean, the value one standard deviation above, and the value one standard deviation below the mean as values of the moderator, see Grace-Martin K: 3 Tips to Make Interpreting Moderation Effects Easier).</p></li>
-<li><p><code>zeromax</code> is similar to the <code>minmax</code> option, however, <span class="math inline">\(0\)</span> is always used as minimum value for the moderator. This may be useful for predictors that don’t have an empirical zero-value, but absence of moderation should be simulated by using <span class="math inline">\(0\)</span> as minimum.</p></li>
-<li><p><code>quart</code> calculates and uses the quartiles (lower, median and upper) of the moderator value.</p></li>
-<li><p><code>all</code> uses all values of the moderator variable.</p></li>
-</ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>,
-                   <span class="dt">mdrt.values =</span> <span class="st">&quot;meansd&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-2.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-</div>
-<div id="model-diagnostics" class="section level2">
-<h2><span class="header-section-number">7.3</span> Model Diagnostics</h2>
-<p>Note: For mixed models, the diagnostic plots like linear relationship or check for Homoscedasticity, do not take the uncertainty of random effects into account, but is only based on the fixed effects part of the model.</p>
-<div id="slope-of-coefficentes" class="section level3">
-<h3><span class="header-section-number">7.3.1</span> Slope of Coefficentes</h3>
-<p>Slope of coefficients for each single predictor, against the response (linear relationship between each model term and response).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;slope&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="residuals" class="section level3">
-<h3><span class="header-section-number">7.3.2</span> Residuals</h3>
-<p>Slope of coefficients for each single predictor, against the residuals (linear relationship between each model term and residuals).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;resid&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-316-1.png" width="576" style="display: block; margin: auto;" /></p>
-</div>
-<div id="diagnostics" class="section level3">
-<h3><span class="header-section-number">7.3.3</span> Diagnostics</h3>
-<p>Check model assumptions.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,
-                   <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</code></pre></div>
-<pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-1.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[2]]
-[[2]]$school</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-2.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
+Coefficients:
+(Intercept)         time        drugB        drugC   time:drugB  
+        9.3         -4.0          0.7          3.6          0.1  
+ time:drugC  
+        3.4  
 
-[[3]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-3.png" width="576" style="display: block; margin: auto;" /></p>
-<pre><code>
-[[4]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-4.png" width="576" style="display: block; margin: auto;" /></p>
+Degrees of Freedom: 59 Total (i.e. Null);  54 Residual
+Null Deviance:      2070 
+Residual Deviance: 1590     AIC: 381</code></pre>
 
 </div>
 </div>
@@ -833,8 +579,8 @@ Var: Residual
           </div>
         </div>
       </div>
-<a href="variance-explained.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="longitudinal-intro-example-autism.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="gee-count-outcome-epilepsy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
