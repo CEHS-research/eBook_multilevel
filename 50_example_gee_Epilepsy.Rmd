@@ -10,6 +10,10 @@ knitr::opts_chunk$set(comment     = "",
                       fig.height  = 4)        # set default figure height to 3 inches
 ```
 
+## Packages
+
+### CRAN
+
 ```{r, message=FALSE, error=FALSE}
 library(tidyverse)    # all things tidy
 library(pander)       # nice looking genderal tabulations
@@ -27,6 +31,19 @@ library(MuMIn)        # Multi-Model Inference (caluclate QIC)
 library(HSAUR)        # package with the dataset
 ```
 
+
+### GitHub
+
+Helper `extract` functions for exponentiating parameters form generalized regression models within a `texreg` table of model parameters.
+
+```{r, message=FALSE, error=FALSE}
+# install.packages("devtools")
+# library(devtools)
+# install_github("SarBearSchwartz/texreghelpr")
+
+library(texreghelpr)
+```
+
 ## Prepare and get to know the dataset
 
 ### Read in the data
@@ -35,17 +52,23 @@ This data set is in the **HSAUR** package.
 
 In this clinical trial, 59 patients suffering from epilepsy were randomized to groups receiving either the anti-epileptic drug "Progabide"" or a placebo in addition to standard chemotherapy. The numbers of seizures suffered in each of four, two-week periods were recorded for each patient along with a baseline seizure count for the 8 weeks prior to being randomized to treatment and age. The main question of interest is whether taking progabide reduced the number of epileptic seizures compared with placebo.
 
-* Indicator2    
+* Indicators    
+
     + `subject` the patient ID, a factor with levels 1 to 59    
     + `period` treatment period, an ordered factor with levels 1 to 4
-
-* Main predictor or independent variable of interest    
-    + `treatment` the treatment group, a factor with levels placebo and Progabide
-
+    
+    
 * Outcome or dependent variable    
+
     +`seizure.rate` the number of seizures (2-weeks)
 
-* Time-invariant Covariate    
+* Main predictor or independent variable of interest   
+
+    + `treatment` the treatment group, a factor with levels placebo and Progabide
+
+
+* Time-invariant Covariates    
+
     + `age` the age of the patient    
     + `base` the number of seizures before the trial (8 weeks)
 
@@ -73,10 +96,11 @@ Solution:  We need to include an `offset` term in the model that indicates the L
 
 ```{r}
 data_long <- epilepsy %>% 
-  dplyr::select(subject, age, treatment, base, period, seizure.rate) %>% 
-  dplyr::mutate(per = log(2)) %>% 
+  dplyr::select(subject, age, treatment, base, 
+                period, seizure.rate) %>% 
+  dplyr::mutate(per = log(2)) %>%                  # new variable to use with the offset
   dplyr::mutate(base_wk = base/8)
-
+  
 str(data_long)
 
 psych::headTail(data_long, top = 10, bottom = 6)
@@ -106,7 +130,7 @@ psych::headTail(data_wide)
 
 ```{r}
 data_wide %>% 
-  furniture::table1(age, base,
+  furniture::table1(age, base, base_wk,
                     splitby = ~ treatment,
                     test = TRUE,
                     type = "full",
@@ -184,6 +208,7 @@ data_long %>%
   ggplot(aes(x = period,
              y = log(seizure.rate + 1))) +
   geom_boxplot() +
+  
   theme_bw() +
   facet_grid(.~ treatment)
 ```
@@ -215,7 +240,7 @@ data_long %>%
 ```
 
 
-## GLM: Poisson Regression
+## Poisson Regression (GLM)
 
 
 ```{r}
@@ -229,7 +254,7 @@ summary(fit_glm)
 ## Generalized Estimating Equations (GEE)
 
 
-### Match GLM
+### Match Poisson Regresssion (GLM)
 
 * correlation structure: `independence`
 * scale parameter = $1$
@@ -270,7 +295,7 @@ summary(fit_gee_exc_s1)
 
 * Although the estimated beta parameters are not much different, the naive SE's are some closer to the robust SE's.
 
-### Estimate the Scale Parameter
+### Estimate the Additional Scale Parameter
 
 * correlation structure: `exchangeable`
 * scale parameter = *freely estimated*
@@ -291,17 +316,24 @@ summary(fit_gee_exc_sf)
 * The sclae parameter is estimated to be much larger than $1$.
 
 
-### Compare
+### Compare Models
 
+
+#### Raw Estimates (logit scale) 
 
 ```{r, include=FALSE}
 texreg::screenreg(list(fit_glm, fit_gee_ind_s1, fit_gee_exc_s1, fit_gee_exc_sf),
-                  digits = 3)
+                  digits = 3,
+                  caption = "Estimates on Logit Scale")
 ```
 
 
 
 ```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::htmlreg(list(fit_glm, 
                      fit_gee_ind_s1, 
                      fit_gee_exc_s1, 
@@ -310,9 +342,49 @@ texreg::htmlreg(list(fit_glm,
                                        "GEE-Indep(1)",
                                        "GEE-Exchg(1)",
                                        "GEE-Exchg(free)"),
+                caption = "Estimates on Logit Scale",
                 digits = 3)
 ```
 
+
+
+#### Exponentiate the Estimates (odds ratio scale)
+
+
+```{r, include=FALSE}
+texreg::screenreg(list(extract_glm_exp(fit_glm), 
+                       extract_gee_exp(fit_gee_ind_s1), 
+                       extract_gee_exp(fit_gee_exc_s1), 
+                       extract_gee_exp(fit_gee_exc_sf)),
+                custom.model.names = c("GLM",
+                                       "GEE-Indep(1)",
+                                       "GEE-Exchg(1)",
+                                       "GEE-Exchg(free)"),
+                  digits = 3,
+                  caption = "Estimates on Odds-Ratio Scale",
+                  caption.above = TRUE,
+                  ci.test = 1)
+```
+
+
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(extract_glm_exp(fit_glm), 
+                     extract_gee_exp(fit_gee_ind_s1), 
+                     extract_gee_exp(fit_gee_exc_s1), 
+                     extract_gee_exp(fit_gee_exc_sf)),
+                custom.model.names = c("GLM",
+                                       "GEE-Indep(1)",
+                                       "GEE-Exchg(1)",
+                                       "GEE-Exchg(free)"),
+                digits = 3,
+                caption = "Estimates on Odds-Ratio Scale",
+                caption.above = TRUE,
+                ci.test = 1)
+```
 
 > CONCLUSION:
 >

@@ -593,7 +593,7 @@ fit_lmer_2a_ml <- lmer(vsae ~ age2*sicdegp + I(age2^2)*sicdegp +
                       REML = FALSE)
 
 fit_lmer_3_ml <- lmer(vsae ~ age2*sicdegp  + 
-                        (-1 + age2 + (age2^2) | childid), 
+                        (-1 + age2 + I(age2^2) | childid), 
                       data = data_long, 
                       REML = FALSE)
 ```

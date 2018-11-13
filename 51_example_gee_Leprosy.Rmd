@@ -10,6 +10,10 @@ knitr::opts_chunk$set(comment     = "",
                       fig.height  = 4)        # set default figure height to 3 inches
 ```
 
+## Packages
+
+### CRAN
+
 ```{r, message=FALSE, error=FALSE}
 library(tidyverse)    # all things tidy
 library(pander)       # nice looking genderal tabulations
@@ -25,32 +29,52 @@ library(geepack)      # Genderalized Estimation Equation Package
 library(MuMIn)        # Multi-Model Inference (caluclate QIC)
 ```
 
+
+### GitHub
+
+Helper `extract` functions for exponentiating parameters form generalized regression models within a `texreg` table of model parameters.
+
+```{r, message=FALSE, error=FALSE}
+# install.packages("devtools")
+# library(devtools)
+# install_github("SarBearSchwartz/texreghelpr")
+
+library(texreghelpr)
+```
+
+
 ## Prepare and get to know the dataset
 
 ### Read in the data
 
-https://content.sph.harvard.edu/fitzmaur/ala/
+
+```{block type='rmdlink', echo=TRUE}
+The following example is presented in the textbook: "Applied Longitudinal Analysis" by Garrett Fitzmaurice, Nan Laird & James Ware
+
+The dataset maybe downloaded from: https://content.sph.harvard.edu/fitzmaur/ala/
+```
+
 
 
 Data on count of leprosy bacilli pre- and post-treatment from a clinical trial of antibiotics for leprosy.
 
 
-Source: Table 14.2.1 (page 422) in Snedecor, G.W. and Cochran, W.G. (1967). 
-Statistical Methods, (6th edn). Ames, Iowa: Iowa State University Press
+Source: Table 14.2.1 (page 422) in Snedecor, G.W. and Cochran, W.G. (1967).  Statistical Methods, (6th edn). Ames, Iowa: Iowa State University Press 
+
 With permission of Iowa State University Press.
 
 Reference: Snedecor, G.W. and Cochran, W.G. (1967). Statistical Methods, (6th edn). 
 Ames, Iowa: Iowa State University Press
 
 
-Description:
+**Description:**
 
 The dataset consists of count data from a placebo-controlled clinical trial of 30 patients with leprosy at the Eversley Childs Sanitorium in the Philippines. Participants in the study were randomized to either of two  antibiotics (denoted treatment drug A and B) or to a placebo (denoted treatment  drug C). Prior to receiving treatment, baseline data on the number of leprosy bacilli at six sites of the body where the bacilli tend to congregate were recorded for each patient. After several months of treatment, the number of leprosy bacilli at six sites of the body were recorded a second time. The outcome variable is the total count of the number of leprosy bacilli at the six sites.
 
 In this study, the question of main scientific interest is whether treatment with antibiotics (drugs A and B) reduces the abundance of leprosy bacilli at the six sites of the body when compared to placebo (drug C). 
 
 
-Variable List:
+**Variable List:**
 
 Drug, Pre-Treatment Bacilli Count, Post-Treatment Bacilli Count.
 
@@ -70,15 +94,21 @@ data_raw <- tibble::tribble(
 ```
 
 
+### Wide Format
+
+
 ```{r}
 data_wide <- data_raw %>% 
   dplyr::mutate(drug = factor(drug)) %>% 
   dplyr::mutate(id = row_number()) %>% 
   dplyr::select(id, drug, count_pre, count_post)
 
-data_wide
+str(data_wide)
+
+psych::headTail(data_wide)
 ```
 
+### Long Format
 
 ```{r}
 data_long <- data_wide %>% 
@@ -87,20 +117,379 @@ data_long <- data_wide %>%
                 starts_with("count")) %>% 
   dplyr::mutate(time = case_when(obs == "count_pre" ~ 0,
                                  obs == "count_post" ~ 1)) %>% 
-  dplyr::select(id, drug, time, count)
+  dplyr::select(id, drug, time, count) %>% 
+  dplyr::arrange(id, time)
 
-data_long
+str(data_long)
+
+psych::headTail(data_long)
+```
+
+## Exploratory Data Analysis
+
+
+### Summary Statistics
+
+
+```{r, include=FALSE}
+data_wide %>% 
+  furniture::table1(count_pre, count_post,
+                    splitby = ~ drug,
+                    test = TRUE,
+                    output = "html")
 ```
 
 
 
 ```{r}
-glm(count~ time*drug,
-    data = data_long)
+data_long %>% 
+  dplyr::group_by(drug, time) %>% 
+  dplyr::summarise(N = n(),
+                   M = mean(count),
+                   VAR = var(count),
+                   SD = sd(count)) %>% 
+  pander::pander()
+```
+
+### Visualize
+
+```{r}
+data_long %>% 
+  dplyr::mutate(time_name = case_when(time == 0 ~ "Pre",
+                                      time == 1 ~ "Post") %>% 
+                  factor(levels = c("Pre", "Post"))) %>% 
+  dplyr::mutate(drug_name = fct_recode(drug,
+                                       "Antibiotic A" = "A",
+                                       "Antibiotic B" = "B",
+                                       "Placebo" = "C")) %>% 
+  ggplot(aes(x = time_name,
+             y = count)) +
+  geom_line(aes(group = id)) +
+  facet_grid(.~ drug_name) +
+  theme_bw() +
+  labs(x = NULL,
+       y = "Number of Leprosy Bacilli at Six Sites of the Body")
+```
+
+
+```{r}
+data_long %>% 
+  dplyr::mutate(time_name = case_when(time == 0 ~ "Pre",
+                                      time == 1 ~ "Post") %>% 
+                  factor(levels = c("Pre", "Post"))) %>% 
+  dplyr::mutate(drug_name = fct_recode(drug,
+                                       "Antibiotic A" = "A",
+                                       "Antibiotic B" = "B",
+                                       "Placebo" = "C")) %>% 
+  ggplot(aes(x = time,
+             y = count)) +
+  geom_line(aes(group = id),
+            color = "gray") +
+  geom_smooth(aes(group = drug),
+              method = "lm") +
+  facet_grid(.~ drug_name) +
+  theme_bw() +
+  labs(x = NULL,
+       y = "Number of Leprosy Bacilli at Six Sites of the Body")
 ```
 
 
 
+```{r}
+data_long %>% 
+  dplyr::mutate(time_name = case_when(time == 0 ~ "Pre",
+                                      time == 1 ~ "Post") %>% 
+                  factor(levels = c("Pre", "Post"))) %>% 
+  dplyr::mutate(drug_name = fct_recode(drug,
+                                       "Antibiotic A" = "A",
+                                       "Antibiotic B" = "B",
+                                       "Placebo" = "C")) %>% 
+  ggplot(aes(x = time,
+             y = count)) +
+  geom_smooth(aes(group = drug,
+                  color = drug_name,
+                  fill = drug_name),
+              method = "lm",
+              alpha = .2) +
+  theme_bw() +
+  labs(x = NULL,
+       y = "Number of Leprosy Bacilli at Six Sites of the Body",
+       color = NULL,
+       fill = NULL) +
+  scale_x_continuous(breaks = 0:1,
+                     labels = c("Pre-Treatment", "Post-Treatment"))
+```
+
+
+## Generalized Estimating Equations (GEE)
+
+#### The `gee()` function in the `gee` package 
+
+```{r}
+mod_gee_ind <- gee::gee(count ~ drug*time,
+                        data = data_long,
+                        family = poisson(link = "log"),
+                        id = id,
+                        corstr = "independence")
+
+
+mod_gee_exc <- gee::gee(count ~ drug*time,
+                        data = data_long,
+                        family = poisson(link = "log"),
+                        id = id,
+                        corstr = "exchangeable")
+
+
+mod_gee_uns <- gee::gee(count ~ drug*time,
+                        data = data_long,
+                        family = poisson(link = "log"),
+                        id = id,
+                        corstr = "unstructured")
+```
 
 
 
+### Compare Models
+
+#### Raw Estimates (log-rate scale) 
+
+```{r, include=FALSE}
+texreg::screenreg(list(mod_gee_ind, 
+                       mod_gee_exc, 
+                       mod_gee_uns), 
+                  custom.model.names = c("Independence",
+                                         "Exchangeable",
+                                         "Unstructured"),
+                  single.row = TRUE,
+                  digits = 3,
+                  caption = "Estimates on Log Scale")
+```
+
+
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(mod_gee_ind, 
+                     mod_gee_exc, 
+                     mod_gee_uns), 
+                custom.model.names = c("Independence",
+                                       "Exchangeable",
+                                       "Unstructured"),
+                single.row = TRUE,
+                digits = 3,
+                caption = "Estimates on Log Scale")
+```
+
+
+
+#### Exponentiate the Estimates (risk scale)
+
+```{r, include=FALSE}
+texreg::screenreg(list(extract_gee_exp(mod_gee_ind), 
+                       extract_gee_exp(mod_gee_exc), 
+                       extract_gee_exp(mod_gee_uns)), 
+                  custom.model.names = c("Independence",
+                                         "Exchangeable",
+                                         "Unstructured"),
+                  single.row = TRUE,
+                  digits = 3,
+                  ci.test = 1,
+                  caption = "Estimates on Count Scale")
+```
+
+
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(extract_gee_exp(mod_gee_ind), 
+                     extract_gee_exp(mod_gee_exc), 
+                     extract_gee_exp(mod_gee_uns)),
+                custom.model.names = c("Independence",
+                                       "Exchangeable",
+                                       "Unstructured"),
+                single.row = TRUE,
+                digits = 3,
+                ci.test = 1,
+                caption = "Estimates on Count Scale")
+```
+
+
+
+#### Manual Extraction
+
+```{r}
+mod_gee_exc %>% coef() %>% exp()
+```
+
+```{r}
+0.5699*1.6731
+```
+
+
+> Interpretation
+>
+> Antibiotic A Group: Starts with mean of 9.3 and drops by 45% (nearly cut in half) over the course of treatment.
+>
+> Antibiotic B Group: Starts at about the same mean at Antibiotic A group and experiences the same decrease.
+>
+> Control Group (C): Starts at about the same mean at Antibiotic A group BUT experiences a less than a 5% decrease over the student period while on the placebo pills.
+
+
+### Visualize the Final Model
+
+#### Refit with the `geeglm()` function in the `geepack` package 
+
+
+```{r}
+mod_geeglm_exc <- geepack::geeglm(count ~ drug*time,
+                                  data = data_long,
+                                  family = poisson(link = "log"),
+                                  id = id,
+                                  corstr = "exchangeable")
+
+summary(mod_geeglm_exc)
+```
+
+
+#### Predict over a manual grid of predictors
+
+```{r}
+expand.grid(drug = levels(data_long$drug),
+            time = 0:1) %>% 
+  dplyr::mutate(fit = predict(mod_geeglm_exc,
+                              newdata = .,
+                              type = "response")) 
+```
+
+
+```{r}
+expand.grid(drug = levels(data_long$drug),
+            time = 0:1) %>% 
+  dplyr::mutate(fit = predict(mod_geeglm_exc,
+                              newdata = .,
+                              type = "response")) %>% 
+  dplyr::mutate(time_name = case_when(time == 0 ~ "Pre",
+                                      time == 1 ~ "Post") %>% 
+                  factor(levels = c("Pre", "Post"))) %>% 
+  dplyr::mutate(drug_name = fct_recode(drug,
+                                       "Antibiotic A" = "A",
+                                       "Antibiotic B" = "B",
+                                       "Placebo" = "C")) %>% 
+  ggplot(aes(x = time_name,
+             y = fit,
+             group = drug_name %>% fct_rev,
+             color = drug_name %>% fct_rev)) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  labs(x = NULL,
+       y = "Estimated Marginal Mean\nNumber of Leprosy Bacilli at Six Sites of the Body",
+       color = NULL) +
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.background = element_rect(color = "black"))
+```
+
+
+
+## Follow-up Analysis
+
+### Collapse the Predictor
+
+```{r}
+data_remodel <- data_long %>% 
+  dplyr::mutate(antibiotic = fct_collapse(drug,
+                                          yes = c("A", "B"),
+                                          no = c("C")))
+```
+
+### Reduce the Model - `gee::gee()`
+
+```{r}
+mod_gee_exc2 <- gee::gee(count ~ antibiotic:time ,
+                         data = data_remodel,
+                         family = poisson(link = "log"),
+                         id = id,
+                         corstr = "exchangeable")
+
+summary(mod_gee_exc2)
+```
+
+### Compare Parameters
+
+```{r, include=FALSE}
+texreg::screenreg(list(extract_gee_exp(mod_gee_exc), 
+                       extract_gee_exp(mod_gee_exc2)), 
+                  custom.model.names = c("Original",
+                                         "Refit"),
+                  single.row = TRUE,
+                  digits = 3,
+                  ci.test = 1,
+                  caption = "Estimates on Count Scale (Exchangeable)")
+```
+
+
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(extract_gee_exp(mod_gee_exc), 
+                     extract_gee_exp(mod_gee_exc2)), 
+                custom.model.names = c("Original",
+                                       "Refit"),
+                single.row = TRUE,
+                digits = 3,
+                ci.test = 1,
+                caption = "Estimates on Count Scale (Exchangeable)")
+```
+
+> Interpretation
+> 
+> Grand mean is 10.73 at pre-treatment. 
+>
+> The mean count dropped by about 40% among thoes on antibiotics, but there was no decrease for thoes on placebo pills.
+
+
+### Visualize
+
+#### Refit with `geepack::geeglm()`
+
+```{r}
+mod_geeglm_exc2 <- geepack::geeglm(count ~ antibiotic:time,
+                                   data = data_remodel,
+                                   family = poisson(link = "log"),
+                                   id = id,
+                                   corstr = "exchangeable")
+```
+
+
+#### Predict over a manual grid
+
+```{r}
+expand.grid(antibiotic = levels(data_remodel$antibiotic),
+            time = 0:1) %>% 
+  dplyr::mutate(fit = predict(mod_geeglm_exc2,
+                              newdata = .,
+                              type = "response")) %>% 
+  dplyr::mutate(time_name = case_when(time == 0 ~ "Pre",
+                                      time == 1 ~ "Post") %>% 
+                  factor(levels = c("Pre", "Post"))) %>% 
+  ggplot(aes(x = time_name,
+             y = fit,
+             group = antibiotic %>% fct_rev,
+             color = antibiotic %>% fct_rev)) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  labs(x = NULL,
+       y = "Estimated Marginal Mean\nNumber of Leprosy Bacilli at Six Sites of the Body",
+       color = "Antibiotic") +
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.background = element_rect(color = "black"))
+```

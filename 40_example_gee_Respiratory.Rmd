@@ -10,6 +10,10 @@ knitr::opts_chunk$set(comment     = "",
                       fig.height  = 4)        # set default figure height to 3 inches
 ```
 
+## Packages
+
+### CRAN
+
 ```{r, message=FALSE, error=FALSE}
 library(tidyverse)    # all things tidy
 library(pander)       # nice looking genderal tabulations
@@ -27,11 +31,52 @@ library(MuMIn)        # Multi-Model Inference (caluclate QIC)
 library(HSAUR)        # package with the dataset
 ```
 
+### GitHub
+
+Helper `extract` functions for exponentiating parameters form generalized regression models within a `texreg` table of model parameters.
+
+```{r, message=FALSE, error=FALSE}
+# install.packages("devtools")
+# library(devtools)
+# install_github("SarBearSchwartz/texreghelpr")
+
+library(texreghelpr)
+```
+
 ## Prepare and get to know the dataset
 
 ### Read in the data
 
 This data set is in the **HSAUR** package. 
+
+In each of two centres, eligible patients were randomly assigned to active treatment or placebo. During the treatment, the respiratory status (categorised poor or good) was determined at each of four, monthly visits. The trial recruited 111 participants (54 in the active group, 57 in the placebo group) and there were no missing data for either the responses or the covariates. The question of interest is to assess whether the treatment is effective and to estimate its effect.
+
+Note that the data (555 observations on the following 7 variables) are in long form, i.e, repeated measurments are stored as additional rows in the data frame.
+
+* Indicators    
+
+    + `subject` the patient ID, a factor with levels 1 to 111
+    + `centre` the study center, a factor with levels 1 and 2    
+    + `month` the month, each patient was examined at months 0, 1, 2, 3 and 4  
+    
+    
+* Outcome or dependent variable    
+
+    + `status` the respiratory status (response variable), a factor with levels poor and good
+    
+    
+* Main predictor or independent variable of interest   
+
+    + `treatment` the treatment arm, a factor with levels placebo and treatment  
+    
+    
+* Time-invariant Covariates    
+
+    + `sex` a factor with levels female and male    
+    + `age` the age of the patient
+
+
+
 
 ```{r}
 data("respiratory", package = "HSAUR")
@@ -79,7 +124,7 @@ psych::headTail(data_long)
 
 ## Exploratory Data Analysis
 
-### Summary Statustics
+### Summary Statistics
 
 #### Demographics and Baseline Measure
 
@@ -97,7 +142,7 @@ data_wide %>%
 data_wide %>% 
   furniture::table1(month_1, month_2, month_3, month_4, 
                     splitby = ~ treatment,
-                    output = "html")
+                    output = "markdown")
 ```
 
 
@@ -132,11 +177,12 @@ data_month_trt_prop %>%
   theme_bw()
 ```
 
-## Logisitc Regression
+## Logisitc Regression (GLM)
 
 
 ```{r}
-resp_glm <- glm(status ~ centre + treatment + sex + BL_status + I(age-33) + I((age-33)^2),
+resp_glm <- glm(status ~ centre + treatment + sex + BL_status + 
+                   I(age-33) + I((age-33)^2),
                 data = data_long,
                 family = binomial(link = "logit"))
 
@@ -144,17 +190,19 @@ summary(resp_glm)
 ```
 
 
+
 ```{r}
 sjPlot::tab_model(resp_glm)
 ```
 
 
-## GEE
+## Generalized Estimating Equations (GEE)
 
 ### Indepdendence
 
 ```{r}
-resp_gee_in <- gee::gee(status ~ centre + treatment + sex + BL_status + I(age-33) + I((age-33)^2),
+resp_gee_in <- gee::gee(status ~ centre + treatment + sex + BL_status + 
+                          I(age-33) + I((age-33)^2),
                         data = data_long,
                         family = binomial(link = "logit"),
                         id = subject,
@@ -173,7 +221,8 @@ The robust (sandwhich) standard errors are however much larger than the naive st
 ### Exchangeable
 
 ```{r}
-resp_gee_ex <- gee::gee(status ~ centre + treatment + sex + BL_status + I(age-33) + I((age-33)^2),
+resp_gee_ex <- gee::gee(status ~ centre + treatment + sex + BL_status + 
+                          I(age-33) + I((age-33)^2),
                         data = data_long,
                         family = binomial(link = "logit"),
                         id = subject,
@@ -190,26 +239,71 @@ Notice that the naive stadard errors are more similar to the robust (sandwhich) 
 
 The GEE models display the robus (sandwhich) standard errors.
 
+#### Raw Estimates (Logit Scale)
 
-```{r}
-texreg::screenreg(list(resp_glm, resp_gee_in, resp_gee_ex),
-                  custom.model.names = c("GLM", "GEE-INDEP", "GEE-EXCH"),
-                  caption = "Estimates = log odds ratios",
+```{r, include=FALSE}
+texreg::screenreg(list(resp_glm, 
+                       resp_gee_in, 
+                       resp_gee_ex),
+                  custom.model.names = c("GLM", 
+                                         "GEE-INDEP", 
+                                         "GEE-EXCH"),
+                  caption = "Estimates on Logit Scale",
                   digits = 4)
+```
+
+
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(resp_glm, 
+                     resp_gee_in, 
+                     resp_gee_ex),
+                custom.model.names = c("GLM", 
+                                       "GEE-INDEP", 
+                                       "GEE-EXCH"),
+                caption = "Estimates on Logit Scale",
+                digits = 4)
 ```
 
 Comparing the two GEE models: parameters are identical and so are the robust (sandwhich) standard errors.
 
 
 
-```{r}
-summary(resp_gee_ex) %>% names
+#### Exponentiate the Estimates (odds ratio scale)
+
+```{r, include=FALSE}
+texreg::screenreg(list(extract_glm_exp(resp_glm), 
+                       extract_gee_exp(resp_gee_in), 
+                       extract_gee_exp(resp_gee_ex)),
+                  custom.model.names = c("GLM", 
+                                         "GEE-INDEP", 
+                                         "GEE-EXCH"),
+                  caption = "Estimates on Odds-Ratio Scale",
+                  ci.test = 1,
+                  digits = 4)
 ```
 
-```{r}
-summary(resp_gee_ex)$coeff
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(extract_glm_exp(resp_glm), 
+                     extract_gee_exp(resp_gee_in), 
+                     extract_gee_exp(resp_gee_ex)),
+                custom.model.names = c("GLM", 
+                                       "GEE-INDEP", 
+                                       "GEE-EXCH"),
+                caption = "Estimates on Odds-Ratio Scale",
+                ci.test = 1,
+                digits = 4)
 ```
 
+
+#### Manual Extraction
 
 ```{r}
 resp_gee_ex %>% coef() %>% exp()
@@ -217,23 +311,24 @@ resp_gee_ex %>% coef() %>% exp()
 
 
 
+
+
 ```{r}
-summary(resp_gee_ex)$coeff["treatmenttreatment", "Estimate"]
+trt_EST <- summary(resp_gee_ex)$coeff["treatmenttreatment", "Estimate"] 
+trt_EST
+exp(trt_EST)
+```
+
+
+```{r}
+Trt_SE <- summary(resp_gee_ex)$coeff["treatmenttreatment", "Robust S.E."] 
+Trt_SE
 ```
 
 ```{r}
-OR_trt_EST <- summary(resp_gee_ex)$coeff["treatmenttreatment", "Estimate"] %>% exp()
-OR_trt_EST
-```
-
-
-```{r}
-OR_Trt_SE <- summary(resp_gee_ex)$coeff["treatmenttreatment", "Robust S.E."] %>% exp
-OR_Trt_SE
-```
-
-```{r}
-OR_trt_EST + c(-1, +1)*1.96*OR_Trt_SE
+trt_95ci <- trt_EST + c(-1, +1)*1.96*Trt_SE
+trt_95ci
+exp(trt_95ci)
 ```
 
 
@@ -270,9 +365,13 @@ resp_geeglm_ex %>% coef() %>% exp()
 
 ### Visualize the Model
 
+#### Range of Data Values
+
 ```{r}
 summary(data_long)
 ```
+
+#### Females in Center 1
 
 ```{r}
 expand.grid(centre = "1",
@@ -291,7 +390,7 @@ expand.grid(centre = "1",
   facet_grid(.~ BL_status) +
   labs(x = "Age, years",
        y = "Predicted Probability of GOOD Respiratory Status",
-       title = "For Females at Center 1")
+       title = "For Females at Center 1, by Baseline Status")
 ```
 
 
@@ -312,6 +411,6 @@ expand.grid(centre = "2",
   facet_grid(.~ BL_status) +
   labs(x = "Age, years",
        y = "Predicted Probability of GOOD Respiratory Status",
-       title = "For Males at Center 2")
+       title = "For Males at Center 2, by Baseline Status")
 ```
 
