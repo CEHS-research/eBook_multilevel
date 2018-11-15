@@ -41,7 +41,7 @@ library(texreghelpr)
 ```
 
 
-## Prepare and get to know the dataset
+## Data Prep
 
 > Data on Amenorrhea from Clinical Trial of Contracepting Women.
 
@@ -56,7 +56,7 @@ Machin D, Farley T, Busca B, Campbell M and d'Arcangues C. (1988). Assessing cha
 
 **Description:**
 
-The data are from a longitudinal clinical trial of contracepting women. In this trial women received an injection of either 100 mg or 150 mg of depot-medroxyprogesterone acetate (DMPA) on the day of randomization  and three additional injections at 90-day intervals. There was a final follow-up visit 90 days after the fourth injection, i.e., one year after the first injection. Throughout the study each woman completed a menstrual diary that recorded any vaginal bleeding pattern disturbances. The diary data were used to determine whether a women experienced *amenorrhea*, the absence of menstrual bleeding for a specified number of days.  A total of 1151 women completed the menstrual diaries and the diary data were used to generate a binary sequence for each woman according to whether or not she had experienced **amenorrhea in the four successive three month intervals**. 
+The data are from a *longitudinal* clinical trial of contracepting women. In this trial women received an injection of either 100 mg or 150 mg of depot-medroxyprogesterone acetate (DMPA) on the day of randomization  and three additional injections at 90-day intervals. There was a final follow-up visit 90 days after the fourth injection, i.e., one year after the first injection. Throughout the study each woman completed a menstrual diary that recorded any vaginal bleeding pattern disturbances. The diary data were used to determine whether a women experienced *amenorrhea*, the absence of menstrual bleeding for a specified number of days.  A total of 1151 women completed the menstrual diaries and the diary data were used to generate a binary sequence for each woman according to whether or not she had experienced **amenorrhea in the four successive three month intervals**. 
 
 In clinical trials of modern hormonal contraceptives, pregnancy is exceedingly rare (and would be regarded as a failure of the contraceptive method), and is not the main outcome of interest in this study. Instead, the outcome of interest is a binary response indicating whether a woman experienced amenorrhea in the four successive three month intervals. A feature of this clinical trial is that there was **substantial dropout**. More than one third of the women dropped out before the completion of the trial.
 
@@ -76,7 +76,7 @@ In clinical trials of modern hormonal contraceptives, pregnancy is exceedingly r
     + `dose` 0 = Low (100 mg), 1 = High (150 mg)
 
 
-### Read in the data
+### Import
 
 
 ```{r}
@@ -190,7 +190,7 @@ data_summary %>%
 ```
 
 
-## Generalized Linear Mixed Effects Models (GLMM) - Basic
+## GLMM - Basic
 
 ### Fit Models
 
@@ -214,7 +214,7 @@ anova(fit_1, fit_2)
 ```
 
 
-### Table of Model Parameteres
+### Model Parameter Tables
 
 #### Logit Scale
 
@@ -361,7 +361,7 @@ effects::Effect(focal.predictors = c("dose", "time"),
 
 
 
-## Generalized Linear Mixed Effects Models (GLMM) - Advanced
+## GLMM - Optimizers
 
 From the documentation:
 
@@ -411,6 +411,15 @@ fit_3d <- lme4::glmer(amenorrhea ~ time + I(time^2) + time:dose + I(time^2):dose
                      control = glmerControl(optimizer ='optimx', optCtrl=list(method='nlminb')),
                      family = binomial)
 ```
+
+## Quadratic Time?
+
+Assess need for quadratic time with the LRT
+
+```{r}
+anova(fit_2, fit_3d)
+```
+
 
 
 ```{r, include=FALSE}

@@ -32,7 +32,7 @@
   
   
 <link rel="prev" href="gee-count-outcome-antibiotics-for-leprosy.html">
-<link rel="next" href="references.html">
+<link rel="next" href="glmm-binary-outcome-antibiotics-for-leprosy-1.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -461,8 +461,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="15.1.1" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cran-2"><i class="fa fa-check"></i><b>15.1.1</b> CRAN</a></li>
 <li class="chapter" data-level="15.1.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#github-2"><i class="fa fa-check"></i><b>15.1.2</b> GitHub</a></li>
 </ul></li>
-<li class="chapter" data-level="15.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#prepare-and-get-to-know-the-dataset-3"><i class="fa fa-check"></i><b>15.2</b> Prepare and get to know the dataset</a><ul>
-<li class="chapter" data-level="15.2.1" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#read-in-the-data-3"><i class="fa fa-check"></i><b>15.2.1</b> Read in the data</a></li>
+<li class="chapter" data-level="15.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#data"><i class="fa fa-check"></i><b>15.2</b> Data</a><ul>
+<li class="chapter" data-level="15.2.1" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#import"><i class="fa fa-check"></i><b>15.2.1</b> Import</a></li>
 <li class="chapter" data-level="15.2.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#wide-format-4"><i class="fa fa-check"></i><b>15.2.2</b> Wide Format</a></li>
 <li class="chapter" data-level="15.2.3" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#long-format-4"><i class="fa fa-check"></i><b>15.2.3</b> Long Format</a></li>
 </ul></li>
@@ -486,8 +486,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="16.1.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#cran-3"><i class="fa fa-check"></i><b>16.1.1</b> CRAN</a></li>
 <li class="chapter" data-level="16.1.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#github-3"><i class="fa fa-check"></i><b>16.1.2</b> GitHub</a></li>
 </ul></li>
-<li class="chapter" data-level="16.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#prepare-and-get-to-know-the-dataset-4"><i class="fa fa-check"></i><b>16.2</b> Prepare and get to know the dataset</a><ul>
-<li class="chapter" data-level="16.2.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#read-in-the-data-4"><i class="fa fa-check"></i><b>16.2.1</b> Read in the data</a></li>
+<li class="chapter" data-level="16.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#data-prep"><i class="fa fa-check"></i><b>16.2</b> Data Prep</a><ul>
+<li class="chapter" data-level="16.2.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#import-1"><i class="fa fa-check"></i><b>16.2.1</b> Import</a></li>
 <li class="chapter" data-level="16.2.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#long-format-5"><i class="fa fa-check"></i><b>16.2.2</b> Long Format</a></li>
 <li class="chapter" data-level="16.2.3" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#wide-format-5"><i class="fa fa-check"></i><b>16.2.3</b> Wide Format</a></li>
 </ul></li>
@@ -495,17 +495,46 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="16.3.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#summary-statistics-2"><i class="fa fa-check"></i><b>16.3.1</b> Summary Statistics</a></li>
 <li class="chapter" data-level="16.3.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#visualize-4"><i class="fa fa-check"></i><b>16.3.2</b> Visualize</a></li>
 </ul></li>
-<li class="chapter" data-level="16.4" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#generalized-linear-mixed-effects-models-glmm---basic"><i class="fa fa-check"></i><b>16.4</b> Generalized Linear Mixed Effects Models (GLMM) - Basic</a><ul>
+<li class="chapter" data-level="16.4" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#glmm---basic"><i class="fa fa-check"></i><b>16.4</b> GLMM - Basic</a><ul>
 <li class="chapter" data-level="16.4.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#fit-models"><i class="fa fa-check"></i><b>16.4.1</b> Fit Models</a></li>
-<li class="chapter" data-level="16.4.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#table-of-model-parameteres"><i class="fa fa-check"></i><b>16.4.2</b> Table of Model Parameteres</a></li>
+<li class="chapter" data-level="16.4.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#model-parameter-tables"><i class="fa fa-check"></i><b>16.4.2</b> Model Parameter Tables</a></li>
 <li class="chapter" data-level="16.4.3" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#visualize-the-model-4"><i class="fa fa-check"></i><b>16.4.3</b> Visualize the Model</a></li>
 </ul></li>
-<li class="chapter" data-level="16.5" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#generalized-linear-mixed-effects-models-glmm---advanced"><i class="fa fa-check"></i><b>16.5</b> Generalized Linear Mixed Effects Models (GLMM) - Advanced</a><ul>
+<li class="chapter" data-level="16.5" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#glmm---optimizers"><i class="fa fa-check"></i><b>16.5</b> GLMM - Optimizers</a><ul>
 <li class="chapter" data-level="16.5.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#adaptive-gauss-hermite-quadrature-increase-the-number-of-quadrature-points"><i class="fa fa-check"></i><b>16.5.1</b> Adaptive Gauss-Hermite Quadrature: Increase the number of quadrature points</a></li>
 <li class="chapter" data-level="16.5.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#laplace-approximation-switch-to-the-nelder_mead-optimizer"><i class="fa fa-check"></i><b>16.5.2</b> Laplace Approximation: switch to the Nelder_Mead optimizer</a></li>
 <li class="chapter" data-level="16.5.3" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#laplace-approximation-switch-to-the-l-bfgs-b-method"><i class="fa fa-check"></i><b>16.5.3</b> Laplace Approximation: Switch to the <code>L-BFGS-B</code> method</a></li>
 <li class="chapter" data-level="16.5.4" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#laplace-approximation-switch-to-the-nlminb-method"><i class="fa fa-check"></i><b>16.5.4</b> Laplace Approximation: Switch to the <code>nlminb</code> method</a></li>
 </ul></li>
+<li class="chapter" data-level="16.6" data-path="glmm-binary-outcome-antibiotics-for-leprosy.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy.html#quadratic-time"><i class="fa fa-check"></i><b>16.6</b> Quadratic Time?</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><i class="fa fa-check"></i><b>17</b> GLMM, Binary Outcome: Antibiotics for Leprosy</a><ul>
+<li class="chapter" data-level="17.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#packages-4"><i class="fa fa-check"></i><b>17.1</b> Packages</a><ul>
+<li class="chapter" data-level="17.1.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#cran-4"><i class="fa fa-check"></i><b>17.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="17.1.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#github-4"><i class="fa fa-check"></i><b>17.1.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#data-prep-1"><i class="fa fa-check"></i><b>17.2</b> Data Prep</a><ul>
+<li class="chapter" data-level="17.2.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#import-2"><i class="fa fa-check"></i><b>17.2.1</b> Import</a></li>
+<li class="chapter" data-level="17.2.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#restrict-to-350ids-of-children-with-complete-data-for-class-demonstration"><i class="fa fa-check"></i><b>17.2.2</b> Restrict to 350ID’s of children with complete data for Class Demonstration</a></li>
+<li class="chapter" data-level="17.2.3" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#long-format-6"><i class="fa fa-check"></i><b>17.2.3</b> Long Format</a></li>
+<li class="chapter" data-level="17.2.4" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#wide-format-6"><i class="fa fa-check"></i><b>17.2.4</b> Wide Format</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#exploratory-data-analysis-10"><i class="fa fa-check"></i><b>17.3</b> Exploratory Data Analysis</a><ul>
+<li class="chapter" data-level="17.3.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#summary-statistics-3"><i class="fa fa-check"></i><b>17.3.1</b> Summary Statistics</a></li>
+<li class="chapter" data-level="17.3.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#visualize-5"><i class="fa fa-check"></i><b>17.3.2</b> Visualize</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#analysis-goal"><i class="fa fa-check"></i><b>17.4</b> Analysis Goal</a><ul>
+<li class="chapter" data-level="17.4.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#center-time-at-twelve-years-old"><i class="fa fa-check"></i><b>17.4.1</b> Center time at twelve years old</a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#glm-analysis"><i class="fa fa-check"></i><b>17.5</b> GLM Analysis</a><ul>
+<li class="chapter" data-level="17.5.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#standard-logistic-regression"><i class="fa fa-check"></i><b>17.5.1</b> Standard logistic regression</a></li>
+</ul></li>
+<li class="chapter" data-level="17.6" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#gee-analysis"><i class="fa fa-check"></i><b>17.6</b> GEE Analysis</a><ul>
+<li class="chapter" data-level="17.6.1" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#drop-the-interaction-with-gender."><i class="fa fa-check"></i><b>17.6.1</b> Drop the interaction with <code>gender</code>.</a></li>
+<li class="chapter" data-level="17.6.2" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#select-the-final-model."><i class="fa fa-check"></i><b>17.6.2</b> Select the <strong>“final”</strong> model.</a></li>
+</ul></li>
+<li class="chapter" data-level="17.7" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#glmm-analysis"><i class="fa fa-check"></i><b>17.7</b> GLMM Analysis</a></li>
+<li class="chapter" data-level="17.8" data-path="glmm-binary-outcome-antibiotics-for-leprosy-1.html"><a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html#compare-methods"><i class="fa fa-check"></i><b>17.8</b> Compare Methods</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -555,8 +584,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <span class="kw">library</span>(texreghelpr)</code></pre></div>
 </div>
 </div>
-<div id="prepare-and-get-to-know-the-dataset-4" class="section level2">
-<h2><span class="header-section-number">16.2</span> Prepare and get to know the dataset</h2>
+<div id="data-prep" class="section level2">
+<h2><span class="header-section-number">16.2</span> Data Prep</h2>
 <blockquote>
 <p>Data on Amenorrhea from Clinical Trial of Contracepting Women.</p>
 </blockquote>
@@ -565,7 +594,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><strong>Reference:</strong></p>
 <p>Machin D, Farley T, Busca B, Campbell M and d’Arcangues C. (1988). Assessing changes in vaginal bleeding patterns in contracepting women. Contraception, 38, 165-179.</p>
 <p><strong>Description:</strong></p>
-<p>The data are from a longitudinal clinical trial of contracepting women. In this trial women received an injection of either 100 mg or 150 mg of depot-medroxyprogesterone acetate (DMPA) on the day of randomization and three additional injections at 90-day intervals. There was a final follow-up visit 90 days after the fourth injection, i.e., one year after the first injection. Throughout the study each woman completed a menstrual diary that recorded any vaginal bleeding pattern disturbances. The diary data were used to determine whether a women experienced <em>amenorrhea</em>, the absence of menstrual bleeding for a specified number of days. A total of 1151 women completed the menstrual diaries and the diary data were used to generate a binary sequence for each woman according to whether or not she had experienced <strong>amenorrhea in the four successive three month intervals</strong>.</p>
+<p>The data are from a <em>longitudinal</em> clinical trial of contracepting women. In this trial women received an injection of either 100 mg or 150 mg of depot-medroxyprogesterone acetate (DMPA) on the day of randomization and three additional injections at 90-day intervals. There was a final follow-up visit 90 days after the fourth injection, i.e., one year after the first injection. Throughout the study each woman completed a menstrual diary that recorded any vaginal bleeding pattern disturbances. The diary data were used to determine whether a women experienced <em>amenorrhea</em>, the absence of menstrual bleeding for a specified number of days. A total of 1151 women completed the menstrual diaries and the diary data were used to generate a binary sequence for each woman according to whether or not she had experienced <strong>amenorrhea in the four successive three month intervals</strong>.</p>
 <p>In clinical trials of modern hormonal contraceptives, pregnancy is exceedingly rare (and would be regarded as a failure of the contraceptive method), and is not the main outcome of interest in this study. Instead, the outcome of interest is a binary response indicating whether a woman experienced amenorrhea in the four successive three month intervals. A feature of this clinical trial is that there was <strong>substantial dropout</strong>. More than one third of the women dropped out before the completion of the trial.</p>
 <p><strong>Variable List:</strong></p>
 <ul>
@@ -583,8 +612,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><code>dose</code> 0 = Low (100 mg), 1 = High (150 mg)</li>
 </ul></li>
 </ul>
-<div id="read-in-the-data-4" class="section level3">
-<h3><span class="header-section-number">16.2.1</span> Read in the data</h3>
+<div id="import-1" class="section level3">
+<h3><span class="header-section-number">16.2.1</span> Import</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/data/master/MLM/RCTcontraception.txt&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>)
 
 <span class="kw">str</span>(data_raw)</code></pre></div>
@@ -757,8 +786,8 @@ data_summary</code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-606-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
-<div id="generalized-linear-mixed-effects-models-glmm---basic" class="section level2">
-<h2><span class="header-section-number">16.4</span> Generalized Linear Mixed Effects Models (GLMM) - Basic</h2>
+<div id="glmm---basic" class="section level2">
+<h2><span class="header-section-number">16.4</span> GLMM - Basic</h2>
 <div id="fit-models" class="section level3">
 <h3><span class="header-section-number">16.4.1</span> Fit Models</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_<span class="dv">1</span> &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">glmer</span>(amenorrhea <span class="op">~</span><span class="st"> </span>time<span class="op">*</span>dose <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
@@ -781,8 +810,8 @@ fit_2  4 3931 3956  -1961     3923
 fit_1  5 3932 3963  -1961     3922  0.69      1       0.41</code></pre>
 </div>
 </div>
-<div id="table-of-model-parameteres" class="section level3">
-<h3><span class="header-section-number">16.4.2</span> Table of Model Parameteres</h3>
+<div id="model-parameter-tables" class="section level3">
+<h3><span class="header-section-number">16.4.2</span> Model Parameter Tables</h3>
 <div id="logit-scale" class="section level4">
 <h4><span class="header-section-number">16.4.2.1</span> Logit Scale</h4>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
@@ -1284,8 +1313,8 @@ Var: id (Intercept)
 </div>
 </div>
 </div>
-<div id="generalized-linear-mixed-effects-models-glmm---advanced" class="section level2">
-<h2><span class="header-section-number">16.5</span> Generalized Linear Mixed Effects Models (GLMM) - Advanced</h2>
+<div id="glmm---optimizers" class="section level2">
+<h2><span class="header-section-number">16.5</span> GLMM - Optimizers</h2>
 <p>From the documentation:</p>
 <p>The <code>lme4::glmer()</code> function fits a generalized linear mixed model, which incorporates both fixed-effects parameters and random effects in a linear predictor, <strong>via maximum likelihood</strong>. The linear predictor is related to the conditional mean of the response through the inverse link function defined in the GLM family.</p>
 <p>The expression for the likelihood of a mixed-effects model is an integral over the random effects space. For a linear mixed-effects model (LMM), as fit by lmer, this integral can be evaluated exactly. For a GLMM the <strong>integral must be approximated</strong>. The most reliable approximation for GLMMs is adaptive <strong>Gauss-Hermite quadrature</strong>, at present implemented only for models with a single scalar random effect. The <code>nAGQ</code> argument controls the number of nodes in the quadrature formula. A model with a single, scalar random-effects term could reasonably use up to 25 quadrature points per scalar integral.</p>
@@ -1321,6 +1350,22 @@ Var: id (Intercept)
                      <span class="dt">data =</span> data_long,
                      <span class="dt">control =</span> <span class="kw">glmerControl</span>(<span class="dt">optimizer =</span><span class="st">&#39;optimx&#39;</span>, <span class="dt">optCtrl=</span><span class="kw">list</span>(<span class="dt">method=</span><span class="st">&#39;nlminb&#39;</span>)),
                      <span class="dt">family =</span> binomial)</code></pre></div>
+</div>
+</div>
+<div id="quadratic-time" class="section level2">
+<h2><span class="header-section-number">16.6</span> Quadratic Time?</h2>
+<p>Assess need for quadratic time with the LRT</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_<span class="dv">2</span>, fit_3d)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_2: amenorrhea ~ time + dose + (1 | id)
+fit_3d: amenorrhea ~ time + I(time^2) + time:dose + I(time^2):dose + 
+fit_3d:     (1 | id)
+       Df  AIC  BIC logLik deviance Chisq Chi Df Pr(&gt;Chisq)   
+fit_2   4 3931 3956  -1961     3923                           
+fit_3d  6 3925 3962  -1957     3913  9.72      2     0.0078 **
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_3a, fit_3b, fit_3c, fit_3d),
                 <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;nAGQ&quot;</span>, <span class="st">&quot;Nelder_Mead&quot;</span>,
                                        <span class="st">&quot;L BFGS B&quot;</span>, <span class="st">&quot;nlminb&quot;</span>),
@@ -1645,9 +1690,8 @@ Var: id (Intercept)
                                 <span class="st">&quot;Second&quot;</span>,
                                 <span class="st">&quot;Third&quot;</span>,
                                 <span class="st">&quot;Fourth&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-624-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-625-1.png" width="576" style="display: block; margin: auto;" /></p>
 
-</div>
 </div>
 </div>
             </section>
@@ -1656,7 +1700,7 @@ Var: id (Intercept)
         </div>
       </div>
 <a href="gee-count-outcome-antibiotics-for-leprosy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="glmm-binary-outcome-antibiotics-for-leprosy-1.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
