@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="gee-continuous-outcome-beat-the-blues.html">
-<link rel="next" href="gee-count-outcome-epilepsy.html">
+<link rel="prev" href="sjplot-package.html">
+<link rel="next" href="mlm-longitudinal-hedeker-gibbons-depression.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -557,192 +557,149 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="gee-binary-outcome-respiratory-illness" class="section level1">
-<h1><span class="header-section-number">13</span> GEE, Binary Outcome: Respiratory Illness</h1>
-<div id="packages" class="section level2">
-<h2><span class="header-section-number">13.1</span> Packages</h2>
-<div id="cran" class="section level3">
-<h3><span class="header-section-number">13.1.1</span> CRAN</h3>
+<div id="mlm-longitudinal-autism" class="section level1">
+<h1><span class="header-section-number">8</span> MLM, Longitudinal: Autism</h1>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
 <span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span>
 <span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
 <span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
 <span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span>
+<span class="kw">library</span>(effects)      <span class="co"># Estimated Marginal Means</span>
+<span class="kw">library</span>(VIM)          <span class="co"># Visualization and Imputation of Missing Values </span>
+<span class="kw">library</span>(naniar)       <span class="co"># Summaries and Visualisations for Missing Data</span>
 
 <span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
 
-<span class="kw">library</span>(corrplot)     <span class="co"># Vizualize correlation matrix</span>
-<span class="kw">library</span>(gee)          <span class="co"># Genderalized Estimation Equation Solver</span>
-<span class="kw">library</span>(geepack)      <span class="co"># Genderalized Estimation Equation Package </span>
-<span class="kw">library</span>(MuMIn)        <span class="co"># Multi-Model Inference (caluclate QIC)</span>
-
-<span class="kw">library</span>(HSAUR)        <span class="co"># package with the dataset</span></code></pre></div>
-</div>
-<div id="github" class="section level3">
-<h3><span class="header-section-number">13.1.2</span> GitHub</h3>
-<p>Helper <code>extract</code> functions for exponentiating parameters form generalized regression models within a <code>texreg</code> table of model parameters.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;devtools&quot;)</span>
-<span class="co"># library(devtools)</span>
-<span class="co"># install_github(&quot;SarBearSchwartz/texreghelpr&quot;)</span>
-
-<span class="kw">library</span>(texreghelpr)</code></pre></div>
-</div>
-</div>
-<div id="prepare-and-get-to-know-the-dataset-1" class="section level2">
-<h2><span class="header-section-number">13.2</span> Prepare and get to know the dataset</h2>
-<div id="read-in-the-data-1" class="section level3">
-<h3><span class="header-section-number">13.2.1</span> Read in the data</h3>
-<blockquote>
-<p>This data set is in the <strong>HSAUR</strong> package.</p>
-</blockquote>
-<p>In each of two centres, eligible patients were randomly assigned to active treatment or placebo. During the treatment, the respiratory status (categorised poor or good) was determined at each of four, monthly visits. The trial recruited 111 participants (54 in the active group, 57 in the placebo group) and there were no missing data for either the responses or the covariates. The question of interest is to assess whether the treatment is effective and to estimate its effect.</p>
-<p>Note that the data (555 observations on the following 7 variables) are in long form, i.e, repeated measurments are stored as additional rows in the data frame.</p>
+<span class="kw">library</span>(HLMdiag)      <span class="co"># package with the dataset</span></code></pre></div>
+<div id="background-4" class="section level2">
+<h2><span class="header-section-number">8.1</span> Background</h2>
+<p>The source: <a href="http://www-personal.umich.edu/~kwelch/" class="uri">http://www-personal.umich.edu/~kwelch/</a></p>
+<p>This data was collected by researchers at the University of Michigan <span class="citation">(Anderson et al. <a href="references.html#ref-anderson2007">2007</a>, <span class="citation">Anderson et al. (<a href="references.html#ref-anderson2009">2009</a>)</span>)</span> as part of a prospective longitudinal study of 214 children. The children were divided into three diagnostic groups (<code>bestest2</code>) when they were 2 years old: Autism (<code>autism</code>), Pervasive Developmental Disorder (<code>pdd</code>), and non-spectrum children (none in this sample). The study was designed to collect information on each child at approximately 2, 3, 5, 9, and 13 years of age, although not all children were measured for each age. One of the study objectives was to assess the relative influence of the initial diagnostic category, language proficiency at age 2, and other covariates on the developmental trajectories of the socialization (<code>vsae</code>) of these children.</p>
+<p>Study participants were children who had had consecutive referrals to one of two autism clinics before the age of 3 years. Social development was assessed at each age using the Vineland Adaptive Behavior Interview survey form, a parent-reported measure of socialization. <strong>VSAE</strong> (Vineland Socialization Age Equivalent), was a combined score that included assessments of interpersonal relationships, play/leisure time activities, and coping skills. Initial language development was assessed using the Sequenced Inventory of Communication Development (SICD) scale; children were placed into one of three groups (<code>sicdegp</code>) based on their initial SICD scores on the expressive language subscale at age 2.</p>
 <ul>
-<li><p>Indicators</p>
+<li><p><code>childid</code> Child’s identification number for this study</p></li>
+<li><p><code>sicdegp</code> Sequenced Inventory of Communication Development group <em>(an assessment of expressive language development)</em> - a factor. Levels are <code>low</code>, <code>med</code>, and <code>high</code></p></li>
+<li><p><code>age2</code> Age (in years) centered around age 2 (age at diagnosis)</p></li>
+<li><code>vsae</code> Vineland Socialization Age Equivalent, Parent-reported measure of socialization, including measures of:
 <ul>
-<li><code>subject</code> the patient ID, a factor with levels 1 to 111</li>
-<li><code>centre</code> the study center, a factor with levels 1 and 2<br />
-</li>
-<li><code>month</code> the month, each patient was examined at months 0, 1, 2, 3 and 4</li>
+<li>interpersonal relationships</li>
+<li>play/leisure time activities</li>
+<li>coping skills</li>
 </ul></li>
-<li><p>Outcome or dependent variable</p>
-<ul>
-<li><code>status</code> the respiratory status (response variable), a factor with levels poor and good</li>
-</ul></li>
-<li><p>Main predictor or independent variable of interest</p>
-<ul>
-<li><code>treatment</code> the treatment arm, a factor with levels placebo and treatment</li>
-</ul></li>
-<li><p>Time-invariant Covariates</p>
-<ul>
-<li><code>sex</code> a factor with levels female and male<br />
-</li>
-<li><code>age</code> the age of the patient</li>
-</ul></li>
+<li><p><code>gender</code> Child’s gender - a factor. Levels are <code>male</code> and <code>female</code></p></li>
+<li><p><code>race</code> Child’s race - a factor. Levels are <code>white</code> and <code>nonwhite</code></p></li>
+<li><p><code>bestest2</code> Diagnosis at age 2 - a factor. Levels are <code>autism</code> and <code>pdd</code> (pervasive developmental disorder)</p></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;respiratory&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;HSAUR&quot;</span>)
-
-<span class="kw">str</span>(respiratory)</code></pre></div>
-<pre><code>&#39;data.frame&#39;:   555 obs. of  7 variables:
- $ centre   : Factor w/ 2 levels &quot;1&quot;,&quot;2&quot;: 1 1 1 1 1 1 1 1 1 1 ...
- $ treatment: Factor w/ 2 levels &quot;placebo&quot;,&quot;treatment&quot;: 1 1 1 1 1 1 1 1 1 1 ...
- $ sex      : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 1 1 1 1 1 1 1 1 1 1 ...
- $ age      : num  46 46 46 46 46 28 28 28 28 28 ...
- $ status   : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 1 1 1 1 1 1 1 1 ...
- $ month    : Ord.factor w/ 5 levels &quot;0&quot;&lt;&quot;1&quot;&lt;&quot;2&quot;&lt;&quot;3&quot;&lt;..: 1 2 3 4 5 1 2 3 4 5 ...
- $ subject  : Factor w/ 111 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 1 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">headTail</span>(respiratory)</code></pre></div>
-<pre><code>    centre treatment    sex age status month subject
-1        1   placebo female  46   poor     0       1
-112      1   placebo female  46   poor     1       1
-223      1   placebo female  46   poor     2       1
-334      1   placebo female  46   poor     3       1
-...   &lt;NA&gt;      &lt;NA&gt;   &lt;NA&gt; ...   &lt;NA&gt;  &lt;NA&gt;    &lt;NA&gt;
-222      2 treatment female  31   good     1     111
-333      2 treatment female  31   good     2     111
-444      2 treatment female  31   good     3     111
-555      2 treatment female  31   good     4     111</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(autism, <span class="dt">package =</span> <span class="st">&quot;HLMdiag&quot;</span>)   <span class="co"># make the dataset &#39;active&#39; from this package</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble<span class="op">::</span><span class="kw">glimpse</span>(autism)             <span class="co"># first look at the dataset and its varaibles</span></code></pre></div>
+<pre><code>Observations: 604
+Variables: 7
+$ childid  &lt;int&gt; 1, 1, 1, 1, 1, 10, 10, 10, 10, 100, 100, 100, 100, 10...
+$ sicdegp  &lt;fct&gt; high, high, high, high, high, low, low, low, low, hig...
+$ age2     &lt;dbl&gt; 0, 1, 3, 7, 11, 0, 1, 7, 11, 0, 1, 3, 7, 0, 1, 7, 11,...
+$ vsae     &lt;int&gt; 6, 7, 18, 25, 27, 9, 11, 18, 39, 15, 24, 37, 135, 8, ...
+$ gender   &lt;fct&gt; male, male, male, male, male, male, male, male, male,...
+$ race     &lt;fct&gt; white, white, white, white, white, white, white, whit...
+$ bestest2 &lt;fct&gt; pdd, pdd, pdd, pdd, pdd, autism, autism, autism, auti...</code></pre>
+<div id="long-format" class="section level3">
+<h3><span class="header-section-number">8.1.1</span> Long Format</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>autism <span class="op">%&gt;%</span><span class="st">                                    </span><span class="co"># save the dataset as a new name</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">childid =</span> childid <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st">          </span><span class="co"># declare grouping var a factor</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> <span class="dv">2</span> <span class="op">+</span><span class="st"> </span>age2) <span class="op">%&gt;%</span><span class="st">                        </span><span class="co"># create the original age variable (unequally spaced)</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">obs =</span> age <span class="op">%&gt;%</span><span class="st"> </span>factor <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># Observation Number = 1, 2, 3, 4, 5 (equally spaced)</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(childid,                                   <span class="co"># choose variables and order to keep</span>
+                gender, race, bestest2, sicdegp, 
+                obs, age, age2, vsae) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(childid, age2)                            <span class="co"># sort observations</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>(<span class="dt">top =</span> <span class="dv">11</span>, <span class="dt">bottom =</span> <span class="dv">6</span>)</code></pre></div>
+<pre><code>    childid gender     race bestest2 sicdegp obs age age2 vsae
+1         1   male    white      pdd    high   1   2    0    6
+2         1   male    white      pdd    high   2   3    1    7
+3         1   male    white      pdd    high   3   5    3   18
+4         1   male    white      pdd    high   4   9    7   25
+5         1   male    white      pdd    high   5  13   11   27
+6         2   male    white   autism     low   1   2    0    6
+7         2   male    white   autism     low   2   3    1    7
+8         2   male    white   autism     low   3   5    3    7
+9         2   male    white   autism     low   4   9    7    8
+10        2   male    white   autism     low   5  13   11   14
+11        3   male nonwhite      pdd    high   1   2    0   17
+...    &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt; ... ...  ...  ...
+599     211   male nonwhite   autism    high   1   2    0   15
+600     212   male    white   autism     med   1   2    0    7
+601     212   male    white   autism     med   2   3    1   21
+602     212   male    white   autism     med   3   5    3   29
+603     212   male    white   autism     med   4   9    7   72
+604     212   male    white   autism     med   5  13   11  147</code></pre>
 </div>
-<div id="wide-format-2" class="section level3">
-<h3><span class="header-section-number">13.2.2</span> Wide Format</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide &lt;-<span class="st"> </span>respiratory <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> month,
-                <span class="dt">value =</span> status,
-                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="st">&quot;BL_status&quot;</span> =<span class="st"> &quot;month_0&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, sex, age, treatment, BL_status, <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>))  
-
-<span class="kw">str</span>(data_wide)</code></pre></div>
-<pre><code>&#39;data.frame&#39;:   111 obs. of  10 variables:
- $ subject  : Factor w/ 111 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
- $ centre   : Factor w/ 2 levels &quot;1&quot;,&quot;2&quot;: 1 1 1 1 1 1 1 1 1 1 ...
- $ sex      : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 1 1 1 1 2 1 1 1 1 1 ...
- $ age      : num  46 28 23 44 13 34 43 28 31 37 ...
- $ treatment: Factor w/ 2 levels &quot;placebo&quot;,&quot;treatment&quot;: 1 1 2 1 1 2 1 2 2 1 ...
- $ BL_status: Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 2 2 2 1 1 1 2 2 ...
- $ month_1  : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 2 2 2 1 2 1 2 1 ...
- $ month_2  : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 2 2 2 1 1 1 2 2 ...
- $ month_3  : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 2 2 2 1 2 1 2 2 ...
- $ month_4  : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 2 1 2 1 2 1 2 1 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</code></pre></div>
-<pre><code>    subject centre    sex age treatment BL_status month_1 month_2 month_3
-1         1      1 female  46   placebo      poor    poor    poor    poor
-2         2      1 female  28   placebo      poor    poor    poor    poor
-3         3      1 female  23 treatment      good    good    good    good
-4         4      1 female  44   placebo      good    good    good    good
-...    &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt; ...      &lt;NA&gt;      &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;    &lt;NA&gt;
-108     108      2   male  39 treatment      poor    good    good    good
-109     109      2 female  68 treatment      poor    good    good    good
-110     110      2   male  63 treatment      good    good    good    good
-111     111      2 female  31 treatment      good    good    good    good
-    month_4
-1      poor
-2      poor
-3      good
-4      poor
-...    &lt;NA&gt;
-108    good
-109    good
-110    good
-111    good</code></pre>
-</div>
-<div id="long-format-2" class="section level3">
-<h3><span class="header-section-number">13.2.3</span> Long Format</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_wide<span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(<span class="dt">key =</span> month,
-                <span class="dt">value =</span> status,
-                <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">str_sub</span>(month, <span class="dt">start =</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">status =</span> <span class="kw">case_when</span>(status <span class="op">==</span><span class="st"> &quot;poor&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,
-                                   status <span class="op">==</span><span class="st"> &quot;good&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject, month) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, sex, age, treatment, BL_status, month, status) 
-
-
-<span class="kw">str</span>(data_long)</code></pre></div>
-<pre><code>&#39;data.frame&#39;:   444 obs. of  8 variables:
- $ subject  : Factor w/ 111 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 2 2 2 2 3 3 ...
- $ centre   : Factor w/ 2 levels &quot;1&quot;,&quot;2&quot;: 1 1 1 1 1 1 1 1 1 1 ...
- $ sex      : Factor w/ 2 levels &quot;female&quot;,&quot;male&quot;: 1 1 1 1 1 1 1 1 1 1 ...
- $ age      : num  46 46 46 46 28 28 28 28 23 23 ...
- $ treatment: Factor w/ 2 levels &quot;placebo&quot;,&quot;treatment&quot;: 1 1 1 1 1 1 1 1 2 2 ...
- $ BL_status: Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 1 1 1 1 1 1 2 2 ...
- $ month    : num  1 2 3 4 1 2 3 4 1 2 ...
- $ status   : num  0 0 0 0 0 0 0 0 1 1 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">headTail</span>(data_long)</code></pre></div>
-<pre><code>    subject centre    sex age treatment BL_status month status
-1         1      1 female  46   placebo      poor     1      0
-2         1      1 female  46   placebo      poor     2      0
-3         1      1 female  46   placebo      poor     3      0
-4         1      1 female  46   placebo      poor     4      0
-...    &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt; ...      &lt;NA&gt;      &lt;NA&gt;   ...    ...
-441     111      2 female  31 treatment      good     1      1
-442     111      2 female  31 treatment      good     2      1
-443     111      2 female  31 treatment      good     3      1
-444     111      2 female  31 treatment      good     4      1</code></pre>
-</div>
-</div>
-<div id="exploratory-data-analysis-6" class="section level2">
-<h2><span class="header-section-number">13.3</span> Exploratory Data Analysis</h2>
-<div id="summary-statistics" class="section level3">
-<h3><span class="header-section-number">13.3.1</span> Summary Statistics</h3>
-<div id="demographics-and-baseline-measure" class="section level4">
-<h4><span class="header-section-number">13.3.1.1</span> Demographics and Baseline Measure</h4>
+<div id="wide-format" class="section level3">
+<h3><span class="header-section-number">8.1.2</span> Wide Format</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st">           </span><span class="co"># save the dataset as a new name</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>age, <span class="op">-</span>obs) <span class="op">%&gt;%</span><span class="st">      </span><span class="co"># delete (by deselecting) this variable </span>
+<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> age2,          <span class="co"># name the varaible that specifies how to spread</span>
+                <span class="dt">value =</span> vsae,        <span class="co"># name the variable to be spread out</span>
+                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st">       </span><span class="co"># add to combine the key-variables name before its value</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(childid)            <span class="co"># sort observations</span></code></pre></div>
+<p>Notice the missing values, displayed as <code>NA</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(centre, sex, age, BL_status, 
-                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>treatment,
-                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>()</code></pre></div>
+<pre><code>    childid gender     race bestest2 sicdegp age2_0 age2_1 age2_3 age2_7
+1         1   male    white      pdd    high      6      7     18     25
+2         2   male    white   autism     low      6      7      7      8
+3         3   male nonwhite      pdd    high     17     18     12     18
+4         4   male nonwhite   autism    high     12     14     38    114
+...    &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;    ...    ...    ...    ...
+152     209   male    white   autism     med      2      4   &lt;NA&gt;     12
+153     210   male    white   autism     low      4     25   &lt;NA&gt;    130
+154     211   male nonwhite   autism    high     15   &lt;NA&gt;   &lt;NA&gt;   &lt;NA&gt;
+155     212   male    white   autism     med      7     21     29     72
+    age2_11
+1        27
+2        14
+3        24
+4      &lt;NA&gt;
+...     ...
+152      32
+153    &lt;NA&gt;
+154    &lt;NA&gt;
+155     147</code></pre>
+</div>
+</div>
+<div id="exploratory-data-analysis-3" class="section level2">
+<h2><span class="header-section-number">8.2</span> Exploratory Data Analysis</h2>
+<div id="demographic-summary" class="section level3">
+<h3><span class="header-section-number">8.2.1</span> Demographic Summary</h3>
+<div id="using-the-wide-formatted-dataset" class="section level4">
+<h4><span class="header-section-number">8.2.1.1</span> Using the WIDE formatted dataset</h4>
+<p>Each person’s data is only stored on a single line</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(bestest2, gender, race,    <span class="co"># variables to summarize</span>
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,       <span class="co"># how split into columns</span>
+                    <span class="dt">test =</span> <span class="ot">TRUE</span>,               <span class="co"># compare the groups</span>
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)           <span class="co"># for website</span></code></pre></div>
 <table>
 <thead>
 <tr>
 <th>
 </th>
 <th>
-placebo
+low
 </th>
 <th>
-treatment
+med
+</th>
+<th>
+high
+</th>
+<th>
+P-Value
 </th>
 </tr>
 </thead>
@@ -751,48 +708,89 @@ treatment
 <td>
 </td>
 <td>
-n = 57
+n = 49
 </td>
 <td>
-n = 54
-</td>
-</tr>
-<tr>
-<td>
-centre
+n = 65
 </td>
 <td>
+n = 41
 </td>
 <td>
 </td>
 </tr>
 <tr>
 <td>
-1
+bestest2
 </td>
 <td>
-29 (50.9%)
 </td>
 <td>
-27 (50%)
-</td>
-</tr>
-<tr>
-<td>
-2
 </td>
 <td>
-28 (49.1%)
 </td>
 <td>
-27 (50%)
+0.018
 </td>
 </tr>
 <tr>
 <td>
-sex
+autism
 </td>
 <td>
+38 (77.6%)
+</td>
+<td>
+42 (64.6%)
+</td>
+<td>
+20 (48.8%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+pdd
+</td>
+<td>
+11 (22.4%)
+</td>
+<td>
+23 (35.4%)
+</td>
+<td>
+21 (51.2%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+gender
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.706
+</td>
+</tr>
+<tr>
+<td>
+male
+</td>
+<td>
+44 (89.8%)
+</td>
+<td>
+55 (84.6%)
+</td>
+<td>
+35 (85.4%)
 </td>
 <td>
 </td>
@@ -802,10 +800,172 @@ sex
 female
 </td>
 <td>
-40 (70.2%)
+5 (10.2%)
 </td>
 <td>
-48 (88.9%)
+10 (15.4%)
+</td>
+<td>
+6 (14.6%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+race
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.944
+</td>
+</tr>
+<tr>
+<td>
+white
+</td>
+<td>
+31 (63.3%)
+</td>
+<td>
+43 (66.2%)
+</td>
+<td>
+27 (65.9%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+nonwhite
+</td>
+<td>
+18 (36.7%)
+</td>
+<td>
+22 (33.8%)
+</td>
+<td>
+14 (34.1%)
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="using-the-long-formatted-dataset" class="section level4">
+<h4><span class="header-section-number">8.2.1.2</span> Using the LONG formatted dataset</h4>
+<p>Each person’s data is stored on multiple lines, one for each time point. To ensure the summary table is correct, you must choose a single time point per person.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(age <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st">                  </span><span class="co"># restrict to one-line per person</span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(bestest2, gender, race,    <span class="co"># variables to summarize</span>
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,       <span class="co"># how split into columns</span>
+                    <span class="dt">test =</span> <span class="ot">TRUE</span>,               <span class="co"># compare the groups</span>
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)           <span class="co"># for website</span></code></pre></div>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th>
+low
+</th>
+<th>
+med
+</th>
+<th>
+high
+</th>
+<th>
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+n = 49
+</td>
+<td>
+n = 65
+</td>
+<td>
+n = 40
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+bestest2
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.025
+</td>
+</tr>
+<tr>
+<td>
+autism
+</td>
+<td>
+38 (77.6%)
+</td>
+<td>
+42 (64.6%)
+</td>
+<td>
+20 (50%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+pdd
+</td>
+<td>
+11 (22.4%)
+</td>
+<td>
+23 (35.4%)
+</td>
+<td>
+20 (50%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+gender
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.714
 </td>
 </tr>
 <tr>
@@ -813,532 +973,865 @@ female
 male
 </td>
 <td>
-17 (29.8%)
+44 (89.8%)
 </td>
 <td>
-6 (11.1%)
-</td>
-</tr>
-<tr>
-<td>
-age
+55 (84.6%)
 </td>
 <td>
+35 (87.5%)
 </td>
 <td>
 </td>
 </tr>
 <tr>
 <td>
+female
 </td>
 <td>
-33.6 (13.4)
+5 (10.2%)
 </td>
 <td>
-32.9 (14.0)
-</td>
-</tr>
-<tr>
-<td>
-BL_status
+10 (15.4%)
 </td>
 <td>
+5 (12.5%)
 </td>
 <td>
 </td>
 </tr>
 <tr>
 <td>
-poor
+race
 </td>
 <td>
-31 (54.4%)
 </td>
 <td>
-30 (55.6%)
+</td>
+<td>
+</td>
+<td>
+0.95
 </td>
 </tr>
 <tr>
 <td>
-good
+white
 </td>
 <td>
-26 (45.6%)
+31 (63.3%)
 </td>
 <td>
-24 (44.4%)
+43 (66.2%)
+</td>
+<td>
+26 (65%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+nonwhite
+</td>
+<td>
+18 (36.7%)
+</td>
+<td>
+22 (33.8%)
+</td>
+<td>
+14 (35%)
+</td>
+<td>
 </td>
 </tr>
 </tbody>
 </table>
 </div>
-<div id="status-over-time" class="section level4">
-<h4><span class="header-section-number">13.3.1.2</span> Status Over Time</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(month_<span class="dv">1</span>, month_<span class="dv">2</span>, month_<span class="dv">3</span>, month_<span class="dv">4</span>, 
-                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>treatment,
-                    <span class="dt">output =</span> <span class="st">&quot;markdown&quot;</span>)</code></pre></div>
+</div>
+<div id="baseline-summary" class="section level3">
+<h3><span class="header-section-number">8.2.2</span> Baseline Summary</h3>
+<!-- #### Using the WIDE formatted dataset -->
+<!-- Each person's data is only stored on a single line -->
+<!-- ```{r, results="asis"} -->
+<!-- # Knit to Website: output = "html"  -->
+<!-- # Knit to PDF:     output = "latex2" -->
+<!-- # View on Screen:  output = ""text", or "markdown", "html" -->
+<!-- data_wide %>%  -->
+<!--   furniture::table1(age2_0,  -->
+<!--                     splitby = ~ sicdegp, -->
+<!--                     test = TRUE, -->
+<!--                     output = "html") -->
+<!-- ``` -->
+<div id="using-the-long-formatted-dataset-1" class="section level4">
+<h4><span class="header-section-number">8.2.2.1</span> Using the LONG formatted dataset</h4>
+<p>Each person’s data is stored on multiple lines, one for each time point. To ensure the summary table is correct, you must choose a single time point per person.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot; </span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(age <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(vsae, 
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,
+                    <span class="dt">test =</span> <span class="ot">TRUE</span>,
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
 <table>
 <thead>
-<tr class="header">
-<th></th>
-<th>placebo</th>
-<th>treatment</th>
+<tr>
+<th>
+</th>
+<th>
+low
+</th>
+<th>
+med
+</th>
+<th>
+high
+</th>
+<th>
+P-Value
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td></td>
-<td>n = 57</td>
-<td>n = 54</td>
+<tr>
+<td>
+</td>
+<td>
+n = 49
+</td>
+<td>
+n = 65
+</td>
+<td>
+n = 40
+</td>
+<td>
+</td>
 </tr>
-<tr class="even">
-<td>month_1</td>
-<td></td>
-<td></td>
+<tr>
+<td>
+vsae
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+&lt;.001
+</td>
 </tr>
-<tr class="odd">
-<td>poor</td>
-<td>29 (50.9%)</td>
-<td>17 (31.5%)</td>
-</tr>
-<tr class="even">
-<td>good</td>
-<td>28 (49.1%)</td>
-<td>37 (68.5%)</td>
-</tr>
-<tr class="odd">
-<td>month_2</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>poor</td>
-<td>35 (61.4%)</td>
-<td>16 (29.6%)</td>
-</tr>
-<tr class="odd">
-<td>good</td>
-<td>22 (38.6%)</td>
-<td>38 (70.4%)</td>
-</tr>
-<tr class="even">
-<td>month_3</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="odd">
-<td>poor</td>
-<td>31 (54.4%)</td>
-<td>15 (27.8%)</td>
-</tr>
-<tr class="even">
-<td>good</td>
-<td>26 (45.6%)</td>
-<td>39 (72.2%)</td>
-</tr>
-<tr class="odd">
-<td>month_4</td>
-<td></td>
-<td></td>
-</tr>
-<tr class="even">
-<td>poor</td>
-<td>32 (56.1%)</td>
-<td>20 (37%)</td>
-</tr>
-<tr class="odd">
-<td>good</td>
-<td>25 (43.9%)</td>
-<td>34 (63%)</td>
+<tr>
+<td>
+</td>
+<td>
+7.1 (2.7)
+</td>
+<td>
+8.7 (3.5)
+</td>
+<td>
+12.4 (3.4)
+</td>
+<td>
+</td>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_month_trt_prop &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment, month) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(),
-                   <span class="dt">prop_good =</span> <span class="kw">mean</span>(status),
-                   <span class="dt">prop_sd =</span> <span class="kw">sd</span>(status),
-                   <span class="dt">prop_se =</span> prop_sd<span class="op">/</span>n)
+</div>
+</div>
+<div id="missing-data-attrition" class="section level3">
+<h3><span class="header-section-number">8.2.3</span> Missing Data &amp; Attrition</h3>
+<div id="vim-package" class="section level4">
+<h4><span class="header-section-number">8.2.3.1</span> <code>VIM</code> package</h4>
+<p>Plot the amount of missing vlaues and the amount of each patter of missing values.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>VIM<span class="op">::</span><span class="kw">aggr</span>(<span class="dt">numbers =</span> <span class="ot">TRUE</span>,   <span class="co"># shows the number to the far right</span>
+            <span class="dt">prop =</span> <span class="ot">FALSE</span>)     <span class="co"># shows counts instead of proportions</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-329-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="naniar-package" class="section level4">
+<h4><span class="header-section-number">8.2.3.2</span> <code>naniar</code> package</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>naniar<span class="op">::</span><span class="kw">vis_miss</span>()</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-330-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_var</span>()</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-331-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_var</span>(<span class="dt">show_pct =</span> <span class="ot">TRUE</span>,     <span class="co"># x-axis is PERCENT, not count</span>
+                      <span class="dt">facet =</span> sicdegp) <span class="op">+</span><span class="st">   </span><span class="co"># create seperate panels</span>
+<span class="st">  </span><span class="kw">theme_bw</span>()                               <span class="co"># add ggplot layers as normal</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-332-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_upset</span>() </code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-333-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_upset</span>(<span class="dt">sets =</span> <span class="kw">c</span>(<span class="st">&quot;age2_0_NA&quot;</span>,
+                                 <span class="st">&quot;age2_1_NA&quot;</span>,
+                                 <span class="st">&quot;age2_3_NA&quot;</span>,
+                                 <span class="st">&quot;age2_7_NA&quot;</span>,
+                                 <span class="st">&quot;age2_11_NA&quot;</span>),
+                        <span class="dt">keep.order =</span> <span class="ot">TRUE</span>) </code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-334-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="means-across-time" class="section level3">
+<h3><span class="header-section-number">8.2.4</span> Means Across Time</h3>
+<div id="using-the-wide-formatted-dataset-1" class="section level4">
+<h4><span class="header-section-number">8.2.4.1</span> Using the WIDE formatted dataset</h4>
+<blockquote>
+<p>Default = COMPLETE CASES ONLY!!!</p>
+</blockquote>
+<p>Note - the sample size at each time point is the same, but subjects are only included if they have data at every time point</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot;</span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
 
-psych<span class="op">::</span><span class="kw">headTail</span>(data_month_trt_prop)</code></pre></div>
-<pre><code>  treatment month   n prop_good prop_sd prop_se
-1   placebo     1  57      0.49     0.5    0.01
-2   placebo     2  57      0.39    0.49    0.01
-3   placebo     3  57      0.46     0.5    0.01
-4   placebo     4  57      0.44     0.5    0.01
-5      &lt;NA&gt;   ... ...       ...     ...     ...
-6 treatment     1  54      0.69    0.47    0.01
-7 treatment     2  54       0.7    0.46    0.01
-8 treatment     3  54      0.72    0.45    0.01
-9 treatment     4  54      0.63    0.49    0.01</code></pre>
+data_wide <span class="op">%&gt;%</span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age2_<span class="dv">0</span>, age2_<span class="dv">1</span>, age2_<span class="dv">3</span>, age2_<span class="dv">7</span>, age2_<span class="dv">11</span>,
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,
+                    <span class="dt">test =</span> <span class="ot">TRUE</span>,
+                    <span class="dt">na.rm =</span> <span class="ot">TRUE</span>,           <span class="co"># default: COMPLETE CASES ONLY!!!!!</span>
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th>
+low
+</th>
+<th>
+med
+</th>
+<th>
+high
+</th>
+<th>
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+n = 10
+</td>
+<td>
+n = 17
+</td>
+<td>
+n = 14
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_0
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.003
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+6.6 (2.9)
+</td>
+<td>
+9.5 (4.1)
+</td>
+<td>
+12.5 (4.1)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_1
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+&lt;.001
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+8.0 (2.1)
+</td>
+<td>
+14.3 (6.1)
+</td>
+<td>
+19.5 (6.1)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_3
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+&lt;.001
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+12.5 (5.5)
+</td>
+<td>
+20.2 (8.6)
+</td>
+<td>
+33.9 (18.5)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_7
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+&lt;.001
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+12.3 (8.1)
+</td>
+<td>
+34.4 (22.5)
+</td>
+<td>
+56.9 (23.5)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_11
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.009
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+22.4 (24.4)
+</td>
+<td>
+57.8 (50.3)
+</td>
+<td>
+80.9 (44.4)
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Specify All data:</p>
+</blockquote>
+<p>note - that the smaple sizes will be different for each time point</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: output = &quot;html&quot;</span>
+<span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span>
+<span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span>
+
+data_wide <span class="op">%&gt;%</span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age2_<span class="dv">0</span>, age2_<span class="dv">1</span>, age2_<span class="dv">3</span>, age2_<span class="dv">7</span>, age2_<span class="dv">11</span>,
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,
+                    <span class="dt">test =</span> <span class="ot">TRUE</span>,
+                    <span class="dt">na.rm =</span> <span class="ot">FALSE</span>,           <span class="co"># INCLUDES ALL DATA !!!!</span>
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th>
+low
+</th>
+<th>
+med
+</th>
+<th>
+high
+</th>
+<th>
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+n = 49
+</td>
+<td>
+n = 65
+</td>
+<td>
+n = 41
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_0
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+&lt;.001
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+7.1 (2.7)
+</td>
+<td>
+8.7 (3.5)
+</td>
+<td>
+12.4 (3.4)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_1
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+&lt;.001
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+12.0 (6.3)
+</td>
+<td>
+13.7 (5.4)
+</td>
+<td>
+21.2 (9.4)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_3
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+&lt;.001
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+15.0 (7.9)
+</td>
+<td>
+17.7 (8.0)
+</td>
+<td>
+33.9 (15.8)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_7
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+&lt;.001
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+25.6 (28.4)
+</td>
+<td>
+32.1 (23.4)
+</td>
+<td>
+64.1 (34.6)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age2_11
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+&lt;.001
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+37.1 (35.5)
+</td>
+<td>
+56.2 (47.9)
+</td>
+<td>
+88.7 (46.3)
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="using-the-long-formatted-dataset-2" class="section level4">
+<h4><span class="header-section-number">8.2.4.2</span> Using the LONG formatted dataset</h4>
+<p>Each person’s data is stored on multiple lines, one for each time point.</p>
+<blockquote>
+<p>FOR ALL DATA!</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_sum_all &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(sicdegp, age2) <span class="op">%&gt;%</span><span class="st">              </span><span class="co"># specify the groups</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">vsae_n    =</span> <span class="kw">n</span>(),                      <span class="co"># count of valid scores</span>
+                   <span class="dt">vsae_mean =</span> <span class="kw">mean</span>(vsae),               <span class="co"># mean score</span>
+                   <span class="dt">vsae_sd   =</span> <span class="kw">sd</span>(vsae),                 <span class="co"># standard deviation of scores</span>
+                   <span class="dt">vsae_sem  =</span> vsae_sd <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(vsae_n))   <span class="co"># stadard error for the mean of scores</span>
+
+data_sum_all</code></pre></div>
+<pre><code># A tibble: 15 x 6
+# Groups:   sicdegp [?]
+   sicdegp  age2 vsae_n vsae_mean vsae_sd vsae_sem
+   &lt;fct&gt;   &lt;dbl&gt;  &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+ 1 low         0     49      7.06    2.73    0.389
+ 2 low         1     46     12.0     6.33    0.934
+ 3 low         3     29     15.0     7.92    1.47 
+ 4 low         7     36     25.6    28.4     4.74 
+ 5 low        11     28     37.1    35.5     6.72 
+ 6 med         0     65      8.74    3.51    0.436
+ 7 med         1     62     13.7     5.42    0.688
+ 8 med         3     36     17.7     8.00    1.33 
+ 9 med         7     48     32.1    23.4     3.38 
+10 med        11     40     56.2    47.9     7.58 
+11 high        0     40     12.4     3.43    0.542
+12 high        1     38     21.2     9.38    1.52 
+13 high        3     26     33.9    15.8     3.09 
+14 high        7     35     64.1    34.6     5.85 
+15 high       11     26     88.7    46.3     9.09 </code></pre>
+<blockquote>
+<p>FOR COMPLETE CASES ONLY!!!</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_sum_cc &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(childid) <span class="op">%&gt;%</span><span class="st">        </span><span class="co"># group-by child</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">child_vsae_n =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># count the number of valid VSAE scores</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(child_vsae_n <span class="op">==</span><span class="st"> </span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># restrict to only thoes children with 5 valid scores</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(sicdegp, age2) <span class="op">%&gt;%</span><span class="st">              </span><span class="co"># specify the groups</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">vsae_n    =</span> <span class="kw">n</span>(),                      <span class="co"># count of valid scores</span>
+                   <span class="dt">vsae_mean =</span> <span class="kw">mean</span>(vsae),               <span class="co"># mean score</span>
+                   <span class="dt">vsae_sd   =</span> <span class="kw">sd</span>(vsae),                 <span class="co"># standard deviation of scores</span>
+                   <span class="dt">vsae_sem  =</span> vsae_sd <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(vsae_n))   <span class="co"># stadard error for the mean of scores</span>
+
+data_sum_cc</code></pre></div>
+<pre><code># A tibble: 15 x 6
+# Groups:   sicdegp [?]
+   sicdegp  age2 vsae_n vsae_mean vsae_sd vsae_sem
+   &lt;fct&gt;   &lt;dbl&gt;  &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;
+ 1 low         0     10      6.6     2.88    0.909
+ 2 low         1     10      8       2.11    0.667
+ 3 low         3     10     12.5     5.54    1.75 
+ 4 low         7     10     12.3     8.07    2.55 
+ 5 low        11     10     22.4    24.4     7.73 
+ 6 med         0     17      9.47    4.12    1.00 
+ 7 med         1     17     14.3     6.08    1.47 
+ 8 med         3     17     20.2     8.57    2.08 
+ 9 med         7     17     34.4    22.5     5.47 
+10 med        11     17     57.8    50.3    12.2  
+11 high        0     14     12.5     4.09    1.09 
+12 high        1     14     19.5     6.15    1.64 
+13 high        3     14     33.9    18.5     4.94 
+14 high        7     14     56.9    23.5     6.29 
+15 high       11     14     80.9    44.4    11.9  </code></pre>
 </div>
 </div>
-<div id="visualization-2" class="section level3">
-<h3><span class="header-section-number">13.3.2</span> Visualization</h3>
-<div id="status-over-time-1" class="section level4">
-<h4><span class="header-section-number">13.3.2.1</span> Status Over Time</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_month_trt_prop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,
-             <span class="dt">y =</span> prop_good,
-             <span class="dt">group =</span> treatment,
-             <span class="dt">color =</span> treatment)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> prop_good <span class="op">-</span><span class="st"> </span>prop_se,
-                    <span class="dt">ymax =</span> prop_good <span class="op">+</span><span class="st"> </span>prop_se),
+<div id="person-profile-plots" class="section level3">
+<h3><span class="header-section-number">8.2.5</span> Person Profile Plots</h3>
+<p>Use the data in LONG format</p>
+<div id="unequally-spaced" class="section level4">
+<h4><span class="header-section-number">8.2.5.1</span> Unequally Spaced</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">fct_recode</span>(sicdegp,
+                                     <span class="st">&quot;Low Communication&quot;</span> =<span class="st"> &quot;low&quot;</span>,
+                                     <span class="st">&quot;Medium Communication&quot;</span> =<span class="st"> &quot;med&quot;</span>,
+                                     <span class="st">&quot;High Communication&quot;</span> =<span class="st"> &quot;high&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,
+             <span class="dt">y =</span> vsae)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> childid),
+            <span class="dt">alpha =</span> .<span class="dv">5</span>,
+            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>sicdegp)  <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age of Child, Years&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Vineland Socialization Age Equivalent&quot;</span>,
+       <span class="dt">color =</span> <span class="st">&quot;Sequenced Inventory of Communication Development&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Flexible&quot;</span>),
+              <span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,
+              <span class="dt">se =</span> <span class="ot">FALSE</span>,) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Linear&quot;</span>),
+              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
+              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Smoother Type: &quot;</span>,
+                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Flexible&quot;</span> =<span class="st"> &quot;blue&quot;</span>, 
+                                <span class="st">&quot;Linear&quot;</span>    =<span class="st"> &quot;red&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-339-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="equally-spaced" class="section level4">
+<h4><span class="header-section-number">8.2.5.2</span> Equally Spaced</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">fct_recode</span>(sicdegp,
+                                     <span class="st">&quot;Low Communication&quot;</span> =<span class="st"> &quot;low&quot;</span>,
+                                     <span class="st">&quot;Medium Communication&quot;</span> =<span class="st"> &quot;med&quot;</span>,
+                                     <span class="st">&quot;High Communication&quot;</span> =<span class="st"> &quot;high&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> obs,
+             <span class="dt">y =</span> vsae)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> childid),
+            <span class="dt">alpha =</span> .<span class="dv">5</span>,
+            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>sicdegp)  <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Observation Number&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Vineland Socialization Age Equivalent&quot;</span>,
+       <span class="dt">color =</span> <span class="st">&quot;Sequenced Inventory of Communication Development&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Flexible&quot;</span>),
+              <span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,
+              <span class="dt">se =</span> <span class="ot">FALSE</span>,) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Linear&quot;</span>),
+              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
+              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Smoother Type: &quot;</span>,
+                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Flexible&quot;</span> =<span class="st"> &quot;blue&quot;</span>, 
+                                <span class="st">&quot;Linear&quot;</span>    =<span class="st"> &quot;red&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-340-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="side-by-side-boxplots" class="section level3">
+<h3><span class="header-section-number">8.2.6</span> Side-by-side Boxplots</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> sicdegp,
+             <span class="dt">y =</span> vsae,
+             <span class="dt">fill =</span> sicdegp)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>age, 
+             <span class="dt">labeller =</span> <span class="st">&quot;label_both&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-341-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="means-plots" class="section level3">
+<h3><span class="header-section-number">8.2.7</span> Means Plots</h3>
+<div id="default-stat_summary" class="section level4">
+<h4><span class="header-section-number">8.2.7.1</span> Default <code>stat_summary</code></h4>
+<p>It is nice that the <code>stat_summary()</code> layer computes the standard error for the mean for you using the data in LONG format</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,
+             <span class="dt">y =</span> vsae,
+             <span class="dt">color =</span> sicdegp)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_summary</span>() <span class="op">+</span><span class="st">                       </span><span class="co"># default: points at MEAN and extend vertically 1 standard error for the mean</span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> <span class="st">&quot;mean&quot;</span>,           <span class="co"># plot the means</span>
+               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st">          </span><span class="co"># ...and connect with lines</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),
+        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.25</span>, <span class="fl">1.25</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-342-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> obs,
+             <span class="dt">y =</span> vsae,
+             <span class="dt">color =</span> sicdegp)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">stat_summary</span>() <span class="op">+</span><span class="st">                       </span><span class="co"># default: points at MEAN and extend vertically 1 standard error for the mean</span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> <span class="st">&quot;mean&quot;</span>,           <span class="co"># plot the means</span>
+               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st">          </span><span class="co"># ...and connect with lines</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),
+        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.25</span>, <span class="fl">1.25</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-343-1.png" width="768" style="display: block; margin: auto;" /></p>
+</div>
+<div id="manually-summarized" class="section level4">
+<h4><span class="header-section-number">8.2.7.2</span> Manually Summarized</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_sum_all <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age2 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> age,
+      <span class="dt">y =</span> vsae_mean,
+      <span class="dt">color =</span> sicdegp) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> vsae_mean <span class="op">-</span><span class="st"> </span>vsae_sem,   <span class="co"># mean +/- one SE for the mean</span>
+                    <span class="dt">ymax =</span> vsae_mean <span class="op">+</span><span class="st"> </span>vsae_sem),
                 <span class="dt">width =</span> .<span class="dv">25</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-529-1.png" width="576" style="display: block; margin: auto;" /></p>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">shape =</span> sicdegp),
+             <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> sicdegp)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age of Child, Years&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Vineland Socialization Age Equivalent&quot;</span>,
+       <span class="dt">color =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>,
+       <span class="dt">shape =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>,
+       <span class="dt">linetype =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-344-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
-<div id="logisitc-regression-glm" class="section level2">
-<h2><span class="header-section-number">13.4</span> Logisitc Regression (GLM)</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span>
-<span class="st">                   </span><span class="kw">I</span>(age<span class="op">-</span><span class="dv">33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="op">-</span><span class="dv">33</span>)<span class="op">^</span><span class="dv">2</span>),
-                <span class="dt">data =</span> data_long,
-                <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))
-
-<span class="kw">summary</span>(resp_glm)</code></pre></div>
-<pre><code>
-Call:
-glm(formula = status ~ centre + treatment + sex + BL_status + 
-    I(age - 33) + I((age - 33)^2), family = binomial(link = &quot;logit&quot;), 
-    data = data_long)
-
-Deviance Residuals: 
-    Min       1Q   Median       3Q      Max  
--2.5965  -0.9178   0.3985   0.8388   2.0988  
-
-Coefficients:
-                     Estimate Std. Error z value Pr(&gt;|z|)    
-(Intercept)        -1.9685725  0.2733549  -7.202 5.95e-13 ***
-centre2             0.5347938  0.2464412   2.170 0.030002 *  
-treatmenttreatment  1.3561814  0.2447533   5.541 3.01e-08 ***
-sexmale             0.4263433  0.3175081   1.343 0.179343    
-BL_statusgood       1.9193401  0.2500033   7.677 1.63e-14 ***
-I(age - 33)        -0.0368535  0.0106382  -3.464 0.000532 ***
-I((age - 33)^2)     0.0025169  0.0006352   3.963 7.41e-05 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-(Dispersion parameter for binomial family taken to be 1)
-
-    Null deviance: 608.93  on 443  degrees of freedom
-Residual deviance: 465.25  on 437  degrees of freedom
-AIC: 479.25
-
-Number of Fisher Scoring iterations: 4</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">tab_model</span>(resp_glm)</code></pre></div>
-<table style="border-collapse:collapse; border:none;">
-<tr>
-<th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
- 
-</th>
-<th colspan="3" style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm; ">
-status
-</th>
-</tr>
-<tr>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  text-align:left; ">
-Predictors
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-Odds Ratios
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-CI
-</td>
-<td style=" text-align:center; border-bottom:1px solid; font-style:italic; font-weight:normal;  ">
-p
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-(Intercept)
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.14
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.08 – 0.23
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-centre: centre 2
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.71
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.05 – 2.77
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.030</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-treatmenttreatment
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-3.88
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-2.42 – 6.33
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-sexmale
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.53
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.83 – 2.87
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.179
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-BL_statusgood
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-6.82
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-4.22 – 11.27
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-I(age-33)
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.96
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-0.94 – 0.98
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>0.001</strong>
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-I((age-33)^2)
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-1.00 – 1.00
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
-<strong>&lt;0.001
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm; border-top:1px solid;">
-Observations
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left; border-top:1px solid;" colspan="3">
-444
-</td>
-</tr>
-<tr>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-Cox &amp; Snell’s R<sup>2</sup> / Nagelkerke’s R<sup>2</sup>
-</td>
-<td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.276 / 0.370
-</td>
-</tr>
-<table style="border-collapse:collapse; border:none;">
+<div id="model-1-full-model-with-loaded-mean-structure" class="section level2">
+<h2><span class="header-section-number">8.3</span> Model 1: Full model with ‘loaded’ mean structure</h2>
+<p>Take top-down approach: Quadratic regression model, describing <code>vsae</code> as a function of <code>age2</code></p>
+<blockquote>
+<p>Each child has a unique parabolic trajectory over time, with coefficients that vary randomly around fixed-effects defining a mean growth curve for each SICD group. Since there is no <code>age</code> = 0 in our data, we will use the <code>age2</code> variables, which is <code>age</code> -2, so that intercept has meaning (mean at baseline age).</p>
+</blockquote>
+<ul>
+<li>Fixed-effects
+<ul>
+<li><code>age2</code> age</li>
+<li><code>I(age2^2)</code> quadratic age or age-squared, the <code>I()</code> denotes an internal calculated variable</li>
+<li><code>sicdegp</code> SICD group (reference group = low)</li>
+<li>SICD group x age/age-squared interactions</li>
+</ul></li>
+<li>Random-effects
+<ul>
+<li>intercep</li>
+<li>age and age-squared</li>
+</ul></li>
+</ul>
+<div id="fit-the-model-10" class="section level3">
+<h3><span class="header-section-number">8.3.1</span> Fit the Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_1_re &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span>
+<span class="st">                        </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid), 
+                      <span class="dt">data =</span> data_long,
+                      <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
 </div>
-<div id="generalized-estimating-equations-gee" class="section level2">
-<h2><span class="header-section-number">13.5</span> Generalized Estimating Equations (GEE)</h2>
-<div id="indepdendence" class="section level3">
-<h3><span class="header-section-number">13.5.1</span> Indepdendence</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_gee_in &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span>
-<span class="st">                          </span><span class="kw">I</span>(age<span class="op">-</span><span class="dv">33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="op">-</span><span class="dv">33</span>)<span class="op">^</span><span class="dv">2</span>),
-                        <span class="dt">data =</span> data_long,
-                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
-                        <span class="dt">id =</span> subject,
-                        <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>,
-                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,
-                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
-<pre><code>       (Intercept)            centre2 treatmenttreatment 
-      -1.968572485        0.534793799        1.356181372 
-           sexmale      BL_statusgood        I(age - 33) 
-       0.426343291        1.919340141       -0.036853528 
-   I((age - 33)^2) 
-       0.002516859 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(resp_gee_in)</code></pre></div>
-<pre><code>
- GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
- gee S-function, version 4.13 modified 98/01/27 (1998) 
-
-Model:
- Link:                      Logit 
- Variance to Mean Relation: Binomial 
- Correlation Structure:     Independent 
-
-Call:
-gee::gee(formula = status ~ centre + treatment + sex + BL_status + 
-    I(age - 33) + I((age - 33)^2), id = subject, data = data_long, 
-    family = binomial(link = &quot;logit&quot;), corstr = &quot;independence&quot;, 
-    scale.fix = TRUE, scale.value = 1)
-
-Summary of Residuals:
-        Min          1Q      Median          3Q         Max 
--0.96563962 -0.34372730  0.07631922  0.29658264  0.88947816 
-
-
-Coefficients:
-                       Estimate   Naive S.E.   Naive z  Robust S.E.
-(Intercept)        -1.968572493 0.2733635751 -7.201298 0.4457014141
-centre2             0.534793799 0.2464443046  2.170039 0.3795759846
-treatmenttreatment  1.356181377 0.2447584751  5.540896 0.3777998909
-sexmale             0.426343293 0.3175134753  1.342757 0.4832336627
-BL_statusgood       1.919340146 0.2500092510  7.677077 0.3772812271
-I(age - 33)        -0.036853528 0.0106384086 -3.464196 0.0150120266
-I((age - 33)^2)     0.002516859 0.0006351834  3.962414 0.0007592432
-                     Robust z
-(Intercept)        -4.4167966
-centre2             1.4089242
-treatmenttreatment  3.5896818
-sexmale             0.8822715
-BL_statusgood       5.0872930
-I(age - 33)        -2.4549336
-I((age - 33)^2)     3.3149582
-
-Estimated Scale Parameter:  1
-Number of Iterations:  1
-
-Working Correlation
-     [,1] [,2] [,3] [,4]
-[1,]    1    0    0    0
-[2,]    0    1    0    0
-[3,]    0    0    1    0
-[4,]    0    0    0    1</code></pre>
-<p>The results for GEE fit with the independence correlation structure produces results that are nearly identical to the GLM model.</p>
-<p>The robust (sandwhich) standard errors are however much larger than the naive stadard errors</p>
-</div>
-<div id="exchangeable" class="section level3">
-<h3><span class="header-section-number">13.5.2</span> Exchangeable</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_gee_ex &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span>
-<span class="st">                          </span><span class="kw">I</span>(age<span class="op">-</span><span class="dv">33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="op">-</span><span class="dv">33</span>)<span class="op">^</span><span class="dv">2</span>),
-                        <span class="dt">data =</span> data_long,
-                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
-                        <span class="dt">id =</span> subject,
-                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,
-                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,
-                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
-<pre><code>       (Intercept)            centre2 treatmenttreatment 
-      -1.968572485        0.534793799        1.356181372 
-           sexmale      BL_statusgood        I(age - 33) 
-       0.426343291        1.919340141       -0.036853528 
-   I((age - 33)^2) 
-       0.002516859 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(resp_gee_ex)</code></pre></div>
-<pre><code>
- GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
- gee S-function, version 4.13 modified 98/01/27 (1998) 
-
-Model:
- Link:                      Logit 
- Variance to Mean Relation: Binomial 
- Correlation Structure:     Exchangeable 
-
-Call:
-gee::gee(formula = status ~ centre + treatment + sex + BL_status + 
-    I(age - 33) + I((age - 33)^2), id = subject, data = data_long, 
-    family = binomial(link = &quot;logit&quot;), corstr = &quot;exchangeable&quot;, 
-    scale.fix = TRUE, scale.value = 1)
-
-Summary of Residuals:
-        Min          1Q      Median          3Q         Max 
--0.96563962 -0.34372730  0.07631922  0.29658264  0.88947816 
-
-
-Coefficients:
-                       Estimate  Naive S.E.    Naive z  Robust S.E.
-(Intercept)        -1.968572493 0.379830796 -5.1827617 0.4457014141
-centre2             0.534793799 0.342427246  1.5617735 0.3795759846
-treatmenttreatment  1.356181377 0.340084835  3.9877737 0.3777998909
-sexmale             0.426343293 0.441175807  0.9663796 0.4832336627
-BL_statusgood       1.919340146 0.347380636  5.5251789 0.3772812271
-I(age - 33)        -0.036853528 0.014781762 -2.4931757 0.0150120266
-I((age - 33)^2)     0.002516859 0.000882569  2.8517424 0.0007592432
-                     Robust z
-(Intercept)        -4.4167966
-centre2             1.4089242
-treatmenttreatment  3.5896818
-sexmale             0.8822715
-BL_statusgood       5.0872930
-I(age - 33)        -2.4549336
-I((age - 33)^2)     3.3149582
-
-Estimated Scale Parameter:  1
-Number of Iterations:  1
-
-Working Correlation
-        [,1]    [,2]    [,3]    [,4]
-[1,] 1.00000 0.31021 0.31021 0.31021
-[2,] 0.31021 1.00000 0.31021 0.31021
-[3,] 0.31021 0.31021 1.00000 0.31021
-[4,] 0.31021 0.31021 0.31021 1.00000</code></pre>
-<p>Notice that the naive stadard errors are more similar to the robust (sandwhich) standard errors, supporting that this is a better fitting model</p>
-</div>
-<div id="paramgeter-estimates-table" class="section level3">
-<h3><span class="header-section-number">13.5.3</span> Paramgeter Estimates Table</h3>
-<p>The GEE models display the robus (sandwhich) standard errors.</p>
-<div id="raw-estimates-logit-scale" class="section level4">
-<h4><span class="header-section-number">13.5.3.1</span> Raw Estimates (Logit Scale)</h4>
+<div id="table-of-prameter-estimates" class="section level3">
+<h3><span class="header-section-number">8.3.2</span> Table of Prameter Estimates</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
 <span class="co"># Knit to PDF:     texreg::texreg()</span>
 <span class="co"># View on Screen:  texreg::screenreg()</span>
 
-texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(resp_glm, 
-                     resp_gee_in, 
-                     resp_gee_ex),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, 
-                                       <span class="st">&quot;GEE-INDEP&quot;</span>, 
-                                       <span class="st">&quot;GEE-EXCH&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Logit Scale&quot;</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_lmer_1_re),
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Full Model&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="bottom" style="margin-top:0.3em;">
-Estimates on Logit Scale
+<caption align="top" style="margin-bottom:0.3em;">
+MLM: Full Model
 </caption>
 <tr>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
 <b></b>
 </th>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>GLM</b>
-</th>
-<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>GEE-INDEP</b>
-</th>
-<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>GEE-EXCH</b>
+<b>Model 1</b>
 </th>
 </tr>
 <tr>
@@ -1346,188 +1839,71 @@ Estimates on Logit Scale
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
--1.9686<sup style="vertical-align: 0px;">***</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
--1.9686<sup style="vertical-align: 0px;">***</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
--1.9686<sup style="vertical-align: 0px;">***</sup>
+8.40 (0.75)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
+age2
 </td>
 <td style="padding-right: 12px; border: none;">
-(0.2734)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.4457)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.4457)
+2.28 (0.74)<sup style="vertical-align: 0px;">**</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-centre2
+sicdegpmed
 </td>
 <td style="padding-right: 12px; border: none;">
-0.5348<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-0.5348
-</td>
-<td style="padding-right: 12px; border: none;">
-0.5348
+1.26 (0.99)
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
+sicdegphigh
 </td>
 <td style="padding-right: 12px; border: none;">
-(0.2464)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.3796)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.3796)
+5.39 (1.11)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-treatmenttreatment
+I(age2^2)
 </td>
 <td style="padding-right: 12px; border: none;">
-1.3562<sup style="vertical-align: 0px;">***</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-1.3562<sup style="vertical-align: 0px;">***</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-1.3562<sup style="vertical-align: 0px;">***</sup>
+0.07 (0.08)
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
+age2:sicdegpmed
 </td>
 <td style="padding-right: 12px; border: none;">
-(0.2448)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.3778)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.3778)
+0.43 (0.98)
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-sexmale
+age2:sicdegphigh
 </td>
 <td style="padding-right: 12px; border: none;">
-0.4263
-</td>
-<td style="padding-right: 12px; border: none;">
-0.4263
-</td>
-<td style="padding-right: 12px; border: none;">
-0.4263
+3.31 (1.08)<sup style="vertical-align: 0px;">**</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
+sicdegpmed:I(age2^2)
 </td>
 <td style="padding-right: 12px; border: none;">
-(0.3175)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.4832)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.4832)
+-0.00 (0.11)
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-BL_statusgood
+sicdegphigh:I(age2^2)
 </td>
 <td style="padding-right: 12px; border: none;">
-1.9193<sup style="vertical-align: 0px;">***</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-1.9193<sup style="vertical-align: 0px;">***</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-1.9193<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.2500)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.3773)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.3773)
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-I(age - 33)
-</td>
-<td style="padding-right: 12px; border: none;">
--0.0369<sup style="vertical-align: 0px;">***</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
--0.0369<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
--0.0369<sup style="vertical-align: 0px;">*</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0106)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0150)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0150)
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-I((age - 33)^2)
-</td>
-<td style="padding-right: 12px; border: none;">
-0.0025<sup style="vertical-align: 0px;">***</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-0.0025<sup style="vertical-align: 0px;">***</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-0.0025<sup style="vertical-align: 0px;">***</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0006)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0008)
-</td>
-<td style="padding-right: 12px; border: none;">
-(0.0008)
+0.14 (0.12)
 </td>
 </tr>
 <tr>
@@ -1535,11 +1911,7 @@ I((age - 33)^2)
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-479.2530
-</td>
-<td style="border-top: 1px solid black;">
-</td>
-<td style="border-top: 1px solid black;">
+4586.50
 </td>
 </tr>
 <tr>
@@ -1547,11 +1919,7 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-507.9238
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
+4656.96
 </td>
 </tr>
 <tr>
@@ -1559,23 +1927,7 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--232.6265
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Deviance
-</td>
-<td style="padding-right: 12px; border: none;">
-465.2530
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
+-2277.25
 </td>
 </tr>
 <tr>
@@ -1583,68 +1935,210 @@ Deviance
 Num. obs.
 </td>
 <td style="padding-right: 12px; border: none;">
-444
+604
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: childid
 </td>
 <td style="padding-right: 12px; border: none;">
-444
+155
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: childid (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-444
+1.27
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: childid age2
+</td>
+<td style="padding-right: 12px; border: none;">
+14.00
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: childid I(age2^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.16
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: childid (Intercept) age2
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.13
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: childid (Intercept) I(age2^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.41
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: childid age2 I(age2^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.61
 </td>
 </tr>
 <tr>
 <td style="border-bottom: 2px solid black;">
-Dispersion
+Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-</td>
-<td style="border-bottom: 2px solid black;">
-1.0000
-</td>
-<td style="border-bottom: 2px solid black;">
-1.0000
+37.20
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;" colspan="5">
+<td style="padding-right: 12px; border: none;" colspan="3">
 <span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
 </td>
 </tr>
 </table>
-<p>Comparing the two GEE models: parameters are identical and so are the robust (sandwhich) standard errors.</p>
 </div>
-<div id="exponentiate-the-estimates-odds-ratio-scale" class="section level4">
-<h4><span class="header-section-number">13.5.3.2</span> Exponentiate the Estimates (odds ratio scale)</h4>
+<div id="plot-of-the-estimated-marginal-means" class="section level3">
+<h3><span class="header-section-number">8.3.3</span> Plot of the Estimated Marginal Means</h3>
+<p>Note: the <span class="math inline">\(x-axis\)</span> is the <code>age2</code> (age - 2) variable, so it represents time since age 2 (or baseline)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_1_re,
+                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>, <span class="st">&quot;sicdegp&quot;</span>),
+                   <span class="dt">title =</span> <span class="st">&quot;Model 1: Loaded Means Structure&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-348-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="model-2a-drop-random-intercepts" class="section level2">
+<h2><span class="header-section-number">8.4</span> Model 2A: Drop Random Intercepts</h2>
+<p>Note: There seems to be relatively little variation in baseline measurements of VSAE across individuals in the same SICD group, so the variation at age 2 can be attributed to random error, rather than between-subject variation.</p>
+<p>This indicates we may want to try removing the random intercepts, while retaining the same fixed- and other random-effects.</p>
+<p>This new model implies that children have common initial VSAE value at age 2, given their SICD group.</p>
+<div id="fit-the-model-11" class="section level3">
+<h3><span class="header-section-number">8.4.1</span> Fit the Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_2a_re &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span>
+<span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid), 
+                      <span class="dt">data =</span> data_long,
+                      <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
+</div>
+<div id="assess-the-signifcance" class="section level3">
+<h3><span class="header-section-number">8.4.2</span> Assess the Signifcance</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_1_re, fit_lmer_2a_re, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_2a_re: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (-1 + age2 + I(age2^2) | 
+fit_lmer_2a_re:     childid)
+fit_lmer_1_re: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (1 + age2 + I(age2^2) | 
+fit_lmer_1_re:     childid)
+               Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_2a_re 13 4587.0 4644.2 -2280.5   4561.0                         
+fit_lmer_1_re  16 4586.5 4657.0 -2277.2   4554.5 6.4643      3    0.09108
+                
+fit_lmer_2a_re  
+fit_lmer_1_re  .
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The more complicated model (including random intercepts) does NOT fit better, thus the random intercepts may be removed from the model. Model 2a is bettern than Model 1</p>
+</div>
+</div>
+<div id="model-2b-drop-random-quadratic-slope" class="section level2">
+<h2><span class="header-section-number">8.5</span> Model 2B: Drop Random Quadratic Slope</h2>
+<p>We should formally test the necessity of quadratic age random-effect.</p>
+<p>Comparison of nested models with REML-based LRT using a 50:50 mixture χ2-distribution with 1 and 2 df Difference of 2 covariance parameters</p>
+<div id="fit-the-model-12" class="section level3">
+<h3><span class="header-section-number">8.5.1</span> Fit the Model</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_2b_re &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span>
+<span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2  <span class="op">|</span><span class="st"> </span>childid), 
+                      <span class="dt">REML =</span> <span class="ot">TRUE</span>, 
+                      <span class="dt">data =</span> data_long)</code></pre></div>
+</div>
+<div id="assess-the-signifcance-1" class="section level3">
+<h3><span class="header-section-number">8.5.2</span> Assess the Signifcance</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_2a_re, fit_lmer_2b_re, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_2b_re: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (-1 + age2 | childid)
+fit_lmer_2a_re: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (-1 + age2 + I(age2^2) | 
+fit_lmer_2a_re:     childid)
+               Df    AIC    BIC  logLik deviance Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_2b_re 11 4669.3 4717.7 -2323.7   4647.3                        
+fit_lmer_2a_re 13 4587.0 4644.2 -2280.5   4561.0 86.34      2  &lt; 2.2e-16
+                  
+fit_lmer_2b_re    
+fit_lmer_2a_re ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The more complicated model (including random intercepts) DOES fit better, thus the random sopes for both the linear AND the quadratic effect of age should be retained in the model. Model 2a is better than model 2b</p>
+</div>
+</div>
+<div id="model-3-drop-quadratic-time-fixed-effect" class="section level2">
+<h2><span class="header-section-number">8.6</span> Model 3: Drop Quadratic Time Fixed Effect</h2>
+<p>Fit the previous ‘best’ model via ML, not REML to compare nested model that differe in terms of fixed effects only</p>
+<div id="fit-the-models" class="section level3">
+<h3><span class="header-section-number">8.6.1</span> Fit the Models</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_2a_ml &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span>
+<span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid),  
+                      <span class="dt">data =</span> data_long, 
+                      <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+fit_lmer_3_ml &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp  <span class="op">+</span><span class="st"> </span>
+<span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid), 
+                      <span class="dt">data =</span> data_long, 
+                      <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
+</div>
+<div id="assess-the-signifcance-2" class="section level3">
+<h3><span class="header-section-number">8.6.2</span> Assess the Signifcance</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_2a_ml, fit_lmer_3_ml)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_3_ml: vsae ~ age2 * sicdegp + (-1 + age2 + I(age2^2) | childid)
+fit_lmer_2a_ml: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (-1 + age2 + I(age2^2) | 
+fit_lmer_2a_ml:     childid)
+               Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_3_ml  10 4584.4 4628.5 -2282.2   4564.4                         
+fit_lmer_2a_ml 13 4582.1 4639.3 -2278.0   4556.1 8.3704      3    0.03895
+                
+fit_lmer_3_ml   
+fit_lmer_2a_ml *
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>The more complicated model (including fixed interaction between quadratic time and SICD group) DOES fit better, thus the higher level interaction should be retained in the model. Model 2a is better than model 3.</p>
+</div>
+</div>
+<div id="final-model-3" class="section level2">
+<h2><span class="header-section-number">8.7</span> Final Model</h2>
+<div id="table-of-parameter-esitmates" class="section level3">
+<h3><span class="header-section-number">8.7.1</span> Table of Parameter Esitmates</h3>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
 <span class="co"># Knit to PDF:     texreg::texreg()</span>
 <span class="co"># View on Screen:  texreg::screenreg()</span>
 
-texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(resp_glm), 
-                     <span class="kw">extract_gee_exp</span>(resp_gee_in), 
-                     <span class="kw">extract_gee_exp</span>(resp_gee_ex)),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, 
-                                       <span class="st">&quot;GEE-INDEP&quot;</span>, 
-                                       <span class="st">&quot;GEE-EXCH&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Odds-Ratio Scale&quot;</span>,
-                <span class="dt">ci.test =</span> <span class="dv">1</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
+texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_lmer_2a_re),
+                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,
+                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
+                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>,
+                <span class="dt">digits             =</span> <span class="dv">4</span>)</code></pre></div>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <table cellspacing="0" align="center" style="border: none;">
-<caption align="bottom" style="margin-top:0.3em;">
-Estimates on Odds-Ratio Scale
+<caption align="top" style="margin-bottom:0.3em;">
+MLM: Final Model
 </caption>
 <tr>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
 <b></b>
 </th>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>GLM</b>
-</th>
-<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>GEE-INDEP</b>
-</th>
-<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
-<b>GEE-EXCH</b>
+<b>Model 1</b>
 </th>
 </tr>
 <tr>
@@ -1652,188 +2146,71 @@ Estimates on Odds-Ratio Scale
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1397<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-0.1397<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-0.1397<sup style="vertical-align: 0px;">*</sup>
+8.4085 (0.7370)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
+age2
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.0801; 0.2343]
-</td>
-<td style="padding-right: 12px; border: none;">
-[0.0583; 0.3345]
-</td>
-<td style="padding-right: 12px; border: none;">
-[0.0583; 0.3345]
+2.2694 (0.7399)<sup style="vertical-align: 0px;">**</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-centre2
+sicdegpmed
 </td>
 <td style="padding-right: 12px; border: none;">
-1.7071<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-1.7071
-</td>
-<td style="padding-right: 12px; border: none;">
-1.7071
+1.2644 (0.9741)
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
+sicdegphigh
 </td>
 <td style="padding-right: 12px; border: none;">
-[1.0540; 2.7748]
-</td>
-<td style="padding-right: 12px; border: none;">
-[0.8113; 3.5922]
-</td>
-<td style="padding-right: 12px; border: none;">
-[0.8113; 3.5922]
+5.3646 (1.0907)<sup style="vertical-align: 0px;">***</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-treatmenttreatment
+I(age2^2)
 </td>
 <td style="padding-right: 12px; border: none;">
-3.8813<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-3.8813<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-3.8813<sup style="vertical-align: 0px;">*</sup>
+0.0721 (0.0790)
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
+age2:sicdegpmed
 </td>
 <td style="padding-right: 12px; border: none;">
-[2.4221; 6.3344]
-</td>
-<td style="padding-right: 12px; border: none;">
-[1.8509; 8.1390]
-</td>
-<td style="padding-right: 12px; border: none;">
-[1.8509; 8.1390]
+0.4289 (0.9808)
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-sexmale
+age2:sicdegphigh
 </td>
 <td style="padding-right: 12px; border: none;">
-1.5316
-</td>
-<td style="padding-right: 12px; border: none;">
-1.5316
-</td>
-<td style="padding-right: 12px; border: none;">
-1.5316
+3.3259 (1.0760)<sup style="vertical-align: 0px;">**</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
+sicdegpmed:I(age2^2)
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.8257; 2.8745]
-</td>
-<td style="padding-right: 12px; border: none;">
-[0.5940; 3.9491]
-</td>
-<td style="padding-right: 12px; border: none;">
-[0.5940; 3.9491]
+0.0007 (0.1038)
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
-BL_statusgood
+sicdegphigh:I(age2^2)
 </td>
 <td style="padding-right: 12px; border: none;">
-6.8165<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-6.8165<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-6.8165<sup style="vertical-align: 0px;">*</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-[4.2214; 11.2710]
-</td>
-<td style="padding-right: 12px; border: none;">
-[3.2539; 14.2793]
-</td>
-<td style="padding-right: 12px; border: none;">
-[3.2539; 14.2793]
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-I(age - 33)
-</td>
-<td style="padding-right: 12px; border: none;">
-0.9638<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-0.9638<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-0.9638<sup style="vertical-align: 0px;">*</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-[0.9435; 0.9837]
-</td>
-<td style="padding-right: 12px; border: none;">
-[0.9359; 0.9926]
-</td>
-<td style="padding-right: 12px; border: none;">
-[0.9359; 0.9926]
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-I((age - 33)^2)
-</td>
-<td style="padding-right: 12px; border: none;">
-1.0025<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-1.0025<sup style="vertical-align: 0px;">*</sup>
-</td>
-<td style="padding-right: 12px; border: none;">
-1.0025<sup style="vertical-align: 0px;">*</sup>
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-[1.0013; 1.0038]
-</td>
-<td style="padding-right: 12px; border: none;">
-[1.0010; 1.0040]
-</td>
-<td style="padding-right: 12px; border: none;">
-[1.0010; 1.0040]
+0.1335 (0.1138)
 </td>
 </tr>
 <tr>
@@ -1841,11 +2218,7 @@ I((age - 33)^2)
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-479.2530
-</td>
-<td style="border-top: 1px solid black;">
-</td>
-<td style="border-top: 1px solid black;">
+4586.9689
 </td>
 </tr>
 <tr>
@@ -1853,11 +2226,7 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-507.9238
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
+4644.2154
 </td>
 </tr>
 <tr>
@@ -1865,23 +2234,7 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--232.6265
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-</tr>
-<tr>
-<td style="padding-right: 12px; border: none;">
-Deviance
-</td>
-<td style="padding-right: 12px; border: none;">
-465.2530
-</td>
-<td style="padding-right: 12px; border: none;">
-</td>
-<td style="padding-right: 12px; border: none;">
+-2280.4845
 </td>
 </tr>
 <tr>
@@ -1889,166 +2242,355 @@ Deviance
 Num. obs.
 </td>
 <td style="padding-right: 12px; border: none;">
-444
+604
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Num. groups: childid
 </td>
 <td style="padding-right: 12px; border: none;">
-444
+155
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: childid age2
 </td>
 <td style="padding-right: 12px; border: none;">
-444
+13.9919
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Var: childid I(age2^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+0.1338
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Cov: childid age2 I(age2^2)
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.4436
 </td>
 </tr>
 <tr>
 <td style="border-bottom: 2px solid black;">
-Dispersion
+Var: Residual
 </td>
 <td style="border-bottom: 2px solid black;">
-</td>
-<td style="border-bottom: 2px solid black;">
-1.0000
-</td>
-<td style="border-bottom: 2px solid black;">
-1.0000
+37.9867
 </td>
 </tr>
 <tr>
-<td style="padding-right: 12px; border: none;" colspan="5">
-<span style="font-size:0.8em"><sup>*</sup> 1 outside the confidence interval</span>
+<td style="padding-right: 12px; border: none;" colspan="3">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05</span>
 </td>
 </tr>
 </table>
 </div>
-<div id="manual-extraction" class="section level4">
-<h4><span class="header-section-number">13.5.3.3</span> Manual Extraction</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_gee_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</code></pre></div>
-<pre><code>       (Intercept)            centre2 treatmenttreatment 
-         0.1396561          1.7070962          3.8813436 
-           sexmale      BL_statusgood        I(age - 33) 
-         1.5316465          6.8164591          0.9638173 
-   I((age - 33)^2) 
-         1.0025200 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trt_EST &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Estimate&quot;</span>] 
-trt_EST</code></pre></div>
-<pre><code>[1] 1.356181</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exp</span>(trt_EST)</code></pre></div>
-<pre><code>[1] 3.881344</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Trt_SE &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Robust S.E.&quot;</span>] 
-Trt_SE</code></pre></div>
-<pre><code>[1] 0.3777999</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trt_95ci &lt;-<span class="st"> </span>trt_EST <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="op">+</span><span class="dv">1</span>)<span class="op">*</span><span class="fl">1.96</span><span class="op">*</span>Trt_SE
-trt_95ci</code></pre></div>
-<pre><code>[1] 0.6156936 2.0966692</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exp</span>(trt_95ci)</code></pre></div>
-<pre><code>[1] 1.850940 8.139015</code></pre>
+<div id="interpretation-of-fixed-effects" class="section level3">
+<h3><span class="header-section-number">8.7.2</span> Interpretation of Fixed Effects</h3>
+<div id="reference-group-low-sicd-group" class="section level4">
+<h4><span class="header-section-number">8.7.2.1</span> Reference Group: <code>low</code> SICD group</h4>
+<ul>
+<li><p><span class="math inline">\(\gamma_{0}\)</span> = 8.408 is the estimated marginal mean VSAE score for children in the <code>low</code> SICD, at 2 years of age</p></li>
+<li><p><span class="math inline">\(\gamma_{a}\)</span> = 2.269 and <span class="math inline">\(\gamma_{a^2}\)</span> = 0.072 are the fixed effects for age and age-squared on VSAE for children in the <code>low</code> SICD group (change over time)</p></li>
+</ul>
+<p>Thus the equation for the estimated marginal mean VASE trajectory for the <code>low</code> SICD group is:</p>
+<p><span class="math display">\[
+\begin{align*}
+VASE =&amp; \gamma_{0} + 
+        \gamma_{a}   (AGE - 2) + 
+        \gamma_{a^2} (AGE - 2)^2 \\
+     =&amp; 8.408 + 
+        2.269 (AGE - 2)  + 
+        0.072 (AGE - 2)^2 \\ 
+\end{align*}
+\]</span></p>
+</div>
+<div id="first-comparison-group-medium-sicd-group" class="section level4">
+<h4><span class="header-section-number">8.7.2.2</span> First Comparison Group: <code>medium</code> SICD group</h4>
+<ul>
+<li><p><span class="math inline">\(\gamma_{med}\)</span> = 1.264 is the DIFFERENCE in the estimated marginal mean VSAE score for children in the <code>medium</code> vs. the <code>low</code> SICD, at 2 years of age</p></li>
+<li><p><span class="math inline">\(\gamma_{med:\;a}\)</span> = 0.429 and <span class="math inline">\(\gamma_{med:\;a^2}\)</span> = 0.001 are the DIFFERENCE in the fixed effects for age and age-squared on VSAE for children in the <code>medium</code> vs. the <code>low</code> SICD group</p></li>
+</ul>
+<p>Thus the equation for the estimated marginal mean VASE trajectory for the <code>medium</code> SICD group is:</p>
+<p><span class="math display">\[
+\begin{align*}
+VASE =&amp; (\gamma_{0}   + \gamma_{med}) + 
+        (\gamma_{a}   + \gamma_{med:\;a})  (AGE - 2) + 
+        (\gamma_{a^2} + \gamma_{med:\;a^2})(AGE - 2)^2 \\
+     =&amp; (8.408 + 
+         1.264) + 
+        (2.269 + 
+         0.429)  (AGE - 2) + 
+        (0.072 + 
+         0.001)(AGE - 2)^2 \\
+     =&amp; 9.673 + 
+        2.698  (AGE - 2) + 
+        0.073 (AGE - 2)^2 \\
+\end{align*}
+\]</span></p>
+</div>
+<div id="second-comparison-group-high-sicd-group" class="section level4">
+<h4><span class="header-section-number">8.7.2.3</span> Second Comparison Group: <code>high</code> SICD group</h4>
+<ul>
+<li><p><span class="math inline">\(\gamma_{hi}\)</span> = 5.365 is the DIFFERENCE in the estimated marginal mean VSAE score for children in the <code>high</code> vs. the <code>low</code> SICD, at 2 years of age</p></li>
+<li><p><span class="math inline">\(\gamma_{hi:\;a}\)</span> = 3.326 and <span class="math inline">\(\gamma_{hi:\;a^2}\)</span> = 0.133 are the DIFFERENCE in the fixed effects for age and age-squared on VSAE for children in the <code>high</code> vs. the <code>low</code> SICD group</p></li>
+</ul>
+<p>Thus the equation for the estimated marginal mean VASE trajectory for the <code>high</code> SICD group is:</p>
+<p><span class="math display">\[
+\begin{align*}
+VASE =&amp; (\gamma_{0}   + \gamma_{hi}) + 
+        (\gamma_{a}   + \gamma_{hi:\;a})  (AGE - 2) + 
+        (\gamma_{a^2} + \gamma_{hi:\;a^2})(AGE - 2)^2 \\
+     =&amp; (8.408 + 
+         5.365) + 
+        (2.269 + 
+         3.326)  (AGE - 2) + 
+        (0.072 + 
+         0.133)(AGE - 2)^2 \\
+     =&amp; 13.773 + 
+        5.595  (AGE - 2) + 
+        0.206 (AGE - 2)^2 \\
+\end{align*}
+\]</span></p>
 </div>
 </div>
-<div id="refit-with-the-geepack-package" class="section level3">
-<h3><span class="header-section-number">13.5.4</span> Refit with the <code>geepack</code> package</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_geeglm_ex &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">-</span><span class="dv">33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="op">-</span><span class="dv">33</span>)<span class="op">^</span><span class="dv">2</span>),
-                        <span class="dt">data =</span> data_long,
-                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
-                        <span class="dt">id =</span> subject,
-                        <span class="dt">waves =</span> month,
-                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(resp_geeglm_ex)</code></pre></div>
+<div id="interpretation-of-random-effects" class="section level3">
+<h3><span class="header-section-number">8.7.3</span> Interpretation of Random Effects</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lme4<span class="op">::</span><span class="kw">VarCorr</span>(fit_lmer_2a_re)<span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">print</span>(<span class="dt">comp =</span> <span class="kw">c</span>(<span class="st">&quot;Variance&quot;</span>, <span class="st">&quot;Std.Dev&quot;</span>),
+        <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre></div>
+<pre><code> Groups   Name      Variance Std.Dev. Corr 
+ childid  age2      13.992   3.741         
+          I(age2^2)  0.134   0.366    -0.32
+ Residual           37.987   6.163         </code></pre>
+<p><strong>Here a group of observations = a CHILD</strong></p>
+<div id="residual-varaince" class="section level4">
+<h4><span class="header-section-number">8.7.3.1</span> Residual Varaince</h4>
+<p><strong>Within-child-variance</strong></p>
+<ul>
+<li><span class="math inline">\(e_{ti}\)</span> the residuals associated with observation at time <span class="math inline">\(t\)</span> on child <span class="math inline">\(i\)</span></li>
+</ul>
+<p><span class="math display">\[
+\sigma^2 = \sigma^2_e 
+         = VAR[e_{ti}] 
+         = 37.987
+\]</span></p>
+</div>
+<div id="variance-components" class="section level4">
+<h4><span class="header-section-number">8.7.3.2</span> 2 Variance Components</h4>
+<p><strong>Between-children slope variances</strong></p>
+<p>Random LINEAR effect of age variance</p>
+<ul>
+<li><span class="math inline">\(u_{1i}\)</span> the DIFFERENCE between child <span class="math inline">\(i\)</span>’s specific linear component for age and the fixed linear component for age, given their SICD group</li>
+</ul>
+<p><span class="math display">\[
+\tau_{11} = \sigma^2_{u1} 
+          = VAR[u_{1i}] 
+          = 13.99
+\]</span></p>
+<p>Random QUADRATIC effect of age variance</p>
+<ul>
+<li><span class="math inline">\(u_{2i}\)</span> the DIFFERENCE between child <span class="math inline">\(i\)</span>’s specific quadratic component for age and the fixed quadratic component for age, given their SICD group</li>
+</ul>
+<p><span class="math display">\[
+\tau_{22} = \sigma^2_{u2} 
+          = VAR[u_{2i}] 
+          = 0.13
+\]</span></p>
+</div>
+<div id="covariance-or-correlation-components" class="section level4">
+<h4><span class="header-section-number">8.7.3.3</span> 1 Covariance (or correlation) Components</h4>
+<p><strong>Slope-slope covariance</strong></p>
+<p>Random LINEAR and Quadratic effect of age covariance:</p>
+<ul>
+<li>correlation = -0.32</li>
+</ul>
+<p><span class="math display">\[
+\tau_{12} = \sigma^2_{u12} 
+          = COV[u_{1i}, u_{2i}] 
+          = -0.44
+\]</span></p>
+</div>
+</div>
+<div id="assumption-checking" class="section level3">
+<h3><span class="header-section-number">8.7.4</span> Assumption Checking</h3>
+<p>The residuals are:</p>
+<ul>
+<li><p>Assumed to be normally, independently, and identically distributed (conditional on other random-effects)</p></li>
+<li><p>Assumed independent of random-effects</p></li>
+</ul>
+<p><span class="math display">\[
+e_{ti}  \sim  N(0, \sigma^2)
+\]</span></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_2a_re, <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</code></pre></div>
+<pre><code>[[1]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-359-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
-Call:
-geepack::geeglm(formula = status ~ centre + treatment + sex + 
-    BL_status + I(age - 33) + I((age - 33)^2), family = binomial(link = &quot;logit&quot;), 
-    data = data_long, id = subject, waves = month, corstr = &quot;exchangeable&quot;)
+[[2]]
+[[2]]$childid</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-359-2.png" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
 
- Coefficients:
-                     Estimate    Std.err   Wald Pr(&gt;|W|)    
-(Intercept)        -1.9685725  0.4457014 19.508 1.00e-05 ***
-centre2             0.5347938  0.3795760  1.985 0.158858    
-treatmenttreatment  1.3561814  0.3777999 12.886 0.000331 ***
-sexmale             0.4263433  0.4832337  0.778 0.377630    
-BL_statusgood       1.9193401  0.3772812 25.881 3.63e-07 ***
-I(age - 33)        -0.0368535  0.0150120  6.027 0.014091 *  
-I((age - 33)^2)     0.0025169  0.0007592 10.989 0.000917 ***
----
-Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-
-Estimated Scale Parameters:
-            Estimate Std.err
-(Intercept)    1.033  0.4694
-
-Correlation: Structure = exchangeable  Link = identity 
-
-Estimated Correlation Parameters:
-      Estimate Std.err
-alpha   0.3119  0.1515
-Number of clusters:   111   Maximum cluster size: 4 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_geeglm_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</code></pre></div>
-<pre><code>       (Intercept)            centre2 treatmenttreatment 
-            0.1397             1.7071             3.8813 
-           sexmale      BL_statusgood        I(age - 33) 
-            1.5316             6.8165             0.9638 
-   I((age - 33)^2) 
-            1.0025 </code></pre>
+[[3]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-359-3.png" width="576" style="display: block; margin: auto;" /></p>
+<pre><code>
+[[4]]</code></pre>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-359-4.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
-<div id="visualize-the-model-3" class="section level3">
-<h3><span class="header-section-number">13.5.5</span> Visualize the Model</h3>
-<div id="range-of-data-values" class="section level4">
-<h4><span class="header-section-number">13.5.5.1</span> Range of Data Values</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(data_long)</code></pre></div>
-<pre><code>    subject    centre      sex           age           treatment  
- 1      :  4   1:224   female:352   Min.   :11.0   placebo  :228  
- 2      :  4   2:220   male  : 92   1st Qu.:23.0   treatment:216  
- 3      :  4                        Median :31.0                  
- 4      :  4                        Mean   :33.3                  
- 5      :  4                        3rd Qu.:43.0                  
- 6      :  4                        Max.   :68.0                  
- (Other):420                                                      
- BL_status      month          status     
- poor:244   Min.   :1.00   Min.   :0.000  
- good:200   1st Qu.:1.75   1st Qu.:0.000  
-            Median :2.50   Median :1.000  
-            Mean   :2.50   Mean   :0.561  
-            3rd Qu.:3.25   3rd Qu.:1.000  
-            Max.   :4.00   Max.   :1.000  
-                                          </code></pre>
+<div id="plot-of-the-estimated-marginal-means-1" class="section level3">
+<h3><span class="header-section-number">8.7.5</span> Plot of the Estimated Marginal Means</h3>
+<div id="quick-and-default" class="section level4">
+<h4><span class="header-section-number">8.7.5.1</span> Quick and Default</h4>
+<p>Note: the <span class="math inline">\(x-axis\)</span> is the <code>age2</code> (age - 2) variable, so it represents time since age 2 (or baseline)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_2a_re,
+                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,                 <span class="co"># estimated marginal means (no random effects)</span>
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>, <span class="st">&quot;sicdegp&quot;</span>),  <span class="co"># 1st = x-axiz, 2nd = seperate lines</span>
+                   <span class="dt">title =</span> <span class="st">&quot;Final Model (2a)&quot;</span>)    <span class="co"># Optional title</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-360-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
-<div id="females-in-center-1" class="section level4">
-<h4><span class="header-section-number">13.5.5.2</span> Females in Center 1</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,
-            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),
-            <span class="dt">sex =</span> <span class="st">&quot;female&quot;</span>,
-            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),
-            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,
-                              <span class="dt">newdata =</span> .,
-                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<div id="more-customized---color" class="section level4">
+<h4><span class="header-section-number">8.7.5.2</span> More Customized - Color</h4>
+<p>This version would look better on a poster or in a slide presentation.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>,<span class="st">&quot;sicdegp&quot;</span>),  <span class="co"># variables involved in interactions</span>
+                <span class="dt">mod =</span> fit_lmer_2a_re,
+                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">age2 =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">11</span>, <span class="dt">by =</span> .<span class="dv">1</span>))) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># add more values to smooth out the prediction lines and ribbons</span>
+<span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age2 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># trandform back to standard years</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">factor</span>(sicdegp,
+                                 <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;high&quot;</span>, <span class="st">&quot;med&quot;</span>, <span class="st">&quot;low&quot;</span>),
+                                 <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;High&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;Low&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,
              <span class="dt">y =</span> fit,
-             <span class="dt">linetype =</span> treatment)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,
-       <span class="dt">title =</span> <span class="st">&quot;For Females at Center 1, by Baseline Status&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-546-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;2&quot;</span>,
-            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),
-            <span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,
-            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),
-            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,
-                              <span class="dt">newdata =</span> .,
-                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+             <span class="dt">group =</span> sicdegp)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower,        <span class="co"># 95% Confidence Intervals</span>
+                  <span class="dt">ymax =</span> upper,
+                  <span class="dt">fill =</span> sicdegp),
+              <span class="dt">alpha =</span> .<span class="dv">3</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> sicdegp,
+                <span class="dt">color =</span> sicdegp),
+            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span><span class="st">                  </span><span class="co"># mark values that were actually measured</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">120</span>, <span class="dt">by =</span> <span class="dv">20</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(.<span class="dv">2</span>, .<span class="dv">8</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
+        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">2.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,
+       <span class="dt">linetype =</span> <span class="st">&quot;Communication&quot;</span>,
+       <span class="dt">fill     =</span> <span class="st">&quot;Communication&quot;</span>,
+       <span class="dt">color    =</span> <span class="st">&quot;Communication&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-361-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="more-customized---black-and-white" class="section level4">
+<h4><span class="header-section-number">8.7.5.3</span> More Customized - Black and White</h4>
+<p>This version would be better for a publication.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>,<span class="st">&quot;sicdegp&quot;</span>),
+                <span class="dt">mod =</span> fit_lmer_2a_re,
+                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">age2 =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">11</span>, <span class="dt">by =</span> .<span class="dv">1</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age2 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">factor</span>(sicdegp,
+                                 <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;high&quot;</span>, <span class="st">&quot;med&quot;</span>, <span class="st">&quot;low&quot;</span>),
+                                 <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;High&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;Low&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,
              <span class="dt">y =</span> fit,
-             <span class="dt">linetype =</span> treatment)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,
-       <span class="dt">title =</span> <span class="st">&quot;For Males at Center 2, by Baseline Status&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-547-1.png" width="576" style="display: block; margin: auto;" /></p>
-
+             <span class="dt">group =</span> sicdegp)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower,
+                  <span class="dt">ymax =</span> upper,
+                  <span class="dt">fill =</span> sicdegp),
+              <span class="dt">alpha =</span> .<span class="dv">4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> sicdegp),
+            <span class="dt">size =</span> .<span class="dv">7</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">120</span>, <span class="dt">by =</span> <span class="dv">20</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray10&quot;</span>, <span class="st">&quot;gray40&quot;</span>, <span class="st">&quot;gray60&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(.<span class="dv">15</span>, .<span class="dv">8</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
+        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,
+       <span class="dt">linetype =</span> <span class="st">&quot;Communication&quot;</span>,
+       <span class="dt">fill     =</span> <span class="st">&quot;Communication&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-362-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
+</div>
+<div id="blups-vs.fixed-effects" class="section level3">
+<h3><span class="header-section-number">8.7.6</span> Blups vs. Fixed Effects</h3>
+<p><strong>BLUP</strong> = Best Linear Unbiased Predictor</p>
+<p>A BLUP is the specific prediction for an individual supject, showin by black lines below. This includes the fixed effects as well as the specific random effects for a given individual.</p>
+<p>Comparatively, the blue lines below display the predictions for fixed effects only.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">fct_recode</span>(sicdegp,
+                                     <span class="st">&quot;Low Communication&quot;</span> =<span class="st"> &quot;low&quot;</span>,
+                                     <span class="st">&quot;Medium Communication&quot;</span> =<span class="st"> &quot;med&quot;</span>,
+                                     <span class="st">&quot;High Communication&quot;</span> =<span class="st"> &quot;high&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_fixed =</span> <span class="kw">predict</span>(fit_lmer_2a_re, <span class="dt">re.form =</span> <span class="ot">NA</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># fixed effects only</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_wrand =</span> <span class="kw">predict</span>(fit_lmer_2a_re)) <span class="op">%&gt;%</span><span class="st">               </span><span class="co"># fixed and random effects together</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age2,
+             <span class="dt">y =</span> vsae)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_wrand,           <span class="co"># BLUP = fixed and random effects together</span>
+                <span class="dt">group =</span> childid,
+                <span class="dt">color =</span> <span class="st">&quot;BLUP&quot;</span>,
+                <span class="dt">size  =</span> <span class="st">&quot;BLUP&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_fixed,           <span class="co"># fixed effects only</span>
+                <span class="dt">group =</span> sicdegp,
+                <span class="dt">color =</span> <span class="st">&quot;Fixed&quot;</span>,
+                <span class="dt">size  =</span> <span class="st">&quot;Fixed&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,
+                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> &quot;black&quot;</span>,
+                                <span class="st">&quot;Fixed&quot;</span> =<span class="st"> &quot;blue&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_size_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,
+                    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> </span>.<span class="dv">5</span>,
+                               <span class="st">&quot;Fixed&quot;</span> =<span class="st"> </span><span class="fl">1.5</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>sicdegp) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-363-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_fixed =</span> <span class="kw">predict</span>(fit_lmer_2a_re, <span class="dt">re.form =</span> <span class="ot">NA</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_wrand =</span> <span class="kw">predict</span>(fit_lmer_2a_re)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(childid <span class="op">%in%</span><span class="st"> </span><span class="kw">sample</span>(<span class="kw">levels</span>(data_long<span class="op">$</span>childid), <span class="dv">25</span>)) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># 25 randomly sampled children</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,
+             <span class="dt">y =</span> vsae)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> sicdegp),
+             <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_wrand,
+                <span class="dt">linetype =</span> <span class="st">&quot;BLUP&quot;</span>,
+                <span class="dt">size     =</span> <span class="st">&quot;BLUP&quot;</span>),
+            <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_fixed,
+                <span class="dt">color =</span> sicdegp,
+                <span class="dt">linetype =</span> <span class="st">&quot;Fixed&quot;</span>,
+                <span class="dt">size     =</span> <span class="st">&quot;Fixed&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,
+                        <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> &quot;longdash&quot;</span>,
+                                   <span class="st">&quot;Fixed&quot;</span> =<span class="st"> &quot;solid&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_size_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,
+                    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> </span>.<span class="dv">5</span>,
+                               <span class="st">&quot;Fixed&quot;</span> =<span class="st"> </span><span class="dv">1</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(. <span class="op">~</span><span class="st"> </span>childid, <span class="dt">labeller =</span> <span class="st">&quot;label_both&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,
+       <span class="dt">color =</span> <span class="st">&quot;Communication:&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-364-1.png" width="768" style="display: block; margin: auto;" /></p>
+
 </div>
 </div>
 </div>
@@ -2057,8 +2599,8 @@ Number of clusters:   111   Maximum cluster size: 4 </code></pre>
           </div>
         </div>
       </div>
-<a href="gee-continuous-outcome-beat-the-blues.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="gee-count-outcome-epilepsy.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="sjplot-package.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="mlm-longitudinal-hedeker-gibbons-depression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

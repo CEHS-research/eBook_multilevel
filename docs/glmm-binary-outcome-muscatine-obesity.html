@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="glmm-binary-outcome-muscatine-obesity.html">
-
+<link rel="prev" href="glmm-binary-outcome-antibiotics-for-leprosy.html">
+<link rel="next" href="references.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -557,40 +557,936 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="glmm-binary-outcome-muscatine-obesity" class="section level1">
+<h1><span class="header-section-number">17</span> GLMM, Binary Outcome: Muscatine Obesity</h1>
+<div id="packages-4" class="section level2">
+<h2><span class="header-section-number">17.1</span> Packages</h2>
+<div id="cran-4" class="section level3">
+<h3><span class="header-section-number">17.1.1</span> CRAN</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
+<span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
+<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
 
-<div id="refs" class="references">
-<div id="ref-anderson2007">
-<p>Anderson, Deborah K, Catherine Lord, Susan Risi, Pamela S DiLavore, Cory Shulman, Audrey Thurm, Kathleen Welch, and Andrew Pickles. 2007. “Patterns of Growth in Verbal Abilities Among Children with Autism Spectrum Disorder.” <em>Journal of Consulting and Clinical Psychology</em> 75 (4). American Psychological Association: 594.</p>
+<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
+<span class="kw">library</span>(gee)          <span class="co"># Generalized Estimating Equations</span>
+<span class="kw">library</span>(effects)      <span class="co"># Plotting estimated marginal means</span>
+
+<span class="kw">library</span>(gridExtra)    <span class="co"># combining graphics</span></code></pre></div>
 </div>
-<div id="ref-anderson2009">
-<p>Anderson, Deborah K, Rosalind S Oti, Catherine Lord, and Kathleen Welch. 2009. “Patterns of Growth in Adaptive Social Abilities Among Children with Autism Spectrum Disorders.” <em>Journal of Abnormal Child Psychology</em> 37 (7). Springer: 1019–34.</p>
+<div id="github-4" class="section level3">
+<h3><span class="header-section-number">17.1.2</span> GitHub</h3>
+<p>Helper <code>extract</code> functions for exponentiating parameters form generalized regression models within a <code>texreg</code> table of model parameters.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;devtools&quot;)</span>
+<span class="co"># library(devtools)</span>
+<span class="co"># install_github(&quot;SarBearSchwartz/texreghelpr&quot;)</span>
+
+<span class="kw">library</span>(texreghelpr)</code></pre></div>
 </div>
-<div id="ref-finch2016">
-<p>Finch, W Holmes, Jocelyn E Bolin, and Ken Kelley. 2016. <em>Multilevel Modeling Using R</em>. Crc Press.</p>
 </div>
-<div id="ref-gelman2008">
-<p>Gelman, Andrew. 2008. “Scaling Regression Inputs by Dividing by Two Standard Deviations.” <em>Statistics in Medicine</em> 27 (15). Wiley Online Library: 2865–73.</p>
+<div id="data-prep-1" class="section level2">
+<h2><span class="header-section-number">17.2</span> Data Prep</h2>
+<blockquote>
+<p>Data on Obesity from the Muscatine Coronary Risk Factor Study.</p>
+</blockquote>
+<p><strong>Source:</strong></p>
+<p>Table 10 (page 96) in Woolson and Clarke (1984). With permission of Blackwell Publishing.</p>
+<p><strong>Reference:</strong></p>
+<p>Woolson, R.F. and Clarke, W.R. (1984). Analysis of categorical incompletel longitudinal data. Journal of the Royal Statistical Society, Series A, 147, 87-99.</p>
+<p><strong>Description:</strong></p>
+<p>The <strong>Muscatine Coronary Risk Factor Study (MCRFS)</strong> was a longitudinal study of coronary risk factors in school children in Muscatine, Iowa <em>(Woolson and Clarke 1984; Ekholm and Skinner 1998)</em>. Five cohorts of children were measured for <code>height</code> and <code>weight</code> in <strong>1977</strong>, <strong>1979</strong>, and <strong>1981</strong>. <code>Relative weight</code> was calculated as the <strong>ratio</strong> of a child’s observed weight to the median weight for their age-sex-height group. Children with a relative weight greater than 110% of the median weight for their respective stratum were classified as <code>obese</code>. The analysis of this study involves binary data <em>(1 = obese, 0 = not obese)</em> collected at successive time points.</p>
+<p>This data was also using in an article title <em>“Missing data methods in longitudinal studies: a review”</em> (<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3016756/" class="uri">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3016756/</a>).</p>
+<p><strong>Variable List:</strong></p>
+<ul>
+<li><p>Indicators</p>
+<ul>
+<li><code>id</code> Child’s unique identification number</li>
+<li><code>occas</code> Occasion number: 1, 2, 3</li>
+</ul></li>
+<li><p>Outcome or dependent variable</p>
+<ul>
+<li><code>obesity</code> Obesity Status, 0 = no, 1 = yes</li>
+</ul></li>
+<li><p>Main predictor or independent variable of interest</p>
+<ul>
+<li><code>gender</code> 0 = Male, 1 = Female</li>
+<li><code>baseage</code> Baseline Age, mid-point of age-cohort</li>
+<li><code>currage</code> Current Age, mid-point of age-cohort</li>
+</ul></li>
+</ul>
+<div id="import-2" class="section level3">
+<h3><span class="header-section-number">17.2.1</span> Import</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/data/master/MLM/Muscatine.txt&quot;</span>, <span class="dt">header=</span><span class="ot">TRUE</span>)
+
+<span class="kw">str</span>(data_raw)</code></pre></div>
+<pre><code>&#39;data.frame&#39;:   14568 obs. of  6 variables:
+ $ id     : int  1 1 1 2 2 2 3 3 3 4 ...
+ $ gender : int  0 0 0 0 0 0 0 0 0 0 ...
+ $ baseage: int  6 6 6 6 6 6 6 6 6 6 ...
+ $ currage: int  6 8 10 6 8 10 6 8 10 6 ...
+ $ occas  : int  1 2 3 1 2 3 1 2 3 1 ...
+ $ obesity: Factor w/ 3 levels &quot;.&quot;,&quot;0&quot;,&quot;1&quot;: 3 3 3 3 3 3 3 3 3 3 ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">headTail</span>(data_raw, <span class="dt">top =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>        id gender baseage currage occas obesity
+1        1      0       6       6     1       1
+2        1      0       6       8     2       1
+3        1      0       6      10     3       1
+4        2      0       6       6     1       1
+5        2      0       6       8     2       1
+6        2      0       6      10     3       1
+7        3      0       6       6     1       1
+8        3      0       6       8     2       1
+9        3      0       6      10     3       1
+10       4      0       6       6     1       1
+...    ...    ...     ...     ...   ...    &lt;NA&gt;
+14565 4855      1      14      18     3       0
+14566 4856      1      14      14     1       .
+14567 4856      1      14      16     2       .
+14568 4856      1      14      18     3       0</code></pre>
 </div>
-<div id="ref-hedeker2006">
-<p>Hedeker, Donald, and Robert D Gibbons. 2006. <em>Longitudinal Data Analysis</em>. Vol. 451. John Wiley &amp; Sons.</p>
+<div id="restrict-to-350ids-of-children-with-complete-data-for-class-demonstration" class="section level3">
+<h3><span class="header-section-number">17.2.2</span> Restrict to 350ID’s of children with complete data for Class Demonstration</h3>
+<p>Dealing with missing-ness and its implications are beyond the score of this class. Instead we are going to restrict our class analysis to a subset of 350 children who have complete data</p>
+<blockquote>
+<p>I am using the <code>set.seed()</code> function so that I can replicate the restults later.</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">complete_ids &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(obesity <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;0&quot;</span>, <span class="st">&quot;1&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(n <span class="op">==</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(id)
+
+<span class="kw">set.seed</span>(<span class="dv">8892</span>)
+
+use_ids &lt;-<span class="st"> </span>complete_ids <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">sample</span>(<span class="dv">350</span>)
+
+<span class="kw">head</span>(use_ids)</code></pre></div>
+<pre><code>[1] 2577 2859  364  954   47 3487</code></pre>
 </div>
-<div id="ref-R-stargazer">
-<p>Hlavac, Marek. 2018. <em>Stargazer: Well-Formatted Regression and Summary Statistics Tables</em>. <a href="https://CRAN.R-project.org/package=stargazer" class="uri">https://CRAN.R-project.org/package=stargazer</a>.</p>
+<div id="long-format-6" class="section level3">
+<h3><span class="header-section-number">17.2.3</span> Long Format</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st">  </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(id <span class="op">%in%</span><span class="st"> </span>use_ids) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">id       =</span> id     <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">gender   =</span> gender <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">1</span>, 
+                                      <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_base =</span> baseage <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">age_curr =</span> currage <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">occation =</span> occas   <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">obesity  =</span> obesity <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">1</span>, 
+                                       <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;No&quot;</span>, <span class="st">&quot;Yes&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">select</span>(id, gender, age_base, age_curr, occation, obesity)
+
+<span class="kw">str</span>(data_long)</code></pre></div>
+<pre><code>&#39;data.frame&#39;:   1050 obs. of  6 variables:
+ $ id      : Factor w/ 350 levels &quot;4&quot;,&quot;6&quot;,&quot;8&quot;,&quot;13&quot;,..: 1 1 1 2 2 2 3 3 3 4 ...
+ $ gender  : Factor w/ 2 levels &quot;Male&quot;,&quot;Female&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+ $ age_base: Factor w/ 5 levels &quot;6&quot;,&quot;8&quot;,&quot;10&quot;,&quot;12&quot;,..: 1 1 1 1 1 1 1 1 1 2 ...
+ $ age_curr: Factor w/ 7 levels &quot;6&quot;,&quot;8&quot;,&quot;10&quot;,&quot;12&quot;,..: 1 2 3 1 2 3 1 2 3 2 ...
+ $ occation: Factor w/ 3 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;: 1 2 3 1 2 3 1 2 3 1 ...
+ $ obesity : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 2 2 2 2 2 2 2 2 2 2 ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">headTail</span>(data_long, <span class="dt">top =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>       id gender age_base age_curr occation obesity
+1       4   Male        6        6        1     Yes
+2       4   Male        6        8        2     Yes
+3       4   Male        6       10        3     Yes
+4       6   Male        6        6        1     Yes
+5       6   Male        6        8        2     Yes
+6       6   Male        6       10        3     Yes
+7       8   Male        6        6        1     Yes
+8       8   Male        6        8        2     Yes
+9       8   Male        6       10        3     Yes
+10     13   Male        8        8        1     Yes
+...  &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;
+1047 3572 Female       14       18        3      No
+1048 3576 Female       14       14        1      No
+1049 3576 Female       14       16        2      No
+1050 3576 Female       14       18        3      No</code></pre>
 </div>
-<div id="ref-hox2017">
-<p>Hox, Joop J, Mirjam Moerbeek, and Rens Van de Schoot. 2017. <em>Multilevel Analysis: Techniques and Applications</em>. 3rd ed. Routledge.</p>
+<div id="wide-format-6" class="section level3">
+<h3><span class="header-section-number">17.2.4</span> Wide Format</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> var,
+         <span class="dt">value =</span> val,
+         age_curr, obesity) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">unite</span>(<span class="dt">col =</span> var_occ,
+        var, occation) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> var_occ,
+         <span class="dt">value =</span> val) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate_if</span>(is.character, factor)<span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(id) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">num_miss =</span> <span class="kw">sum</span>(<span class="kw">is.na</span>(<span class="kw">c</span>(obesity_<span class="dv">1</span>, obesity_<span class="dv">2</span>, obesity_<span class="dv">3</span>)))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">num_miss =</span> <span class="kw">as.factor</span>(num_miss)) 
+
+
+<span class="kw">str</span>(data_wide)</code></pre></div>
+<pre><code>Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:   350 obs. of  10 variables:
+ $ id        : Factor w/ 350 levels &quot;4&quot;,&quot;6&quot;,&quot;8&quot;,&quot;13&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+ $ gender    : Factor w/ 2 levels &quot;Male&quot;,&quot;Female&quot;: 1 1 1 1 1 1 1 1 1 1 ...
+ $ age_base  : Factor w/ 5 levels &quot;6&quot;,&quot;8&quot;,&quot;10&quot;,&quot;12&quot;,..: 1 1 1 2 2 2 2 2 2 2 ...
+ $ age_curr_1: Factor w/ 5 levels &quot;10&quot;,&quot;12&quot;,&quot;14&quot;,..: 4 4 4 5 5 5 5 5 5 5 ...
+ $ age_curr_2: Factor w/ 5 levels &quot;10&quot;,&quot;12&quot;,&quot;14&quot;,..: 5 5 5 1 1 1 1 1 1 1 ...
+ $ age_curr_3: Factor w/ 5 levels &quot;10&quot;,&quot;12&quot;,&quot;14&quot;,..: 1 1 1 2 2 2 2 2 2 2 ...
+ $ obesity_1 : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+ $ obesity_2 : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+ $ obesity_3 : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 2 2 2 2 2 2 2 2 2 2 ...
+ $ num_miss  : Factor w/ 1 level &quot;0&quot;: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">headTail</span>(data_wide, <span class="dt">top =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>     id gender age_base age_curr_1 age_curr_2 age_curr_3 obesity_1
+1     4   Male        6          6          8         10       Yes
+2     6   Male        6          6          8         10       Yes
+3     8   Male        6          6          8         10       Yes
+4    13   Male        8          8         10         12       Yes
+5    16   Male        8          8         10         12       Yes
+6    21   Male        8          8         10         12       Yes
+7    23   Male        8          8         10         12       Yes
+8    24   Male        8          8         10         12       Yes
+9    25   Male        8          8         10         12       Yes
+10   26   Male        8          8         10         12       Yes
+11 &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;
+12 3559 Female       14         14         16         18        No
+13 3570 Female       14         14         16         18        No
+14 3572 Female       14         14         16         18        No
+15 3576 Female       14         14         16         18        No
+   obesity_2 obesity_3 num_miss
+1        Yes       Yes        0
+2        Yes       Yes        0
+3        Yes       Yes        0
+4        Yes       Yes        0
+5        Yes       Yes        0
+6        Yes       Yes        0
+7        Yes       Yes        0
+8        Yes       Yes        0
+9        Yes       Yes        0
+10       Yes       Yes        0
+11      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;
+12        No        No        0
+13        No        No        0
+14        No        No        0
+15        No        No        0</code></pre>
 </div>
-<div id="ref-nakagawa2013">
-<p>Nakagawa, Shinichi, and Holger Schielzeth. 2013. “A General and Simple Method for Obtaining R2 from Generalized Linear Mixed-Effects Models.” <em>Methods in Ecology and Evolution</em> 4 (2). Wiley Online Library: 133–42.</p>
 </div>
-<div id="ref-reisby1977">
-<p>Reisby, Niels, Lars F Gram, Per Bech, Adam Nagy, Gorm Odden Petersen, Jørgen Ortmann, Ilse Ibsen, et al. 1977. “Imipramine: Clinical Effects and Pharmacokinetic Variability.” <em>Psychopharmacology</em> 54 (3). Springer: 263–72.</p>
+<div id="exploratory-data-analysis-10" class="section level2">
+<h2><span class="header-section-number">17.3</span> Exploratory Data Analysis</h2>
+<div id="summary-statistics-3" class="section level3">
+<h3><span class="header-section-number">17.3.1</span> Summary Statistics</h3>
+<div id="demographics-and-baseline-1" class="section level4">
+<h4><span class="header-section-number">17.3.1.1</span> Demographics and Baseline</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age_base, obesity_<span class="dv">1</span>,
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>gender,
+                    <span class="dt">test    =</span> <span class="ot">TRUE</span>,
+                    <span class="dt">na.rm   =</span> <span class="ot">FALSE</span>,
+                    <span class="dt">output  =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th>
+Male
+</th>
+<th>
+Female
+</th>
+<th>
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+n = 186
+</td>
+<td>
+n = 164
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+age_base
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.864
+</td>
+</tr>
+<tr>
+<td>
+6
+</td>
+<td>
+28 (15.1%)
+</td>
+<td>
+24 (14.6%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+8
+</td>
+<td>
+49 (26.3%)
+</td>
+<td>
+45 (27.4%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+10
+</td>
+<td>
+45 (24.2%)
+</td>
+<td>
+37 (22.6%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+12
+</td>
+<td>
+37 (19.9%)
+</td>
+<td>
+28 (17.1%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+14
+</td>
+<td>
+27 (14.5%)
+</td>
+<td>
+30 (18.3%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+NA
+</td>
+<td>
+0 (0%)
+</td>
+<td>
+0 (0%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+obesity_1
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+1
+</td>
+</tr>
+<tr>
+<td>
+No
+</td>
+<td>
+148 (79.6%)
+</td>
+<td>
+130 (79.3%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+Yes
+</td>
+<td>
+38 (20.4%)
+</td>
+<td>
+34 (20.7%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+NA
+</td>
+<td>
+0 (0%)
+</td>
+<td>
+0 (0%)
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="ref-R-ggplot2">
-<p>Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, and Kara Woo. 2018. <em>Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics</em>. <a href="https://CRAN.R-project.org/package=ggplot2" class="uri">https://CRAN.R-project.org/package=ggplot2</a>.</p>
+<div id="status-over-time-2" class="section level4">
+<h4><span class="header-section-number">17.3.1.2</span> Status over Time</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_summary &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(gender, age_curr) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">obesityN =</span> <span class="kw">case_when</span>(obesity <span class="op">==</span><span class="st"> &quot;Yes&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+                                     obesity <span class="op">==</span><span class="st"> &quot;No&quot;</span>  <span class="op">~</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="kw">complete.cases</span>(gender, age_curr, obesityN)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(),
+                   <span class="dt">prob_est =</span> <span class="kw">mean</span>(obesityN),
+                   <span class="dt">prob_SD  =</span> <span class="kw">sd</span>(obesityN),
+                   <span class="dt">prob_SE  =</span> prob_SD<span class="op">/</span><span class="kw">sqrt</span>(n))
+
+data_summary</code></pre></div>
+<pre><code># A tibble: 14 x 6
+# Groups:   gender [?]
+   gender age_curr     n prob_est prob_SD prob_SE
+   &lt;fct&gt;  &lt;fct&gt;    &lt;int&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+ 1 Male   6           28    0.107   0.315  0.0595
+ 2 Male   8           77    0.182   0.388  0.0442
+ 3 Male   10         122    0.213   0.411  0.0372
+ 4 Male   12         131    0.267   0.444  0.0388
+ 5 Male   14         109    0.284   0.453  0.0434
+ 6 Male   16          64    0.219   0.417  0.0521
+ 7 Male   18          27    0.259   0.447  0.0859
+ 8 Female 6           24    0.125   0.338  0.0690
+ 9 Female 8           69    0.174   0.382  0.0460
+10 Female 10         106    0.292   0.457  0.0444
+11 Female 12         110    0.282   0.452  0.0431
+12 Female 14          95    0.284   0.453  0.0465
+13 Female 16          58    0.259   0.442  0.0580
+14 Female 18          30    0.133   0.346  0.0631</code></pre>
 </div>
+</div>
+<div id="visualize-5" class="section level3">
+<h3><span class="header-section-number">17.3.2</span> Visualize</h3>
+<div id="by-cohort-and-gender" class="section level4">
+<h4><span class="header-section-number">17.3.2.1</span> By cohort and gender</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(gender, age_base, age_curr) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">obesityN =</span> <span class="kw">case_when</span>(obesity <span class="op">==</span><span class="st"> &quot;Yes&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+                                     obesity <span class="op">==</span><span class="st"> &quot;No&quot;</span>  <span class="op">~</span><span class="st"> </span><span class="dv">0</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="kw">complete.cases</span>(gender, age_curr, obesityN)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(),
+                   <span class="dt">prob_est =</span> <span class="kw">mean</span>(obesityN),
+                   <span class="dt">prob_SD  =</span> <span class="kw">sd</span>(obesityN),
+                   <span class="dt">prob_SE  =</span> prob_SD<span class="op">/</span><span class="kw">sqrt</span>(n)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age_curr,
+             <span class="dt">y =</span> prob_est,
+             <span class="dt">group =</span> age_base,
+             <span class="dt">color =</span> age_base)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Child&#39;s Age, years&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Proportion Obese&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>gender)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-635-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="by-only-gender" class="section level4">
+<h4><span class="header-section-number">17.3.2.2</span> BY only gender</h4>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_summary <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age_curr,
+             <span class="dt">y =</span> prob_est,
+             <span class="dt">group =</span> gender)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> prob_est <span class="op">-</span><span class="st"> </span>prob_SE,
+                  <span class="dt">ymax =</span> prob_est <span class="op">+</span><span class="st"> </span>prob_SE,
+                  <span class="dt">fill =</span> gender),
+              <span class="dt">alpha =</span> .<span class="dv">3</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> gender,
+                 <span class="dt">shape =</span> gender)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> gender,
+                <span class="dt">color =</span> gender)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodger blue&quot;</span>, <span class="st">&quot;hot pink&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodger blue&quot;</span>, <span class="st">&quot;hot pink&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Child&#39;s Age, years&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Proportion Obese&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-636-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Smooth out the trends</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_summary <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age_curr,
+             <span class="dt">y =</span> prob_est,
+             <span class="dt">group =</span> gender,
+             <span class="dt">color =</span> gender)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
+              <span class="dt">formula =</span> y <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(x, <span class="dv">2</span>),
+              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodger blue&quot;</span>, <span class="st">&quot;hot pink&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodger blue&quot;</span>, <span class="st">&quot;hot pink&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Child&#39;s Age, years&quot;</span>,
+       <span class="dt">y =</span> <span class="st">&quot;Proportion Obese&quot;</span>)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-637-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="analysis-goal" class="section level2">
+<h2><span class="header-section-number">17.4</span> Analysis Goal</h2>
+<blockquote>
+<p>Does risk of obesity increase with age and are patterns of change similar for both sexes?</p>
+</blockquote>
+<p>There are 5 age cohorts that were measured each for 3 years, baseage and currage are age midpoints of those cohort groups. Which to include, current age or occasion? <strong>Assume no cohort effects.</strong> <em>If you do think this is an issue, include baseline age (<code>age_base</code>) and current age minus baseline age (<code>time</code>) in model.</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(gender, age_base, occation) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n       =</span> <span class="kw">n</span>(),
+            <span class="dt">count   =</span> <span class="kw">sum</span>(obesity <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>),
+            <span class="dt">prop    =</span> <span class="kw">mean</span>(obesity <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>),
+            <span class="dt">se      =</span> <span class="kw">sd</span>(obesity <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>)<span class="op">/</span><span class="kw">sqrt</span>(n)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">time =</span> (occation <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">*</span><span class="st"> </span><span class="dv">2</span> <span class="op">-</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time,
+             <span class="dt">y =</span> prop,
+             <span class="dt">color =</span> gender,
+             <span class="dt">fill =</span> gender))  <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> prop <span class="op">-</span><span class="st"> </span>se,
+                  <span class="dt">ymax =</span> prop <span class="op">+</span><span class="st"> </span>se),
+              <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>age_base, <span class="dt">labeller =</span> label_both) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title    =</span> <span class="st">&quot;Observed Obesity Rates, by Gender within Cohort&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Subset of 350 children with complete data&quot;</span>,
+       <span class="dt">x        =</span> <span class="st">&quot;Time, years from 1977&quot;</span>,
+       <span class="dt">y        =</span> <span class="st">&quot;Proportion of Children Characterized as Obese&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodgerblue3&quot;</span>, <span class="st">&quot;red&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodgerblue3&quot;</span>, <span class="st">&quot;red&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),
+        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-638-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(gender, age_curr) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n       =</span> <span class="kw">n</span>(),
+            <span class="dt">count   =</span> <span class="kw">sum</span>(obesity <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>),
+            <span class="dt">prop    =</span> <span class="kw">mean</span>(obesity <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>),
+            <span class="dt">se      =</span> <span class="kw">sd</span>(obesity <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>)<span class="op">/</span><span class="kw">sqrt</span>(n)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age_curr <span class="op">%&gt;%</span><span class="st"> </span>as.character <span class="op">%&gt;%</span><span class="st"> </span>as.numeric,
+             <span class="dt">y =</span> prop,
+             <span class="dt">group =</span> gender,
+             <span class="dt">color =</span> gender,
+             <span class="dt">fill =</span> gender))  <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> prop <span class="op">-</span><span class="st"> </span>se,
+                  <span class="dt">ymax =</span> prop <span class="op">+</span><span class="st"> </span>se),
+              <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">12</span>, 
+             <span class="dt">linetype   =</span> <span class="st">&quot;dashed&quot;</span>, 
+             <span class="dt">size       =</span> <span class="dv">1</span>, 
+             <span class="dt">color      =</span> <span class="st">&quot;navyblue&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title    =</span> <span class="st">&quot;Observed Obesity Rates, by Gender (collapsing cohorts)&quot;</span>,
+       <span class="dt">subtitle =</span> <span class="st">&quot;Subset of 350 children with complete data&quot;</span>,
+       <span class="dt">x        =</span> <span class="st">&quot;Age of Child, years&quot;</span>,
+       <span class="dt">y        =</span> <span class="st">&quot;Proportion of Children Characterized as Obese&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodgerblue3&quot;</span>, <span class="st">&quot;red&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodgerblue3&quot;</span>, <span class="st">&quot;red&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">6</span>, <span class="dt">to =</span> <span class="dv">18</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),
+        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.05</span>, <span class="fl">1.05</span>),
+        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-639-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div id="center-time-at-twelve-years-old" class="section level3">
+<h3><span class="header-section-number">17.4.1</span> Center time at twelve years old</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age_center =</span> age_curr <span class="op">%&gt;%</span><span class="st"> </span>as.character <span class="op">%&gt;%</span><span class="st"> </span>as.numeric <span class="op">-</span><span class="dv">12</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">obesity_num =</span> obesity <span class="op">%&gt;%</span><span class="st"> </span>as.numeric <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)
+
+psych<span class="op">::</span><span class="kw">headTail</span>(data_long)</code></pre></div>
+<pre><code>       id gender age_base age_curr occation obesity age_center obesity_num
+1       4   Male        6        6        1     Yes         -6           1
+2       4   Male        6        8        2     Yes         -4           1
+3       4   Male        6       10        3     Yes         -2           1
+4       6   Male        6        6        1     Yes         -6           1
+...  &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;     &lt;NA&gt;    &lt;NA&gt;        ...         ...
+1047 3572 Female       14       18        3      No          6           0
+1048 3576 Female       14       14        1      No          2           0
+1049 3576 Female       14       16        2      No          4           0
+1050 3576 Female       14       18        3      No          6           0</code></pre>
+</div>
+</div>
+<div id="glm-analysis" class="section level2">
+<h2><span class="header-section-number">17.5</span> GLM Analysis</h2>
+<div id="standard-logistic-regression" class="section level3">
+<h3><span class="header-section-number">17.5.1</span> Standard logistic regression</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_glm_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">glm</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender<span class="op">*</span>age_center <span class="op">+</span><span class="st"> </span>gender<span class="op">*</span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>), 
+                 <span class="dt">data   =</span> data_long,
+                 <span class="dt">family =</span> binomial)
+
+fit_glm_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">glm</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>age_center <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>), 
+                 <span class="dt">data   =</span> data_long,
+                 <span class="dt">family =</span> binomial)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(fit_glm_<span class="dv">1</span>), 
+                       <span class="kw">extract_glm_exp</span>(fit_glm_<span class="dv">2</span>)),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Interaction&quot;</span>,
+                                         <span class="st">&quot;Main Effects&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;GLM: Parameter EStimates&quot;</span>,
+                  <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                  <span class="dt">ci.test =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>
+============================================================================
+                              Interaction             Main Effects          
+----------------------------------------------------------------------------
+(Intercept)                      0.35 [0.27; 0.45] *     0.37 [0.29; 0.46] *
+genderFemale                     1.23 [0.85; 1.78]       1.11 [0.83; 1.47]  
+age_center                       1.07 [1.00; 1.14]       1.05 [1.00; 1.10]  
+I(age_center^2)                  0.98 [0.96; 1.00]       0.98 [0.96; 0.99] *
+genderFemale:age_center          0.96 [0.87; 1.07]                          
+genderFemale:I(age_center^2)     0.99 [0.96; 1.02]                          
+----------------------------------------------------------------------------
+AIC                           1157.07                 1154.39               
+BIC                           1186.81                 1174.21               
+Log Likelihood                -572.54                 -573.19               
+Deviance                      1145.07                 1146.39               
+Num. obs.                     1050                    1050                  
+============================================================================
+* 1 outside the confidence interval</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_pred_glm &lt;-<span class="st"> </span><span class="kw">Effect</span>(<span class="kw">c</span>(<span class="st">&quot;gender&quot;</span>, <span class="st">&quot;age_center&quot;</span>), 
+       fit_glm_<span class="dv">2</span>,
+       <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">age_center =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">6</span>, <span class="dt">to =</span> <span class="dv">6</span>, <span class="dt">by =</span> <span class="fl">0.25</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">   </span>data.frame <span class="op">%&gt;%</span>
+<span class="st">   </span><span class="kw">mutate</span>(<span class="dt">age =</span> age_center <span class="op">+</span><span class="st"> </span><span class="dv">12</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x        =</span> age,
+              <span class="dt">y        =</span> fit,
+              <span class="dt">group    =</span> gender,
+              <span class="dt">linetype =</span> gender,
+              <span class="dt">fill     =</span> gender,
+              <span class="dt">color    =</span> gender)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> fit <span class="op">-</span><span class="st"> </span>se,
+                  <span class="dt">ymax =</span> fit <span class="op">+</span><span class="st"> </span>se),
+              <span class="dt">alpha =</span> .<span class="dv">3</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">title    =</span> <span class="st">&quot;Generalized Linear Model: Model #2&quot;</span>,
+        <span class="dt">subtitle =</span> <span class="st">&quot;Predicted Probability of Obesity&quot;</span>,
+        <span class="dt">x        =</span> <span class="st">&quot;Child&#39;s Age, years&quot;</span>,
+        <span class="dt">y        =</span> <span class="st">&quot;Probability&quot;</span>,
+        <span class="dt">linetype =</span> <span class="st">&quot;Gender&quot;</span>,
+        <span class="dt">fill     =</span> <span class="st">&quot;Gender&quot;</span>,
+        <span class="dt">color    =</span> <span class="st">&quot;Gender&quot;</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),
+         <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.05</span>, <span class="fl">1.05</span>),
+         <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
+         <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">6</span>, <span class="dt">to =</span> <span class="dv">18</span>, <span class="dt">by =</span> <span class="dv">2</span>))
+
+plot_pred_glm </code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-643-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="gee-analysis" class="section level2">
+<h2><span class="header-section-number">17.6</span> GEE Analysis</h2>
+<blockquote>
+<p>ALWAYS: fix the scale parameter to 1 with binomial data!!!</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_gee_1in &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender<span class="op">*</span>age_center <span class="op">+</span><span class="st"> </span>gender<span class="op">*</span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>), 
+                        <span class="dt">id          =</span> id, 
+                        <span class="dt">data        =</span> data_long,
+                        <span class="dt">family      =</span> binomial,
+                        <span class="dt">corstr      =</span> <span class="st">&#39;independence&#39;</span>, 
+                        <span class="dt">scale.fix   =</span> <span class="ot">TRUE</span>,
+                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>                 (Intercept)                 genderFemale 
+                     -1.0470                       0.2053 
+                  age_center              I(age_center^2) 
+                      0.0643                      -0.0166 
+     genderFemale:age_center genderFemale:I(age_center^2) 
+                     -0.0357                      -0.0124 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_gee_1ex &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender<span class="op">*</span>age_center <span class="op">+</span><span class="st"> </span>gender<span class="op">*</span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>), 
+                        <span class="dt">id          =</span> id, 
+                        <span class="dt">data        =</span> data_long,
+                        <span class="dt">family      =</span> binomial,
+                        <span class="dt">corstr      =</span> <span class="st">&#39;exchangeable&#39;</span>, 
+                        <span class="dt">scale.fix   =</span> <span class="ot">TRUE</span>,
+                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>                 (Intercept)                 genderFemale 
+                     -1.0470                       0.2053 
+                  age_center              I(age_center^2) 
+                      0.0643                      -0.0166 
+     genderFemale:age_center genderFemale:I(age_center^2) 
+                     -0.0357                      -0.0124 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_gee_1un &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender<span class="op">*</span>age_center <span class="op">+</span><span class="st"> </span>gender<span class="op">*</span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>), 
+                        <span class="dt">id          =</span> id, 
+                        <span class="dt">data        =</span> data_long,
+                        <span class="dt">family      =</span> binomial,
+                        <span class="dt">corstr      =</span> <span class="st">&#39;unstructured&#39;</span>, 
+                        <span class="dt">scale.fix   =</span> <span class="ot">TRUE</span>,
+                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>                 (Intercept)                 genderFemale 
+                     -1.0470                       0.2053 
+                  age_center              I(age_center^2) 
+                      0.0643                      -0.0166 
+     genderFemale:age_center genderFemale:I(age_center^2) 
+                     -0.0357                      -0.0124 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(<span class="kw">extract_gee_exp</span>(fit_gee_1in), 
+                       <span class="kw">extract_gee_exp</span>(fit_gee_1ex),
+                       <span class="kw">extract_gee_exp</span>(fit_gee_1un)),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Independent&quot;</span>,
+                                         <span class="st">&quot;Exchangable&quot;</span>,
+                                         <span class="st">&quot;Unstructured&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;Gee Model Parameters: With Interactions&quot;</span>,
+                  <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                  <span class="dt">ci.test =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>
+====================================================================================================
+                              Independent             Exchangable             Unstructured          
+----------------------------------------------------------------------------------------------------
+(Intercept)                      0.35 [0.25; 0.49] *     0.34 [0.25; 0.47] *     0.35 [0.25; 0.47] *
+genderFemale                     1.23 [0.76; 1.97]       1.23 [0.79; 1.92]       1.21 [0.78; 1.88]  
+age_center                       1.07 [0.97; 1.17]       1.08 [1.01; 1.17] *     1.09 [1.01; 1.17] *
+I(age_center^2)                  0.98 [0.96; 1.01]       0.99 [0.97; 1.00]       0.99 [0.97; 1.00]  
+genderFemale:age_center          0.96 [0.85; 1.10]       0.96 [0.86; 1.07]       0.95 [0.85; 1.06]  
+genderFemale:I(age_center^2)     0.99 [0.96; 1.02]       0.99 [0.96; 1.01]       0.99 [0.96; 1.01]  
+----------------------------------------------------------------------------------------------------
+Dispersion                       1.00                    1.00                    1.00               
+Num. obs.                     1050                    1050                    1050                  
+====================================================================================================
+* 1 outside the confidence interval</code></pre>
+<div id="drop-the-interaction-with-gender." class="section level3">
+<h3><span class="header-section-number">17.6.1</span> Drop the interaction with <code>gender</code>.</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_gee_2in &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>age_center <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>), 
+                        <span class="dt">id          =</span> id, 
+                        <span class="dt">data        =</span> data_long,
+                        <span class="dt">family      =</span> binomial,
+                        <span class="dt">corstr      =</span> <span class="st">&#39;independence&#39;</span>, 
+                        <span class="dt">scale.fix   =</span> <span class="ot">TRUE</span>,
+                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>    (Intercept)    genderFemale      age_center I(age_center^2) 
+        -0.9961          0.1005          0.0469         -0.0227 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_gee_2ex &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>age_center <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>), 
+                        <span class="dt">id          =</span> id, 
+                        <span class="dt">data        =</span> data_long,
+                        <span class="dt">family      =</span> binomial,
+                        <span class="dt">corstr      =</span> <span class="st">&#39;exchangeable&#39;</span>, 
+                        <span class="dt">scale.fix   =</span> <span class="ot">TRUE</span>,
+                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>    (Intercept)    genderFemale      age_center I(age_center^2) 
+        -0.9961          0.1005          0.0469         -0.0227 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_gee_2un &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>age_center <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>),  
+                        <span class="dt">id          =</span> id, 
+                        <span class="dt">data        =</span> data_long,
+                        <span class="dt">family      =</span> binomial,
+                        <span class="dt">corstr      =</span> <span class="st">&#39;unstructured&#39;</span>, 
+                        <span class="dt">scale.fix   =</span> <span class="ot">TRUE</span>,
+                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>    (Intercept)    genderFemale      age_center I(age_center^2) 
+        -0.9961          0.1005          0.0469         -0.0227 </code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(<span class="kw">extract_gee_exp</span>(fit_gee_2in), 
+                       <span class="kw">extract_gee_exp</span>(fit_gee_2ex),
+                       <span class="kw">extract_gee_exp</span>(fit_gee_2un)),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Independent&quot;</span>,
+                                         <span class="st">&quot;Exchangable&quot;</span>,
+                                         <span class="st">&quot;Unstructured&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;Gee Model Parameters: Main Effects Only&quot;</span>,
+                  <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                  <span class="dt">ci.test =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>
+=======================================================================================
+                 Independent             Exchangable             Unstructured          
+---------------------------------------------------------------------------------------
+(Intercept)         0.37 [0.27; 0.50] *     0.36 [0.27; 0.48] *     0.36 [0.27; 0.49] *
+genderFemale        1.11 [0.73; 1.67]       1.12 [0.74; 1.69]       1.09 [0.72; 1.64]  
+age_center          1.05 [0.98; 1.12]       1.06 [1.01; 1.12] *     1.06 [1.00; 1.12] *
+I(age_center^2)     0.98 [0.96; 0.99] *     0.98 [0.97; 0.99] *     0.98 [0.97; 0.99] *
+---------------------------------------------------------------------------------------
+Dispersion          1.00                    1.00                    1.00               
+Num. obs.        1050                    1050                    1050                  
+=======================================================================================
+* 1 outside the confidence interval</code></pre>
+</div>
+<div id="select-the-final-model." class="section level3">
+<h3><span class="header-section-number">17.6.2</span> Select the <strong>“final”</strong> model.</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_geeglm_2un &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>age_center <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>),  
+                                  <span class="dt">id          =</span> id, 
+                                  <span class="dt">data        =</span> data_long,
+                                  <span class="dt">family      =</span> binomial,
+                                  <span class="dt">corstr      =</span> <span class="st">&#39;unstructured&#39;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_pred_gee &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">gender =</span> data_long<span class="op">$</span>gender <span class="op">%&gt;%</span><span class="st"> </span>levels,
+                             <span class="dt">age_center =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">6</span>, <span class="dt">to =</span> <span class="dv">6</span>, <span class="dt">by =</span> .<span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(fit_geeglm_2un,
+                        <span class="dt">newdata =</span> .,
+                        <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">gender =</span> <span class="kw">fct_rev</span>(gender)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">mutate</span>(<span class="dt">age =</span> age_center <span class="op">+</span><span class="st"> </span><span class="dv">12</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x        =</span> age,
+              <span class="dt">y        =</span> fit,
+              <span class="dt">group    =</span> gender,
+              <span class="dt">linetype =</span> gender,
+              <span class="dt">color    =</span> gender)) <span class="op">+</span>
+<span class="st">   </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Generalized Estimating Equation: Model #2, unstructured&quot;</span>,
+        <span class="dt">subtitle =</span> <span class="st">&quot;Predicted Probability of Obesity&quot;</span>,
+        <span class="dt">x     =</span> <span class="st">&quot;Child&#39;s Age, years&quot;</span>,
+        <span class="dt">y     =</span> <span class="st">&quot;Probability&quot;</span>,
+        <span class="dt">linetype =</span> <span class="st">&quot;Gender&quot;</span>,
+        <span class="dt">color =</span> <span class="st">&quot;Gender&quot;</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),
+         <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.05</span>, <span class="fl">1.05</span>),
+         <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
+         <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">6</span>, <span class="dt">to =</span> <span class="dv">18</span>, <span class="dt">by =</span> <span class="dv">3</span>))
+  
+  
+plot_pred_gee</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-649-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="glmm-analysis" class="section level2">
+<h2><span class="header-section-number">17.7</span> GLMM Analysis</h2>
+<blockquote>
+<p>IT IS GENERALLY NOT RECOMMENDED THAT RANDOM-SLOPES BE ESTIMATED FOR BINOMIAL GLMMS</p>
+</blockquote>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_glmm_<span class="dv">1</span> &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">glmer</span>(obesity_num <span class="op">~</span><span class="st"> </span>age_center<span class="op">*</span>gender <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>gender <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id), 
+                          <span class="dt">data =</span> data_long,
+                          <span class="dt">family =</span> binomial) 
+
+fit_glmm_<span class="dv">2</span> &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">glmer</span>(obesity_num <span class="op">~</span><span class="st"> </span>gender <span class="op">+</span><span class="st"> </span>age_center <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age_center<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>id), 
+                          <span class="dt">data =</span> data_long,
+                          <span class="dt">family =</span> binomial) </code></pre></div>
+<p>Indicates smaller model is better, no interaction at higher level necessary</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_glmm_<span class="dv">1</span>, fit_glmm_<span class="dv">2</span>)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_glmm_2: obesity_num ~ gender + age_center + I(age_center^2) + (1 | id)
+fit_glmm_1: obesity_num ~ age_center * gender + I(age_center^2) * gender + 
+fit_glmm_1:     (1 | id)
+           Df AIC BIC logLik deviance Chisq Chi Df Pr(&gt;Chisq)
+fit_glmm_2  5 919 944   -455      909                        
+fit_glmm_1  7 921 956   -453      907  2.27      2       0.32</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(<span class="kw">extract_glmer_exp</span>(fit_glmm_<span class="dv">1</span>), 
+                       <span class="kw">extract_glmer_exp</span>(fit_glmm_<span class="dv">2</span>)),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Interaction&quot;</span>,
+                                         <span class="st">&quot;Main Effects&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;GLMM: Parameter EStimates&quot;</span>,
+                  <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                  <span class="dt">ci.test =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>
+============================================================================
+                              Interaction             Main Effects          
+----------------------------------------------------------------------------
+(Intercept)                      0.00 [0.00; 0.01] *     0.00 [0.00; 0.01] *
+age_center                       1.32 [1.07; 1.62] *     1.24 [1.07; 1.44] *
+genderFemale                     1.65 [0.45; 6.03]       1.29 [0.38; 4.40]  
+I(age_center^2)                  0.95 [0.91; 1.00] *     0.94 [0.91; 0.97] *
+age_center:genderFemale          0.87 [0.65; 1.17]                          
+genderFemale:I(age_center^2)     0.97 [0.91; 1.03]                          
+----------------------------------------------------------------------------
+AIC                            920.90                  919.17               
+BIC                            955.59                  943.95               
+Log Likelihood                -453.45                 -454.59               
+Num. obs.                     1050                    1050                  
+Num. groups: id                350                     350                  
+Var: id (Intercept)             55.06                   54.21               
+============================================================================
+* 1 outside the confidence interval</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Effect</span>(<span class="kw">c</span>(<span class="st">&quot;gender&quot;</span>, <span class="st">&quot;age_center&quot;</span>),fit_glmm_<span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_exp =</span> <span class="kw">exp</span>(fit))</code></pre></div>
+<pre><code>   gender age_center      fit    se    lower    upper fit_exp
+1    Male         -6 7.48e-05 1.260 6.33e-06 0.000884       1
+2  Female         -6 9.66e-05 1.288 7.73e-06 0.001205       1
+3    Male         -3 8.32e-04 0.896 1.44e-04 0.004801       1
+4  Female         -3 1.07e-03 0.935 1.72e-04 0.006670       1
+5    Male          0 2.84e-03 0.785 6.12e-04 0.013096       1
+6  Female          0 3.67e-03 0.828 7.26e-04 0.018292       1
+7    Male          3 2.99e-03 0.799 6.28e-04 0.014164       1
+8  Female          3 3.86e-03 0.840 7.46e-04 0.019720       1
+9    Male          6 9.73e-04 1.025 1.31e-04 0.007216       1
+10 Female          6 1.26e-03 1.058 1.58e-04 0.009890       1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">plot_pred_glmm &lt;-<span class="st"> </span><span class="kw">Effect</span>(<span class="kw">c</span>(<span class="st">&quot;gender&quot;</span>, <span class="st">&quot;age_center&quot;</span>), 
+       fit_glmm_<span class="dv">2</span>,
+       <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">age_center =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">6</span>, <span class="dt">to =</span> <span class="dv">6</span>, <span class="dt">by =</span> <span class="fl">0.25</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">   </span>data.frame <span class="op">%&gt;%</span>
+<span class="st">   </span><span class="kw">mutate</span>(<span class="dt">age =</span> age_center <span class="op">+</span><span class="st"> </span><span class="dv">12</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">   </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x        =</span> age,
+              <span class="dt">y        =</span> fit,
+              <span class="dt">group    =</span> gender,
+              <span class="dt">linetype =</span> gender,
+              <span class="dt">color    =</span> gender)) <span class="op">+</span>
+<span class="st">   </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw">theme_bw</span>() <span class="op">+</span>
+<span class="st">   </span><span class="kw">labs</span>(<span class="dt">title    =</span> <span class="st">&quot;Generalized Linear Mixed Models: Model #2&quot;</span>,
+        <span class="dt">subtitle =</span> <span class="st">&quot;Predicted Probability of Obesity&quot;</span>,
+        <span class="dt">x        =</span> <span class="st">&quot;Child&#39;s Age, years&quot;</span>,
+        <span class="dt">y        =</span> <span class="st">&quot;Probability&quot;</span>,
+        <span class="dt">linetype =</span> <span class="st">&quot;Gender&quot;</span>,
+        <span class="dt">color    =</span> <span class="st">&quot;Gender&quot;</span>) <span class="op">+</span>
+<span class="st">   </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),
+         <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.05</span>, <span class="fl">1.05</span>),
+         <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
+         <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">6</span>, <span class="dt">to =</span> <span class="dv">18</span>, <span class="dt">by =</span> <span class="dv">3</span>))
+
+plot_pred_glmm </code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-654-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="compare-methods" class="section level2">
+<h2><span class="header-section-number">17.8</span> Compare Methods</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(fit_glm_<span class="dv">2</span>),
+                       <span class="kw">extract_gee_exp</span>(fit_gee_2un),
+                       <span class="kw">extract_glmer_exp</span>(fit_glmm_<span class="dv">2</span>)),
+                  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>,
+                                         <span class="st">&quot;GEE&quot;</span>,
+                                         <span class="st">&quot;GLMM&quot;</span>),
+                  <span class="dt">caption =</span> <span class="st">&quot;Compare Methods: Parameter EStimates&quot;</span>,
+                  <span class="dt">single.row =</span> <span class="ot">TRUE</span>,
+                  <span class="dt">ci.test =</span> <span class="dv">1</span>)</code></pre></div>
+<pre><code>
+===========================================================================================
+                     GLM                     GEE                     GLMM                  
+-------------------------------------------------------------------------------------------
+(Intercept)             0.37 [0.29; 0.46] *     0.36 [0.27; 0.49] *     0.00 [0.00; 0.01] *
+genderFemale            1.11 [0.83; 1.47]       1.09 [0.72; 1.64]       1.29 [0.38; 4.40]  
+age_center              1.05 [1.00; 1.10]       1.06 [1.00; 1.12] *     1.24 [1.07; 1.44] *
+I(age_center^2)         0.98 [0.96; 0.99] *     0.98 [0.97; 0.99] *     0.94 [0.91; 0.97] *
+-------------------------------------------------------------------------------------------
+AIC                  1154.39                                          919.17               
+BIC                  1174.21                                          943.95               
+Log Likelihood       -573.19                                         -454.59               
+Deviance             1146.39                                                               
+Num. obs.            1050                    1050                    1050                  
+Dispersion                                      1.00                                       
+Num. groups: id                                                       350                  
+Var: id (Intercept)                                                    54.21               
+===========================================================================================
+* 1 outside the confidence interval</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">gridExtra<span class="op">::</span><span class="kw">grid.arrange</span>(plot_pred_glm, 
+                        plot_pred_gee, 
+                        plot_pred_glmm)</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-656-1.png" width="720" style="display: block; margin: auto;" /></p>
+
 </div>
 </div>
             </section>
@@ -598,8 +1494,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="glmm-binary-outcome-muscatine-obesity.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="glmm-binary-outcome-antibiotics-for-leprosy.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="glmm-binary-outcome-muscatine-obesity.html">
-
+<link rel="prev" href="mlm-longitudinal-hedeker-gibbons-depression.html">
+<link rel="next" href="mlm-longitudinal-rct-exercise-and-diet.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -557,39 +557,692 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="references" class="section level1 unnumbered">
-<h1>References</h1>
+<div id="mlm-longitudinal-hox-ch-5---student-gpa" class="section level1">
+<h1><span class="header-section-number">10</span> MLM, Longitudinal: Hox ch 5 - student GPA</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
+<span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span>
+<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
+<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
+<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
+<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
+<span class="kw">library</span>(sjPlot)       <span class="co"># Visualization for Models</span>
+<span class="kw">library</span>(effects)      <span class="co"># Effec displays for Models</span>
 
-<div id="refs" class="references">
-<div id="ref-anderson2007">
-<p>Anderson, Deborah K, Catherine Lord, Susan Risi, Pamela S DiLavore, Cory Shulman, Audrey Thurm, Kathleen Welch, and Andrew Pickles. 2007. “Patterns of Growth in Verbal Abilities Among Children with Autism Spectrum Disorder.” <em>Journal of Consulting and Clinical Psychology</em> 75 (4). American Psychological Association: 594.</p>
+<span class="kw">library</span>(lme4)         <span class="co"># non-linear mixed-effects models</span>
+
+<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span></code></pre></div>
+<div id="background-6" class="section level2">
+<h2><span class="header-section-number">10.1</span> Background</h2>
+<div class="rmdlink">
+<p>
+The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edition”</strong> <span class="citation"><span class="citation">(Hox, Moerbeek, and Van de Schoot <a href="references.html#ref-hox2017">2017</a>)</span></span> has a companion <a href="https://multilevel-analysis.sites.uu.nl/">website</a> which includes links to all the data files used throughout the book (housed on the <a href="https://github.com/MultiLevelAnalysis">book’s GitHub repository</a>).
+</p>
 </div>
-<div id="ref-anderson2009">
-<p>Anderson, Deborah K, Rosalind S Oti, Catherine Lord, and Kathleen Welch. 2009. “Patterns of Growth in Adaptive Social Abilities Among Children with Autism Spectrum Disorders.” <em>Journal of Abnormal Child Psychology</em> 37 (7). Springer: 1019–34.</p>
+<p>The following example is used through out <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>’s chapater 5.</p>
+<p>The GPA for 200 college students were followed for 6 consecutive semesters (simulated). Job status was also measured as number of hours worked for the same size occations. Time-invariant covariates are the student’s gender and high school GPA. The variable <code>admitted</code> will not be used.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%205/GPA2/gpa2long.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span>
+
+tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw) </code></pre></div>
+<pre><code>Observations: 1,200
+Variables: 7
+$ student  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3,...
+$ occas    &lt;fct&gt; year 1 semester 1, year 1 semester 2, year 2 semester...
+$ gpa      &lt;dbl&gt; 2.3, 2.1, 3.0, 3.0, 3.0, 3.3, 2.2, 2.5, 2.6, 2.6, 3.0...
+$ job      &lt;fct&gt; 2 hours, 2 hours, 2 hours, 2 hours, 2 hours, 2 hours,...
+$ sex      &lt;fct&gt; female, female, female, female, female, female, male,...
+$ highgpa  &lt;dbl&gt; 2.8, 2.8, 2.8, 2.8, 2.8, 2.8, 2.5, 2.5, 2.5, 2.5, 2.5...
+$ admitted &lt;fct&gt; yes, yes, yes, yes, yes, yes, no, no, no, no, no, no,...</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(occas, job) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">table</span>(<span class="dt">useNA =</span> <span class="st">&quot;always&quot;</span>)</code></pre></div>
+<pre><code>                   job
+occas               no job 1 hour 2 hours 3 hours 4 or more hours &lt;NA&gt;
+  year 1 semester 1      0      0     172      28               0    0
+  year 1 semester 2      0      0     169      31               0    0
+  year 2 semester 1      0      7     159      34               0    0
+  year 2 semester 2      0      5     169      26               0    0
+  year 3 semester 1      0     18     150      32               0    0
+  year 3 semester 2      0     22     148      30               0    0
+  &lt;NA&gt;                   0      0       0       0               0    0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">student =</span> <span class="kw">factor</span>(student)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sem =</span> <span class="kw">case_when</span>(occas <span class="op">==</span><span class="st"> &quot;year 1 semester 1&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 1 semester 2&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 2 semester 1&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">3</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 2 semester 2&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">4</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 3 semester 1&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">5</span>,
+                                occas <span class="op">==</span><span class="st"> &quot;year 3 semester 2&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">6</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">semc =</span> sem <span class="op">-</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">job =</span> <span class="kw">fct_drop</span>(job)) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">hrs =</span> <span class="kw">case_when</span>(job <span class="op">==</span><span class="st"> &quot;no job&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,
+                                job <span class="op">==</span><span class="st"> &quot;1 hour&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>,
+                                job <span class="op">==</span><span class="st"> &quot;2 hours&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,
+                                job <span class="op">==</span><span class="st"> &quot;3 hours&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">3</span>,
+                                job <span class="op">==</span><span class="st"> &quot;4 or more hours&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">4</span>)) <span class="op">%&gt;%</span><span class="st">  </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(student, sex, highgpa, sem, semc, job, hrs, gpa) <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(student, sem)
+
+psych<span class="op">::</span><span class="kw">headTail</span>(data_long, <span class="dt">top =</span> <span class="dv">10</span>)</code></pre></div>
+<pre><code>   student    sex highgpa sem semc     job hrs gpa
+1        1 female     2.8   1    0 2 hours   2 2.3
+2        1 female     2.8   2    1 2 hours   2 2.1
+3        1 female     2.8   3    2 2 hours   2   3
+4        1 female     2.8   4    3 2 hours   2   3
+5        1 female     2.8   5    4 2 hours   2   3
+6        1 female     2.8   6    5 2 hours   2 3.3
+7        2   male     2.5   1    0 2 hours   2 2.2
+8        2   male     2.5   2    1 3 hours   3 2.5
+9        2   male     2.5   3    2 2 hours   2 2.6
+10       2   male     2.5   4    3 2 hours   2 2.6
+11    &lt;NA&gt;   &lt;NA&gt;     ... ...  ...    &lt;NA&gt; ... ...
+12     200   male     3.4   3    2 2 hours   2 3.4
+13     200   male     3.4   4    3 2 hours   2 3.5
+14     200   male     3.4   5    4  1 hour   1 3.3
+15     200   male     3.4   6    5  1 hour   1 3.4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">wide</span>(<span class="dt">v.names =</span> <span class="kw">c</span>(<span class="st">&quot;job&quot;</span>, <span class="st">&quot;hrs&quot;</span>, <span class="st">&quot;gpa&quot;</span>),
+                  <span class="dt">timevar =</span> <span class="st">&quot;sem&quot;</span>,
+                  <span class="dt">id =</span> <span class="st">&quot;student&quot;</span>)
+
+
+psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</code></pre></div>
+<pre><code>     student    sex highgpa semc   job.1 hrs.1 gpa.1   job.2 hrs.2 gpa.2
+1          1 female     2.8    0 2 hours     2   2.3 2 hours     2   2.1
+7          2   male     2.5    0 2 hours     2   2.2 3 hours     3   2.5
+13         3 female     2.5    0 2 hours     2   2.4 2 hours     2   2.9
+19         4   male     3.8    0 3 hours     3   2.5 2 hours     2   2.7
+...     &lt;NA&gt;   &lt;NA&gt;     ...  ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...
+1177     197 female     2.1    0 2 hours     2   2.9 2 hours     2   2.5
+1183     198   male       4    0 2 hours     2   2.5 2 hours     2   2.9
+1189     199 female     2.3    0 2 hours     2   2.6 2 hours     2   2.3
+1195     200   male     3.4    0 2 hours     2   2.8 2 hours     2   3.2
+       job.3 hrs.3 gpa.3   job.4 hrs.4 gpa.4   job.5 hrs.5 gpa.5   job.6
+1    2 hours     2     3 2 hours     2     3 2 hours     2     3 2 hours
+7    2 hours     2   2.6 2 hours     2   2.6 2 hours     2     3 2 hours
+13   2 hours     2     3 3 hours     3   2.8 2 hours     2   3.3 2 hours
+19   2 hours     2   2.4 2 hours     2   2.7 2 hours     2   2.9 2 hours
+...     &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;
+1177 3 hours     3   2.8 2 hours     2   3.2 2 hours     2   3.3 2 hours
+1183 2 hours     2     3 2 hours     2   3.2  1 hour     1   3.3 2 hours
+1189 3 hours     3   2.7 2 hours     2   2.7 2 hours     2   2.8 3 hours
+1195 2 hours     2   3.4 2 hours     2   3.5  1 hour     1   3.3  1 hour
+     hrs.6 gpa.6
+1        2   3.3
+7        2   2.8
+13       2   3.4
+19       2   2.7
+...    ...   ...
+1177     2   3.8
+1183     2   3.4
+1189     3   2.8
+1195     1   3.4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(highgpa, gpa.<span class="dv">1</span>, job.<span class="dv">1</span>, hrs.<span class="dv">1</span>,
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sex,
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>,
+                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th>
+male
+</th>
+<th>
+female
+</th>
+<th>
+P-Value
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+n = 95
+</td>
+<td>
+n = 105
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+highgpa
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.309
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+3.0 (0.6)
+</td>
+<td>
+2.9 (0.6)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+gpa 1
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.095
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.6 (0.3)
+</td>
+<td>
+2.6 (0.3)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+job 1
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.192
+</td>
+</tr>
+<tr>
+<td>
+1 hour
+</td>
+<td>
+0 (0%)
+</td>
+<td>
+0 (0%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+2 hours
+</td>
+<td>
+78 (82.1%)
+</td>
+<td>
+94 (89.5%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+3 hours
+</td>
+<td>
+17 (17.9%)
+</td>
+<td>
+11 (10.5%)
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+hrs 1
+</td>
+<td>
+</td>
+<td>
+</td>
+<td>
+0.137
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.2 (0.4)
+</td>
+<td>
+2.1 (0.3)
+</td>
+<td>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(gpa.<span class="dv">1</span>, gpa.<span class="dv">2</span>, gpa.<span class="dv">3</span>, gpa.<span class="dv">4</span>, gpa.<span class="dv">5</span>, gpa.<span class="dv">6</span>,
+                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sex,
+                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>
+</th>
+<th>
+male
+</th>
+<th>
+female
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+</td>
+<td>
+n = 95
+</td>
+<td>
+n = 105
+</td>
+</tr>
+<tr>
+<td>
+gpa 1
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.6 (0.3)
+</td>
+<td>
+2.6 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 2
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.7 (0.3)
+</td>
+<td>
+2.8 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 3
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.7 (0.4)
+</td>
+<td>
+2.9 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 4
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.8 (0.4)
+</td>
+<td>
+3.0 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 5
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+2.9 (0.4)
+</td>
+<td>
+3.1 (0.3)
+</td>
+</tr>
+<tr>
+<td>
+gpa 6
+</td>
+<td>
+</td>
+<td>
+</td>
+</tr>
+<tr>
+<td>
+</td>
+<td>
+3.0 (0.4)
+</td>
+<td>
+3.2 (0.4)
+</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div id="ref-finch2016">
-<p>Finch, W Holmes, Jocelyn E Bolin, and Ken Kelley. 2016. <em>Multilevel Modeling Using R</em>. Crc Press.</p>
+<div id="mlm" class="section level2">
+<h2><span class="header-section-number">10.2</span> MLM</h2>
+<div id="null-models-and-icc" class="section level3">
+<h3><span class="header-section-number">10.2.1</span> Null Models and ICC</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_0_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(fit_lmer_0_re)</code></pre></div>
+<pre><code>
+Linear mixed model
+
+Family : gaussian (identity)
+Formula: gpa ~ 1 + (1 | student)
+
+  ICC (student): 0.3693</code></pre>
+<p>Over a third of the variance in the 6 GPA measures is variance between individuals, and about two-thirds is variance within individuals across time.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_1_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(fit_lmer_1_re)</code></pre></div>
+<pre><code>
+Linear mixed model
+
+Family : gaussian (identity)
+Formula: gpa ~ semc + (1 | student)
+
+  ICC (student): 0.5231</code></pre>
+<p>After accounting for the linear change in GPA over semesters, about half of the remaining variance in GPA scores is attributable person-to-person differences.</p>
 </div>
-<div id="ref-gelman2008">
-<p>Gelman, Andrew. 2008. “Scaling Regression Inputs by Dividing by Two Standard Deviations.” <em>Statistics in Medicine</em> 27 (15). Wiley Online Library: 2865–73.</p>
+<div id="fixed-effects-2" class="section level3">
+<h3><span class="header-section-number">10.2.2</span> Fixed Effects</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_0_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+fit_lmer_1_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+
+fit_lmer_2_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+
+fit_lmer_3_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">screenreg</span>(<span class="kw">list</span>(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml),
+          <span class="dt">digits =</span> <span class="dv">3</span>)</code></pre></div>
+<pre><code>
+================================================================================
+                          Model 1       Model 2       Model 3       Model 4     
+--------------------------------------------------------------------------------
+(Intercept)                  2.865 ***     2.599 ***     2.970 ***     2.641 ***
+                            (0.019)       (0.022)       (0.044)       (0.098)   
+semc                                       0.106 ***     0.102 ***     0.102 ***
+                                          (0.004)       (0.004)       (0.004)   
+hrs                                                     -0.171 ***    -0.172 ***
+                                                        (0.018)       (0.018)   
+highgpa                                                                0.085 ** 
+                                                                      (0.028)   
+sexfemale                                                              0.147 ***
+                                                                      (0.033)   
+--------------------------------------------------------------------------------
+AIC                        919.456       401.649       318.399       296.760    
+BIC                        934.726       422.009       343.849       332.390    
+Log Likelihood            -456.728      -196.825      -154.200      -141.380    
+Num. obs.                 1200          1200          1200          1200        
+Num. groups: student       200           200           200           200        
+Var: student (Intercept)     0.057         0.063         0.052         0.045    
+Var: Residual                0.098         0.058         0.055         0.055    
+================================================================================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_0_ml: gpa ~ 1 + (1 | student)
+fit_lmer_1_ml: gpa ~ semc + (1 | student)
+fit_lmer_2_ml: gpa ~ semc + hrs + (1 | student)
+fit_lmer_3_ml: gpa ~ semc + hrs + highgpa + sex + (1 | student)
+              Df    AIC    BIC  logLik deviance   Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_0_ml  3 919.46 934.73 -456.73   913.46                          
+fit_lmer_1_ml  4 401.65 422.01 -196.82   393.65 519.807      1  &lt; 2.2e-16
+fit_lmer_2_ml  5 318.40 343.85 -154.20   308.40  85.250      1  &lt; 2.2e-16
+fit_lmer_3_ml  7 296.76 332.39 -141.38   282.76  25.639      2  2.707e-06
+                 
+fit_lmer_0_ml    
+fit_lmer_1_ml ***
+fit_lmer_2_ml ***
+fit_lmer_3_ml ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
-<div id="ref-hedeker2006">
-<p>Hedeker, Donald, and Robert D Gibbons. 2006. <em>Longitudinal Data Analysis</em>. Vol. 451. John Wiley &amp; Sons.</p>
+<div id="variance-explained-by-linear-time-at-level-one" class="section level3">
+<h3><span class="header-section-number">10.2.3</span> Variance Explained by linear TIME at Level ONE</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">re_var</span>(fit_lmer_0_ml)  <span class="co"># baseilne</span></code></pre></div>
+<pre><code>      Within-group-variance:    0.098
+     Between-group-variance:    0.057 (student)</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">re_var</span>(fit_lmer_1_ml)  <span class="co"># model to compare</span></code></pre></div>
+<pre><code>      Within-group-variance:    0.058
+     Between-group-variance:    0.063 (student)</code></pre>
+<div id="raudenbush-and-bryk-2" class="section level4">
+<h4><span class="header-section-number">10.2.3.1</span> Raudenbush and Bryk</h4>
+<ul>
+<li>Explained variance is a proportion of first-level variance only</li>
+<li>A good option when the multilevel sampling process is is close to two-stage simple random sampling</li>
+</ul>
+<div class="genericEq">
+<p>
+<strong>Raudenbush and Bryk Approximate Formula - Level 1 </strong> <em>approximate</em> <span class="math display"><span class="math display">\[
+approx \;R^2_1 = \frac{\sigma^2_{e-BL} - \sigma^2_{e-MC}}
+             {\sigma^2_{e-BL} }
+\tag{Hox 4.8}
+\]</span></span>
+</p>
 </div>
-<div id="ref-R-stargazer">
-<p>Hlavac, Marek. 2018. <em>Stargazer: Well-Formatted Regression and Summary Statistics Tables</em>. <a href="https://CRAN.R-project.org/package=stargazer" class="uri">https://CRAN.R-project.org/package=stargazer</a>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="fl">0.098</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.058</span>) <span class="op">/</span><span class="st"> </span><span class="fl">0.098</span></code></pre></div>
+<pre><code>[1] 0.4081633</code></pre>
 </div>
-<div id="ref-hox2017">
-<p>Hox, Joop J, Mirjam Moerbeek, and Rens Van de Schoot. 2017. <em>Multilevel Analysis: Techniques and Applications</em>. 3rd ed. Routledge.</p>
+<div id="snijders-and-bosker-2" class="section level4">
+<h4><span class="header-section-number">10.2.3.2</span> Snijders and Bosker</h4>
+<div class="genericEq">
+<p>
+<strong>Snijders and Bosker Formula - Level 1 </strong>
+</p>
+<p>
+Random Intercepts Models Only, <em>address potential negative <span class="math inline"><span class="math inline">\(R^2\)</span></span> issue</em> <span class="math display"><span class="math display">\[
+R^2_1 = 1 - \frac{\sigma^2_{e-MC} + \sigma^2_{u0-MC}}
+                 {\sigma^2_{e-BL} + \sigma^2_{u0-BL}}
+\]</span></span>
+</p>
 </div>
-<div id="ref-nakagawa2013">
-<p>Nakagawa, Shinichi, and Holger Schielzeth. 2013. “A General and Simple Method for Obtaining R2 from Generalized Linear Mixed-Effects Models.” <em>Methods in Ecology and Evolution</em> 4 (2). Wiley Online Library: 133–42.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="fl">0.058</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.063</span>)<span class="op">/</span>(<span class="fl">0.098</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.057</span>)</code></pre></div>
+<pre><code>[1] 0.2193548</code></pre>
 </div>
-<div id="ref-reisby1977">
-<p>Reisby, Niels, Lars F Gram, Per Bech, Adam Nagy, Gorm Odden Petersen, Jørgen Ortmann, Ilse Ibsen, et al. 1977. “Imipramine: Clinical Effects and Pharmacokinetic Variability.” <em>Psychopharmacology</em> 54 (3). Springer: 263–72.</p>
 </div>
-<div id="ref-R-ggplot2">
-<p>Wickham, Hadley, Winston Chang, Lionel Henry, Thomas Lin Pedersen, Kohske Takahashi, Claus Wilke, and Kara Woo. 2018. <em>Ggplot2: Create Elegant Data Visualisations Using the Grammar of Graphics</em>. <a href="https://CRAN.R-project.org/package=ggplot2" class="uri">https://CRAN.R-project.org/package=ggplot2</a>.</p>
+<div id="variance-explained-by-linear-time-at-level-two" class="section level3">
+<h3><span class="header-section-number">10.2.4</span> Variance Explained by linear TIME at Level TWO</h3>
+<div id="raudenbush-and-bryk-3" class="section level4">
+<h4><span class="header-section-number">10.2.4.1</span> Raudenbush and Bryk</h4>
+<div class="genericEq">
+<p>
+<strong>Raudenbush and Bryk Approximate Formula - Level 2 </strong> <span class="math display"><span class="math display">\[
+approx \; R^2_s = \frac{\sigma^2_{u0-BL} - \sigma^2_{u0-MC}}
+             {\sigma^2_{u0-BL} }
+\tag{Hox 4.9}
+\]</span></span>
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(<span class="fl">0.057</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.063</span>)<span class="op">/</span><span class="st"> </span><span class="fl">0.057</span></code></pre></div>
+<pre><code>[1] -0.1052632</code></pre>
+<p>YIKES! Negative Variance explained!</p>
+</div>
+<div id="snijders-and-bosker-3" class="section level4">
+<h4><span class="header-section-number">10.2.4.2</span> Snijders and Bosker</h4>
+<div class="genericEq">
+<p>
+<strong>Snijders and Bosker Formula Extended - Level 2 </strong> <span class="math display"><span class="math display">\[
+R^2_2 = 1 - \frac{\frac{\sigma^2_{e-MC}}{B} + \sigma^2_{u0-MC}}
+                 {\frac{\sigma^2_{e-BL}}{B} + \sigma^2_{u0-BL}}
+\]</span></span>
+</p>
+<p>
+<span class="math inline"><span class="math inline">\(B\)</span></span> is the average size of the Level 2 units. Technically, you should use the <em>harmonic mean</em>, but unless the clusters differ greatly in size, it doesn’t make a huge difference.
+</p>
+</div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span>(<span class="fl">0.058</span><span class="op">/</span><span class="dv">6</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.063</span>) <span class="op">/</span><span class="st"> </span>(<span class="fl">0.098</span><span class="op">/</span><span class="dv">6</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.057</span>)</code></pre></div>
+<pre><code>[1] 0.009090909</code></pre>
+<p>Reason: The intercept only model overestimates the variance at the occasion level and underestimates the variance at the subject level (se chapter 4 of <span class="citation">Hox, Moerbeek, and Van de Schoot (<a href="references.html#ref-hox2017">2017</a>)</span>)</p>
+</div>
+</div>
+<div id="random-effects-2" class="section level3">
+<h3><span class="header-section-number">10.2.5</span> Random Effects</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_3_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)
+
+
+fit_lmer_4_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_3_re, fit_lmer_4_re, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_3_re: gpa ~ semc + hrs + highgpa + sex + (1 | student)
+fit_lmer_4_re: gpa ~ semc + hrs + highgpa + sex + (semc | student)
+              Df    AIC    BIC  logLik deviance Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_3_re  7 328.84 364.47 -157.42   314.84                        
+fit_lmer_4_re  9 219.93 265.75 -100.97   201.94 112.9      2  &lt; 2.2e-16
+                 
+fit_lmer_3_re    
+fit_lmer_4_re ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="cross-level-interaction" class="section level3">
+<h3><span class="header-section-number">10.2.6</span> Cross-Level Interaction</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_4_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+fit_lmer_4_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)
+
+
+
+fit_lmer_5_ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>semc<span class="op">:</span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+
+fit_lmer_5_re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(gpa <span class="op">~</span><span class="st"> </span>semc <span class="op">+</span><span class="st"> </span>hrs <span class="op">+</span><span class="st"> </span>highgpa <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>semc<span class="op">:</span>sex <span class="op">+</span><span class="st"> </span>(semc<span class="op">|</span>student),
+                            <span class="dt">data =</span> data_long,
+                            <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">screenreg</span>(<span class="kw">list</span>(fit_lmer_4_ml, fit_lmer_5_ml, fit_lmer_5_re))</code></pre></div>
+<pre><code>
+====================================================================
+                               Model 1      Model 2      Model 3    
+--------------------------------------------------------------------
+(Intercept)                       2.56 ***     2.58 ***     2.58 ***
+                                 (0.09)       (0.09)       (0.09)   
+semc                              0.10 ***     0.09 ***     0.09 ***
+                                 (0.01)       (0.01)       (0.01)   
+hrs                              -0.13 ***    -0.13 ***    -0.13 ***
+                                 (0.02)       (0.02)       (0.02)   
+highgpa                           0.09 ***     0.09 ***     0.09 ***
+                                 (0.03)       (0.03)       (0.03)   
+sexfemale                         0.12 ***     0.08 *       0.08 *  
+                                 (0.03)       (0.03)       (0.03)   
+semc:sexfemale                                 0.03 **      0.03 ** 
+                                              (0.01)       (0.01)   
+--------------------------------------------------------------------
+AIC                             188.12       182.97       182.97    
+BIC                             233.93       233.87       233.87    
+Log Likelihood                  -85.06       -81.49       -81.49    
+Num. obs.                      1200         1200         1200       
+Num. groups: student            200          200          200       
+Var: student (Intercept)          0.04         0.04         0.04    
+Var: student semc                 0.00         0.00         0.00    
+Cov: student (Intercept) semc    -0.00        -0.00        -0.00    
+Var: Residual                     0.04         0.04         0.04    
+====================================================================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_4_ml, fit_lmer_5_ml)</code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_4_ml: gpa ~ semc + hrs + highgpa + sex + (semc | student)
+fit_lmer_5_ml: gpa ~ semc + hrs + highgpa + sex + semc:sex + (semc | student)
+              Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
+fit_lmer_4_ml  9 188.12 233.93 -85.059   170.12                         
+fit_lmer_5_ml 10 182.97 233.87 -81.486   162.97 7.1464      1   0.007511
+                
+fit_lmer_4_ml   
+fit_lmer_5_ml **
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_5_re,
+                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
+                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;semc&quot;</span>, <span class="st">&quot;sex&quot;</span>))</code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-461-1.png" width="576" style="display: block; margin: auto;" /></p>
+
 </div>
 </div>
 </div>
@@ -598,8 +1251,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           </div>
         </div>
       </div>
-<a href="glmm-binary-outcome-muscatine-obesity.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="mlm-longitudinal-hedeker-gibbons-depression.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="mlm-longitudinal-rct-exercise-and-diet.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
