@@ -1,0 +1,638 @@
+# GLMM, Count Outcome: Bolous
+
+
+
+```{block type='rmdlink', echo=TRUE}
+GLMM FAQ
+by: Ben Bolker and others
+
+https://bbolker.github.io/mixedmodels-misc/glmmFAQ.html
+```
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(comment     = "",
+                      echo        = TRUE, 
+                      warning     = FALSE, 
+                      message     = FALSE,
+                      fig.align   = "center", # center all figures
+                      fig.width   = 6,        # set default figure width to 4 inches
+                      fig.height  = 4)        # set default figure height to 3 inches
+```
+
+## Packages
+
+### CRAN
+
+```{r, message=FALSE, error=FALSE}
+library(tidyverse)    # all things tidy
+library(pander)       # nice looking genderal tabulations
+library(furniture)    # nice table1() descriptives
+library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+library(psych)        # contains some useful functions, like headTail
+
+library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(gee)          # Generalized Estimating Equations
+library(optimx)       # Optimizers for use in lme4::glmer
+library(MuMIn)        # Multi-Model Inference (caluclate QIC)
+library(effects)      # Plotting estimated marginal means
+
+library(gridExtra)    # combining graphics
+```
+
+
+### GitHub
+
+Helper `extract` functions for exponentiating parameters form generalized regression models within a `texreg` table of model parameters.
+
+```{r, message=FALSE, error=FALSE}
+# install.packages("devtools")
+# library(devtools)
+# install_github("SarBearSchwartz/texreghelpr")
+
+library(texreghelpr)
+```
+
+
+## Data Prep
+
+> Bolus data from Weiss 2005
+
+Patient controlled analgesia (PCA) comparing 2 dosing regimes to self-control pain 
+
+Bolus=  Large dose of medication given (usually intravenously by direct infusion injection or gravity drip) to raise blood-level concentrations to a therapeutic level
+
+A ‘lock-out’ period followed each dose, where subject may not administer more medication.  
+
+* Lock-out time is twice as long in 2mg/dose group
+* Allows for max of 30 dosages in 2mg/dose and 60 in 1mg/dose group in any 4-hour period
+* No responses neared these upper limits
+
+
+
+**Variable List:**
+
+* Indicators   
+
+    + `id` unique subject indicator
+    + `time` 11 consecutive 4-hour periods: 0, 1, 2, ..., 10
+
+
+* Outcome or dependent variable    
+
+    + `count` # doses recorded for in that 4-hour period
+
+
+* Main predictor or independent variable of interest   
+
+    + `group`1mg/dose group, 2mg/dose group
+
+
+
+### Import
+
+```{r}
+data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/data/master/MLM/bolus.txt",
+                       header = TRUE)
+
+str(data_raw) # see the structure
+
+psych::headTail(data_raw)
+```
+
+### Long Format
+
+```{r}
+data_long <- data_raw %>% 
+  dplyr::mutate(id = factor(id)) %>% 
+  dplyr::mutate(timeF = factor(time))
+
+str(data_long) # see the structure
+
+psych::headTail(data_long)
+```
+
+### Wide Format
+
+```{r}
+data_wide <- data_long %>% 
+  dplyr::select(-timeF) %>% 
+  tidyr::spread(key = time,
+                value = count,
+                sep = "_")
+
+str(data_wide) # see the structure
+
+psych::headTail(data_wide)
+```
+
+
+## Exploratory Data Analysis
+
+### Summary Statistics
+
+#### Demographics and Baseline
+
+```{r}
+data_wide %>% 
+  furniture::table1(time_0,
+                    splitby = ~ group,
+                    test    = TRUE,
+                    na.rm   = FALSE,
+                    output  = "html")
+```
+
+
+#### Status over Time
+
+
+```{r}
+data_wide %>% 
+  furniture::table1(time_0, 
+                    time_1, time_2, time_3, time_4, time_5, 
+                    time_6, time_7, time_8, time_9, time_10,
+                    splitby = ~ group,
+                    test    = TRUE,
+                    na.rm   = FALSE,
+                    output  = "html")
+```
+
+
+#### Correlation over Time
+
+```{r}
+data_wide %>% 
+  dplyr::select(starts_with("time_")) %>% 
+  cor() %>% 
+  corrplot::corrplot.mixed()
+```
+
+
+
+### Visualize
+
+#### Person Profile Plots, by Group
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = time, 
+             y = count)) +
+  geom_line(aes(group = id),
+              color = "gray") +
+  facet_grid(. ~ group) + 
+  theme_bw()
+```
+
+
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = time, 
+             y = count)) +
+  geom_smooth(aes(group = id),
+              method = "lm",
+              color = "gray",
+              se = FALSE) +
+  facet_grid(. ~ group) + 
+  theme_bw()
+```
+
+
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = time, 
+             y = count)) +
+  geom_smooth(aes(group = id),
+              method = "lm",
+              formula = y ~ poly(x, 2),
+              color = "gray",
+              se = FALSE) +
+  facet_grid(. ~ group) + 
+  theme_bw()
+```
+
+
+
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = time, 
+             y = count)) +
+  geom_line(aes(group = id)) +
+  geom_smooth(method = "loess",
+              color = "blue",
+              se = FALSE) +
+  geom_smooth(method = "lm",
+              color = "red",
+              se = FALSE) +
+  facet_grid(. ~ group) + 
+  theme_bw()
+```
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = time, 
+             y = log(count + .1))) +
+  geom_line(aes(group = id)) +
+  geom_smooth(method = "loess",
+              color = "blue",
+              se = FALSE) +
+  geom_smooth(method = "lm",
+              color = "red",
+              se = FALSE) +
+  facet_grid(. ~ group) + 
+  theme_bw()
+```
+
+
+```{r}
+data_long %>% 
+  ggplot(aes(x = time, 
+             y = count)) +
+  geom_smooth(method = "loess",
+              color = "gray",
+              se = FALSE) +
+  geom_smooth(method = "lm",
+              color = "red",
+              se = FALSE) +
+  geom_smooth(method = "lm",
+              formula = y ~ poly(x, 2),
+              color = "green",
+              se = FALSE) +
+  geom_smooth(method = "lm",
+              formula = y ~ poly(x, 3),
+              color = "purple",
+              se = FALSE) +
+  facet_grid(. ~ group) + 
+  theme_bw()
+```
+
+#### Means over Time, BY Group
+
+```{r}
+data_long %>% 
+  dplyr::group_by(group, timeF) %>% 
+  dplyr::summarise(M = mean(count)) %>% 
+  ggplot(aes(x = timeF,
+             y = M,
+             group = group,
+             color = group)) +
+  geom_point() + 
+  geom_line() + 
+  theme_bw() + 
+  labs(x = "Four-week Intervals",
+       y = "Sample Mean Count",
+       color = "Dose") 
+```
+
+
+```{r}
+data_long %>% 
+  dplyr::group_by(group, timeF) %>% 
+  dplyr::summarise(M = mean(log(count + .1))) %>% 
+  ggplot(aes(x = timeF,
+             y = M,
+             group = group,
+             color = group)) +
+  geom_point() + 
+  geom_line() + 
+  theme_bw() + 
+  labs(x = "Four-week Intervals",
+       y = "Sample Mean Count",
+       color = "Dose") 
+```
+
+
+## GEE Analysis
+
+### Fit Various Correlation Structures
+
+#### Exchangable
+
+```{r}
+mod_gee_ex <- gee::gee(count ~ group + time + I(time^2),
+                       id = id,
+                       data = data_long,
+                       family = poisson(link = "log"),
+                       corstr = 'exchangeable')
+
+summary(mod_gee_ex)
+```
+
+#### Auto-regressive (correlation decay over time)
+
+```{r}
+mod_gee_ar <- gee::gee(count ~ group + time + I(time^2),
+                       id = id,
+                       data = data_long,
+                       family = poisson(link = "log"),
+                       corstr = "AR-M",
+                       Mv = 1)	
+
+summary(mod_gee_ar)
+```
+
+#### Unstructured
+
+```{r}
+mod_gee_un <- gee::gee(count ~ group + time + I(time^2),
+                       id = id,
+                       data = data_long,
+                       family = poisson(link = "log"),
+                       corstr = "unstructured")	
+
+summary(mod_gee_un)
+```
+
+### Compare Corelation Structures
+
+#### QIC: Model Fit 
+
+```{r}
+MuMIn::model.sel(mod_gee_ex, 
+                 mod_gee_ar, 
+                 mod_gee_un, 
+                 rank = "QIC")    #sorts the best to the TOP, uses QIC(I) to choose corelation structure
+```
+
+
+#### Model Parameter Table
+
+```{r, include = FALSE}
+texreg::screenreg(list(extract_gee_exp(mod_gee_ex),
+                       extract_gee_exp(mod_gee_ar),
+                       extract_gee_exp(mod_gee_un)),
+                  custom.model.names = c("Exchangable",
+                                         "AutoRegressive",
+                                         "Unstructured"),
+                  caption = "GEE: Main Effects Only, with Quadratic Time",
+                  single.row = TRUE,
+                  ci.test = 1)
+```
+
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(extract_gee_exp(mod_gee_ex),
+                     extract_gee_exp(mod_gee_ar),
+                     extract_gee_exp(mod_gee_un)),
+                custom.model.names = c("Exchangable",
+                                       "AutoRegressive",
+                                       "Unstructured"),
+                caption = "GEE: Main Effects Only, with Quadratic Time",
+                single.row = TRUE,
+                ci.test = 1)
+```
+
+### Add Interaction Terms
+
+```{r}
+mod_gee_ar2 <- gee::gee(count ~ group*time + group*I(time^2),
+                        id = id,
+                        data = data_long,
+                        family = poisson(link = "log"),
+                        corstr = "AR-M",
+                        Mv = 1)	
+
+summary(mod_gee_ar2)
+```
+
+
+```{r}
+MuMIn::QIC(mod_gee_ar, 
+           mod_gee_ar2, 
+           typeR = TRUE)    # NOT the default
+```
+
+```{r}
+texreg::screenreg(list(extract_gee_exp(mod_gee_ar),
+                       extract_gee_exp(mod_gee_ar2)),
+                  single.row = TRUE,
+                  ci.test = 1)
+```
+
+
+
+
+### Visualize Best Model
+
+#### Model Parameter Table
+
+```{r, include=FALSE}
+texreg::screenreg(extract_gee_exp(mod_gee_ar),
+                  single.row = TRUE,
+                  ci.test = 1)
+```
+
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(extract_gee_exp(mod_gee_ar),
+                caption = "GEE: Final Model (auto regressive)",
+                single.row = TRUE,
+                ci.test = 1)
+```
+
+#### Refit via `geepack::geeglm()`
+
+```{r}
+mod_geeglm_ar <- geepack::geeglm(count ~ group + time + I(time^2),
+                       id = id,
+                       data = data_long,
+                       family = poisson(link = "log"),
+                       corstr = "ar1")	
+
+summary(mod_geeglm_ar)
+```
+
+
+#### Predict over a Grid 
+
+Estimated Marginal Mean Counts
+
+```{r}
+expand.grid(time = 0:10,
+            group = levels(data_long$group)) %>% 
+  dplyr::mutate(fit = predict(mod_geeglm_ar,
+                              newdata = .,
+                              type = "response")) %>% 
+  tidyr::spread(key = group,
+                value = fit)
+```
+
+#### Plot Estimated Marginal Means
+
+```{r}
+expand.grid(time = 0:10,
+            group = levels(data_long$group)) %>% 
+  dplyr::mutate(fit = predict(mod_geeglm_ar,
+                              newdata = .,
+                              type = "response")) %>% 
+  ggplot(aes(x = time,
+             y = fit,
+             color = fct_rev(group))) +
+  geom_point() + 
+  geom_line() + 
+  theme_bw() + 
+  labs(x = "Four-week Intervals",
+       y = "Estimated Populaton Mean Count",
+       color = "Dose") + 
+  scale_x_continuous(breaks = 0:10)
+```
+
+
+
+## GLMM Analysis
+
+
+### RI: Random Intercepts Only
+
+```{r}
+mod_glmer_ri <- lme4::glmer(count ~ group + I(time/4) + I((time/4)^2) + (1|id),
+                            data = data_long,
+                            family = poisson(link = "log"))
+
+summary(mod_glmer_ri)
+```
+
+
+### RIAS: Random Intercepts and Slopes
+
+```{r}
+mod_glmer_rias <- lme4::glmer(count ~ group + I(time/4) + I((time/4)^2) + (I(time/4)|id),
+                              data = data_long,
+                              family = poisson(link = "log"))
+
+summary(mod_glmer_rias)
+```
+
+ 
+
+```{r}
+anova(mod_glmer_ri, mod_glmer_rias)
+```
+
+```{r, include=FALSE}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(extract_glmer_exp(mod_glmer_ri),
+                       extract_glmer_exp(mod_glmer_rias)),
+                  custom.model.names = c("Intecepts", "Intercepts and Slopes"),
+                  caption = "GLMM: Compare Random Effects",
+                  single.row = TRUE,
+                  ci.test = 1)
+```
+
+```{r, results="asis"}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(extract_glmer_exp(mod_glmer_ri),
+                     extract_glmer_exp(mod_glmer_rias)),
+                custom.model.names = c("Intecepts", "Intercepts and Slopes"),
+                caption = "GLMM: Compare Random Effects",
+                single.row = TRUE,
+                ci.test = 1)
+```
+
+
+
+### RAIS: Add Interaction
+
+
+See the [GLMM - Optimizers page](https://cehs-research.github.io/eBook_multilevel/glmm-binary-outcome-antibiotics-for-leprosy.html#glmm---optimizers) for more information on convergence problems.
+
+```{r}
+mod_glmer_rias2 <- lme4::glmer(count ~ group*I(time/4) + group*I((time/4)^2) + ( I(time/4)|id ),
+                              data = data_long,
+                              control = glmerControl(optimizer ="Nelder_Mead"),  # convergence issues resolved
+                              family = poisson(link = "log"))	
+```
+
+```{r}
+anova(mod_glmer_rias, mod_glmer_rias2)
+```
+
+
+
+### Visualize Best Model
+
+#### Model Parameter Table
+
+```{r, include=FALSE}
+texreg::screenreg(list(extract_glmer_exp(mod_glmer_rias)),
+                  single.row = TRUE,
+                  ci.test = 1)
+```
+
+
+```{r, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::htmlreg(list(extract_glmer_exp(mod_glmer_rias)),
+                caption = "GLMM: Final Model",
+                single.row = TRUE,
+                ci.test = 1)
+```
+
+
+
+#### Estimated Marginal Means
+
+```{r}
+effects::Effect(focal.predictors = c("group", "time"),
+                xlevels = list(time = 0:10),
+                mod = mod_glmer_rias) %>% 
+  data.frame %>% 
+  dplyr::select(group, time, fit) %>% 
+  tidyr::spread(key = group,
+                value = fit,
+                sep = "_")
+```
+
+#### Plot Estimated Marginal Means
+
+```{r}
+effects::Effect(focal.predictors = c("group", "time"),
+                xlevels = list(time = seq(from = 0, to = 10, by = .25)),
+                mod = mod_glmer_rias) %>% 
+  data.frame %>% 
+  ggplot(aes(x = time,
+             y = fit)) +
+  geom_ribbon(aes(ymin = fit - se,
+                  ymax = fit + se,
+                  fill = group),
+              alpha = .3) +
+  geom_line(aes(color = group)) + 
+  theme_bw() + 
+  labs(x = "Four-week Intervals",
+       y = "Estimated Populaton Mean Count",
+       color = "Dose",
+       fill = "Dose") + 
+  scale_x_continuous(breaks = 0:10)
+```
+
+
+```{r}
+data_long %>% 
+  dplyr::mutate(fit = predict(mod_glmer_rias,
+                              newdata = .,
+                              type = "response")) %>% 
+  ggplot(aes(x = time, 
+             y = fit)) +
+  geom_line(aes(group = id)) +
+  facet_grid(.~ group) +
+  theme_bw()
+```
+
