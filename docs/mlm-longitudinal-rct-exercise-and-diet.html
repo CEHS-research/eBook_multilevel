@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
-  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>11 MLM, Longitudinal: RCT - Exercise and Diet | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
+  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta property="og:title" content="11 MLM, Longitudinal: RCT - Exercise and Diet | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="EQM_v1_cover.png" />
@@ -17,24 +16,25 @@
   <meta name="github-repo" content="cehs-research/eBook_wrangle" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta name="twitter:title" content="11 MLM, Longitudinal: RCT - Exercise and Diet | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
   
   <meta name="twitter:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
   <meta name="twitter:image" content="EQM_v1_cover.png" />
 
-<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett">
+<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett" />
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
 <link rel="prev" href="mlm-longitudinal-hox-ch-5-student-gpa.html">
 <link rel="next" href="gee-continuous-outcome-beat-the-blues.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -50,41 +50,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -305,7 +330,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.7.3" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#interpretation-of-random-effects"><i class="fa fa-check"></i><b>8.7.3</b> Interpretation of Random Effects</a></li>
 <li class="chapter" data-level="8.7.4" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#assumption-checking"><i class="fa fa-check"></i><b>8.7.4</b> Assumption Checking</a></li>
 <li class="chapter" data-level="8.7.5" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#plot-of-the-estimated-marginal-means-1"><i class="fa fa-check"></i><b>8.7.5</b> Plot of the Estimated Marginal Means</a></li>
-<li class="chapter" data-level="8.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.fixed-effects"><i class="fa fa-check"></i><b>8.7.6</b> Blups vs. Fixed Effects</a></li>
+<li class="chapter" data-level="8.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.-fixed-effects"><i class="fa fa-check"></i><b>8.7.6</b> Blups vs. Fixed Effects</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html"><i class="fa fa-check"></i><b>9</b> MLM, Longitudinal: Hedeker &amp; Gibbons - Depression</a><ul>
@@ -331,7 +356,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.4.5" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#intra-individual-correlation-icc"><i class="fa fa-check"></i><b>9.4.5</b> Intra-individual Correlation (ICC)</a></li>
 <li class="chapter" data-level="9.4.6" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#compare-to-the-single-level-null-no-random-effects"><i class="fa fa-check"></i><b>9.4.6</b> Compare to the Single-Level Null: No Random Effects</a></li>
 </ul></li>
-<li class="chapter" data-level="9.5" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#mlm-add-random-slope-for-time-i.e.trend"><i class="fa fa-check"></i><b>9.5</b> MLM: Add Random Slope for Time (i.e. Trend)</a><ul>
+<li class="chapter" data-level="9.5" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#mlm-add-random-slope-for-time-i.e.-trend"><i class="fa fa-check"></i><b>9.5</b> MLM: Add Random Slope for Time (i.e. Trend)</a><ul>
 <li class="chapter" data-level="9.5.1" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#fit-the-model-14"><i class="fa fa-check"></i><b>9.5.1</b> Fit the Model</a></li>
 <li class="chapter" data-level="9.5.2" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#table-of-prameter-estimates-1"><i class="fa fa-check"></i><b>9.5.2</b> Table of Prameter Estimates</a></li>
 <li class="chapter" data-level="9.5.3" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#likelihood-ratio-test"><i class="fa fa-check"></i><b>9.5.3</b> Likelihood Ratio Test</a></li>
@@ -593,23 +618,23 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="mlm-longitudinal-rct---exercise-and-diet" class="section level1">
 <h1><span class="header-section-number">11</span> MLM, Longitudinal: RCT - Exercise and Diet</h1>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
-<span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span>
-<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
-<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
-<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
-<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
-<span class="kw">library</span>(sjPlot)       <span class="co"># Visualization for Models</span>
-<span class="kw">library</span>(effects)      <span class="co"># Effec displays for Models</span>
-
-<span class="kw">library</span>(lme4)         <span class="co"># non-linear mixed-effects models</span></code></pre></div>
+<div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb568-1" title="1"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></a>
+<a class="sourceLine" id="cb568-2" title="2"><span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span></a>
+<a class="sourceLine" id="cb568-3" title="3"><span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></a>
+<a class="sourceLine" id="cb568-4" title="4"><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></a>
+<a class="sourceLine" id="cb568-5" title="5"><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></a>
+<a class="sourceLine" id="cb568-6" title="6"><span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span></a>
+<a class="sourceLine" id="cb568-7" title="7"><span class="kw">library</span>(sjPlot)       <span class="co"># Visualization for Models</span></a>
+<a class="sourceLine" id="cb568-8" title="8"><span class="kw">library</span>(effects)      <span class="co"># Effec displays for Models</span></a>
+<a class="sourceLine" id="cb568-9" title="9"></a>
+<a class="sourceLine" id="cb568-10" title="10"><span class="kw">library</span>(lme4)         <span class="co"># non-linear mixed-effects models</span></a></code></pre></div>
 <div id="the-dataset" class="section level2">
 <h2><span class="header-section-number">11.1</span> The dataset</h2>
 <p>This comes from a <strong>Randomized Controled Trial</strong>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/data/master/MLM/exercise_diet.txt&quot;</span>,
-                  <span class="dt">header =</span> <span class="ot">TRUE</span>, 
-                  <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw)</code></pre></div>
+<div class="sourceCode" id="cb569"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb569-1" title="1">data_raw &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/data/master/MLM/exercise_diet.txt&quot;</span>,</a>
+<a class="sourceLine" id="cb569-2" title="2">                  <span class="dt">header =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb569-3" title="3">                  <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb570-1" title="1">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw)</a></code></pre></div>
 <pre><code>Observations: 120
 Variables: 5
 $ id       &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5,...
@@ -617,22 +642,22 @@ $ exertype &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
 $ diet     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
 $ pulse    &lt;int&gt; 90, 92, 93, 93, 90, 92, 93, 93, 97, 97, 94, 94, 80, 8...
 $ time     &lt;int&gt; 0, 228, 296, 639, 0, 56, 434, 538, 0, 150, 295, 541, ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> id <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">exertype =</span> exertype <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,
-                         <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;At Rest&quot;</span>,
-                                    <span class="st">&quot;Leisurely Walking&quot;</span>,
-                                    <span class="st">&quot;Moderate Running&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">diet =</span> diet <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">                  </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,
-                         <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;low-fat&quot;</span>,
-                                    <span class="st">&quot;non-fat&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">time_min =</span> time <span class="op">/</span><span class="st"> </span><span class="dv">60</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>(<span class="dt">top =</span> <span class="dv">10</span>, <span class="dt">bottom =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>(<span class="dt">caption =</span> <span class="st">&quot;Raw Data&quot;</span>)</code></pre></div>
-<table style="width:96%;">
+<div class="sourceCode" id="cb572"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb572-1" title="1">data_long &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb572-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> id <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb572-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">exertype =</span> exertype <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb572-4" title="4"><span class="st">                  </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>,</a>
+<a class="sourceLine" id="cb572-5" title="5">                         <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;At Rest&quot;</span>,</a>
+<a class="sourceLine" id="cb572-6" title="6">                                    <span class="st">&quot;Leisurely Walking&quot;</span>,</a>
+<a class="sourceLine" id="cb572-7" title="7">                                    <span class="st">&quot;Moderate Running&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb572-8" title="8"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">diet =</span> diet <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb572-9" title="9"><span class="st">                  </span><span class="kw">factor</span>(<span class="dt">levels =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb572-10" title="10">                         <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;low-fat&quot;</span>,</a>
+<a class="sourceLine" id="cb572-11" title="11">                                    <span class="st">&quot;non-fat&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb572-12" title="12"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">time_min =</span> time <span class="op">/</span><span class="st"> </span><span class="dv">60</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb573"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb573-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb573-2" title="2"><span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>(<span class="dt">top =</span> <span class="dv">10</span>, <span class="dt">bottom =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb573-3" title="3"><span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>(<span class="dt">caption =</span> <span class="st">&quot;Raw Data&quot;</span>)</a></code></pre></div>
+<table style="width:97%;">
 <caption>Raw Data</caption>
 <colgroup>
 <col width="13%" />
@@ -641,7 +666,7 @@ $ time     &lt;int&gt; 0, 228, 296, 639, 0, 56, 434, 538, 0, 150, 295, 541, ...<
 <col width="13%" />
 <col width="11%" />
 <col width="9%" />
-<col width="13%" />
+<col width="15%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -851,16 +876,16 @@ $ time     &lt;int&gt; 0, 228, 296, 639, 0, 56, 434, 538, 0, 150, 295, 541, ...<
 <h2><span class="header-section-number">11.2</span> Exploratory Data Analysis</h2>
 <div id="demographic-summary-1" class="section level3">
 <h3><span class="header-section-number">11.2.1</span> Demographic Summary</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(diet, pulse,
-                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>exertype,
-                    <span class="dt">caption =</span> <span class="st">&quot;Baseline Descriptives&quot;</span>,
-                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>,
-                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode" id="cb574"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb574-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb574-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb574-3" title="3"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(diet, pulse,</a>
+<a class="sourceLine" id="cb574-4" title="4">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>exertype,</a>
+<a class="sourceLine" id="cb574-5" title="5">                    <span class="dt">caption =</span> <span class="st">&quot;Baseline Descriptives&quot;</span>,</a>
+<a class="sourceLine" id="cb574-6" title="6">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>,</a>
+<a class="sourceLine" id="cb574-7" title="7">                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-468">Table 11.1: </span>Baseline Descriptives
+<span id="tab:unnamed-chunk-469">Table 11.1: </span>Baseline Descriptives
 </caption>
 <thead>
 <tr>
@@ -976,13 +1001,13 @@ pulse
 </div>
 <div id="baseline-summary-1" class="section level3">
 <h3><span class="header-section-number">11.2.2</span> Baseline Summary</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(exertype, diet) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(pulse)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> diet,
-                <span class="dt">value =</span> mean) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>(<span class="dt">caption =</span> <span class="st">&quot;Baseline Pulse, Means&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb575"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb575-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb575-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(time <span class="op">==</span><span class="st"> </span><span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb575-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(exertype, diet) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb575-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">mean =</span> <span class="kw">mean</span>(pulse)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb575-5" title="5"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> diet,</a>
+<a class="sourceLine" id="cb575-6" title="6">                <span class="dt">value =</span> mean) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb575-7" title="7"><span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>(<span class="dt">caption =</span> <span class="st">&quot;Baseline Pulse, Means&quot;</span>)</a></code></pre></div>
 <table style="width:56%;">
 <caption>Baseline Pulse, Means</caption>
 <colgroup>
@@ -1020,36 +1045,36 @@ pulse
 <h3><span class="header-section-number">11.2.3</span> Raw Trajectories - Person Profile Plot</h3>
 <div id="connect-the-dots" class="section level4">
 <h4><span class="header-section-number">11.2.3.1</span> Connect the dots</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,
-             <span class="dt">y =</span> pulse)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_grid</span>(diet <span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-470-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb576"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb576-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb576-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,</a>
+<a class="sourceLine" id="cb576-3" title="3">             <span class="dt">y =</span> pulse)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb576-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb576-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb576-6" title="6"><span class="st">  </span><span class="kw">facet_grid</span>(diet <span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span></a>
+<a class="sourceLine" id="cb576-7" title="7"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-471-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="loess---moving-average-smoothers" class="section level4">
 <h4><span class="header-section-number">11.2.3.2</span> Loess - Moving Average Smoothers</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,
-             <span class="dt">y =</span> pulse,
-             <span class="dt">color =</span> diet)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,
-              <span class="dt">se =</span> <span class="ot">FALSE</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>,
-              <span class="dt">span =</span> <span class="dv">5</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.08</span>, <span class="fl">0.85</span>),
-        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Pulse (Beats per Minute)&quot;</span>,
-       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-471-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb577"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb577-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb577-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,</a>
+<a class="sourceLine" id="cb577-3" title="3">             <span class="dt">y =</span> pulse,</a>
+<a class="sourceLine" id="cb577-4" title="4">             <span class="dt">color =</span> diet)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb577-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb577-6" title="6"><span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span></a>
+<a class="sourceLine" id="cb577-7" title="7"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb577-8" title="8"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,</a>
+<a class="sourceLine" id="cb577-9" title="9">              <span class="dt">se =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb577-10" title="10">              <span class="dt">size =</span> <span class="dv">2</span>,</a>
+<a class="sourceLine" id="cb577-11" title="11">              <span class="dt">span =</span> <span class="dv">5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb577-12" title="12"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.08</span>, <span class="fl">0.85</span>),</a>
+<a class="sourceLine" id="cb577-13" title="13">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb577-14" title="14"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,</a>
+<a class="sourceLine" id="cb577-15" title="15">       <span class="dt">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,</a>
+<a class="sourceLine" id="cb577-16" title="16">       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,</a>
+<a class="sourceLine" id="cb577-17" title="17">       <span class="dt">y =</span> <span class="st">&quot;Pulse (Beats per Minute)&quot;</span>,</a>
+<a class="sourceLine" id="cb577-18" title="18">       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-472-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1057,10 +1082,10 @@ pulse
 <h2><span class="header-section-number">11.3</span> Multilevel Modeling</h2>
 <div id="null-model-1" class="section level3">
 <h3><span class="header-section-number">11.3.1</span> Null Model</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_0re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
-                           <span class="dt">data =</span> data_long)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(fit_lmer_0re)</code></pre></div>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<div class="sourceCode" id="cb578"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb578-1" title="1">fit_lmer_0re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),</a>
+<a class="sourceLine" id="cb578-2" title="2">                           <span class="dt">data =</span> data_long)</a></code></pre></div>
+<div class="sourceCode" id="cb579"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb579-1" title="1">texreg<span class="op">::</span><span class="kw">htmlreg</span>(fit_lmer_0re)</a></code></pre></div>
+&lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">
 Statistical models
@@ -1153,54 +1178,51 @@ Var: Residual
 </div>
 <div id="icc" class="section level3">
 <h3><span class="header-section-number">11.3.2</span> ICC</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjstats<span class="op">::</span><span class="kw">icc</span>(fit_lmer_0re)</code></pre></div>
-<pre><code>
-Intraclass Correlation Coefficient for Linear mixed model
+<div class="sourceCode" id="cb580"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb580-1" title="1">sjstats<span class="op">::</span><span class="kw">icc</span>(fit_lmer_0re)</a></code></pre></div>
+<pre><code># Intraclass Correlation Coefficient
 
-Family : gaussian (identity)
-Formula: pulse ~ 1 + (1 | id)
-
-  ICC (id): 0.6025</code></pre>
+     Adjusted ICC: 0.603
+  Conditional ICC: 0.603</code></pre>
 </div>
 <div id="add-fixed-effects-level-specific" class="section level3">
 <h3><span class="header-section-number">11.3.3</span> Add fixed effects: level specific</h3>
 <div id="fit-nested-models-3" class="section level4">
 <h4><span class="header-section-number">11.3.3.1</span> Fit nested models</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Null Model (random intercept only)</span>
-fit_lmer_0ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
-                           <span class="dt">data =</span> data_long,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
-
-<span class="co"># Add quadratic time</span>
-fit_lmer_1ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>time_min <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
-                           <span class="dt">data =</span> data_long,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
-
-<span class="co"># Add main effects for 2 interventions (person-specific, i.e. level-2 factors)</span>
-fit_lmer_2ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet <span class="op">+</span><span class="st"> </span>exertype <span class="op">+</span><span class="st"> </span>time_min <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
-                           <span class="dt">data =</span> data_long,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
-
-<span class="co"># Add interaction between level-2 factors</span>
-fit_lmer_3ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype <span class="op">+</span><span class="st"> </span>time_min <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
-                           <span class="dt">data =</span> data_long,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
-
-<span class="co"># Add exercise interacting with [time &amp; time-squared]</span>
-fit_lmer_4ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype <span class="op">+</span><span class="st"> </span>exertype<span class="op">*</span>time_min <span class="op">+</span><span class="st"> </span>exertype<span class="op">*</span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
-                           <span class="dt">data =</span> data_long,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
-
-<span class="co"># Add diet interacting with [time &amp; time-squared]</span>
-fit_lmer_5ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype<span class="op">*</span>time_min <span class="op">+</span><span class="st"> </span>diet<span class="op">*</span>exertype<span class="op">*</span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
-                           <span class="dt">data =</span> data_long,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_lmer_1ml, 
-                     fit_lmer_2ml, 
-                     fit_lmer_3ml, 
-                     fit_lmer_4ml, 
-                     fit_lmer_5ml))</code></pre></div>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<div class="sourceCode" id="cb582"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb582-1" title="1"><span class="co"># Null Model (random intercept only)</span></a>
+<a class="sourceLine" id="cb582-2" title="2">fit_lmer_0ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),</a>
+<a class="sourceLine" id="cb582-3" title="3">                           <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb582-4" title="4">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb582-5" title="5"></a>
+<a class="sourceLine" id="cb582-6" title="6"><span class="co"># Add quadratic time</span></a>
+<a class="sourceLine" id="cb582-7" title="7">fit_lmer_1ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>time_min <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),</a>
+<a class="sourceLine" id="cb582-8" title="8">                           <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb582-9" title="9">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb582-10" title="10"></a>
+<a class="sourceLine" id="cb582-11" title="11"><span class="co"># Add main effects for 2 interventions (person-specific, i.e. level-2 factors)</span></a>
+<a class="sourceLine" id="cb582-12" title="12">fit_lmer_2ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet <span class="op">+</span><span class="st"> </span>exertype <span class="op">+</span><span class="st"> </span>time_min <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),</a>
+<a class="sourceLine" id="cb582-13" title="13">                           <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb582-14" title="14">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb582-15" title="15"></a>
+<a class="sourceLine" id="cb582-16" title="16"><span class="co"># Add interaction between level-2 factors</span></a>
+<a class="sourceLine" id="cb582-17" title="17">fit_lmer_3ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype <span class="op">+</span><span class="st"> </span>time_min <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),</a>
+<a class="sourceLine" id="cb582-18" title="18">                           <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb582-19" title="19">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb582-20" title="20"></a>
+<a class="sourceLine" id="cb582-21" title="21"><span class="co"># Add exercise interacting with [time &amp; time-squared]</span></a>
+<a class="sourceLine" id="cb582-22" title="22">fit_lmer_4ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype <span class="op">+</span><span class="st"> </span>exertype<span class="op">*</span>time_min <span class="op">+</span><span class="st"> </span>exertype<span class="op">*</span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),</a>
+<a class="sourceLine" id="cb582-23" title="23">                           <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb582-24" title="24">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb582-25" title="25"></a>
+<a class="sourceLine" id="cb582-26" title="26"><span class="co"># Add diet interacting with [time &amp; time-squared]</span></a>
+<a class="sourceLine" id="cb582-27" title="27">fit_lmer_5ml &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype<span class="op">*</span>time_min <span class="op">+</span><span class="st"> </span>diet<span class="op">*</span>exertype<span class="op">*</span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),</a>
+<a class="sourceLine" id="cb582-28" title="28">                           <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb582-29" title="29">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb583"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb583-1" title="1">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_lmer_1ml, </a>
+<a class="sourceLine" id="cb583-2" title="2">                     fit_lmer_2ml, </a>
+<a class="sourceLine" id="cb583-3" title="3">                     fit_lmer_3ml, </a>
+<a class="sourceLine" id="cb583-4" title="4">                     fit_lmer_4ml, </a>
+<a class="sourceLine" id="cb583-5" title="5">                     fit_lmer_5ml))</a></code></pre></div>
+&lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">
 Statistical models
@@ -1988,13 +2010,13 @@ Var: Residual
 </tr>
 </table>
 </div>
-<div id="evaluate-model-fit-i.e.variable-significance" class="section level4">
+<div id="evaluate-model-fit-i.e.-variable-significance" class="section level4">
 <h4><span class="header-section-number">11.3.3.2</span> Evaluate Model Fit, i.e. variable significance</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">anova</span>(fit_lmer_1ml, 
-      fit_lmer_2ml, 
-      fit_lmer_3ml, 
-      fit_lmer_4ml, 
-      fit_lmer_5ml)</code></pre></div>
+<div class="sourceCode" id="cb584"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb584-1" title="1"><span class="kw">anova</span>(fit_lmer_1ml, </a>
+<a class="sourceLine" id="cb584-2" title="2">      fit_lmer_2ml, </a>
+<a class="sourceLine" id="cb584-3" title="3">      fit_lmer_3ml, </a>
+<a class="sourceLine" id="cb584-4" title="4">      fit_lmer_4ml, </a>
+<a class="sourceLine" id="cb584-5" title="5">      fit_lmer_5ml)</a></code></pre></div>
 <pre><code>Data: data_long
 Models:
 fit_lmer_1ml: pulse ~ time_min + I(time_min^2) + (1 | id)
@@ -2023,67 +2045,67 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <div id="final-model-4" class="section level3">
 <h3><span class="header-section-number">11.3.4</span> Final Model</h3>
 <p>Refit via REML</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit_lmer_5re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype<span class="op">*</span>time_min <span class="op">+</span><span class="st"> </span>
-<span class="st">                                   </span>diet<span class="op">*</span>exertype<span class="op">*</span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),
-                           <span class="dt">data =</span> data_long,
-                           <span class="dt">REML =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode" id="cb586"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb586-1" title="1">fit_lmer_5re &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(pulse <span class="op">~</span><span class="st"> </span>diet<span class="op">*</span>exertype<span class="op">*</span>time_min <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb586-2" title="2"><span class="st">                                   </span>diet<span class="op">*</span>exertype<span class="op">*</span><span class="kw">I</span>(time_min<span class="op">^</span><span class="dv">2</span>) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id),</a>
+<a class="sourceLine" id="cb586-3" title="3">                           <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb586-4" title="4">                           <span class="dt">REML =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <div id="visualize" class="section level4">
 <h4><span class="header-section-number">11.3.4.1</span> Visualize</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_5re,
-                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,
-                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;time_min&quot;</span>, <span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-481-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),
-                <span class="dt">mod =</span> fit_lmer_5re) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,
-             <span class="dt">y =</span> fit,
-             <span class="dt">fill =</span> diet,
-             <span class="dt">color =</span> diet)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.08</span>, <span class="fl">0.85</span>),
-        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,
-       <span class="dt">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,
-       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb587"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb587-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_5re,</a>
+<a class="sourceLine" id="cb587-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,</a>
+<a class="sourceLine" id="cb587-3" title="3">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;time_min&quot;</span>, <span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>))</a></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-482-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),
-                <span class="dt">mod =</span> fit_lmer_5re,
-                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="st">&quot;time_min&quot;</span> =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, 
-                                                <span class="dt">to   =</span> <span class="dv">12</span>, 
-                                                <span class="dt">by   =</span> <span class="fl">0.5</span>))) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">diet =</span> <span class="kw">fct_rev</span>(diet)) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># reverse the order of the levels</span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,
-             <span class="dt">y =</span> fit)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> fit <span class="op">-</span><span class="st"> </span>se,
-                  <span class="dt">ymax =</span> fit <span class="op">+</span><span class="st"> </span>se,
-                  <span class="dt">fill =</span> diet),
-              <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> diet,
-                <span class="dt">linetype =</span> diet),
-                <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.85</span>),
-        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),
-        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,
-       <span class="dt">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,
-       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>,
-       <span class="dt">linetype =</span> <span class="st">&quot;Diet Plan&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">14</span>, <span class="dt">by =</span> <span class="dv">5</span>))</code></pre></div>
+<div class="sourceCode" id="cb588"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb588-1" title="1">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),</a>
+<a class="sourceLine" id="cb588-2" title="2">                <span class="dt">mod =</span> fit_lmer_5re) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb588-3" title="3"><span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb588-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,</a>
+<a class="sourceLine" id="cb588-5" title="5">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb588-6" title="6">             <span class="dt">fill =</span> diet,</a>
+<a class="sourceLine" id="cb588-7" title="7">             <span class="dt">color =</span> diet)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb588-8" title="8"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">1.5</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb588-9" title="9"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb588-10" title="10"><span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span></a>
+<a class="sourceLine" id="cb588-11" title="11"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.08</span>, <span class="fl">0.85</span>),</a>
+<a class="sourceLine" id="cb588-12" title="12">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb588-13" title="13"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,</a>
+<a class="sourceLine" id="cb588-14" title="14">       <span class="dt">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,</a>
+<a class="sourceLine" id="cb588-15" title="15">       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,</a>
+<a class="sourceLine" id="cb588-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,</a>
+<a class="sourceLine" id="cb588-17" title="17">       <span class="dt">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,</a>
+<a class="sourceLine" id="cb588-18" title="18">       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</a></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-483-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb589"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb589-1" title="1">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),</a>
+<a class="sourceLine" id="cb589-2" title="2">                <span class="dt">mod =</span> fit_lmer_5re,</a>
+<a class="sourceLine" id="cb589-3" title="3">                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="st">&quot;time_min&quot;</span> =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, </a>
+<a class="sourceLine" id="cb589-4" title="4">                                                <span class="dt">to   =</span> <span class="dv">12</span>, </a>
+<a class="sourceLine" id="cb589-5" title="5">                                                <span class="dt">by   =</span> <span class="fl">0.5</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb589-6" title="6"><span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb589-7" title="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">diet =</span> <span class="kw">fct_rev</span>(diet)) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># reverse the order of the levels</span></a>
+<a class="sourceLine" id="cb589-8" title="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time_min,</a>
+<a class="sourceLine" id="cb589-9" title="9">             <span class="dt">y =</span> fit)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb589-10" title="10"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> fit <span class="op">-</span><span class="st"> </span>se,</a>
+<a class="sourceLine" id="cb589-11" title="11">                  <span class="dt">ymax =</span> fit <span class="op">+</span><span class="st"> </span>se,</a>
+<a class="sourceLine" id="cb589-12" title="12">                  <span class="dt">fill =</span> diet),</a>
+<a class="sourceLine" id="cb589-13" title="13">              <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb589-14" title="14"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">color =</span> diet,</a>
+<a class="sourceLine" id="cb589-15" title="15">                <span class="dt">linetype =</span> diet),</a>
+<a class="sourceLine" id="cb589-16" title="16">                <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb589-17" title="17"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb589-18" title="18"><span class="st">  </span><span class="kw">facet_grid</span>(<span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span></a>
+<a class="sourceLine" id="cb589-19" title="19"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.12</span>, <span class="fl">0.85</span>),</a>
+<a class="sourceLine" id="cb589-20" title="20">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),</a>
+<a class="sourceLine" id="cb589-21" title="21">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb589-22" title="22"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,</a>
+<a class="sourceLine" id="cb589-23" title="23">       <span class="dt">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,</a>
+<a class="sourceLine" id="cb589-24" title="24">       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,</a>
+<a class="sourceLine" id="cb589-25" title="25">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,</a>
+<a class="sourceLine" id="cb589-26" title="26">       <span class="dt">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,</a>
+<a class="sourceLine" id="cb589-27" title="27">       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>,</a>
+<a class="sourceLine" id="cb589-28" title="28">       <span class="dt">linetype =</span> <span class="st">&quot;Diet Plan&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb589-29" title="29"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb589-30" title="30"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb589-31" title="31"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">14</span>, <span class="dt">by =</span> <span class="dv">5</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-484-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -2115,7 +2137,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -2125,6 +2147,10 @@ gitbook.start({
 "size": 2
 },
 "edit": {
+"link": null,
+"text": null
+},
+"history": {
 "link": null,
 "text": null
 },
@@ -2142,8 +2168,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

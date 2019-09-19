@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
-  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>13 GEE, Binary Outcome: Respiratory Illness | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
+  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta property="og:title" content="13 GEE, Binary Outcome: Respiratory Illness | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="EQM_v1_cover.png" />
@@ -17,24 +16,25 @@
   <meta name="github-repo" content="cehs-research/eBook_wrangle" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta name="twitter:title" content="13 GEE, Binary Outcome: Respiratory Illness | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
   
   <meta name="twitter:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
   <meta name="twitter:image" content="EQM_v1_cover.png" />
 
-<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett">
+<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett" />
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
 <link rel="prev" href="gee-continuous-outcome-beat-the-blues.html">
 <link rel="next" href="gee-count-outcome-epilepsy.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -50,41 +50,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -305,7 +330,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.7.3" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#interpretation-of-random-effects"><i class="fa fa-check"></i><b>8.7.3</b> Interpretation of Random Effects</a></li>
 <li class="chapter" data-level="8.7.4" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#assumption-checking"><i class="fa fa-check"></i><b>8.7.4</b> Assumption Checking</a></li>
 <li class="chapter" data-level="8.7.5" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#plot-of-the-estimated-marginal-means-1"><i class="fa fa-check"></i><b>8.7.5</b> Plot of the Estimated Marginal Means</a></li>
-<li class="chapter" data-level="8.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.fixed-effects"><i class="fa fa-check"></i><b>8.7.6</b> Blups vs. Fixed Effects</a></li>
+<li class="chapter" data-level="8.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.-fixed-effects"><i class="fa fa-check"></i><b>8.7.6</b> Blups vs. Fixed Effects</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html"><i class="fa fa-check"></i><b>9</b> MLM, Longitudinal: Hedeker &amp; Gibbons - Depression</a><ul>
@@ -331,7 +356,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.4.5" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#intra-individual-correlation-icc"><i class="fa fa-check"></i><b>9.4.5</b> Intra-individual Correlation (ICC)</a></li>
 <li class="chapter" data-level="9.4.6" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#compare-to-the-single-level-null-no-random-effects"><i class="fa fa-check"></i><b>9.4.6</b> Compare to the Single-Level Null: No Random Effects</a></li>
 </ul></li>
-<li class="chapter" data-level="9.5" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#mlm-add-random-slope-for-time-i.e.trend"><i class="fa fa-check"></i><b>9.5</b> MLM: Add Random Slope for Time (i.e. Trend)</a><ul>
+<li class="chapter" data-level="9.5" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#mlm-add-random-slope-for-time-i.e.-trend"><i class="fa fa-check"></i><b>9.5</b> MLM: Add Random Slope for Time (i.e. Trend)</a><ul>
 <li class="chapter" data-level="9.5.1" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#fit-the-model-14"><i class="fa fa-check"></i><b>9.5.1</b> Fit the Model</a></li>
 <li class="chapter" data-level="9.5.2" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#table-of-prameter-estimates-1"><i class="fa fa-check"></i><b>9.5.2</b> Table of Prameter Estimates</a></li>
 <li class="chapter" data-level="9.5.3" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#likelihood-ratio-test"><i class="fa fa-check"></i><b>9.5.3</b> Likelihood Ratio Test</a></li>
@@ -597,29 +622,29 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">13.1</span> Packages</h2>
 <div id="cran" class="section level3">
 <h3><span class="header-section-number">13.1.1</span> CRAN</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
-<span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span>
-<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
-<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
-<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
-
-<span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span>
-
-<span class="kw">library</span>(corrplot)     <span class="co"># Vizualize correlation matrix</span>
-<span class="kw">library</span>(gee)          <span class="co"># Genderalized Estimation Equation Solver</span>
-<span class="kw">library</span>(geepack)      <span class="co"># Genderalized Estimation Equation Package </span>
-<span class="kw">library</span>(MuMIn)        <span class="co"># Multi-Model Inference (caluclate QIC)</span>
-
-<span class="kw">library</span>(HSAUR)        <span class="co"># package with the dataset</span></code></pre></div>
+<div class="sourceCode" id="cb647"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb647-1" title="1"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></a>
+<a class="sourceLine" id="cb647-2" title="2"><span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span></a>
+<a class="sourceLine" id="cb647-3" title="3"><span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></a>
+<a class="sourceLine" id="cb647-4" title="4"><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></a>
+<a class="sourceLine" id="cb647-5" title="5"><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></a>
+<a class="sourceLine" id="cb647-6" title="6"></a>
+<a class="sourceLine" id="cb647-7" title="7"><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></a>
+<a class="sourceLine" id="cb647-8" title="8"></a>
+<a class="sourceLine" id="cb647-9" title="9"><span class="kw">library</span>(corrplot)     <span class="co"># Vizualize correlation matrix</span></a>
+<a class="sourceLine" id="cb647-10" title="10"><span class="kw">library</span>(gee)          <span class="co"># Genderalized Estimation Equation Solver</span></a>
+<a class="sourceLine" id="cb647-11" title="11"><span class="kw">library</span>(geepack)      <span class="co"># Genderalized Estimation Equation Package </span></a>
+<a class="sourceLine" id="cb647-12" title="12"><span class="kw">library</span>(MuMIn)        <span class="co"># Multi-Model Inference (caluclate QIC)</span></a>
+<a class="sourceLine" id="cb647-13" title="13"></a>
+<a class="sourceLine" id="cb647-14" title="14"><span class="kw">library</span>(HSAUR)        <span class="co"># package with the dataset</span></a></code></pre></div>
 </div>
 <div id="github" class="section level3">
 <h3><span class="header-section-number">13.1.2</span> GitHub</h3>
 <p>Helper <code>extract</code> functions for exponentiating parameters form generalized regression models within a <code>texreg</code> table of model parameters.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;devtools&quot;)</span>
-<span class="co"># library(devtools)</span>
-<span class="co"># install_github(&quot;SarBearSchwartz/texreghelpr&quot;)</span>
-
-<span class="kw">library</span>(texreghelpr)</code></pre></div>
+<div class="sourceCode" id="cb648"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb648-1" title="1"><span class="co"># install.packages(&quot;devtools&quot;)</span></a>
+<a class="sourceLine" id="cb648-2" title="2"><span class="co"># library(devtools)</span></a>
+<a class="sourceLine" id="cb648-3" title="3"><span class="co"># install_github(&quot;SarBearSchwartz/texreghelpr&quot;)</span></a>
+<a class="sourceLine" id="cb648-4" title="4"></a>
+<a class="sourceLine" id="cb648-5" title="5"><span class="kw">library</span>(texreghelpr)</a></code></pre></div>
 </div>
 </div>
 <div id="prepare-and-get-to-know-the-dataset-1" class="section level2">
@@ -654,9 +679,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><code>age</code> the age of the patient</li>
 </ul></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(<span class="st">&quot;respiratory&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;HSAUR&quot;</span>)
-
-<span class="kw">str</span>(respiratory)</code></pre></div>
+<div class="sourceCode" id="cb649"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb649-1" title="1"><span class="kw">data</span>(<span class="st">&quot;respiratory&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;HSAUR&quot;</span>)</a>
+<a class="sourceLine" id="cb649-2" title="2"></a>
+<a class="sourceLine" id="cb649-3" title="3"><span class="kw">str</span>(respiratory)</a></code></pre></div>
 <pre><code>&#39;data.frame&#39;:   555 obs. of  7 variables:
  $ centre   : Factor w/ 2 levels &quot;1&quot;,&quot;2&quot;: 1 1 1 1 1 1 1 1 1 1 ...
  $ treatment: Factor w/ 2 levels &quot;placebo&quot;,&quot;treatment&quot;: 1 1 1 1 1 1 1 1 1 1 ...
@@ -665,7 +690,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
  $ status   : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 1 1 1 1 1 1 1 1 ...
  $ month    : Ord.factor w/ 5 levels &quot;0&quot;&lt;&quot;1&quot;&lt;&quot;2&quot;&lt;&quot;3&quot;&lt;..: 1 2 3 4 5 1 2 3 4 5 ...
  $ subject  : Factor w/ 111 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 1 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">headTail</span>(respiratory)</code></pre></div>
+<div class="sourceCode" id="cb651"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb651-1" title="1">psych<span class="op">::</span><span class="kw">headTail</span>(respiratory)</a></code></pre></div>
 <pre><code>    centre treatment    sex age status month subject
 1        1   placebo female  46   poor     0       1
 112      1   placebo female  46   poor     1       1
@@ -679,15 +704,15 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="wide-format-2" class="section level3">
 <h3><span class="header-section-number">13.2.2</span> Wide Format</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide &lt;-<span class="st"> </span>respiratory <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> month,
-                <span class="dt">value =</span> status,
-                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="st">&quot;BL_status&quot;</span> =<span class="st"> &quot;month_0&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, sex, age, treatment, BL_status, <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>))  
-
-<span class="kw">str</span>(data_wide)</code></pre></div>
+<div class="sourceCode" id="cb653"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb653-1" title="1">data_wide &lt;-<span class="st"> </span>respiratory <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb653-2" title="2"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> month,</a>
+<a class="sourceLine" id="cb653-3" title="3">                <span class="dt">value =</span> status,</a>
+<a class="sourceLine" id="cb653-4" title="4">                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb653-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="st">&quot;BL_status&quot;</span> =<span class="st"> &quot;month_0&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb653-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb653-7" title="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, sex, age, treatment, BL_status, <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>))  </a>
+<a class="sourceLine" id="cb653-8" title="8"></a>
+<a class="sourceLine" id="cb653-9" title="9"><span class="kw">str</span>(data_wide)</a></code></pre></div>
 <pre><code>&#39;data.frame&#39;:   111 obs. of  10 variables:
  $ subject  : Factor w/ 111 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
  $ centre   : Factor w/ 2 levels &quot;1&quot;,&quot;2&quot;: 1 1 1 1 1 1 1 1 1 1 ...
@@ -699,7 +724,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
  $ month_2  : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 2 2 2 1 1 1 2 2 ...
  $ month_3  : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 2 2 2 1 2 1 2 2 ...
  $ month_4  : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 2 1 2 1 2 1 2 1 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</code></pre></div>
+<div class="sourceCode" id="cb655"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb655-1" title="1">psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</a></code></pre></div>
 <pre><code>    subject centre    sex age treatment BL_status month_1 month_2 month_3
 1         1      1 female  46   placebo      poor    poor    poor    poor
 2         2      1 female  28   placebo      poor    poor    poor    poor
@@ -723,18 +748,18 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div id="long-format-2" class="section level3">
 <h3><span class="header-section-number">13.2.3</span> Long Format</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_long &lt;-<span class="st"> </span>data_wide<span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(<span class="dt">key =</span> month,
-                <span class="dt">value =</span> status,
-                <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">str_sub</span>(month, <span class="dt">start =</span> <span class="op">-</span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">status =</span> <span class="kw">case_when</span>(status <span class="op">==</span><span class="st"> &quot;poor&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,
-                                   status <span class="op">==</span><span class="st"> &quot;good&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject, month) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, sex, age, treatment, BL_status, month, status) 
-
-
-<span class="kw">str</span>(data_long)</code></pre></div>
+<div class="sourceCode" id="cb657"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb657-1" title="1">data_long &lt;-<span class="st"> </span>data_wide<span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb657-2" title="2"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(<span class="dt">key =</span> month,</a>
+<a class="sourceLine" id="cb657-3" title="3">                <span class="dt">value =</span> status,</a>
+<a class="sourceLine" id="cb657-4" title="4">                <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb657-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">str_sub</span>(month, <span class="dt">start =</span> <span class="dv">-1</span>) <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb657-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">status =</span> <span class="kw">case_when</span>(status <span class="op">==</span><span class="st"> &quot;poor&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb657-7" title="7">                                   status <span class="op">==</span><span class="st"> &quot;good&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb657-8" title="8"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject, month) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb657-9" title="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, sex, age, treatment, BL_status, month, status) </a>
+<a class="sourceLine" id="cb657-10" title="10"></a>
+<a class="sourceLine" id="cb657-11" title="11"></a>
+<a class="sourceLine" id="cb657-12" title="12"><span class="kw">str</span>(data_long)</a></code></pre></div>
 <pre><code>&#39;data.frame&#39;:   444 obs. of  8 variables:
  $ subject  : Factor w/ 111 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 2 2 2 2 3 3 ...
  $ centre   : Factor w/ 2 levels &quot;1&quot;,&quot;2&quot;: 1 1 1 1 1 1 1 1 1 1 ...
@@ -744,7 +769,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
  $ BL_status: Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 1 1 1 1 1 1 2 2 ...
  $ month    : num  1 2 3 4 1 2 3 4 1 2 ...
  $ status   : num  0 0 0 0 0 0 0 0 1 1 ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">psych<span class="op">::</span><span class="kw">headTail</span>(data_long)</code></pre></div>
+<div class="sourceCode" id="cb659"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb659-1" title="1">psych<span class="op">::</span><span class="kw">headTail</span>(data_long)</a></code></pre></div>
 <pre><code>    subject centre    sex age treatment BL_status month status
 1         1      1 female  46   placebo      poor     1      0
 2         1      1 female  46   placebo      poor     2      0
@@ -763,10 +788,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h3><span class="header-section-number">13.3.1</span> Summary Statistics</h3>
 <div id="demographics-and-baseline-measure" class="section level4">
 <h4><span class="header-section-number">13.3.1.1</span> Demographics and Baseline Measure</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(centre, sex, age, BL_status, 
-                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>treatment,
-                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb661"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb661-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb661-2" title="2"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(centre, sex, age, BL_status, </a>
+<a class="sourceLine" id="cb661-3" title="3">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>treatment,</a>
+<a class="sourceLine" id="cb661-4" title="4">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -908,10 +933,10 @@ good
 </div>
 <div id="status-over-time" class="section level4">
 <h4><span class="header-section-number">13.3.1.2</span> Status Over Time</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_wide <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(month_<span class="dv">1</span>, month_<span class="dv">2</span>, month_<span class="dv">3</span>, month_<span class="dv">4</span>, 
-                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>treatment,
-                    <span class="dt">output =</span> <span class="st">&quot;markdown&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb662"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb662-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb662-2" title="2"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(month_<span class="dv">1</span>, month_<span class="dv">2</span>, month_<span class="dv">3</span>, month_<span class="dv">4</span>, </a>
+<a class="sourceLine" id="cb662-3" title="3">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>treatment,</a>
+<a class="sourceLine" id="cb662-4" title="4">                    <span class="dt">output =</span> <span class="st">&quot;markdown&quot;</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -988,14 +1013,14 @@ good
 </tr>
 </tbody>
 </table>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_month_trt_prop &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment, month) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(),
-                   <span class="dt">prop_good =</span> <span class="kw">mean</span>(status),
-                   <span class="dt">prop_sd =</span> <span class="kw">sd</span>(status),
-                   <span class="dt">prop_se =</span> prop_sd<span class="op">/</span>n)
-
-psych<span class="op">::</span><span class="kw">headTail</span>(data_month_trt_prop)</code></pre></div>
+<div class="sourceCode" id="cb663"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb663-1" title="1">data_month_trt_prop &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb663-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment, month) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb663-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(),</a>
+<a class="sourceLine" id="cb663-4" title="4">                   <span class="dt">prop_good =</span> <span class="kw">mean</span>(status),</a>
+<a class="sourceLine" id="cb663-5" title="5">                   <span class="dt">prop_sd =</span> <span class="kw">sd</span>(status),</a>
+<a class="sourceLine" id="cb663-6" title="6">                   <span class="dt">prop_se =</span> prop_sd<span class="op">/</span>n)</a>
+<a class="sourceLine" id="cb663-7" title="7"></a>
+<a class="sourceLine" id="cb663-8" title="8">psych<span class="op">::</span><span class="kw">headTail</span>(data_month_trt_prop)</a></code></pre></div>
 <pre><code>  treatment month   n prop_good prop_sd prop_se
 1   placebo     1  57      0.49     0.5    0.01
 2   placebo     2  57      0.39    0.49    0.01
@@ -1012,29 +1037,29 @@ psych<span class="op">::</span><span class="kw">headTail</span>(data_month_trt_p
 <h3><span class="header-section-number">13.3.2</span> Visualization</h3>
 <div id="status-over-time-1" class="section level4">
 <h4><span class="header-section-number">13.3.2.1</span> Status Over Time</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_month_trt_prop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,
-             <span class="dt">y =</span> prop_good,
-             <span class="dt">group =</span> treatment,
-             <span class="dt">color =</span> treatment)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> prop_good <span class="op">-</span><span class="st"> </span>prop_se,
-                    <span class="dt">ymax =</span> prop_good <span class="op">+</span><span class="st"> </span>prop_se),
-                <span class="dt">width =</span> .<span class="dv">25</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>()</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-529-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb665"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb665-1" title="1">data_month_trt_prop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb665-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
+<a class="sourceLine" id="cb665-3" title="3">             <span class="dt">y =</span> prop_good,</a>
+<a class="sourceLine" id="cb665-4" title="4">             <span class="dt">group =</span> treatment,</a>
+<a class="sourceLine" id="cb665-5" title="5">             <span class="dt">color =</span> treatment)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb665-6" title="6"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> prop_good <span class="op">-</span><span class="st"> </span>prop_se,</a>
+<a class="sourceLine" id="cb665-7" title="7">                    <span class="dt">ymax =</span> prop_good <span class="op">+</span><span class="st"> </span>prop_se),</a>
+<a class="sourceLine" id="cb665-8" title="8">                <span class="dt">width =</span> <span class="fl">.25</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb665-9" title="9"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb665-10" title="10"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb665-11" title="11"><span class="st">  </span><span class="kw">theme_bw</span>()</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-530-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
 <div id="logisitc-regression-glm" class="section level2">
 <h2><span class="header-section-number">13.4</span> Logisitc Regression (GLM)</h2>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span>
-<span class="st">                   </span><span class="kw">I</span>(age<span class="op">-</span><span class="dv">33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="op">-</span><span class="dv">33</span>)<span class="op">^</span><span class="dv">2</span>),
-                <span class="dt">data =</span> data_long,
-                <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))
-
-<span class="kw">summary</span>(resp_glm)</code></pre></div>
+<div class="sourceCode" id="cb666"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb666-1" title="1">resp_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb666-2" title="2"><span class="st">                   </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb666-3" title="3">                <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb666-4" title="4">                <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))</a>
+<a class="sourceLine" id="cb666-5" title="5"></a>
+<a class="sourceLine" id="cb666-6" title="6"><span class="kw">summary</span>(resp_glm)</a></code></pre></div>
 <pre><code>
 Call:
 glm(formula = status ~ centre + treatment + sex + BL_status + 
@@ -1064,7 +1089,7 @@ Residual deviance: 465.25  on 437  degrees of freedom
 AIC: 479.25
 
 Number of Fisher Scoring iterations: 4</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sjPlot<span class="op">::</span><span class="kw">tab_model</span>(resp_glm)</code></pre></div>
+<div class="sourceCode" id="cb668"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb668-1" title="1">sjPlot<span class="op">::</span><span class="kw">tab_model</span>(resp_glm)</a></code></pre></div>
 <table style="border-collapse:collapse; border:none;">
 <tr>
 <th style="border-top: double; text-align:center; font-style:normal; font-weight:bold; padding:0.2cm;  text-align:left; ">
@@ -1104,7 +1129,7 @@ p
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-centre 2
+centre2
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 1.71
@@ -1160,7 +1185,7 @@ good
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-I(age-33)
+I(age - 33)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 0.96
@@ -1174,7 +1199,7 @@ I(age-33)
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; ">
-I((age-33)^2)
+I((age - 33)^2)
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:center;  ">
 1.00
@@ -1196,10 +1221,10 @@ Observations
 </tr>
 <tr>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; text-align:left; padding-top:0.1cm; padding-bottom:0.1cm;">
-Cox &amp; Snell’s R<sup>2</sup> / Nagelkerke’s R<sup>2</sup>
+R<sup>2</sup> Tjur
 </td>
 <td style=" padding:0.2cm; text-align:left; vertical-align:top; padding-top:0.1cm; padding-bottom:0.1cm; text-align:left;" colspan="3">
-0.276 / 0.370
+0.293
 </td>
 </tr>
 </table>
@@ -1208,21 +1233,21 @@ Cox &amp; Snell’s R<sup>2</sup> / Nagelkerke’s R<sup>2</sup>
 <h2><span class="header-section-number">13.5</span> Generalized Estimating Equations (GEE)</h2>
 <div id="indepdendence" class="section level3">
 <h3><span class="header-section-number">13.5.1</span> Indepdendence</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_gee_in &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span>
-<span class="st">                          </span><span class="kw">I</span>(age<span class="op">-</span><span class="dv">33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="op">-</span><span class="dv">33</span>)<span class="op">^</span><span class="dv">2</span>),
-                        <span class="dt">data =</span> data_long,
-                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
-                        <span class="dt">id =</span> subject,
-                        <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>,
-                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,
-                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode" id="cb669"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb669-1" title="1">resp_gee_in &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb669-2" title="2"><span class="st">                          </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb669-3" title="3">                        <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb669-4" title="4">                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</a>
+<a class="sourceLine" id="cb669-5" title="5">                        <span class="dt">id =</span> subject,</a>
+<a class="sourceLine" id="cb669-6" title="6">                        <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>,</a>
+<a class="sourceLine" id="cb669-7" title="7">                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb669-8" title="8">                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</a></code></pre></div>
 <pre><code>       (Intercept)            centre2 treatmenttreatment 
       -1.968572485        0.534793799        1.356181372 
            sexmale      BL_statusgood        I(age - 33) 
        0.426343291        1.919340141       -0.036853528 
    I((age - 33)^2) 
        0.002516859 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(resp_gee_in)</code></pre></div>
+<div class="sourceCode" id="cb671"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb671-1" title="1"><span class="kw">summary</span>(resp_gee_in)</a></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
  gee S-function, version 4.13 modified 98/01/27 (1998) 
@@ -1275,21 +1300,21 @@ Working Correlation
 </div>
 <div id="exchangeable" class="section level3">
 <h3><span class="header-section-number">13.5.2</span> Exchangeable</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_gee_ex &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span>
-<span class="st">                          </span><span class="kw">I</span>(age<span class="op">-</span><span class="dv">33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="op">-</span><span class="dv">33</span>)<span class="op">^</span><span class="dv">2</span>),
-                        <span class="dt">data =</span> data_long,
-                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
-                        <span class="dt">id =</span> subject,
-                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,
-                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,
-                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</code></pre></div>
+<div class="sourceCode" id="cb673"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb673-1" title="1">resp_gee_ex &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb673-2" title="2"><span class="st">                          </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb673-3" title="3">                        <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb673-4" title="4">                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</a>
+<a class="sourceLine" id="cb673-5" title="5">                        <span class="dt">id =</span> subject,</a>
+<a class="sourceLine" id="cb673-6" title="6">                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</a>
+<a class="sourceLine" id="cb673-7" title="7">                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb673-8" title="8">                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</a></code></pre></div>
 <pre><code>       (Intercept)            centre2 treatmenttreatment 
       -1.968572485        0.534793799        1.356181372 
            sexmale      BL_statusgood        I(age - 33) 
        0.426343291        1.919340141       -0.036853528 
    I((age - 33)^2) 
        0.002516859 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(resp_gee_ex)</code></pre></div>
+<div class="sourceCode" id="cb675"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb675-1" title="1"><span class="kw">summary</span>(resp_gee_ex)</a></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
  gee S-function, version 4.13 modified 98/01/27 (1998) 
@@ -1344,19 +1369,19 @@ Working Correlation
 <p>The GEE models display the robus (sandwhich) standard errors.</p>
 <div id="raw-estimates-logit-scale" class="section level4">
 <h4><span class="header-section-number">13.5.3.1</span> Raw Estimates (Logit Scale)</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
-<span class="co"># Knit to PDF:     texreg::texreg()</span>
-<span class="co"># View on Screen:  texreg::screenreg()</span>
-
-texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(resp_glm, 
-                     resp_gee_in, 
-                     resp_gee_ex),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, 
-                                       <span class="st">&quot;GEE-INDEP&quot;</span>, 
-                                       <span class="st">&quot;GEE-EXCH&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Logit Scale&quot;</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<div class="sourceCode" id="cb677"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb677-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
+<a class="sourceLine" id="cb677-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
+<a class="sourceLine" id="cb677-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
+<a class="sourceLine" id="cb677-4" title="4"></a>
+<a class="sourceLine" id="cb677-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(resp_glm, </a>
+<a class="sourceLine" id="cb677-6" title="6">                     resp_gee_in, </a>
+<a class="sourceLine" id="cb677-7" title="7">                     resp_gee_ex),</a>
+<a class="sourceLine" id="cb677-8" title="8">                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, </a>
+<a class="sourceLine" id="cb677-9" title="9">                                       <span class="st">&quot;GEE-INDEP&quot;</span>, </a>
+<a class="sourceLine" id="cb677-10" title="10">                                       <span class="st">&quot;GEE-EXCH&quot;</span>),</a>
+<a class="sourceLine" id="cb677-11" title="11">                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Logit Scale&quot;</span>,</a>
+<a class="sourceLine" id="cb677-12" title="12">                <span class="dt">digits =</span> <span class="dv">4</span>)</a></code></pre></div>
+&lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">
 Estimates on Logit Scale
@@ -1649,20 +1674,20 @@ Dispersion
 </div>
 <div id="exponentiate-the-estimates-odds-ratio-scale" class="section level4">
 <h4><span class="header-section-number">13.5.3.2</span> Exponentiate the Estimates (odds ratio scale)</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
-<span class="co"># Knit to PDF:     texreg::texreg()</span>
-<span class="co"># View on Screen:  texreg::screenreg()</span>
-
-texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(resp_glm), 
-                     <span class="kw">extract_gee_exp</span>(resp_gee_in), 
-                     <span class="kw">extract_gee_exp</span>(resp_gee_ex)),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, 
-                                       <span class="st">&quot;GEE-INDEP&quot;</span>, 
-                                       <span class="st">&quot;GEE-EXCH&quot;</span>),
-                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Odds-Ratio Scale&quot;</span>,
-                <span class="dt">ci.test =</span> <span class="dv">1</span>,
-                <span class="dt">digits =</span> <span class="dv">4</span>)</code></pre></div>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<div class="sourceCode" id="cb678"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb678-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
+<a class="sourceLine" id="cb678-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
+<a class="sourceLine" id="cb678-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
+<a class="sourceLine" id="cb678-4" title="4"></a>
+<a class="sourceLine" id="cb678-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(resp_glm), </a>
+<a class="sourceLine" id="cb678-6" title="6">                     <span class="kw">extract_gee_exp</span>(resp_gee_in), </a>
+<a class="sourceLine" id="cb678-7" title="7">                     <span class="kw">extract_gee_exp</span>(resp_gee_ex)),</a>
+<a class="sourceLine" id="cb678-8" title="8">                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, </a>
+<a class="sourceLine" id="cb678-9" title="9">                                       <span class="st">&quot;GEE-INDEP&quot;</span>, </a>
+<a class="sourceLine" id="cb678-10" title="10">                                       <span class="st">&quot;GEE-EXCH&quot;</span>),</a>
+<a class="sourceLine" id="cb678-11" title="11">                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Odds-Ratio Scale&quot;</span>,</a>
+<a class="sourceLine" id="cb678-12" title="12">                <span class="dt">ci.test =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb678-13" title="13">                <span class="dt">digits =</span> <span class="dv">4</span>)</a></code></pre></div>
+&lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">
 Estimates on Odds-Ratio Scale
@@ -1954,37 +1979,37 @@ Dispersion
 </div>
 <div id="manual-extraction" class="section level4">
 <h4><span class="header-section-number">13.5.3.3</span> Manual Extraction</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_gee_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</code></pre></div>
+<div class="sourceCode" id="cb679"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb679-1" title="1">resp_gee_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</a></code></pre></div>
 <pre><code>       (Intercept)            centre2 treatmenttreatment 
          0.1396561          1.7070962          3.8813436 
            sexmale      BL_statusgood        I(age - 33) 
          1.5316465          6.8164591          0.9638173 
    I((age - 33)^2) 
          1.0025200 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trt_EST &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Estimate&quot;</span>] 
-trt_EST</code></pre></div>
+<div class="sourceCode" id="cb681"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb681-1" title="1">trt_EST &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Estimate&quot;</span>] </a>
+<a class="sourceLine" id="cb681-2" title="2">trt_EST</a></code></pre></div>
 <pre><code>[1] 1.356181</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exp</span>(trt_EST)</code></pre></div>
+<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb683-1" title="1"><span class="kw">exp</span>(trt_EST)</a></code></pre></div>
 <pre><code>[1] 3.881344</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">Trt_SE &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Robust S.E.&quot;</span>] 
-Trt_SE</code></pre></div>
+<div class="sourceCode" id="cb685"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb685-1" title="1">Trt_SE &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Robust S.E.&quot;</span>] </a>
+<a class="sourceLine" id="cb685-2" title="2">Trt_SE</a></code></pre></div>
 <pre><code>[1] 0.3777999</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">trt_95ci &lt;-<span class="st"> </span>trt_EST <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="op">+</span><span class="dv">1</span>)<span class="op">*</span><span class="fl">1.96</span><span class="op">*</span>Trt_SE
-trt_95ci</code></pre></div>
+<div class="sourceCode" id="cb687"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb687-1" title="1">trt_95ci &lt;-<span class="st"> </span>trt_EST <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="op">+</span><span class="dv">1</span>)<span class="op">*</span><span class="fl">1.96</span><span class="op">*</span>Trt_SE</a>
+<a class="sourceLine" id="cb687-2" title="2">trt_95ci</a></code></pre></div>
 <pre><code>[1] 0.6156936 2.0966692</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">exp</span>(trt_95ci)</code></pre></div>
+<div class="sourceCode" id="cb689"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb689-1" title="1"><span class="kw">exp</span>(trt_95ci)</a></code></pre></div>
 <pre><code>[1] 1.850940 8.139015</code></pre>
 </div>
 </div>
 <div id="refit-with-the-geepack-package" class="section level3">
 <h3><span class="header-section-number">13.5.4</span> Refit with the <code>geepack</code> package</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_geeglm_ex &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="op">-</span><span class="dv">33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="op">-</span><span class="dv">33</span>)<span class="op">^</span><span class="dv">2</span>),
-                        <span class="dt">data =</span> data_long,
-                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),
-                        <span class="dt">id =</span> subject,
-                        <span class="dt">waves =</span> month,
-                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(resp_geeglm_ex)</code></pre></div>
+<div class="sourceCode" id="cb691"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb691-1" title="1">resp_geeglm_ex &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb691-2" title="2">                        <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb691-3" title="3">                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</a>
+<a class="sourceLine" id="cb691-4" title="4">                        <span class="dt">id =</span> subject,</a>
+<a class="sourceLine" id="cb691-5" title="5">                        <span class="dt">waves =</span> month,</a>
+<a class="sourceLine" id="cb691-6" title="6">                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb692"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb692-1" title="1"><span class="kw">summary</span>(resp_geeglm_ex)</a></code></pre></div>
 <pre><code>
 Call:
 geepack::geeglm(formula = status ~ centre + treatment + sex + 
@@ -2013,7 +2038,7 @@ Estimated Correlation Parameters:
       Estimate Std.err
 alpha   0.3119  0.1515
 Number of clusters:   111   Maximum cluster size: 4 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">resp_geeglm_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</code></pre></div>
+<div class="sourceCode" id="cb694"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb694-1" title="1">resp_geeglm_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</a></code></pre></div>
 <pre><code>       (Intercept)            centre2 treatmenttreatment 
             0.1397             1.7071             3.8813 
            sexmale      BL_statusgood        I(age - 33) 
@@ -2025,7 +2050,7 @@ Number of clusters:   111   Maximum cluster size: 4 </code></pre>
 <h3><span class="header-section-number">13.5.5</span> Visualize the Model</h3>
 <div id="range-of-data-values" class="section level4">
 <h4><span class="header-section-number">13.5.5.1</span> Range of Data Values</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(data_long)</code></pre></div>
+<div class="sourceCode" id="cb696"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb696-1" title="1"><span class="kw">summary</span>(data_long)</a></code></pre></div>
 <pre><code>    subject    centre      sex           age           treatment  
  1      :  4   1:224   female:352   Min.   :11.0   placebo  :228  
  2      :  4   2:220   male  : 92   1st Qu.:23.0   treatment:216  
@@ -2045,42 +2070,42 @@ Number of clusters:   111   Maximum cluster size: 4 </code></pre>
 </div>
 <div id="females-in-center-1" class="section level4">
 <h4><span class="header-section-number">13.5.5.2</span> Females in Center 1</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,
-            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),
-            <span class="dt">sex =</span> <span class="st">&quot;female&quot;</span>,
-            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),
-            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,
-                              <span class="dt">newdata =</span> .,
-                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,
-             <span class="dt">y =</span> fit,
-             <span class="dt">linetype =</span> treatment)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,
-       <span class="dt">title =</span> <span class="st">&quot;For Females at Center 1, by Baseline Status&quot;</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-546-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;2&quot;</span>,
-            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),
-            <span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,
-            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),
-            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,
-                              <span class="dt">newdata =</span> .,
-                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,
-             <span class="dt">y =</span> fit,
-             <span class="dt">linetype =</span> treatment)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,
-       <span class="dt">title =</span> <span class="st">&quot;For Males at Center 2, by Baseline Status&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb698"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb698-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,</a>
+<a class="sourceLine" id="cb698-2" title="2">            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</a>
+<a class="sourceLine" id="cb698-3" title="3">            <span class="dt">sex =</span> <span class="st">&quot;female&quot;</span>,</a>
+<a class="sourceLine" id="cb698-4" title="4">            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb698-5" title="5">            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb698-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</a>
+<a class="sourceLine" id="cb698-7" title="7">                              <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb698-8" title="8">                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb698-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb698-10" title="10">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb698-11" title="11">             <span class="dt">linetype =</span> treatment)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb698-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb698-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb698-14" title="14"><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span></a>
+<a class="sourceLine" id="cb698-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,</a>
+<a class="sourceLine" id="cb698-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</a>
+<a class="sourceLine" id="cb698-17" title="17">       <span class="dt">title =</span> <span class="st">&quot;For Females at Center 1, by Baseline Status&quot;</span>)</a></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-547-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb699"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb699-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;2&quot;</span>,</a>
+<a class="sourceLine" id="cb699-2" title="2">            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</a>
+<a class="sourceLine" id="cb699-3" title="3">            <span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,</a>
+<a class="sourceLine" id="cb699-4" title="4">            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb699-5" title="5">            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb699-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</a>
+<a class="sourceLine" id="cb699-7" title="7">                              <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb699-8" title="8">                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb699-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb699-10" title="10">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb699-11" title="11">             <span class="dt">linetype =</span> treatment)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb699-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb699-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb699-14" title="14"><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span></a>
+<a class="sourceLine" id="cb699-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,</a>
+<a class="sourceLine" id="cb699-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</a>
+<a class="sourceLine" id="cb699-17" title="17">       <span class="dt">title =</span> <span class="st">&quot;For Males at Center 2, by Baseline Status&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-548-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -2112,7 +2137,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -2122,6 +2147,10 @@ gitbook.start({
 "size": 2
 },
 "edit": {
+"link": null,
+"text": null
+},
+"history": {
 "link": null,
 "text": null
 },
@@ -2139,8 +2168,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

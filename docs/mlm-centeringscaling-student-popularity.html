@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html >
-
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
 <head>
 
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
-  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs.">
-  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>5 MLM, Centering/Scaling: Student Popularity | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
+  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta property="og:title" content="5 MLM, Centering/Scaling: Student Popularity | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
   <meta property="og:type" content="book" />
   
   <meta property="og:image" content="EQM_v1_cover.png" />
@@ -17,24 +16,25 @@
   <meta name="github-repo" content="cehs-research/eBook_wrangle" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta name="twitter:title" content="5 MLM, Centering/Scaling: Student Popularity | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
   
   <meta name="twitter:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
   <meta name="twitter:image" content="EQM_v1_cover.png" />
 
-<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett">
+<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett" />
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
 <link rel="prev" href="mlm-centeringscaling-reading-achievement-2-levels-only.html">
 <link rel="next" href="variance-explained.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
@@ -50,41 +50,66 @@
 
 
 <style type="text/css">
-div.sourceCode { overflow-x: auto; }
-table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-  margin: 0; padding: 0; vertical-align: baseline; border: none; }
-table.sourceCode { width: 100%; line-height: 100%; }
-td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-td.sourceCode { padding-left: 5px; }
-code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code > span.dt { color: #902000; } /* DataType */
-code > span.dv { color: #40a070; } /* DecVal */
-code > span.bn { color: #40a070; } /* BaseN */
-code > span.fl { color: #40a070; } /* Float */
-code > span.ch { color: #4070a0; } /* Char */
-code > span.st { color: #4070a0; } /* String */
-code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code > span.ot { color: #007020; } /* Other */
-code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code > span.fu { color: #06287e; } /* Function */
-code > span.er { color: #ff0000; font-weight: bold; } /* Error */
-code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-code > span.cn { color: #880000; } /* Constant */
-code > span.sc { color: #4070a0; } /* SpecialChar */
-code > span.vs { color: #4070a0; } /* VerbatimString */
-code > span.ss { color: #bb6688; } /* SpecialString */
-code > span.im { } /* Import */
-code > span.va { color: #19177c; } /* Variable */
-code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code > span.op { color: #666666; } /* Operator */
-code > span.bu { } /* BuiltIn */
-code > span.ex { } /* Extension */
-code > span.pp { color: #bc7a00; } /* Preprocessor */
-code > span.at { color: #7d9029; } /* Attribute */
-code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <link rel="stylesheet" href="style.css" type="text/css" />
@@ -305,7 +330,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="8.7.3" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#interpretation-of-random-effects"><i class="fa fa-check"></i><b>8.7.3</b> Interpretation of Random Effects</a></li>
 <li class="chapter" data-level="8.7.4" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#assumption-checking"><i class="fa fa-check"></i><b>8.7.4</b> Assumption Checking</a></li>
 <li class="chapter" data-level="8.7.5" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#plot-of-the-estimated-marginal-means-1"><i class="fa fa-check"></i><b>8.7.5</b> Plot of the Estimated Marginal Means</a></li>
-<li class="chapter" data-level="8.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.fixed-effects"><i class="fa fa-check"></i><b>8.7.6</b> Blups vs. Fixed Effects</a></li>
+<li class="chapter" data-level="8.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.-fixed-effects"><i class="fa fa-check"></i><b>8.7.6</b> Blups vs. Fixed Effects</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html"><i class="fa fa-check"></i><b>9</b> MLM, Longitudinal: Hedeker &amp; Gibbons - Depression</a><ul>
@@ -331,7 +356,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li class="chapter" data-level="9.4.5" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#intra-individual-correlation-icc"><i class="fa fa-check"></i><b>9.4.5</b> Intra-individual Correlation (ICC)</a></li>
 <li class="chapter" data-level="9.4.6" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#compare-to-the-single-level-null-no-random-effects"><i class="fa fa-check"></i><b>9.4.6</b> Compare to the Single-Level Null: No Random Effects</a></li>
 </ul></li>
-<li class="chapter" data-level="9.5" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#mlm-add-random-slope-for-time-i.e.trend"><i class="fa fa-check"></i><b>9.5</b> MLM: Add Random Slope for Time (i.e. Trend)</a><ul>
+<li class="chapter" data-level="9.5" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#mlm-add-random-slope-for-time-i.e.-trend"><i class="fa fa-check"></i><b>9.5</b> MLM: Add Random Slope for Time (i.e. Trend)</a><ul>
 <li class="chapter" data-level="9.5.1" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#fit-the-model-14"><i class="fa fa-check"></i><b>9.5.1</b> Fit the Model</a></li>
 <li class="chapter" data-level="9.5.2" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#table-of-prameter-estimates-1"><i class="fa fa-check"></i><b>9.5.2</b> Table of Prameter Estimates</a></li>
 <li class="chapter" data-level="9.5.3" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html#likelihood-ratio-test"><i class="fa fa-check"></i><b>9.5.3</b> Likelihood Ratio Test</a></li>
@@ -593,22 +618,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
             <section class="normal" id="section-">
 <div id="mlm-centeringscaling-student-popularity" class="section level1">
 <h1><span class="header-section-number">5</span> MLM, Centering/Scaling: Student Popularity</h1>
-<div class="figure">
-<img src="images/header_hox_popular2.png" />
-
-</div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span>
-<span class="kw">library</span>(broom)        <span class="co"># converst stats objestcs to tidy tibbles</span>
-<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span>
-<span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span>
-<span class="kw">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span>
-<span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span>
-<span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span>
-<span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span>
-
-<span class="kw">library</span>(lme4)         <span class="co"># non-linear mixed-effects models</span>
-
-<span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span></code></pre></div>
+<p><img src="images/header_hox_popular2.png" /></p>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb271-1" title="1"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></a>
+<a class="sourceLine" id="cb271-2" title="2"><span class="kw">library</span>(broom)        <span class="co"># converst stats objestcs to tidy tibbles</span></a>
+<a class="sourceLine" id="cb271-3" title="3"><span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span></a>
+<a class="sourceLine" id="cb271-4" title="4"><span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></a>
+<a class="sourceLine" id="cb271-5" title="5"><span class="kw">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span></a>
+<a class="sourceLine" id="cb271-6" title="6"><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></a>
+<a class="sourceLine" id="cb271-7" title="7"><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></a>
+<a class="sourceLine" id="cb271-8" title="8"><span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span></a>
+<a class="sourceLine" id="cb271-9" title="9"></a>
+<a class="sourceLine" id="cb271-10" title="10"><span class="kw">library</span>(lme4)         <span class="co"># non-linear mixed-effects models</span></a>
+<a class="sourceLine" id="cb271-11" title="11"></a>
+<a class="sourceLine" id="cb271-12" title="12"><span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span></a></code></pre></div>
 <div id="background-3" class="section level2">
 <h2><span class="header-section-number">5.1</span> Background</h2>
 <div class="rmdlink">
@@ -621,20 +643,17 @@ The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edit
 <p>From <strong>Appendix E</strong>:</p>
 <p>The popularity data in <strong>popular2.sav</strong> are simulated data for <strong>2000 pupils in 100 schools</strong>. The purpose is to offer a very simple example for multilevel regression analysis. The main outcome variable is the <strong>pupil popularity</strong>, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil. Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: <strong>pupil popularity</strong> as rated by their teacher, on a scale from 1-10. The explanatory variables are <strong>pupil gender</strong> (boy=0, girl=1), <strong>pupil extraversion</strong> (10-point scale) and <strong>teacher experience</strong> in years. The popularity data have been generated to be a ‘nice’ well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.</p>
 </blockquote>
-<div class="figure">
-<img src="images/diagram_hox_popular2.png" />
-
-</div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span>
-
-data_pop &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st">   </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">paste</span>(class, pupil,
-                           <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># create a unique id for each student (char)</span>
-<span class="st">                  </span><span class="kw">factor</span>()) <span class="op">%&gt;%</span><span class="st">             </span><span class="co"># declare id is a factor</span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, pupil<span class="op">:</span>popteach)         <span class="co"># reduce the variables included</span>
-
-tibble<span class="op">::</span><span class="kw">glimpse</span>(data_pop)</code></pre></div>
+<p><img src="images/diagram_hox_popular2.png" /></p>
+<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb272-2" title="2"><span class="st">  </span>haven<span class="op">::</span><span class="kw">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span></a>
+<a class="sourceLine" id="cb272-3" title="3"></a>
+<a class="sourceLine" id="cb272-4" title="4">data_pop &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st">   </span></a>
+<a class="sourceLine" id="cb272-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> <span class="kw">paste</span>(class, pupil,</a>
+<a class="sourceLine" id="cb272-6" title="6">                           <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># create a unique id for each student (char)</span></a>
+<a class="sourceLine" id="cb272-7" title="7"><span class="st">                  </span><span class="kw">factor</span>()) <span class="op">%&gt;%</span><span class="st">             </span><span class="co"># declare id is a factor</span></a>
+<a class="sourceLine" id="cb272-8" title="8"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, pupil<span class="op">:</span>popteach)         <span class="co"># reduce the variables included</span></a>
+<a class="sourceLine" id="cb272-9" title="9"></a>
+<a class="sourceLine" id="cb272-10" title="10">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_pop)</a></code></pre></div>
 <pre><code>Observations: 2,000
 Variables: 8
 $ id       &lt;fct&gt; 1_1, 1_2, 1_3, 1_4, 1_5, 1_6, 1_7, 1_8, 1_9, 1_10, 1_...
@@ -645,34 +664,34 @@ $ sex      &lt;fct&gt; girl, boy, girl, girl, girl, boy, boy, boy, boy, boy,...
 $ texp     &lt;dbl&gt; 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 2...
 $ popular  &lt;dbl&gt; 6.3, 4.9, 5.3, 4.7, 6.0, 4.7, 5.9, 4.2, 5.2, 3.9, 5.7...
 $ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3,...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
-      <span class="dt">y =</span> popular,
-      <span class="dt">group =</span> class) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
-              <span class="dt">se =</span> <span class="ot">FALSE</span>,
-              <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,
-              <span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;OLS: Single Level Regression&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are OLS regression ran independently on each class&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-245-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb274-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb274-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb274-3" title="3"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,</a>
+<a class="sourceLine" id="cb274-4" title="4">      <span class="dt">y =</span> popular,</a>
+<a class="sourceLine" id="cb274-5" title="5">      <span class="dt">group =</span> class) <span class="op">+</span></a>
+<a class="sourceLine" id="cb274-6" title="6"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</a>
+<a class="sourceLine" id="cb274-7" title="7">              <span class="dt">se =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb274-8" title="8">              <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,</a>
+<a class="sourceLine" id="cb274-9" title="9">              <span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb274-10" title="10"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb274-11" title="11"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb274-12" title="12">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb274-13" title="13"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;OLS: Single Level Regression&quot;</span>,</a>
+<a class="sourceLine" id="cb274-14" title="14">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are OLS regression ran independently on each class&quot;</span>,</a>
+<a class="sourceLine" id="cb274-15" title="15">       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb274-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb274-17" title="17"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb274-18" title="18">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb274-19" title="19"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb274-20" title="20"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-242-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="grand-mean-centering-and-standardizing-variables" class="section level2">
 <h2><span class="header-section-number">5.2</span> Grand-Mean-Centering and Standardizing Variables</h2>
 <p>It is best to manually determine the variable’s mean (<code>mean()</code>) and standard deviation (<code>sd()</code>).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(data_pop<span class="op">$</span>extrav)</code></pre></div>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb275-1" title="1"><span class="kw">mean</span>(data_pop<span class="op">$</span>extrav)</a></code></pre></div>
 <pre><code>[1] 5.215</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sd</span>(data_pop<span class="op">$</span>extrav)</code></pre></div>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb277-1" title="1"><span class="kw">sd</span>(data_pop<span class="op">$</span>extrav)</a></code></pre></div>
 <pre><code>[1] 1.262368</code></pre>
 <div id="grand-mean-centering" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Grand-Mean-Centering</h3>
@@ -685,15 +704,15 @@ VAR_G = VAR - mean(VAR)
 <p><span class="math display">\[
 VAR_Z = \frac{VAR - mean(VAR)}{sd(VAR)}
 \]</span></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop &lt;-<span class="st"> </span>data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">extravG =</span>  extrav <span class="op">-</span><span class="st"> </span><span class="fl">5.215</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">extravZ =</span> (extrav <span class="op">-</span><span class="st"> </span><span class="fl">5.215</span>) <span class="op">/</span><span class="st"> </span><span class="fl">1.262368</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(extrav, extravG, extravZ) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>stargazer<span class="op">::</span><span class="kw">stargazer</span>(<span class="dt">title  =</span> <span class="st">&quot;Descriptive statistics: Three versions of Extraversion&quot;</span>,
-                       <span class="dt">header =</span> <span class="ot">FALSE</span>,
-                       <span class="dt">type   =</span> <span class="st">&quot;html&quot;</span>)</code></pre></div>
+<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb279-1" title="1">data_pop &lt;-<span class="st"> </span>data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb279-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">extravG =</span>  extrav <span class="op">-</span><span class="st"> </span><span class="fl">5.215</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb279-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">extravZ =</span> (extrav <span class="op">-</span><span class="st"> </span><span class="fl">5.215</span>) <span class="op">/</span><span class="st"> </span><span class="fl">1.262368</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb280-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb280-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(extrav, extravG, extravZ) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb280-3" title="3"><span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb280-4" title="4"><span class="st">  </span>stargazer<span class="op">::</span><span class="kw">stargazer</span>(<span class="dt">title  =</span> <span class="st">&quot;Descriptive statistics: Three versions of Extraversion&quot;</span>,</a>
+<a class="sourceLine" id="cb280-5" title="5">                       <span class="dt">header =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb280-6" title="6">                       <span class="dt">type   =</span> <span class="st">&quot;html&quot;</span>)</a></code></pre></div>
 <table style="text-align:center">
 <caption>
 <strong>Descriptive statistics: Three versions of Extraversion</strong>
@@ -821,31 +840,31 @@ extravZ
 <h2><span class="header-section-number">5.3</span> RI = ONLY Random Intercepts</h2>
 <div id="fit-mlm-with-all-3-versions-of-the-predictor" class="section level3">
 <h3><span class="header-section-number">5.3.1</span> Fit MLM with all 3 versions of the predictor</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_1_raw &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class),
-                           <span class="dt">data =</span> data_pop,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
-
-pop_lmer_1_cen &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravG <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class),
-                           <span class="dt">data =</span> data_pop,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
-
-pop_lmer_1_std &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravZ <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class),
-                           <span class="dt">data =</span> data_pop,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
-<span class="co"># Knit to PDF:     texreg::texreg()</span>
-<span class="co"># View on Screen:  texreg::screenreg()</span>
-
-texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_1_raw, 
-                     pop_lmer_1_cen, 
-                     pop_lmer_1_std),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Raw&quot;</span>, 
-                                       <span class="st">&quot;Centered&quot;</span>, 
-                                       <span class="st">&quot;Standardized&quot;</span>),
-                <span class="dt">caption            =</span> <span class="st">&quot;MLM - RI: Effect of Grand-Mean Centering and Standardizing&quot;</span>,
-                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb281-1" title="1">pop_lmer_<span class="dv">1</span>_raw &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class),</a>
+<a class="sourceLine" id="cb281-2" title="2">                           <span class="dt">data =</span> data_pop,</a>
+<a class="sourceLine" id="cb281-3" title="3">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb281-4" title="4"></a>
+<a class="sourceLine" id="cb281-5" title="5">pop_lmer_<span class="dv">1</span>_cen &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravG <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class),</a>
+<a class="sourceLine" id="cb281-6" title="6">                           <span class="dt">data =</span> data_pop,</a>
+<a class="sourceLine" id="cb281-7" title="7">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb281-8" title="8"></a>
+<a class="sourceLine" id="cb281-9" title="9">pop_lmer_<span class="dv">1</span>_std &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravZ <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>class),</a>
+<a class="sourceLine" id="cb281-10" title="10">                           <span class="dt">data =</span> data_pop,</a>
+<a class="sourceLine" id="cb281-11" title="11">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb282-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
+<a class="sourceLine" id="cb282-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
+<a class="sourceLine" id="cb282-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
+<a class="sourceLine" id="cb282-4" title="4"></a>
+<a class="sourceLine" id="cb282-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_<span class="dv">1</span>_raw, </a>
+<a class="sourceLine" id="cb282-6" title="6">                     pop_lmer_<span class="dv">1</span>_cen, </a>
+<a class="sourceLine" id="cb282-7" title="7">                     pop_lmer_<span class="dv">1</span>_std),</a>
+<a class="sourceLine" id="cb282-8" title="8">                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Raw&quot;</span>, </a>
+<a class="sourceLine" id="cb282-9" title="9">                                       <span class="st">&quot;Centered&quot;</span>, </a>
+<a class="sourceLine" id="cb282-10" title="10">                                       <span class="st">&quot;Standardized&quot;</span>),</a>
+<a class="sourceLine" id="cb282-11" title="11">                <span class="dt">caption            =</span> <span class="st">&quot;MLM - RI: Effect of Grand-Mean Centering and Standardizing&quot;</span>,</a>
+<a class="sourceLine" id="cb282-12" title="12">                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb282-13" title="13">                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+&lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
 MLM - RI: Effect of Grand-Mean Centering and Standardizing
@@ -1084,8 +1103,8 @@ model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or devia
 </div>
 <div id="investigating-a-mlm-ri-model" class="section level3">
 <h3><span class="header-section-number">5.3.2</span> Investigating a MLM-RI Model</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_1_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>broom<span class="op">::</span><span class="kw">tidy</span>()</code></pre></div>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb283-1" title="1">pop_lmer_<span class="dv">1</span>_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb283-2" title="2"><span class="st">  </span>broom<span class="op">::</span><span class="kw">tidy</span>()</a></code></pre></div>
 <pre><code># A tibble: 4 x 5
   term                    estimate std.error statistic group   
   &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;   
@@ -1093,138 +1112,139 @@ model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or devia
 2 extrav                     0.486    0.0201      24.1 fixed   
 3 sd_(Intercept).class       0.912   NA           NA   class   
 4 sd_Observation.Residual    0.964   NA           NA   Residual</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_1_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>broom<span class="op">::</span><span class="kw">glance</span>()</code></pre></div>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb285-1" title="1">pop_lmer_<span class="dv">1</span>_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb285-2" title="2"><span class="st">  </span>broom<span class="op">::</span><span class="kw">glance</span>()</a></code></pre></div>
 <pre><code># A tibble: 1 x 6
   sigma logLik   AIC   BIC deviance df.residual
   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
 1 0.964 -2912. 5832. 5854.    5824.        1996</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_1_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>broom<span class="op">::</span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per observation (2000 students)</span></code></pre></div>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb287-1" title="1">pop_lmer_<span class="dv">1</span>_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb287-2" title="2"><span class="st">  </span>broom<span class="op">::</span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb287-3" title="3"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per observation (2000 students)</span></a></code></pre></div>
 <pre><code>  popular extrav class  .fitted      .resid       .hat      .cooksd
-1     6.3      5     1 5.138703  1.16129692 0.04738597 2.712828e-05
-2     4.9      7     1 6.111103 -1.21110349 0.04935992 1.752270e-03
-3     5.3      4     1 4.652503  0.64749713 0.04770832 8.856823e-05
-4     4.7      3     1 4.166303  0.53369734 0.04890355 2.626814e-04
-5     6.0      5     1 5.138703  0.86129692 0.04738597 1.492250e-05
+1     6.3      5     1 5.138703  1.16129690 0.04738598 2.712824e-05
+2     4.9      7     1 6.111104 -1.21110356 0.04935992 1.752270e-03
+3     5.3      4     1 4.652503  0.64749713 0.04770832 8.856822e-05
+4     4.7      3     1 4.166303  0.53369736 0.04890355 2.626814e-04
+5     6.0      5     1 5.138703  0.86129690 0.04738598 1.492248e-05
 6     4.7      4     1 4.652503  0.04749713 0.04770832 4.765813e-07
     .fixed      .mu .offset .sqrtXwt .sqrtrwt .weights      .wtres
-1 4.973704 5.138703       0        1        1        1  1.16129692
-2 5.946104 6.111103       0        1        1        1 -1.21110349
+1 4.973704 5.138703       0        1        1        1  1.16129690
+2 5.946104 6.111104       0        1        1        1 -1.21110356
 3 4.487503 4.652503       0        1        1        1  0.64749713
-4 4.001303 4.166303       0        1        1        1  0.53369734
-5 4.973704 5.138703       0        1        1        1  0.86129692
+4 4.001303 4.166303       0        1        1        1  0.53369736
+5 4.973704 5.138703       0        1        1        1  0.86129690
 6 4.487503 4.652503       0        1        1        1  0.04749713</code></pre>
 <div id="fixed-effects-intercept-and-slope" class="section level4">
 <h4><span class="header-section-number">5.3.2.1</span> Fixed Effects: intercept and slope</h4>
 <p>There is only ONE fixed intercept and ONE fixed slope.</p>
 <p>The <code>fixef()</code> function extracts the estimates of the fixed effects.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_1_raw) </code></pre></div>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb289-1" title="1"><span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw) </a></code></pre></div>
 <pre><code>(Intercept)      extrav 
-  2.5427027   0.4862002 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]</code></pre></div>
+  2.5427025   0.4862002 </code></pre>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb291-1" title="1"><span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]</a></code></pre></div>
 <pre><code>[1] 2.542703</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;extrav&quot;</span>]]</code></pre></div>
+<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb293-1" title="1"><span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;extrav&quot;</span>]]</a></code></pre></div>
 <pre><code>[1] 0.4862002</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
-      <span class="dt">y =</span> popular,
-      <span class="dt">group =</span> class) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
-              <span class="dt">se =</span> <span class="ot">FALSE</span>,
-              <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,
-              <span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;extrav&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = raw score&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are OLS regression ran independently on each class&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-260-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb295-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb295-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb295-3" title="3"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,</a>
+<a class="sourceLine" id="cb295-4" title="4">      <span class="dt">y =</span> popular,</a>
+<a class="sourceLine" id="cb295-5" title="5">      <span class="dt">group =</span> class) <span class="op">+</span></a>
+<a class="sourceLine" id="cb295-6" title="6"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</a>
+<a class="sourceLine" id="cb295-7" title="7">              <span class="dt">se =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb295-8" title="8">              <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,</a>
+<a class="sourceLine" id="cb295-9" title="9">              <span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb295-10" title="10"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb295-11" title="11">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;extrav&quot;</span>]],</a>
+<a class="sourceLine" id="cb295-12" title="12">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb295-13" title="13">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb295-14" title="14"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb295-15" title="15"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb295-16" title="16">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb295-17" title="17"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = raw score&quot;</span>,</a>
+<a class="sourceLine" id="cb295-18" title="18">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are OLS regression ran independently on each class&quot;</span>,</a>
+<a class="sourceLine" id="cb295-19" title="19">       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb295-20" title="20">       <span class="dt">y =</span> <span class="st">&quot;Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb295-21" title="21"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb295-22" title="22">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb295-23" title="23"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb295-24" title="24"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-257-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="random-effects-intercepts" class="section level4">
 <h4><span class="header-section-number">5.3.2.2</span> Random Effects: intercepts</h4>
 <p>There is a different random intercept for EACH CLASS. These tell how far each class’s average is off of the grand average.</p>
 <p>The <code>ranef()</code> function extracts the random effects from a fitted model object</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb296-1" title="1"><span class="kw">ranef</span>(pop_lmer_<span class="dv">1</span>_raw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb296-2" title="2"><span class="st">  </span><span class="kw">str</span>()</a></code></pre></div>
 <pre><code>List of 1
  $ class:&#39;data.frame&#39;:  100 obs. of  1 variable:
   ..$ (Intercept): num [1:100] 0.165 -0.7536 -0.3646 0.5405 -0.0994 ...
+  ..- attr(*, &quot;postVar&quot;)= num [1, 1, 1:100] 0.044 0.044 0.0486 0.0386 0.042 ...
  - attr(*, &quot;class&quot;)= chr &quot;ranef.mer&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></code></pre></div>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1"><span class="kw">ranef</span>(pop_lmer_<span class="dv">1</span>_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb298-2" title="2"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></a></code></pre></div>
 <pre><code>  (Intercept)
-1  0.16499938
-2 -0.75362983
-3 -0.36464658
-4  0.54049206
-5 -0.09943663
-6 -0.60487822</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Random_Intercepts =</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Random_Intercepts)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> .<span class="dv">25</span>)</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-263-1.png" width="288" style="display: block; margin: auto;" /></p>
+1  0.16499940
+2 -0.75362991
+3 -0.36464663
+4  0.54049212
+5 -0.09943666
+6 -0.60487829</code></pre>
+<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb300-1" title="1"><span class="kw">ranef</span>(pop_lmer_<span class="dv">1</span>_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb300-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Random_Intercepts =</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb300-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Random_Intercepts)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb300-4" title="4"><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="fl">.25</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-260-1.png" width="288" style="display: block; margin: auto;" /></p>
 </div>
 <div id="predictions" class="section level4">
 <h4><span class="header-section-number">5.3.2.3</span> Predictions</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb301-1" title="1"><span class="kw">predict</span>(pop_lmer_<span class="dv">1</span>_raw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb301-2" title="2"><span class="st">  </span><span class="kw">str</span>()</a></code></pre></div>
 <pre><code> Named num [1:2000] 5.14 6.11 4.65 4.17 5.14 ...
  - attr(*, &quot;names&quot;)= chr [1:2000] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle value per observation (2000 students)</span></code></pre></div>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb303-1" title="1"><span class="kw">predict</span>(pop_lmer_<span class="dv">1</span>_raw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb303-2" title="2"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle value per observation (2000 students)</span></a></code></pre></div>
 <pre><code>       1        2        3        4        5        6 
-5.138703 6.111103 4.652503 4.166303 5.138703 4.652503 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_1_raw)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> extrav,
-             <span class="dt">y =</span> pred,
-             <span class="dt">group =</span> class)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;extrav&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
-             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = raw score&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-266-1.png" width="576" style="display: block; margin: auto;" /></p>
+5.138703 6.111104 4.652503 4.166303 5.138703 4.652503 </code></pre>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb305-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb305-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_<span class="dv">1</span>_raw)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb305-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> extrav,</a>
+<a class="sourceLine" id="cb305-4" title="4">             <span class="dt">y =</span> pred,</a>
+<a class="sourceLine" id="cb305-5" title="5">             <span class="dt">group =</span> class)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb305-6" title="6"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb305-7" title="7"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb305-8" title="8">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;extrav&quot;</span>]],</a>
+<a class="sourceLine" id="cb305-9" title="9">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb305-10" title="10">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb305-11" title="11"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb305-12" title="12"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb305-13" title="13">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb305-14" title="14"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,</a>
+<a class="sourceLine" id="cb305-15" title="15">             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb305-16" title="16"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = raw score&quot;</span>,</a>
+<a class="sourceLine" id="cb305-17" title="17">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class&quot;</span>,</a>
+<a class="sourceLine" id="cb305-18" title="18">       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb305-19" title="19">       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb305-20" title="20"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb305-21" title="21">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb305-22" title="22"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb305-23" title="23"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-263-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="combined-effects" class="section level4">
 <h4><span class="header-section-number">5.3.2.4</span> Combined Effects</h4>
 <p>The <code>coef()</code> function computes the sum of the random and fixed effects coefficients for each explanatory variable for each level of each grouping factor.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb306-1" title="1"><span class="kw">coef</span>(pop_lmer_<span class="dv">1</span>_raw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb306-2" title="2"><span class="st">  </span><span class="kw">str</span>()</a></code></pre></div>
 <pre><code>List of 1
  $ class:&#39;data.frame&#39;:  100 obs. of  2 variables:
   ..$ (Intercept): num [1:100] 2.71 1.79 2.18 3.08 2.44 ...
   ..$ extrav     : num [1:100] 0.486 0.486 0.486 0.486 0.486 ...
  - attr(*, &quot;class&quot;)= chr &quot;coef.mer&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></code></pre></div>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb308-1" title="1"><span class="kw">coef</span>(pop_lmer_<span class="dv">1</span>_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb308-2" title="2"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></a></code></pre></div>
 <pre><code>  (Intercept)    extrav
 1    2.707702 0.4862002
 2    1.789073 0.4862002
@@ -1232,158 +1252,158 @@ model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or devia
 4    3.083195 0.4862002
 5    2.443266 0.4862002
 6    1.937824 0.4862002</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_1_raw)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
-      <span class="dt">y =</span> pred,
-      <span class="dt">group =</span> class) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
-                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
-                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
-                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
-            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
-            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
-              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
-                  <span class="dt">slope     =</span> extrav),
-              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
-              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;extrav&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
-             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = raw score&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) </code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-269-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb310-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb310-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_<span class="dv">1</span>_raw)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb310-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-4" title="4"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,</a>
+<a class="sourceLine" id="cb310-5" title="5">      <span class="dt">y =</span> pred,</a>
+<a class="sourceLine" id="cb310-6" title="6">      <span class="dt">group =</span> class) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-7" title="7"><span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, </a>
+<a class="sourceLine" id="cb310-8" title="8">                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb310-9" title="9">                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,</a>
+<a class="sourceLine" id="cb310-10" title="10">                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),</a>
+<a class="sourceLine" id="cb310-11" title="11">            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,</a>
+<a class="sourceLine" id="cb310-12" title="12">            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-13" title="13"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_<span class="dv">1</span>_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),</a>
+<a class="sourceLine" id="cb310-14" title="14">              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,</a>
+<a class="sourceLine" id="cb310-15" title="15">                  <span class="dt">slope     =</span> extrav),</a>
+<a class="sourceLine" id="cb310-16" title="16">              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,</a>
+<a class="sourceLine" id="cb310-17" title="17">              <span class="dt">size =</span> <span class="fl">.1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-18" title="18"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-19" title="19"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb310-20" title="20">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;extrav&quot;</span>]],</a>
+<a class="sourceLine" id="cb310-21" title="21">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb310-22" title="22">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-23" title="23"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-24" title="24"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb310-25" title="25">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-26" title="26"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,</a>
+<a class="sourceLine" id="cb310-27" title="27">             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-28" title="28"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = raw score&quot;</span>,</a>
+<a class="sourceLine" id="cb310-29" title="29">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,</a>
+<a class="sourceLine" id="cb310-30" title="30">       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb310-31" title="31">       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-32" title="32"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb310-33" title="33">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-34" title="34"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb310-35" title="35"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) </a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-266-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="comapre-the-centered-version" class="section level3">
 <h3><span class="header-section-number">5.3.3</span> Comapre the Centered Version</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_1_cen)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravG,
-      <span class="dt">y =</span> pred,
-      <span class="dt">group =</span> class) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="op">-</span><span class="fl">5.215</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
-                <span class="dt">xmax =</span> <span class="op">-</span><span class="fl">5.215</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
-                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
-                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_1_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
-            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
-            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
-                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
-                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
-                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
-            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
-            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_1_cen)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
-              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
-                  <span class="dt">slope     =</span> extravG),
-              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
-              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;extravG&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="op">-</span><span class="fl">5.215</span>,
-             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = grand-mean centered&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;GRAND-MEAN CENTERED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-270-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb311-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb311-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_<span class="dv">1</span>_cen)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb311-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-4" title="4"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravG,</a>
+<a class="sourceLine" id="cb311-5" title="5">      <span class="dt">y =</span> pred,</a>
+<a class="sourceLine" id="cb311-6" title="6">      <span class="dt">group =</span> class) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-7" title="7"><span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="fl">-5.215</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, </a>
+<a class="sourceLine" id="cb311-8" title="8">                <span class="dt">xmax =</span> <span class="fl">-5.215</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb311-9" title="9">                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,</a>
+<a class="sourceLine" id="cb311-10" title="10">                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),</a>
+<a class="sourceLine" id="cb311-11" title="11">            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,</a>
+<a class="sourceLine" id="cb311-12" title="12">            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-13" title="13"><span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, </a>
+<a class="sourceLine" id="cb311-14" title="14">                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb311-15" title="15">                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,</a>
+<a class="sourceLine" id="cb311-16" title="16">                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),</a>
+<a class="sourceLine" id="cb311-17" title="17">            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,</a>
+<a class="sourceLine" id="cb311-18" title="18">            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-19" title="19"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_<span class="dv">1</span>_cen)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),</a>
+<a class="sourceLine" id="cb311-20" title="20">              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,</a>
+<a class="sourceLine" id="cb311-21" title="21">                  <span class="dt">slope     =</span> extravG),</a>
+<a class="sourceLine" id="cb311-22" title="22">              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,</a>
+<a class="sourceLine" id="cb311-23" title="23">              <span class="dt">size =</span> <span class="fl">.1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-24" title="24"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-25" title="25"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb311-26" title="26">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_cen)[[<span class="st">&quot;extravG&quot;</span>]],</a>
+<a class="sourceLine" id="cb311-27" title="27">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb311-28" title="28">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-29" title="29"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-30" title="30"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">-5.215</span>,</a>
+<a class="sourceLine" id="cb311-31" title="31">             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-32" title="32"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb311-33" title="33">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-34" title="34"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = grand-mean centered&quot;</span>,</a>
+<a class="sourceLine" id="cb311-35" title="35">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,</a>
+<a class="sourceLine" id="cb311-36" title="36">       <span class="dt">x =</span> <span class="st">&quot;GRAND-MEAN CENTERED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb311-37" title="37">       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-38" title="38"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),</a>
+<a class="sourceLine" id="cb311-39" title="39">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-40" title="40"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">-4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb311-41" title="41"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-267-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="comapre-the-standardized-version" class="section level3">
 <h3><span class="header-section-number">5.3.4</span> Comapre the Standardized Version</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_1_std)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravZ,
-      <span class="dt">y =</span> pred,
-      <span class="dt">group =</span> class) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
-                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
-                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
-                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_1_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
-            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
-            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_1_std)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
-              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
-                  <span class="dt">slope     =</span> extravZ),
-              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
-              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_1_std)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_1_std)[[<span class="st">&quot;extravZ&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="op">-</span><span class="fl">5.215</span>,
-             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = standardized&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;STANDARDIZED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-271-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb312-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb312-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_<span class="dv">1</span>_std)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb312-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-4" title="4"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravZ,</a>
+<a class="sourceLine" id="cb312-5" title="5">      <span class="dt">y =</span> pred,</a>
+<a class="sourceLine" id="cb312-6" title="6">      <span class="dt">group =</span> class) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-7" title="7"><span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, </a>
+<a class="sourceLine" id="cb312-8" title="8">                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb312-9" title="9">                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,</a>
+<a class="sourceLine" id="cb312-10" title="10">                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),</a>
+<a class="sourceLine" id="cb312-11" title="11">            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,</a>
+<a class="sourceLine" id="cb312-12" title="12">            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-13" title="13"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_<span class="dv">1</span>_std)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),</a>
+<a class="sourceLine" id="cb312-14" title="14">              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,</a>
+<a class="sourceLine" id="cb312-15" title="15">                  <span class="dt">slope     =</span> extravZ),</a>
+<a class="sourceLine" id="cb312-16" title="16">              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,</a>
+<a class="sourceLine" id="cb312-17" title="17">              <span class="dt">size =</span> <span class="fl">.1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-18" title="18"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-19" title="19"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_std)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb312-20" title="20">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">1</span>_std)[[<span class="st">&quot;extravZ&quot;</span>]],</a>
+<a class="sourceLine" id="cb312-21" title="21">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb312-22" title="22">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-23" title="23"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-24" title="24"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb312-25" title="25">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-26" title="26"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">-5.215</span>,</a>
+<a class="sourceLine" id="cb312-27" title="27">             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-28" title="28"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RI: Extroversion = standardized&quot;</span>,</a>
+<a class="sourceLine" id="cb312-29" title="29">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,</a>
+<a class="sourceLine" id="cb312-30" title="30">       <span class="dt">x =</span> <span class="st">&quot;STANDARDIZED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb312-31" title="31">       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-32" title="32"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),</a>
+<a class="sourceLine" id="cb312-33" title="33">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-34" title="34"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">-4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb312-35" title="35"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-268-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="rias-random-intercepts-and-slopes" class="section level2">
 <h2><span class="header-section-number">5.4</span> RIAS = Random Intercepts AND Slopes</h2>
 <div id="fit-mlm-with-all-3-versions-of-the-predictor-1" class="section level3">
 <h3><span class="header-section-number">5.4.1</span> Fit MLM with all 3 versions of the predictor</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_2_raw &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>(extrav<span class="op">|</span>class),
-                           <span class="dt">data =</span> data_pop,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
-
-pop_lmer_2_cen &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravG <span class="op">+</span><span class="st"> </span>(extravG<span class="op">|</span>class),
-                           <span class="dt">data =</span> data_pop,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)
-
-pop_lmer_2_std &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravZ <span class="op">+</span><span class="st"> </span>(extravZ<span class="op">|</span>class),
-                           <span class="dt">data =</span> data_pop,
-                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Knit to Website: texreg::htmlreg()</span>
-<span class="co"># Knit to PDF:     texreg::texreg()</span>
-<span class="co"># View on Screen:  texreg::screenreg()</span>
-
-texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_2_raw, 
-                     pop_lmer_2_cen, 
-                     pop_lmer_2_std),
-                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Raw&quot;</span>, 
-                                       <span class="st">&quot;Centered&quot;</span>, 
-                                       <span class="st">&quot;Standardized&quot;</span>),
-                <span class="dt">caption            =</span> <span class="st">&quot;MLM - RIAS: Effect of Grand-Mean Centering and Standardizing&quot;</span>,
-                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,
-                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb313-1" title="1">pop_lmer_<span class="dv">2</span>_raw &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extrav <span class="op">+</span><span class="st"> </span>(extrav<span class="op">|</span>class),</a>
+<a class="sourceLine" id="cb313-2" title="2">                           <span class="dt">data =</span> data_pop,</a>
+<a class="sourceLine" id="cb313-3" title="3">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb313-4" title="4"></a>
+<a class="sourceLine" id="cb313-5" title="5">pop_lmer_<span class="dv">2</span>_cen &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravG <span class="op">+</span><span class="st"> </span>(extravG<span class="op">|</span>class),</a>
+<a class="sourceLine" id="cb313-6" title="6">                           <span class="dt">data =</span> data_pop,</a>
+<a class="sourceLine" id="cb313-7" title="7">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb313-8" title="8"></a>
+<a class="sourceLine" id="cb313-9" title="9">pop_lmer_<span class="dv">2</span>_std &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(popular <span class="op">~</span><span class="st"> </span>extravZ <span class="op">+</span><span class="st"> </span>(extravZ<span class="op">|</span>class),</a>
+<a class="sourceLine" id="cb313-10" title="10">                           <span class="dt">data =</span> data_pop,</a>
+<a class="sourceLine" id="cb313-11" title="11">                           <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb314-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
+<a class="sourceLine" id="cb314-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
+<a class="sourceLine" id="cb314-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
+<a class="sourceLine" id="cb314-4" title="4"></a>
+<a class="sourceLine" id="cb314-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(pop_lmer_<span class="dv">2</span>_raw, </a>
+<a class="sourceLine" id="cb314-6" title="6">                     pop_lmer_<span class="dv">2</span>_cen, </a>
+<a class="sourceLine" id="cb314-7" title="7">                     pop_lmer_<span class="dv">2</span>_std),</a>
+<a class="sourceLine" id="cb314-8" title="8">                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Raw&quot;</span>, </a>
+<a class="sourceLine" id="cb314-9" title="9">                                       <span class="st">&quot;Centered&quot;</span>, </a>
+<a class="sourceLine" id="cb314-10" title="10">                                       <span class="st">&quot;Standardized&quot;</span>),</a>
+<a class="sourceLine" id="cb314-11" title="11">                <span class="dt">caption            =</span> <span class="st">&quot;MLM - RIAS: Effect of Grand-Mean Centering and Standardizing&quot;</span>,</a>
+<a class="sourceLine" id="cb314-12" title="12">                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb314-13" title="13">                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+&lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
 MLM - RIAS: Effect of Grand-Mean Centering and Standardizing
@@ -1694,8 +1714,8 @@ model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or devia
 </div>
 <div id="investigating-a-mlm-ri-model-1" class="section level3">
 <h3><span class="header-section-number">5.4.2</span> Investigating a MLM-RI Model</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_2_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>broom<span class="op">::</span><span class="kw">tidy</span>()</code></pre></div>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb315-1" title="1">pop_lmer_<span class="dv">2</span>_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb315-2" title="2"><span class="st">  </span>broom<span class="op">::</span><span class="kw">tidy</span>()</a></code></pre></div>
 <pre><code># A tibble: 6 x 5
   term                         estimate std.error statistic group   
   &lt;chr&gt;                           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;   
@@ -1705,145 +1725,146 @@ model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or devia
 4 sd_extrav.class                 0.159   NA           NA   class   
 5 cor_(Intercept).extrav.class   -0.969   NA           NA   class   
 6 sd_Observation.Residual         0.946   NA           NA   Residual</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_2_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>broom<span class="op">::</span><span class="kw">glance</span>()</code></pre></div>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb317-1" title="1">pop_lmer_<span class="dv">2</span>_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb317-2" title="2"><span class="st">  </span>broom<span class="op">::</span><span class="kw">glance</span>()</a></code></pre></div>
 <pre><code># A tibble: 1 x 6
   sigma logLik   AIC   BIC deviance df.residual
   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;       &lt;int&gt;
 1 0.946 -2885. 5783. 5816.    5771.        1994</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pop_lmer_2_raw <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>broom<span class="op">::</span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per observation (2000 students)</span></code></pre></div>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb319-1" title="1">pop_lmer_<span class="dv">2</span>_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb319-2" title="2"><span class="st">  </span>broom<span class="op">::</span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb319-3" title="3"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per observation (2000 students)</span></a></code></pre></div>
 <pre><code>  popular extrav class  .fitted      .resid       .hat      .cooksd
-1     6.3      5     1 5.131082  1.16891841 0.04533797 3.872950e-05
-2     4.9      7     1 6.062463 -1.16246304 0.04799065 1.546709e-03
-3     5.3      4     1 4.665391  0.63460913 0.06181534 5.582607e-05
-4     4.7      3     1 4.199700  0.50029985 0.09016186 1.873118e-04
-5     6.0      5     1 5.131082  0.86891841 0.04533797 2.140087e-05
-6     4.7      4     1 4.665391  0.03460913 0.06181534 1.660373e-07
+1     6.3      5     1 5.131081  1.16891931 0.04533781 3.873049e-05
+2     4.9      7     1 6.062459 -1.16245914 0.04799095 1.546691e-03
+3     5.3      4     1 4.665391  0.63460853 0.06181574 5.582510e-05
+4     4.7      3     1 4.199702  0.50029776 0.09016335 1.873083e-04
+5     6.0      5     1 5.131081  0.86891931 0.04533781 2.140143e-05
+6     4.7      4     1 4.665391  0.03460853 0.06181574 1.660290e-07
     .fixed      .mu .offset .sqrtXwt .sqrtrwt .weights      .wtres
-1 4.925861 5.131082       0        1        1        1  1.16891841
-2 5.911665 6.062463       0        1        1        1 -1.16246304
-3 4.432959 4.665391       0        1        1        1  0.63460913
-4 3.940057 4.199700       0        1        1        1  0.50029985
-5 4.925861 5.131082       0        1        1        1  0.86891841
-6 4.432959 4.665391       0        1        1        1  0.03460913</code></pre>
+1 4.925859 5.131081       0        1        1        1  1.16891931
+2 5.911662 6.062459       0        1        1        1 -1.16245914
+3 4.432958 4.665391       0        1        1        1  0.63460853
+4 3.940056 4.199702       0        1        1        1  0.50029776
+5 4.925859 5.131081       0        1        1        1  0.86891931
+6 4.432958 4.665391       0        1        1        1  0.03460853</code></pre>
 <div id="fixed-effects-intercept-and-slope-1" class="section level4">
 <h4><span class="header-section-number">5.4.2.1</span> Fixed Effects: intercept and slope</h4>
 <p>There is only ONE fixed intercept and ONE fixed slope.</p>
 <p>The <code>fixef()</code> function extracts the estimates of the fixed effects.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_2_raw) </code></pre></div>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb321-1" title="1"><span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw) </a></code></pre></div>
 <pre><code>(Intercept)      extrav 
-   2.461351    0.492902 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]</code></pre></div>
-<pre><code>[1] 2.461351</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;extrav&quot;</span>]]</code></pre></div>
-<pre><code>[1] 0.492902</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
-      <span class="dt">y =</span> popular,
-      <span class="dt">group =</span> class) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,
-              <span class="dt">se =</span> <span class="ot">FALSE</span>,
-              <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,
-              <span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;extrav&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
-             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = raw score&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are OLS regression ran independently on each class&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-282-1.png" width="576" style="display: block; margin: auto;" /></p>
+  2.4613520   0.4929015 </code></pre>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb323-1" title="1"><span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]</a></code></pre></div>
+<pre><code>[1] 2.461352</code></pre>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb325-1" title="1"><span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;extrav&quot;</span>]]</a></code></pre></div>
+<pre><code>[1] 0.4929015</code></pre>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb327-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb327-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-3" title="3"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,</a>
+<a class="sourceLine" id="cb327-4" title="4">      <span class="dt">y =</span> popular,</a>
+<a class="sourceLine" id="cb327-5" title="5">      <span class="dt">group =</span> class) <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-6" title="6"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</a>
+<a class="sourceLine" id="cb327-7" title="7">              <span class="dt">se =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb327-8" title="8">              <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,</a>
+<a class="sourceLine" id="cb327-9" title="9">              <span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-10" title="10"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb327-11" title="11">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;extrav&quot;</span>]],</a>
+<a class="sourceLine" id="cb327-12" title="12">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb327-13" title="13">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-14" title="14"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-15" title="15"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb327-16" title="16">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-17" title="17"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,</a>
+<a class="sourceLine" id="cb327-18" title="18">             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-19" title="19"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = raw score&quot;</span>,</a>
+<a class="sourceLine" id="cb327-20" title="20">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are OLS regression ran independently on each class&quot;</span>,</a>
+<a class="sourceLine" id="cb327-21" title="21">       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb327-22" title="22">       <span class="dt">y =</span> <span class="st">&quot;Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-23" title="23"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb327-24" title="24">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-25" title="25"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb327-26" title="26"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-279-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="random-effects-intercepts-1" class="section level4">
 <h4><span class="header-section-number">5.4.2.2</span> Random Effects: intercepts</h4>
 <p>There is a different random intercept AND random slope for EACH CLASS. These tell how far each class’s average is off of the grand average AND how far each class’s slope is off of the grand average sope.</p>
 <p>The <code>ranef()</code> function extracts the random effects from a fitted model object</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_2_raw) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb328-1" title="1"><span class="kw">ranef</span>(pop_lmer_<span class="dv">2</span>_raw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb328-2" title="2"><span class="st">  </span><span class="kw">str</span>()</a></code></pre></div>
 <pre><code>List of 1
  $ class:&#39;data.frame&#39;:  100 obs. of  2 variables:
   ..$ (Intercept): num [1:100] 0.341 -1.18 -0.627 1.079 -0.191 ...
   ..$ extrav     : num [1:100] -0.0272 0.0974 0.0565 -0.0988 0.0208 ...
+  ..- attr(*, &quot;postVar&quot;)= num [1:2, 1:2, 1:100] 0.21332 -0.02975 -0.02975 0.00499 0.20574 ...
  - attr(*, &quot;class&quot;)= chr &quot;ranef.mer&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_2_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></code></pre></div>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb330-1" title="1"><span class="kw">ranef</span>(pop_lmer_<span class="dv">2</span>_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb330-2" title="2"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></a></code></pre></div>
 <pre><code>  (Intercept)      extrav
-1   0.3412771 -0.02721131
-2  -1.1800352  0.09737305
-3  -0.6268933  0.05654048
-4   1.0791097 -0.09876733
-5  -0.1910488  0.02083082
-6  -0.9833296  0.08369927</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_2_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Random_Intercepts =</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Random_Intercepts)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_histogram</span>()</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-285-1.png" width="288" style="display: block; margin: auto;" /></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ranef</span>(pop_lmer_2_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(extrav)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_histogram</span>()</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-286-1.png" width="288" style="display: block; margin: auto;" /></p>
+1   0.3412826 -0.02721226
+2  -1.1800459  0.09737587
+3  -0.6269008  0.05654230
+4   1.0791254 -0.09877051
+5  -0.1910515  0.02083157
+6  -0.9833398  0.08370183</code></pre>
+<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb332-1" title="1"><span class="kw">ranef</span>(pop_lmer_<span class="dv">2</span>_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb332-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Random_Intercepts =</span> <span class="st">&quot;(Intercept)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb332-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(Random_Intercepts)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb332-4" title="4"><span class="st">  </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-282-1.png" width="288" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb333"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb333-1" title="1"><span class="kw">ranef</span>(pop_lmer_<span class="dv">2</span>_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb333-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(extrav)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb333-3" title="3"><span class="st">  </span><span class="kw">geom_histogram</span>()</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-283-1.png" width="288" style="display: block; margin: auto;" /></p>
 </div>
 <div id="predictions-1" class="section level4">
 <h4><span class="header-section-number">5.4.2.3</span> Predictions</h4>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(pop_lmer_2_raw) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb334-1" title="1"><span class="kw">predict</span>(pop_lmer_<span class="dv">2</span>_raw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb334-2" title="2"><span class="st">  </span><span class="kw">str</span>()</a></code></pre></div>
 <pre><code> Named num [1:2000] 5.13 6.06 4.67 4.2 5.13 ...
  - attr(*, &quot;names&quot;)= chr [1:2000] &quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot; ...</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">predict</span>(pop_lmer_2_raw) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle value per observation (2000 students)</span></code></pre></div>
+<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb336-1" title="1"><span class="kw">predict</span>(pop_lmer_<span class="dv">2</span>_raw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb336-2" title="2"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle value per observation (2000 students)</span></a></code></pre></div>
 <pre><code>       1        2        3        4        5        6 
-5.131082 6.062463 4.665391 4.199700 5.131082 4.665391 </code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_2_raw)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> extrav,
-             <span class="dt">y =</span> pred,
-             <span class="dt">group =</span> class)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;extrav&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
-             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = raw score&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-289-1.png" width="576" style="display: block; margin: auto;" /></p>
+5.131081 6.062459 4.665391 4.199702 5.131081 4.665391 </code></pre>
+<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb338-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb338-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_<span class="dv">2</span>_raw)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb338-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> extrav,</a>
+<a class="sourceLine" id="cb338-4" title="4">             <span class="dt">y =</span> pred,</a>
+<a class="sourceLine" id="cb338-5" title="5">             <span class="dt">group =</span> class)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb338-6" title="6"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb338-7" title="7"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb338-8" title="8">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;extrav&quot;</span>]],</a>
+<a class="sourceLine" id="cb338-9" title="9">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb338-10" title="10">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb338-11" title="11"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb338-12" title="12"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb338-13" title="13">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb338-14" title="14"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,</a>
+<a class="sourceLine" id="cb338-15" title="15">             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb338-16" title="16"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = raw score&quot;</span>,</a>
+<a class="sourceLine" id="cb338-17" title="17">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class&quot;</span>,</a>
+<a class="sourceLine" id="cb338-18" title="18">       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb338-19" title="19">       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb338-20" title="20"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb338-21" title="21">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb338-22" title="22"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb338-23" title="23"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-286-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="combined-effects-1" class="section level4">
 <h4><span class="header-section-number">5.4.2.4</span> Combined Effects</h4>
 <p>The <code>coef()</code> function computes the sum of the random and fixed effects coefficients for each explanatory variable for each level of each grouping factor.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(pop_lmer_1_raw) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">str</span>()</code></pre></div>
+<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb339-1" title="1"><span class="kw">coef</span>(pop_lmer_<span class="dv">1</span>_raw) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb339-2" title="2"><span class="st">  </span><span class="kw">str</span>()</a></code></pre></div>
 <pre><code>List of 1
  $ class:&#39;data.frame&#39;:  100 obs. of  2 variables:
   ..$ (Intercept): num [1:100] 2.71 1.79 2.18 3.08 2.44 ...
   ..$ extrav     : num [1:100] 0.486 0.486 0.486 0.486 0.486 ...
  - attr(*, &quot;class&quot;)= chr &quot;coef.mer&quot;</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">coef</span>(pop_lmer_1_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></code></pre></div>
+<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb341-1" title="1"><span class="kw">coef</span>(pop_lmer_<span class="dv">1</span>_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb341-2" title="2"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per group (100 classes)</span></a></code></pre></div>
 <pre><code>  (Intercept)    extrav
 1    2.707702 0.4862002
 2    1.789073 0.4862002
@@ -1851,127 +1872,127 @@ model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or devia
 4    3.083195 0.4862002
 5    2.443266 0.4862002
 6    1.937824 0.4862002</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_2_raw)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,
-      <span class="dt">y =</span> pred,
-      <span class="dt">group =</span> class) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
-                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
-                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">4.5</span>,
-                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">4.5</span>),
-            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
-            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_2_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
-              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
-                  <span class="dt">slope     =</span> extrav),
-              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
-              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;extrav&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,
-             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = raw score&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) </code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-292-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb343-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb343-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_<span class="dv">2</span>_raw)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb343-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-4" title="4"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,</a>
+<a class="sourceLine" id="cb343-5" title="5">      <span class="dt">y =</span> pred,</a>
+<a class="sourceLine" id="cb343-6" title="6">      <span class="dt">group =</span> class) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-7" title="7"><span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, </a>
+<a class="sourceLine" id="cb343-8" title="8">                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb343-9" title="9">                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">4.5</span>,</a>
+<a class="sourceLine" id="cb343-10" title="10">                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">4.5</span>),</a>
+<a class="sourceLine" id="cb343-11" title="11">            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,</a>
+<a class="sourceLine" id="cb343-12" title="12">            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-13" title="13"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_<span class="dv">2</span>_raw)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),</a>
+<a class="sourceLine" id="cb343-14" title="14">              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,</a>
+<a class="sourceLine" id="cb343-15" title="15">                  <span class="dt">slope     =</span> extrav),</a>
+<a class="sourceLine" id="cb343-16" title="16">              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,</a>
+<a class="sourceLine" id="cb343-17" title="17">              <span class="dt">size =</span> <span class="fl">.1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-18" title="18"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-19" title="19"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb343-20" title="20">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;extrav&quot;</span>]],</a>
+<a class="sourceLine" id="cb343-21" title="21">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb343-22" title="22">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-23" title="23"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-24" title="24"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb343-25" title="25">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-26" title="26"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">5.215</span>,</a>
+<a class="sourceLine" id="cb343-27" title="27">             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-28" title="28"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = raw score&quot;</span>,</a>
+<a class="sourceLine" id="cb343-29" title="29">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,</a>
+<a class="sourceLine" id="cb343-30" title="30">       <span class="dt">x =</span> <span class="st">&quot;Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb343-31" title="31">       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-32" title="32"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>),</a>
+<a class="sourceLine" id="cb343-33" title="33">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-34" title="34"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb343-35" title="35"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>)) </a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-289-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="comapre-the-centered-version-1" class="section level3">
 <h3><span class="header-section-number">5.4.3</span> Comapre the Centered Version</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_2_cen)) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravG,
-      <span class="dt">y =</span> pred,
-      <span class="dt">group =</span> class) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="op">-</span><span class="fl">5.215</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
-                <span class="dt">xmax =</span> <span class="op">-</span><span class="fl">5.215</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
-                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">4.5</span>,
-                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_2_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">4.5</span>),
-            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
-            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
-                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
-                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
-                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
-            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
-            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_2_cen)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
-              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
-                  <span class="dt">slope     =</span> extravG),
-              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
-              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;extravG&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="op">-</span><span class="fl">5.215</span>,
-             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = grand-mean centered&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;GRAND-MEAN CENTERED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-293-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb344-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb344-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_<span class="dv">2</span>_cen)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb344-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-4" title="4"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravG,</a>
+<a class="sourceLine" id="cb344-5" title="5">      <span class="dt">y =</span> pred,</a>
+<a class="sourceLine" id="cb344-6" title="6">      <span class="dt">group =</span> class) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-7" title="7"><span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="fl">-5.215</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, </a>
+<a class="sourceLine" id="cb344-8" title="8">                <span class="dt">xmax =</span> <span class="fl">-5.215</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb344-9" title="9">                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">4.5</span>,</a>
+<a class="sourceLine" id="cb344-10" title="10">                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_raw)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">4.5</span>),</a>
+<a class="sourceLine" id="cb344-11" title="11">            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,</a>
+<a class="sourceLine" id="cb344-12" title="12">            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-13" title="13"><span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, </a>
+<a class="sourceLine" id="cb344-14" title="14">                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb344-15" title="15">                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,</a>
+<a class="sourceLine" id="cb344-16" title="16">                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),</a>
+<a class="sourceLine" id="cb344-17" title="17">            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,</a>
+<a class="sourceLine" id="cb344-18" title="18">            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-19" title="19"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_<span class="dv">2</span>_cen)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),</a>
+<a class="sourceLine" id="cb344-20" title="20">              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,</a>
+<a class="sourceLine" id="cb344-21" title="21">                  <span class="dt">slope     =</span> extravG),</a>
+<a class="sourceLine" id="cb344-22" title="22">              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,</a>
+<a class="sourceLine" id="cb344-23" title="23">              <span class="dt">size =</span> <span class="fl">.1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-24" title="24"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-25" title="25"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb344-26" title="26">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_cen)[[<span class="st">&quot;extravG&quot;</span>]],</a>
+<a class="sourceLine" id="cb344-27" title="27">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb344-28" title="28">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-29" title="29"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-30" title="30"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">-5.215</span>,</a>
+<a class="sourceLine" id="cb344-31" title="31">             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-32" title="32"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb344-33" title="33">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-34" title="34"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = grand-mean centered&quot;</span>,</a>
+<a class="sourceLine" id="cb344-35" title="35">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,</a>
+<a class="sourceLine" id="cb344-36" title="36">       <span class="dt">x =</span> <span class="st">&quot;GRAND-MEAN CENTERED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb344-37" title="37">       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-38" title="38"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),</a>
+<a class="sourceLine" id="cb344-39" title="39">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-40" title="40"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">-4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb344-41" title="41"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-290-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="comapre-the-standardized-version-1" class="section level3">
 <h3><span class="header-section-number">5.4.4</span> Comapre the Standardized Version</h3>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">data_pop <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_2_std)) <span class="op">%&gt;%</span><span class="st"> </span>
-<span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravZ,
-      <span class="dt">y =</span> pred,
-      <span class="dt">group =</span> class) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, 
-                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,
-                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,
-                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_2_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),
-            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,
-            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_2_std)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),
-              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,
-                  <span class="dt">slope     =</span> extravZ),
-              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,
-              <span class="dt">size =</span> .<span class="dv">1</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> .<span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_2_std)[[<span class="st">&quot;(Intercept)&quot;</span>]],
-              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_2_std)[[<span class="st">&quot;extravZ&quot;</span>]],
-              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,
-              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,
-             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="op">-</span><span class="fl">5.215</span>,
-             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = standardized&quot;</span>,
-       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,
-       <span class="dt">x =</span> <span class="st">&quot;STANDARDIZED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,
-       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span>
-<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),
-                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="op">-</span><span class="dv">4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-294-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb345-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred =</span> <span class="kw">predict</span>(pop_lmer_<span class="dv">2</span>_std)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-4" title="4"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extravZ,</a>
+<a class="sourceLine" id="cb345-5" title="5">      <span class="dt">y =</span> pred,</a>
+<a class="sourceLine" id="cb345-6" title="6">      <span class="dt">group =</span> class) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-7" title="7"><span class="st">  </span><span class="kw">geom_rect</span>(<span class="kw">aes</span>(<span class="dt">xmin =</span> <span class="dv">0</span> <span class="op">-</span><span class="st"> </span><span class="fl">0.25</span>, </a>
+<a class="sourceLine" id="cb345-8" title="8">                <span class="dt">xmax =</span> <span class="dv">0</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.25</span>,</a>
+<a class="sourceLine" id="cb345-9" title="9">                <span class="dt">ymin =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">-</span><span class="st"> </span><span class="fl">2.5</span>,</a>
+<a class="sourceLine" id="cb345-10" title="10">                <span class="dt">ymax =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_cen)[[<span class="st">&quot;(Intercept)&quot;</span>]]<span class="op">+</span><span class="st"> </span><span class="fl">2.5</span>),</a>
+<a class="sourceLine" id="cb345-11" title="11">            <span class="dt">fill =</span> <span class="st">&quot;yellow&quot;</span>,</a>
+<a class="sourceLine" id="cb345-12" title="12">            <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-13" title="13"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">data =</span> <span class="kw">coef</span>(pop_lmer_<span class="dv">2</span>_std)<span class="op">$</span>class <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">Intercept =</span> <span class="st">&quot;(Intercept)&quot;</span>),</a>
+<a class="sourceLine" id="cb345-14" title="14">              <span class="kw">aes</span>(<span class="dt">intercept =</span> Intercept,</a>
+<a class="sourceLine" id="cb345-15" title="15">                  <span class="dt">slope     =</span> extravZ),</a>
+<a class="sourceLine" id="cb345-16" title="16">              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>,</a>
+<a class="sourceLine" id="cb345-17" title="17">              <span class="dt">size =</span> <span class="fl">.1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-18" title="18"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="fl">.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-19" title="19"><span class="st">  </span><span class="kw">geom_abline</span>(<span class="dt">intercept =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_std)[[<span class="st">&quot;(Intercept)&quot;</span>]],</a>
+<a class="sourceLine" id="cb345-20" title="20">              <span class="dt">slope     =</span> <span class="kw">fixef</span>(pop_lmer_<span class="dv">2</span>_std)[[<span class="st">&quot;extravZ&quot;</span>]],</a>
+<a class="sourceLine" id="cb345-21" title="21">              <span class="dt">color =</span> <span class="st">&quot;hot pink&quot;</span>,</a>
+<a class="sourceLine" id="cb345-22" title="22">              <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-23" title="23"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-24" title="24"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb345-25" title="25">             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-26" title="26"><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="fl">-5.215</span>,</a>
+<a class="sourceLine" id="cb345-27" title="27">             <span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-28" title="28"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;MLM-RIAS: Extroversion = standardized&quot;</span>,</a>
+<a class="sourceLine" id="cb345-29" title="29">       <span class="dt">subtitle =</span> <span class="st">&quot;Thin black lines are group-wise predictions, one per class EXTRAPOLATED OUT&quot;</span>,</a>
+<a class="sourceLine" id="cb345-30" title="30">       <span class="dt">x =</span> <span class="st">&quot;STANDARDIZED Student&#39;s Extroversion, as rated by their teacher&quot;</span>,</a>
+<a class="sourceLine" id="cb345-31" title="31">       <span class="dt">y =</span> <span class="st">&quot;Predicted</span><span class="ch">\n</span><span class="st">Student&#39;s Populartity, mean rating by their peers&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-32" title="32"><span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>),</a>
+<a class="sourceLine" id="cb345-33" title="33">                  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">10</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-34" title="34"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">-4</span>, <span class="dt">to =</span>  <span class="dv">4</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb345-35" title="35"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span>  <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">10</span>, <span class="dt">by =</span> <span class="dv">2</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-291-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
@@ -2002,7 +2023,7 @@ gitbook.start({
 "google": false,
 "linkedin": false,
 "weibo": false,
-"instapper": false,
+"instapaper": false,
 "vk": false,
 "all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
@@ -2012,6 +2033,10 @@ gitbook.start({
 "size": 2
 },
 "edit": {
+"link": null,
+"text": null
+},
+"history": {
 "link": null,
 "text": null
 },
@@ -2029,8 +2054,8 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
     if (location.protocol !== "file:" && /^https?:/.test(src))
       src = src.replace(/^https?:/, '');
     script.src = src;

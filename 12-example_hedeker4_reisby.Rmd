@@ -598,7 +598,9 @@ sigma(fit_lm_week_ml)^2
 
 
 ```{r}
-sjstats::re_var(fit_lmer_week_RI_reml)  # in longitudinal data, a group of observations = a participant or person
+
+lme4::VarCorr(fit_lmer_week_RI_reml) %>% # in longitudinal data, a group of observations = a participant or person
+  print(comp = c("Variance", "Std.Dev"))
 ```
 
 > "One statistician's error term is another's career!"
