@@ -618,20 +618,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="mlm-longitudinal-autism" class="section level1">
 <h1><span class="header-section-number">8</span> MLM, Longitudinal: Autism</h1>
-<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb376-1" title="1"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></a>
-<a class="sourceLine" id="cb376-2" title="2"><span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span></a>
-<a class="sourceLine" id="cb376-3" title="3"><span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></a>
-<a class="sourceLine" id="cb376-4" title="4"><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></a>
-<a class="sourceLine" id="cb376-5" title="5"><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></a>
-<a class="sourceLine" id="cb376-6" title="6"><span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span></a>
-<a class="sourceLine" id="cb376-7" title="7"><span class="kw">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span></a>
-<a class="sourceLine" id="cb376-8" title="8"><span class="kw">library</span>(effects)      <span class="co"># Estimated Marginal Means</span></a>
-<a class="sourceLine" id="cb376-9" title="9"><span class="kw">library</span>(VIM)          <span class="co"># Visualization and Imputation of Missing Values </span></a>
-<a class="sourceLine" id="cb376-10" title="10"><span class="kw">library</span>(naniar)       <span class="co"># Summaries and Visualisations for Missing Data</span></a>
-<a class="sourceLine" id="cb376-11" title="11"></a>
-<a class="sourceLine" id="cb376-12" title="12"><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></a>
-<a class="sourceLine" id="cb376-13" title="13"></a>
-<a class="sourceLine" id="cb376-14" title="14"><span class="kw">library</span>(HLMdiag)      <span class="co"># package with the dataset</span></a></code></pre></div>
+<div class="sourceCode" id="cb374"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb374-1" title="1"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></a>
+<a class="sourceLine" id="cb374-2" title="2"><span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span></a>
+<a class="sourceLine" id="cb374-3" title="3"><span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></a>
+<a class="sourceLine" id="cb374-4" title="4"><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></a>
+<a class="sourceLine" id="cb374-5" title="5"><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></a>
+<a class="sourceLine" id="cb374-6" title="6"><span class="kw">library</span>(sjstats)      <span class="co"># ICC calculations</span></a>
+<a class="sourceLine" id="cb374-7" title="7"><span class="kw">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span></a>
+<a class="sourceLine" id="cb374-8" title="8"><span class="kw">library</span>(effects)      <span class="co"># Estimated Marginal Means</span></a>
+<a class="sourceLine" id="cb374-9" title="9"><span class="kw">library</span>(VIM)          <span class="co"># Visualization and Imputation of Missing Values </span></a>
+<a class="sourceLine" id="cb374-10" title="10"><span class="kw">library</span>(naniar)       <span class="co"># Summaries and Visualisations for Missing Data</span></a>
+<a class="sourceLine" id="cb374-11" title="11"></a>
+<a class="sourceLine" id="cb374-12" title="12"><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></a>
+<a class="sourceLine" id="cb374-13" title="13"></a>
+<a class="sourceLine" id="cb374-14" title="14"><span class="kw">library</span>(HLMdiag)      <span class="co"># package with the dataset</span></a></code></pre></div>
 <div id="background-4" class="section level2">
 <h2><span class="header-section-number">8.1</span> Background</h2>
 <p>The source: <a href="http://www-personal.umich.edu/~kwelch/" class="uri">http://www-personal.umich.edu/~kwelch/</a></p>
@@ -651,8 +651,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li><p><code>race</code> Child’s race - a factor. Levels are <code>white</code> and <code>nonwhite</code></p></li>
 <li><p><code>bestest2</code> Diagnosis at age 2 - a factor. Levels are <code>autism</code> and <code>pdd</code> (pervasive developmental disorder)</p></li>
 </ul>
-<div class="sourceCode" id="cb377"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb377-1" title="1"><span class="kw">data</span>(autism, <span class="dt">package =</span> <span class="st">&quot;HLMdiag&quot;</span>)   <span class="co"># make the dataset &#39;active&#39; from this package</span></a></code></pre></div>
-<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb378-1" title="1">tibble<span class="op">::</span><span class="kw">glimpse</span>(autism)             <span class="co"># first look at the dataset and its varaibles</span></a></code></pre></div>
+<div class="sourceCode" id="cb375"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb375-1" title="1"><span class="kw">data</span>(autism, <span class="dt">package =</span> <span class="st">&quot;HLMdiag&quot;</span>)   <span class="co"># make the dataset &#39;active&#39; from this package</span></a></code></pre></div>
+<div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb376-1" title="1">tibble<span class="op">::</span><span class="kw">glimpse</span>(autism)             <span class="co"># first look at the dataset and its varaibles</span></a></code></pre></div>
 <pre><code>Observations: 604
 Variables: 7
 $ childid  &lt;int&gt; 1, 1, 1, 1, 1, 10, 10, 10, 10, 100, 100, 100, 100, 10...
@@ -664,16 +664,16 @@ $ race     &lt;fct&gt; white, white, white, white, white, white, white, whit...
 $ bestest2 &lt;fct&gt; pdd, pdd, pdd, pdd, pdd, autism, autism, autism, auti...</code></pre>
 <div id="long-format" class="section level3">
 <h3><span class="header-section-number">8.1.1</span> Long Format</h3>
-<div class="sourceCode" id="cb380"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb380-1" title="1">data_long &lt;-<span class="st"> </span>autism <span class="op">%&gt;%</span><span class="st">                                    </span><span class="co"># save the dataset as a new name</span></a>
-<a class="sourceLine" id="cb380-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">childid =</span> childid <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st">          </span><span class="co"># declare grouping var a factor</span></a>
-<a class="sourceLine" id="cb380-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> <span class="dv">2</span> <span class="op">+</span><span class="st"> </span>age2) <span class="op">%&gt;%</span><span class="st">                        </span><span class="co"># create the original age variable (unequally spaced)</span></a>
-<a class="sourceLine" id="cb380-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">obs =</span> age <span class="op">%&gt;%</span><span class="st"> </span>factor <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># Observation Number = 1, 2, 3, 4, 5 (equally spaced)</span></a>
-<a class="sourceLine" id="cb380-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(childid,                                   <span class="co"># choose variables and order to keep</span></a>
-<a class="sourceLine" id="cb380-6" title="6">                gender, race, bestest2, sicdegp, </a>
-<a class="sourceLine" id="cb380-7" title="7">                obs, age, age2, vsae) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb380-8" title="8"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(childid, age2)                            <span class="co"># sort observations</span></a></code></pre></div>
-<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb381-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb381-2" title="2"><span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>(<span class="dt">top =</span> <span class="dv">11</span>, <span class="dt">bottom =</span> <span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb378-1" title="1">data_long &lt;-<span class="st"> </span>autism <span class="op">%&gt;%</span><span class="st">                                    </span><span class="co"># save the dataset as a new name</span></a>
+<a class="sourceLine" id="cb378-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">childid =</span> childid <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st">          </span><span class="co"># declare grouping var a factor</span></a>
+<a class="sourceLine" id="cb378-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> <span class="dv">2</span> <span class="op">+</span><span class="st"> </span>age2) <span class="op">%&gt;%</span><span class="st">                        </span><span class="co"># create the original age variable (unequally spaced)</span></a>
+<a class="sourceLine" id="cb378-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">obs =</span> age <span class="op">%&gt;%</span><span class="st"> </span>factor <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># Observation Number = 1, 2, 3, 4, 5 (equally spaced)</span></a>
+<a class="sourceLine" id="cb378-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(childid,                                   <span class="co"># choose variables and order to keep</span></a>
+<a class="sourceLine" id="cb378-6" title="6">                gender, race, bestest2, sicdegp, </a>
+<a class="sourceLine" id="cb378-7" title="7">                obs, age, age2, vsae) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb378-8" title="8"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(childid, age2)                            <span class="co"># sort observations</span></a></code></pre></div>
+<div class="sourceCode" id="cb379"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb379-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb379-2" title="2"><span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>(<span class="dt">top =</span> <span class="dv">11</span>, <span class="dt">bottom =</span> <span class="dv">6</span>)</a></code></pre></div>
 <pre><code>    childid gender     race bestest2 sicdegp obs age age2 vsae
 1         1   male    white      pdd    high   1   2    0    6
 2         1   male    white      pdd    high   2   3    1    7
@@ -696,15 +696,15 @@ $ bestest2 &lt;fct&gt; pdd, pdd, pdd, pdd, pdd, autism, autism, autism, auti...<
 </div>
 <div id="wide-format" class="section level3">
 <h3><span class="header-section-number">8.1.2</span> Wide Format</h3>
-<div class="sourceCode" id="cb383"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb383-1" title="1">data_wide &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st">           </span><span class="co"># save the dataset as a new name</span></a>
-<a class="sourceLine" id="cb383-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>age, <span class="op">-</span>obs) <span class="op">%&gt;%</span><span class="st">      </span><span class="co"># delete (by deselecting) this variable </span></a>
-<a class="sourceLine" id="cb383-3" title="3"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> age2,          <span class="co"># name the varaible that specifies how to spread</span></a>
-<a class="sourceLine" id="cb383-4" title="4">                <span class="dt">value =</span> vsae,        <span class="co"># name the variable to be spread out</span></a>
-<a class="sourceLine" id="cb383-5" title="5">                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st">       </span><span class="co"># add to combine the key-variables name before its value</span></a>
-<a class="sourceLine" id="cb383-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(childid)            <span class="co"># sort observations</span></a></code></pre></div>
+<div class="sourceCode" id="cb381"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb381-1" title="1">data_wide &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st">           </span><span class="co"># save the dataset as a new name</span></a>
+<a class="sourceLine" id="cb381-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>age, <span class="op">-</span>obs) <span class="op">%&gt;%</span><span class="st">      </span><span class="co"># delete (by deselecting) this variable </span></a>
+<a class="sourceLine" id="cb381-3" title="3"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> age2,          <span class="co"># name the varaible that specifies how to spread</span></a>
+<a class="sourceLine" id="cb381-4" title="4">                <span class="dt">value =</span> vsae,        <span class="co"># name the variable to be spread out</span></a>
+<a class="sourceLine" id="cb381-5" title="5">                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st">       </span><span class="co"># add to combine the key-variables name before its value</span></a>
+<a class="sourceLine" id="cb381-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(childid)            <span class="co"># sort observations</span></a></code></pre></div>
 <p>Notice the missing values, displayed as <code>NA</code>.</p>
-<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb384-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb384-2" title="2"><span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb382"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb382-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb382-2" title="2"><span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>()</a></code></pre></div>
 <pre><code>    childid gender     race bestest2 sicdegp age2_0 age2_1 age2_3 age2_7
 1         1   male    white      pdd    high      6      7     18     25
 2         2   male    white   autism     low      6      7      7      8
@@ -734,15 +734,15 @@ $ bestest2 &lt;fct&gt; pdd, pdd, pdd, pdd, pdd, autism, autism, autism, auti...<
 <div id="using-the-wide-formatted-dataset" class="section level4">
 <h4><span class="header-section-number">8.2.1.1</span> Using the WIDE formatted dataset</h4>
 <p>Each person’s data is only stored on a single line</p>
-<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb386-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot; </span></a>
-<a class="sourceLine" id="cb386-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
-<a class="sourceLine" id="cb386-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
-<a class="sourceLine" id="cb386-4" title="4"></a>
-<a class="sourceLine" id="cb386-5" title="5">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb386-6" title="6"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(bestest2, gender, race,    <span class="co"># variables to summarize</span></a>
-<a class="sourceLine" id="cb386-7" title="7">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,       <span class="co"># how split into columns</span></a>
-<a class="sourceLine" id="cb386-8" title="8">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,               <span class="co"># compare the groups</span></a>
-<a class="sourceLine" id="cb386-9" title="9">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)           <span class="co"># for website</span></a></code></pre></div>
+<div class="sourceCode" id="cb384"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb384-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot; </span></a>
+<a class="sourceLine" id="cb384-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
+<a class="sourceLine" id="cb384-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
+<a class="sourceLine" id="cb384-4" title="4"></a>
+<a class="sourceLine" id="cb384-5" title="5">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb384-6" title="6"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(bestest2, gender, race,    <span class="co"># variables to summarize</span></a>
+<a class="sourceLine" id="cb384-7" title="7">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,       <span class="co"># how split into columns</span></a>
+<a class="sourceLine" id="cb384-8" title="8">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,               <span class="co"># compare the groups</span></a>
+<a class="sourceLine" id="cb384-9" title="9">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)           <span class="co"># for website</span></a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -922,16 +922,16 @@ nonwhite
 <div id="using-the-long-formatted-dataset" class="section level4">
 <h4><span class="header-section-number">8.2.1.2</span> Using the LONG formatted dataset</h4>
 <p>Each person’s data is stored on multiple lines, one for each time point. To ensure the summary table is correct, you must choose a single time point per person.</p>
-<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb387-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot; </span></a>
-<a class="sourceLine" id="cb387-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
-<a class="sourceLine" id="cb387-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
-<a class="sourceLine" id="cb387-4" title="4"></a>
-<a class="sourceLine" id="cb387-5" title="5">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb387-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(age <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st">                  </span><span class="co"># restrict to one-line per person</span></a>
-<a class="sourceLine" id="cb387-7" title="7"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(bestest2, gender, race,    <span class="co"># variables to summarize</span></a>
-<a class="sourceLine" id="cb387-8" title="8">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,       <span class="co"># how split into columns</span></a>
-<a class="sourceLine" id="cb387-9" title="9">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,               <span class="co"># compare the groups</span></a>
-<a class="sourceLine" id="cb387-10" title="10">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)           <span class="co"># for website</span></a></code></pre></div>
+<div class="sourceCode" id="cb385"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb385-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot; </span></a>
+<a class="sourceLine" id="cb385-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
+<a class="sourceLine" id="cb385-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
+<a class="sourceLine" id="cb385-4" title="4"></a>
+<a class="sourceLine" id="cb385-5" title="5">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb385-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(age <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st">                  </span><span class="co"># restrict to one-line per person</span></a>
+<a class="sourceLine" id="cb385-7" title="7"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(bestest2, gender, race,    <span class="co"># variables to summarize</span></a>
+<a class="sourceLine" id="cb385-8" title="8">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,       <span class="co"># how split into columns</span></a>
+<a class="sourceLine" id="cb385-9" title="9">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,               <span class="co"># compare the groups</span></a>
+<a class="sourceLine" id="cb385-10" title="10">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)           <span class="co"># for website</span></a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1126,16 +1126,16 @@ nonwhite
 <div id="using-the-long-formatted-dataset-1" class="section level4">
 <h4><span class="header-section-number">8.2.2.1</span> Using the LONG formatted dataset</h4>
 <p>Each person’s data is stored on multiple lines, one for each time point. To ensure the summary table is correct, you must choose a single time point per person.</p>
-<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb388-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot; </span></a>
-<a class="sourceLine" id="cb388-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
-<a class="sourceLine" id="cb388-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
-<a class="sourceLine" id="cb388-4" title="4"></a>
-<a class="sourceLine" id="cb388-5" title="5">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb388-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(age <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb388-7" title="7"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(vsae, </a>
-<a class="sourceLine" id="cb388-8" title="8">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,</a>
-<a class="sourceLine" id="cb388-9" title="9">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb388-10" title="10">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb386"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb386-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot; </span></a>
+<a class="sourceLine" id="cb386-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
+<a class="sourceLine" id="cb386-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
+<a class="sourceLine" id="cb386-4" title="4"></a>
+<a class="sourceLine" id="cb386-5" title="5">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb386-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(age <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb386-7" title="7"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(vsae, </a>
+<a class="sourceLine" id="cb386-8" title="8">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,</a>
+<a class="sourceLine" id="cb386-9" title="9">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb386-10" title="10">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1209,35 +1209,35 @@ vsae
 <div id="vim-package" class="section level4">
 <h4><span class="header-section-number">8.2.3.1</span> <code>VIM</code> package</h4>
 <p>Plot the amount of missing vlaues and the amount of each patter of missing values.</p>
-<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb389-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb389-2" title="2"><span class="st">  </span>VIM<span class="op">::</span><span class="kw">aggr</span>(<span class="dt">numbers =</span> <span class="ot">TRUE</span>,   <span class="co"># shows the number to the far right</span></a>
-<a class="sourceLine" id="cb389-3" title="3">            <span class="dt">prop =</span> <span class="ot">FALSE</span>)     <span class="co"># shows counts instead of proportions</span></a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-326-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb387"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb387-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb387-2" title="2"><span class="st">  </span>VIM<span class="op">::</span><span class="kw">aggr</span>(<span class="dt">numbers =</span> <span class="ot">TRUE</span>,   <span class="co"># shows the number to the far right</span></a>
+<a class="sourceLine" id="cb387-3" title="3">            <span class="dt">prop =</span> <span class="ot">FALSE</span>)     <span class="co"># shows counts instead of proportions</span></a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-333-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="naniar-package" class="section level4">
 <h4><span class="header-section-number">8.2.3.2</span> <code>naniar</code> package</h4>
+<div class="sourceCode" id="cb388"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb388-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb388-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">vis_miss</span>()</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-334-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb389"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb389-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb389-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_var</span>()</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-335-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb390"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb390-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb390-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">vis_miss</span>()</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-327-1.png" width="576" style="display: block; margin: auto;" /></p>
+<a class="sourceLine" id="cb390-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_var</span>(<span class="dt">show_pct =</span> <span class="ot">TRUE</span>,     <span class="co"># x-axis is PERCENT, not count</span></a>
+<a class="sourceLine" id="cb390-3" title="3">                      <span class="dt">facet =</span> sicdegp) <span class="op">+</span><span class="st">   </span><span class="co"># create seperate panels</span></a>
+<a class="sourceLine" id="cb390-4" title="4"><span class="st">  </span><span class="kw">theme_bw</span>()                               <span class="co"># add ggplot layers as normal</span></a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-336-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb391"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb391-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb391-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_var</span>()</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-328-1.png" width="576" style="display: block; margin: auto;" /></p>
+<a class="sourceLine" id="cb391-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_upset</span>() </a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-337-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb392"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb392-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb392-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_var</span>(<span class="dt">show_pct =</span> <span class="ot">TRUE</span>,     <span class="co"># x-axis is PERCENT, not count</span></a>
-<a class="sourceLine" id="cb392-3" title="3">                      <span class="dt">facet =</span> sicdegp) <span class="op">+</span><span class="st">   </span><span class="co"># create seperate panels</span></a>
-<a class="sourceLine" id="cb392-4" title="4"><span class="st">  </span><span class="kw">theme_bw</span>()                               <span class="co"># add ggplot layers as normal</span></a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-329-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb393-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb393-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_upset</span>() </a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-330-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb394-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb394-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_upset</span>(<span class="dt">sets =</span> <span class="kw">c</span>(<span class="st">&quot;age2_0_NA&quot;</span>,</a>
-<a class="sourceLine" id="cb394-3" title="3">                                 <span class="st">&quot;age2_1_NA&quot;</span>,</a>
-<a class="sourceLine" id="cb394-4" title="4">                                 <span class="st">&quot;age2_3_NA&quot;</span>,</a>
-<a class="sourceLine" id="cb394-5" title="5">                                 <span class="st">&quot;age2_7_NA&quot;</span>,</a>
-<a class="sourceLine" id="cb394-6" title="6">                                 <span class="st">&quot;age2_11_NA&quot;</span>),</a>
-<a class="sourceLine" id="cb394-7" title="7">                        <span class="dt">keep.order =</span> <span class="ot">TRUE</span>) </a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-331-1.png" width="576" style="display: block; margin: auto;" /></p>
+<a class="sourceLine" id="cb392-2" title="2"><span class="st">  </span>naniar<span class="op">::</span><span class="kw">gg_miss_upset</span>(<span class="dt">sets =</span> <span class="kw">c</span>(<span class="st">&quot;age2_0_NA&quot;</span>,</a>
+<a class="sourceLine" id="cb392-3" title="3">                                 <span class="st">&quot;age2_1_NA&quot;</span>,</a>
+<a class="sourceLine" id="cb392-4" title="4">                                 <span class="st">&quot;age2_3_NA&quot;</span>,</a>
+<a class="sourceLine" id="cb392-5" title="5">                                 <span class="st">&quot;age2_7_NA&quot;</span>,</a>
+<a class="sourceLine" id="cb392-6" title="6">                                 <span class="st">&quot;age2_11_NA&quot;</span>),</a>
+<a class="sourceLine" id="cb392-7" title="7">                        <span class="dt">keep.order =</span> <span class="ot">TRUE</span>) </a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-338-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="means-across-time" class="section level3">
@@ -1248,16 +1248,16 @@ vsae
 <p>Default = COMPLETE CASES ONLY!!!</p>
 </blockquote>
 <p>Note - the sample size at each time point is the same, but subjects are only included if they have data at every time point</p>
-<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb395-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot;</span></a>
-<a class="sourceLine" id="cb395-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
-<a class="sourceLine" id="cb395-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
-<a class="sourceLine" id="cb395-4" title="4"></a>
-<a class="sourceLine" id="cb395-5" title="5">data_wide <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb395-6" title="6"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age2_<span class="dv">0</span>, age2_<span class="dv">1</span>, age2_<span class="dv">3</span>, age2_<span class="dv">7</span>, age2_<span class="dv">11</span>,</a>
-<a class="sourceLine" id="cb395-7" title="7">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,</a>
-<a class="sourceLine" id="cb395-8" title="8">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb395-9" title="9">                    <span class="dt">na.rm =</span> <span class="ot">TRUE</span>,           <span class="co"># default: COMPLETE CASES ONLY!!!!!</span></a>
-<a class="sourceLine" id="cb395-10" title="10">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb393"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb393-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot;</span></a>
+<a class="sourceLine" id="cb393-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
+<a class="sourceLine" id="cb393-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
+<a class="sourceLine" id="cb393-4" title="4"></a>
+<a class="sourceLine" id="cb393-5" title="5">data_wide <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb393-6" title="6"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age2_<span class="dv">0</span>, age2_<span class="dv">1</span>, age2_<span class="dv">3</span>, age2_<span class="dv">7</span>, age2_<span class="dv">11</span>,</a>
+<a class="sourceLine" id="cb393-7" title="7">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,</a>
+<a class="sourceLine" id="cb393-8" title="8">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb393-9" title="9">                    <span class="dt">na.rm =</span> <span class="ot">TRUE</span>,           <span class="co"># default: COMPLETE CASES ONLY!!!!!</span></a>
+<a class="sourceLine" id="cb393-10" title="10">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1444,16 +1444,16 @@ age2_11
 <p>Specify All data:</p>
 </blockquote>
 <p>note - that the smaple sizes will be different for each time point</p>
-<div class="sourceCode" id="cb396"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb396-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot;</span></a>
-<a class="sourceLine" id="cb396-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
-<a class="sourceLine" id="cb396-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
-<a class="sourceLine" id="cb396-4" title="4"></a>
-<a class="sourceLine" id="cb396-5" title="5">data_wide <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb396-6" title="6"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age2_<span class="dv">0</span>, age2_<span class="dv">1</span>, age2_<span class="dv">3</span>, age2_<span class="dv">7</span>, age2_<span class="dv">11</span>,</a>
-<a class="sourceLine" id="cb396-7" title="7">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,</a>
-<a class="sourceLine" id="cb396-8" title="8">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb396-9" title="9">                    <span class="dt">na.rm =</span> <span class="ot">FALSE</span>,           <span class="co"># INCLUDES ALL DATA !!!!</span></a>
-<a class="sourceLine" id="cb396-10" title="10">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb394"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb394-1" title="1"><span class="co"># Knit to Website: output = &quot;html&quot;</span></a>
+<a class="sourceLine" id="cb394-2" title="2"><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></a>
+<a class="sourceLine" id="cb394-3" title="3"><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></a>
+<a class="sourceLine" id="cb394-4" title="4"></a>
+<a class="sourceLine" id="cb394-5" title="5">data_wide <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb394-6" title="6"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age2_<span class="dv">0</span>, age2_<span class="dv">1</span>, age2_<span class="dv">3</span>, age2_<span class="dv">7</span>, age2_<span class="dv">11</span>,</a>
+<a class="sourceLine" id="cb394-7" title="7">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sicdegp,</a>
+<a class="sourceLine" id="cb394-8" title="8">                    <span class="dt">test =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb394-9" title="9">                    <span class="dt">na.rm =</span> <span class="ot">FALSE</span>,           <span class="co"># INCLUDES ALL DATA !!!!</span></a>
+<a class="sourceLine" id="cb394-10" title="10">                    <span class="dt">output =</span> <span class="st">&quot;html&quot;</span>)</a></code></pre></div>
 <table>
 <thead>
 <tr>
@@ -1643,14 +1643,14 @@ age2_11
 <blockquote>
 <p>FOR ALL DATA!</p>
 </blockquote>
-<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb397-1" title="1">data_sum_all &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb397-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(sicdegp, age2) <span class="op">%&gt;%</span><span class="st">              </span><span class="co"># specify the groups</span></a>
-<a class="sourceLine" id="cb397-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">vsae_n    =</span> <span class="kw">n</span>(),                      <span class="co"># count of valid scores</span></a>
-<a class="sourceLine" id="cb397-4" title="4">                   <span class="dt">vsae_mean =</span> <span class="kw">mean</span>(vsae),               <span class="co"># mean score</span></a>
-<a class="sourceLine" id="cb397-5" title="5">                   <span class="dt">vsae_sd   =</span> <span class="kw">sd</span>(vsae),                 <span class="co"># standard deviation of scores</span></a>
-<a class="sourceLine" id="cb397-6" title="6">                   <span class="dt">vsae_sem  =</span> vsae_sd <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(vsae_n))   <span class="co"># stadard error for the mean of scores</span></a>
-<a class="sourceLine" id="cb397-7" title="7"></a>
-<a class="sourceLine" id="cb397-8" title="8">data_sum_all</a></code></pre></div>
+<div class="sourceCode" id="cb395"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb395-1" title="1">data_sum_all &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb395-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(sicdegp, age2) <span class="op">%&gt;%</span><span class="st">              </span><span class="co"># specify the groups</span></a>
+<a class="sourceLine" id="cb395-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">vsae_n    =</span> <span class="kw">n</span>(),                      <span class="co"># count of valid scores</span></a>
+<a class="sourceLine" id="cb395-4" title="4">                   <span class="dt">vsae_mean =</span> <span class="kw">mean</span>(vsae),               <span class="co"># mean score</span></a>
+<a class="sourceLine" id="cb395-5" title="5">                   <span class="dt">vsae_sd   =</span> <span class="kw">sd</span>(vsae),                 <span class="co"># standard deviation of scores</span></a>
+<a class="sourceLine" id="cb395-6" title="6">                   <span class="dt">vsae_sem  =</span> vsae_sd <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(vsae_n))   <span class="co"># stadard error for the mean of scores</span></a>
+<a class="sourceLine" id="cb395-7" title="7"></a>
+<a class="sourceLine" id="cb395-8" title="8">data_sum_all</a></code></pre></div>
 <pre><code># A tibble: 15 x 6
 # Groups:   sicdegp [3]
    sicdegp  age2 vsae_n vsae_mean vsae_sd vsae_sem
@@ -1673,17 +1673,17 @@ age2_11
 <blockquote>
 <p>FOR COMPLETE CASES ONLY!!!</p>
 </blockquote>
-<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb399-1" title="1">data_sum_cc &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb399-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(childid) <span class="op">%&gt;%</span><span class="st">        </span><span class="co"># group-by child</span></a>
-<a class="sourceLine" id="cb399-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">child_vsae_n =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># count the number of valid VSAE scores</span></a>
-<a class="sourceLine" id="cb399-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(child_vsae_n <span class="op">==</span><span class="st"> </span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># restrict to only thoes children with 5 valid scores</span></a>
-<a class="sourceLine" id="cb399-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(sicdegp, age2) <span class="op">%&gt;%</span><span class="st">              </span><span class="co"># specify the groups</span></a>
-<a class="sourceLine" id="cb399-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">vsae_n    =</span> <span class="kw">n</span>(),                      <span class="co"># count of valid scores</span></a>
-<a class="sourceLine" id="cb399-7" title="7">                   <span class="dt">vsae_mean =</span> <span class="kw">mean</span>(vsae),               <span class="co"># mean score</span></a>
-<a class="sourceLine" id="cb399-8" title="8">                   <span class="dt">vsae_sd   =</span> <span class="kw">sd</span>(vsae),                 <span class="co"># standard deviation of scores</span></a>
-<a class="sourceLine" id="cb399-9" title="9">                   <span class="dt">vsae_sem  =</span> vsae_sd <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(vsae_n))   <span class="co"># stadard error for the mean of scores</span></a>
-<a class="sourceLine" id="cb399-10" title="10"></a>
-<a class="sourceLine" id="cb399-11" title="11">data_sum_cc</a></code></pre></div>
+<div class="sourceCode" id="cb397"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb397-1" title="1">data_sum_cc &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb397-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(childid) <span class="op">%&gt;%</span><span class="st">        </span><span class="co"># group-by child</span></a>
+<a class="sourceLine" id="cb397-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">child_vsae_n =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st">    </span><span class="co"># count the number of valid VSAE scores</span></a>
+<a class="sourceLine" id="cb397-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(child_vsae_n <span class="op">==</span><span class="st"> </span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># restrict to only thoes children with 5 valid scores</span></a>
+<a class="sourceLine" id="cb397-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(sicdegp, age2) <span class="op">%&gt;%</span><span class="st">              </span><span class="co"># specify the groups</span></a>
+<a class="sourceLine" id="cb397-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">vsae_n    =</span> <span class="kw">n</span>(),                      <span class="co"># count of valid scores</span></a>
+<a class="sourceLine" id="cb397-7" title="7">                   <span class="dt">vsae_mean =</span> <span class="kw">mean</span>(vsae),               <span class="co"># mean score</span></a>
+<a class="sourceLine" id="cb397-8" title="8">                   <span class="dt">vsae_sd   =</span> <span class="kw">sd</span>(vsae),                 <span class="co"># standard deviation of scores</span></a>
+<a class="sourceLine" id="cb397-9" title="9">                   <span class="dt">vsae_sem  =</span> vsae_sd <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(vsae_n))   <span class="co"># stadard error for the mean of scores</span></a>
+<a class="sourceLine" id="cb397-10" title="10"></a>
+<a class="sourceLine" id="cb397-11" title="11">data_sum_cc</a></code></pre></div>
 <pre><code># A tibble: 15 x 6
 # Groups:   sicdegp [3]
    sicdegp  age2 vsae_n vsae_mean vsae_sd vsae_sem
@@ -1710,136 +1710,136 @@ age2_11
 <p>Use the data in LONG format</p>
 <div id="unequally-spaced" class="section level4">
 <h4><span class="header-section-number">8.2.5.1</span> Unequally Spaced</h4>
-<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb401-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">fct_recode</span>(sicdegp,</a>
-<a class="sourceLine" id="cb401-3" title="3">                                     <span class="st">&quot;Low Communication&quot;</span> =<span class="st"> &quot;low&quot;</span>,</a>
-<a class="sourceLine" id="cb401-4" title="4">                                     <span class="st">&quot;Medium Communication&quot;</span> =<span class="st"> &quot;med&quot;</span>,</a>
-<a class="sourceLine" id="cb401-5" title="5">                                     <span class="st">&quot;High Communication&quot;</span> =<span class="st"> &quot;high&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb401-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
-<a class="sourceLine" id="cb401-7" title="7">             <span class="dt">y =</span> vsae)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> childid),</a>
-<a class="sourceLine" id="cb401-10" title="10">            <span class="dt">alpha =</span> <span class="fl">.5</span>,</a>
-<a class="sourceLine" id="cb401-11" title="11">            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-12" title="12"><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>sicdegp)  <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-14" title="14"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age of Child, Years&quot;</span>,</a>
-<a class="sourceLine" id="cb401-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Vineland Socialization Age Equivalent&quot;</span>,</a>
-<a class="sourceLine" id="cb401-17" title="17">       <span class="dt">color =</span> <span class="st">&quot;Sequenced Inventory of Communication Development&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-18" title="18"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Flexible&quot;</span>),</a>
-<a class="sourceLine" id="cb401-19" title="19">              <span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,</a>
-<a class="sourceLine" id="cb401-20" title="20">              <span class="dt">se =</span> <span class="ot">FALSE</span>,) <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-21" title="21"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Linear&quot;</span>),</a>
-<a class="sourceLine" id="cb401-22" title="22">              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</a>
-<a class="sourceLine" id="cb401-23" title="23">              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-24" title="24"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Smoother Type: &quot;</span>,</a>
-<a class="sourceLine" id="cb401-25" title="25">                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Flexible&quot;</span> =<span class="st"> &quot;blue&quot;</span>, </a>
-<a class="sourceLine" id="cb401-26" title="26">                                <span class="st">&quot;Linear&quot;</span>    =<span class="st"> &quot;red&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb401-27" title="27"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
-<a class="sourceLine" id="cb401-28" title="28">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-336-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb399"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb399-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb399-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">fct_recode</span>(sicdegp,</a>
+<a class="sourceLine" id="cb399-3" title="3">                                     <span class="st">&quot;Low Communication&quot;</span> =<span class="st"> &quot;low&quot;</span>,</a>
+<a class="sourceLine" id="cb399-4" title="4">                                     <span class="st">&quot;Medium Communication&quot;</span> =<span class="st"> &quot;med&quot;</span>,</a>
+<a class="sourceLine" id="cb399-5" title="5">                                     <span class="st">&quot;High Communication&quot;</span> =<span class="st"> &quot;high&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb399-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb399-7" title="7">             <span class="dt">y =</span> vsae)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> childid),</a>
+<a class="sourceLine" id="cb399-10" title="10">            <span class="dt">alpha =</span> <span class="fl">.5</span>,</a>
+<a class="sourceLine" id="cb399-11" title="11">            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-12" title="12"><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>sicdegp)  <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-14" title="14"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age of Child, Years&quot;</span>,</a>
+<a class="sourceLine" id="cb399-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Vineland Socialization Age Equivalent&quot;</span>,</a>
+<a class="sourceLine" id="cb399-17" title="17">       <span class="dt">color =</span> <span class="st">&quot;Sequenced Inventory of Communication Development&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-18" title="18"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Flexible&quot;</span>),</a>
+<a class="sourceLine" id="cb399-19" title="19">              <span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,</a>
+<a class="sourceLine" id="cb399-20" title="20">              <span class="dt">se =</span> <span class="ot">FALSE</span>,) <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-21" title="21"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Linear&quot;</span>),</a>
+<a class="sourceLine" id="cb399-22" title="22">              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</a>
+<a class="sourceLine" id="cb399-23" title="23">              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-24" title="24"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Smoother Type: &quot;</span>,</a>
+<a class="sourceLine" id="cb399-25" title="25">                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Flexible&quot;</span> =<span class="st"> &quot;blue&quot;</span>, </a>
+<a class="sourceLine" id="cb399-26" title="26">                                <span class="st">&quot;Linear&quot;</span>    =<span class="st"> &quot;red&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb399-27" title="27"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
+<a class="sourceLine" id="cb399-28" title="28">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-343-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="equally-spaced" class="section level4">
 <h4><span class="header-section-number">8.2.5.2</span> Equally Spaced</h4>
-<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb402-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb402-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">fct_recode</span>(sicdegp,</a>
-<a class="sourceLine" id="cb402-3" title="3">                                     <span class="st">&quot;Low Communication&quot;</span> =<span class="st"> &quot;low&quot;</span>,</a>
-<a class="sourceLine" id="cb402-4" title="4">                                     <span class="st">&quot;Medium Communication&quot;</span> =<span class="st"> &quot;med&quot;</span>,</a>
-<a class="sourceLine" id="cb402-5" title="5">                                     <span class="st">&quot;High Communication&quot;</span> =<span class="st"> &quot;high&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb402-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> obs,</a>
-<a class="sourceLine" id="cb402-7" title="7">             <span class="dt">y =</span> vsae)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb402-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb402-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> childid),</a>
-<a class="sourceLine" id="cb402-10" title="10">            <span class="dt">alpha =</span> <span class="fl">.5</span>,</a>
-<a class="sourceLine" id="cb402-11" title="11">            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb402-12" title="12"><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>sicdegp)  <span class="op">+</span></a>
-<a class="sourceLine" id="cb402-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb402-14" title="14"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Observation Number&quot;</span>,</a>
-<a class="sourceLine" id="cb402-15" title="15">       <span class="dt">y =</span> <span class="st">&quot;Vineland Socialization Age Equivalent&quot;</span>,</a>
-<a class="sourceLine" id="cb402-16" title="16">       <span class="dt">color =</span> <span class="st">&quot;Sequenced Inventory of Communication Development&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb402-17" title="17"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Flexible&quot;</span>),</a>
-<a class="sourceLine" id="cb402-18" title="18">              <span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,</a>
-<a class="sourceLine" id="cb402-19" title="19">              <span class="dt">se =</span> <span class="ot">FALSE</span>,) <span class="op">+</span></a>
-<a class="sourceLine" id="cb402-20" title="20"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Linear&quot;</span>),</a>
-<a class="sourceLine" id="cb402-21" title="21">              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</a>
-<a class="sourceLine" id="cb402-22" title="22">              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb402-23" title="23"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Smoother Type: &quot;</span>,</a>
-<a class="sourceLine" id="cb402-24" title="24">                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Flexible&quot;</span> =<span class="st"> &quot;blue&quot;</span>, </a>
-<a class="sourceLine" id="cb402-25" title="25">                                <span class="st">&quot;Linear&quot;</span>    =<span class="st"> &quot;red&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb402-26" title="26"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
-<a class="sourceLine" id="cb402-27" title="27">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-337-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb400"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb400-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb400-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">fct_recode</span>(sicdegp,</a>
+<a class="sourceLine" id="cb400-3" title="3">                                     <span class="st">&quot;Low Communication&quot;</span> =<span class="st"> &quot;low&quot;</span>,</a>
+<a class="sourceLine" id="cb400-4" title="4">                                     <span class="st">&quot;Medium Communication&quot;</span> =<span class="st"> &quot;med&quot;</span>,</a>
+<a class="sourceLine" id="cb400-5" title="5">                                     <span class="st">&quot;High Communication&quot;</span> =<span class="st"> &quot;high&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb400-6" title="6"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> obs,</a>
+<a class="sourceLine" id="cb400-7" title="7">             <span class="dt">y =</span> vsae)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb400-8" title="8"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="fl">0.75</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb400-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> childid),</a>
+<a class="sourceLine" id="cb400-10" title="10">            <span class="dt">alpha =</span> <span class="fl">.5</span>,</a>
+<a class="sourceLine" id="cb400-11" title="11">            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb400-12" title="12"><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>sicdegp)  <span class="op">+</span></a>
+<a class="sourceLine" id="cb400-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb400-14" title="14"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Observation Number&quot;</span>,</a>
+<a class="sourceLine" id="cb400-15" title="15">       <span class="dt">y =</span> <span class="st">&quot;Vineland Socialization Age Equivalent&quot;</span>,</a>
+<a class="sourceLine" id="cb400-16" title="16">       <span class="dt">color =</span> <span class="st">&quot;Sequenced Inventory of Communication Development&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb400-17" title="17"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Flexible&quot;</span>),</a>
+<a class="sourceLine" id="cb400-18" title="18">              <span class="dt">method =</span> <span class="st">&quot;loess&quot;</span>,</a>
+<a class="sourceLine" id="cb400-19" title="19">              <span class="dt">se =</span> <span class="ot">FALSE</span>,) <span class="op">+</span></a>
+<a class="sourceLine" id="cb400-20" title="20"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">color =</span> <span class="st">&quot;Linear&quot;</span>),</a>
+<a class="sourceLine" id="cb400-21" title="21">              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</a>
+<a class="sourceLine" id="cb400-22" title="22">              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb400-23" title="23"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Smoother Type: &quot;</span>,</a>
+<a class="sourceLine" id="cb400-24" title="24">                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;Flexible&quot;</span> =<span class="st"> &quot;blue&quot;</span>, </a>
+<a class="sourceLine" id="cb400-25" title="25">                                <span class="st">&quot;Linear&quot;</span>    =<span class="st"> &quot;red&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb400-26" title="26"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
+<a class="sourceLine" id="cb400-27" title="27">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-344-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="side-by-side-boxplots" class="section level3">
 <h3><span class="header-section-number">8.2.6</span> Side-by-side Boxplots</h3>
-<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb403-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb403-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> sicdegp,</a>
-<a class="sourceLine" id="cb403-3" title="3">             <span class="dt">y =</span> vsae,</a>
-<a class="sourceLine" id="cb403-4" title="4">             <span class="dt">fill =</span> sicdegp)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb403-5" title="5"><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb403-6" title="6"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb403-7" title="7"><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>age, </a>
-<a class="sourceLine" id="cb403-8" title="8">             <span class="dt">labeller =</span> <span class="st">&quot;label_both&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb403-9" title="9"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-338-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb401"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb401-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb401-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> sicdegp,</a>
+<a class="sourceLine" id="cb401-3" title="3">             <span class="dt">y =</span> vsae,</a>
+<a class="sourceLine" id="cb401-4" title="4">             <span class="dt">fill =</span> sicdegp)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb401-5" title="5"><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb401-6" title="6"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb401-7" title="7"><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>age, </a>
+<a class="sourceLine" id="cb401-8" title="8">             <span class="dt">labeller =</span> <span class="st">&quot;label_both&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb401-9" title="9"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;top&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-345-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="means-plots" class="section level3">
 <h3><span class="header-section-number">8.2.7</span> Means Plots</h3>
 <div id="default-stat_summary" class="section level4">
 <h4><span class="header-section-number">8.2.7.1</span> Default <code>stat_summary</code></h4>
 <p>It is nice that the <code>stat_summary()</code> layer computes the standard error for the mean for you using the data in LONG format</p>
-<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb404-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb404-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
-<a class="sourceLine" id="cb404-3" title="3">             <span class="dt">y =</span> vsae,</a>
-<a class="sourceLine" id="cb404-4" title="4">             <span class="dt">color =</span> sicdegp)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb404-5" title="5"><span class="st">  </span><span class="kw">stat_summary</span>() <span class="op">+</span><span class="st">                       </span><span class="co"># default: points at MEAN and extend vertically 1 standard error for the mean</span></a>
-<a class="sourceLine" id="cb404-6" title="6"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> <span class="st">&quot;mean&quot;</span>,           <span class="co"># plot the means</span></a>
-<a class="sourceLine" id="cb404-7" title="7">               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st">          </span><span class="co"># ...and connect with lines</span></a>
-<a class="sourceLine" id="cb404-8" title="8"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb404-9" title="9"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb404-10" title="10"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb404-11" title="11">        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.25</span>, <span class="fl">1.25</span>),</a>
-<a class="sourceLine" id="cb404-12" title="12">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-339-1.png" width="768" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb405-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb405-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> obs,</a>
-<a class="sourceLine" id="cb405-3" title="3">             <span class="dt">y =</span> vsae,</a>
-<a class="sourceLine" id="cb405-4" title="4">             <span class="dt">color =</span> sicdegp)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb405-5" title="5"><span class="st">  </span><span class="kw">stat_summary</span>() <span class="op">+</span><span class="st">                       </span><span class="co"># default: points at MEAN and extend vertically 1 standard error for the mean</span></a>
-<a class="sourceLine" id="cb405-6" title="6"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> <span class="st">&quot;mean&quot;</span>,           <span class="co"># plot the means</span></a>
-<a class="sourceLine" id="cb405-7" title="7">               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st">          </span><span class="co"># ...and connect with lines</span></a>
-<a class="sourceLine" id="cb405-8" title="8"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb405-9" title="9"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb405-10" title="10">        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.25</span>, <span class="fl">1.25</span>),</a>
-<a class="sourceLine" id="cb405-11" title="11">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-340-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb402"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb402-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb402-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb402-3" title="3">             <span class="dt">y =</span> vsae,</a>
+<a class="sourceLine" id="cb402-4" title="4">             <span class="dt">color =</span> sicdegp)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb402-5" title="5"><span class="st">  </span><span class="kw">stat_summary</span>() <span class="op">+</span><span class="st">                       </span><span class="co"># default: points at MEAN and extend vertically 1 standard error for the mean</span></a>
+<a class="sourceLine" id="cb402-6" title="6"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> <span class="st">&quot;mean&quot;</span>,           <span class="co"># plot the means</span></a>
+<a class="sourceLine" id="cb402-7" title="7">               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st">          </span><span class="co"># ...and connect with lines</span></a>
+<a class="sourceLine" id="cb402-8" title="8"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb402-9" title="9"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb402-10" title="10"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb402-11" title="11">        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.25</span>, <span class="fl">1.25</span>),</a>
+<a class="sourceLine" id="cb402-12" title="12">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-346-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb403"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb403-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb403-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> obs,</a>
+<a class="sourceLine" id="cb403-3" title="3">             <span class="dt">y =</span> vsae,</a>
+<a class="sourceLine" id="cb403-4" title="4">             <span class="dt">color =</span> sicdegp)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb403-5" title="5"><span class="st">  </span><span class="kw">stat_summary</span>() <span class="op">+</span><span class="st">                       </span><span class="co"># default: points at MEAN and extend vertically 1 standard error for the mean</span></a>
+<a class="sourceLine" id="cb403-6" title="6"><span class="st">  </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> <span class="st">&quot;mean&quot;</span>,           <span class="co"># plot the means</span></a>
+<a class="sourceLine" id="cb403-7" title="7">               <span class="dt">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="op">+</span><span class="st">          </span><span class="co"># ...and connect with lines</span></a>
+<a class="sourceLine" id="cb403-8" title="8"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb403-9" title="9"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb403-10" title="10">        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.25</span>, <span class="fl">1.25</span>),</a>
+<a class="sourceLine" id="cb403-11" title="11">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-347-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="manually-summarized" class="section level4">
 <h4><span class="header-section-number">8.2.7.2</span> Manually Summarized</h4>
-<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb406-1" title="1">data_sum_all <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb406-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age2 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb406-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb406-4" title="4"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
-<a class="sourceLine" id="cb406-5" title="5">      <span class="dt">y =</span> vsae_mean,</a>
-<a class="sourceLine" id="cb406-6" title="6">      <span class="dt">color =</span> sicdegp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb406-7" title="7"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> vsae_mean <span class="op">-</span><span class="st"> </span>vsae_sem,   <span class="co"># mean +/- one SE for the mean</span></a>
-<a class="sourceLine" id="cb406-8" title="8">                    <span class="dt">ymax =</span> vsae_mean <span class="op">+</span><span class="st"> </span>vsae_sem),</a>
-<a class="sourceLine" id="cb406-9" title="9">                <span class="dt">width =</span> <span class="fl">.25</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb406-10" title="10"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">shape =</span> sicdegp),</a>
-<a class="sourceLine" id="cb406-11" title="11">             <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb406-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> sicdegp)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb406-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb406-14" title="14"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb406-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age of Child, Years&quot;</span>,</a>
-<a class="sourceLine" id="cb406-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Vineland Socialization Age Equivalent&quot;</span>,</a>
-<a class="sourceLine" id="cb406-17" title="17">       <span class="dt">color =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>,</a>
-<a class="sourceLine" id="cb406-18" title="18">       <span class="dt">shape =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>,</a>
-<a class="sourceLine" id="cb406-19" title="19">       <span class="dt">linetype =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb406-20" title="20"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
-<a class="sourceLine" id="cb406-21" title="21">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-341-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb404"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb404-1" title="1">data_sum_all <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb404-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age2 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb404-3" title="3"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb404-4" title="4"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb404-5" title="5">      <span class="dt">y =</span> vsae_mean,</a>
+<a class="sourceLine" id="cb404-6" title="6">      <span class="dt">color =</span> sicdegp) <span class="op">+</span></a>
+<a class="sourceLine" id="cb404-7" title="7"><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> vsae_mean <span class="op">-</span><span class="st"> </span>vsae_sem,   <span class="co"># mean +/- one SE for the mean</span></a>
+<a class="sourceLine" id="cb404-8" title="8">                    <span class="dt">ymax =</span> vsae_mean <span class="op">+</span><span class="st"> </span>vsae_sem),</a>
+<a class="sourceLine" id="cb404-9" title="9">                <span class="dt">width =</span> <span class="fl">.25</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb404-10" title="10"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">shape =</span> sicdegp),</a>
+<a class="sourceLine" id="cb404-11" title="11">             <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb404-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> sicdegp)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb404-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb404-14" title="14"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb404-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age of Child, Years&quot;</span>,</a>
+<a class="sourceLine" id="cb404-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Vineland Socialization Age Equivalent&quot;</span>,</a>
+<a class="sourceLine" id="cb404-17" title="17">       <span class="dt">color =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>,</a>
+<a class="sourceLine" id="cb404-18" title="18">       <span class="dt">shape =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>,</a>
+<a class="sourceLine" id="cb404-19" title="19">       <span class="dt">linetype =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb404-20" title="20"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
+<a class="sourceLine" id="cb404-21" title="21">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-348-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1865,21 +1865,21 @@ age2_11
 </ul>
 <div id="fit-the-model-10" class="section level3">
 <h3><span class="header-section-number">8.3.1</span> Fit the Model</h3>
-<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb407-1" title="1">fit_lmer_<span class="dv">1</span>_re &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb407-2" title="2"><span class="st">                        </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid), </a>
-<a class="sourceLine" id="cb407-3" title="3">                      <span class="dt">data =</span> data_long,</a>
-<a class="sourceLine" id="cb407-4" title="4">                      <span class="dt">REML =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb405"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb405-1" title="1">fit_lmer_<span class="dv">1</span>_re &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb405-2" title="2"><span class="st">                        </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid), </a>
+<a class="sourceLine" id="cb405-3" title="3">                      <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb405-4" title="4">                      <span class="dt">REML =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="table-of-prameter-estimates" class="section level3">
 <h3><span class="header-section-number">8.3.2</span> Table of Prameter Estimates</h3>
-<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb408-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
-<a class="sourceLine" id="cb408-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
-<a class="sourceLine" id="cb408-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
-<a class="sourceLine" id="cb408-4" title="4"></a>
-<a class="sourceLine" id="cb408-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_lmer_<span class="dv">1</span>_re),</a>
-<a class="sourceLine" id="cb408-6" title="6">                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Full Model&quot;</span>,</a>
-<a class="sourceLine" id="cb408-7" title="7">                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb408-8" title="8">                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb406"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb406-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
+<a class="sourceLine" id="cb406-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
+<a class="sourceLine" id="cb406-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
+<a class="sourceLine" id="cb406-4" title="4"></a>
+<a class="sourceLine" id="cb406-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_lmer_<span class="dv">1</span>_re),</a>
+<a class="sourceLine" id="cb406-6" title="6">                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Full Model&quot;</span>,</a>
+<a class="sourceLine" id="cb406-7" title="7">                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb406-8" title="8">                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 &lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -2071,11 +2071,11 @@ Var: Residual
 <div id="plot-of-the-estimated-marginal-means" class="section level3">
 <h3><span class="header-section-number">8.3.3</span> Plot of the Estimated Marginal Means</h3>
 <p>Note: the <span class="math inline">\(x-axis\)</span> is the <code>age2</code> (age - 2) variable, so it represents time since age 2 (or baseline)</p>
-<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb409-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_<span class="dv">1</span>_re,</a>
-<a class="sourceLine" id="cb409-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,</a>
-<a class="sourceLine" id="cb409-3" title="3">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>, <span class="st">&quot;sicdegp&quot;</span>),</a>
-<a class="sourceLine" id="cb409-4" title="4">                   <span class="dt">title =</span> <span class="st">&quot;Model 1: Loaded Means Structure&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-345-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb407"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb407-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_<span class="dv">1</span>_re,</a>
+<a class="sourceLine" id="cb407-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,</a>
+<a class="sourceLine" id="cb407-3" title="3">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>, <span class="st">&quot;sicdegp&quot;</span>),</a>
+<a class="sourceLine" id="cb407-4" title="4">                   <span class="dt">title =</span> <span class="st">&quot;Model 1: Loaded Means Structure&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-352-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-2a-drop-random-intercepts" class="section level2">
@@ -2085,14 +2085,14 @@ Var: Residual
 <p>This new model implies that children have common initial VSAE value at age 2, given their SICD group.</p>
 <div id="fit-the-model-11" class="section level3">
 <h3><span class="header-section-number">8.4.1</span> Fit the Model</h3>
-<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb410-1" title="1">fit_lmer_2a_re &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb410-2" title="2"><span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid), </a>
-<a class="sourceLine" id="cb410-3" title="3">                      <span class="dt">data =</span> data_long,</a>
-<a class="sourceLine" id="cb410-4" title="4">                      <span class="dt">REML =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb408"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb408-1" title="1">fit_lmer_2a_re &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb408-2" title="2"><span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid), </a>
+<a class="sourceLine" id="cb408-3" title="3">                      <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb408-4" title="4">                      <span class="dt">REML =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 </div>
 <div id="assess-the-signifcance" class="section level3">
 <h3><span class="header-section-number">8.4.2</span> Assess the Signifcance</h3>
-<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb411-1" title="1"><span class="kw">anova</span>(fit_lmer_<span class="dv">1</span>_re, fit_lmer_2a_re, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb409"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb409-1" title="1"><span class="kw">anova</span>(fit_lmer_<span class="dv">1</span>_re, fit_lmer_2a_re, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <pre><code>Data: data_long
 Models:
 fit_lmer_2a_re: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (-1 + age2 + I(age2^2) | 
@@ -2114,14 +2114,14 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 Difference of 2 covariance parameters</p>
 <div id="fit-the-model-12" class="section level3">
 <h3><span class="header-section-number">8.5.1</span> Fit the Model</h3>
-<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb413-1" title="1">fit_lmer_2b_re &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb413-2" title="2"><span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2  <span class="op">|</span><span class="st"> </span>childid), </a>
-<a class="sourceLine" id="cb413-3" title="3">                      <span class="dt">REML =</span> <span class="ot">TRUE</span>, </a>
-<a class="sourceLine" id="cb413-4" title="4">                      <span class="dt">data =</span> data_long)</a></code></pre></div>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb411-1" title="1">fit_lmer_2b_re &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb411-2" title="2"><span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2  <span class="op">|</span><span class="st"> </span>childid), </a>
+<a class="sourceLine" id="cb411-3" title="3">                      <span class="dt">REML =</span> <span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb411-4" title="4">                      <span class="dt">data =</span> data_long)</a></code></pre></div>
 </div>
 <div id="assess-the-signifcance-1" class="section level3">
 <h3><span class="header-section-number">8.5.2</span> Assess the Signifcance</h3>
-<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb414-1" title="1"><span class="kw">anova</span>(fit_lmer_2a_re, fit_lmer_2b_re, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb412-1" title="1"><span class="kw">anova</span>(fit_lmer_2a_re, fit_lmer_2b_re, <span class="dt">refit =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 <pre><code>Data: data_long
 Models:
 fit_lmer_2b_re: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (-1 + age2 | childid)
@@ -2143,19 +2143,19 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <p>Fit the previous ‘best’ model via ML, not REML to compare nested model that differe in terms of fixed effects only</p>
 <div id="fit-the-models" class="section level3">
 <h3><span class="header-section-number">8.6.1</span> Fit the Models</h3>
-<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb416-1" title="1">fit_lmer_2a_ml &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb416-2" title="2"><span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid),  </a>
-<a class="sourceLine" id="cb416-3" title="3">                      <span class="dt">data =</span> data_long, </a>
-<a class="sourceLine" id="cb416-4" title="4">                      <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb416-5" title="5"></a>
-<a class="sourceLine" id="cb416-6" title="6">fit_lmer_<span class="dv">3</span>_ml &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp  <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb416-7" title="7"><span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid), </a>
-<a class="sourceLine" id="cb416-8" title="8">                      <span class="dt">data =</span> data_long, </a>
-<a class="sourceLine" id="cb416-9" title="9">                      <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb414-1" title="1">fit_lmer_2a_ml &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>)<span class="op">*</span>sicdegp <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb414-2" title="2"><span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid),  </a>
+<a class="sourceLine" id="cb414-3" title="3">                      <span class="dt">data =</span> data_long, </a>
+<a class="sourceLine" id="cb414-4" title="4">                      <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb414-5" title="5"></a>
+<a class="sourceLine" id="cb414-6" title="6">fit_lmer_<span class="dv">3</span>_ml &lt;-<span class="st"> </span><span class="kw">lmer</span>(vsae <span class="op">~</span><span class="st"> </span>age2<span class="op">*</span>sicdegp  <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb414-7" title="7"><span class="st">                        </span>(<span class="op">-</span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>age2 <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age2<span class="op">^</span><span class="dv">2</span>) <span class="op">|</span><span class="st"> </span>childid), </a>
+<a class="sourceLine" id="cb414-8" title="8">                      <span class="dt">data =</span> data_long, </a>
+<a class="sourceLine" id="cb414-9" title="9">                      <span class="dt">REML =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 </div>
 <div id="assess-the-signifcance-2" class="section level3">
 <h3><span class="header-section-number">8.6.2</span> Assess the Signifcance</h3>
-<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb417-1" title="1"><span class="kw">anova</span>(fit_lmer_2a_ml, fit_lmer_<span class="dv">3</span>_ml)</a></code></pre></div>
+<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb415-1" title="1"><span class="kw">anova</span>(fit_lmer_2a_ml, fit_lmer_<span class="dv">3</span>_ml)</a></code></pre></div>
 <pre><code>Data: data_long
 Models:
 fit_lmer_3_ml: vsae ~ age2 * sicdegp + (-1 + age2 + I(age2^2) | childid)
@@ -2176,15 +2176,15 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <h2><span class="header-section-number">8.7</span> Final Model</h2>
 <div id="table-of-parameter-esitmates" class="section level3">
 <h3><span class="header-section-number">8.7.1</span> Table of Parameter Esitmates</h3>
-<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb419-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
-<a class="sourceLine" id="cb419-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
-<a class="sourceLine" id="cb419-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
-<a class="sourceLine" id="cb419-4" title="4"></a>
-<a class="sourceLine" id="cb419-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_lmer_2a_re),</a>
-<a class="sourceLine" id="cb419-6" title="6">                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,</a>
-<a class="sourceLine" id="cb419-7" title="7">                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb419-8" title="8">                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb419-9" title="9">                <span class="dt">digits             =</span> <span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb417-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
+<a class="sourceLine" id="cb417-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
+<a class="sourceLine" id="cb417-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
+<a class="sourceLine" id="cb417-4" title="4"></a>
+<a class="sourceLine" id="cb417-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_lmer_2a_re),</a>
+<a class="sourceLine" id="cb417-6" title="6">                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,</a>
+<a class="sourceLine" id="cb417-7" title="7">                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb417-8" title="8">                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb417-9" title="9">                <span class="dt">digits             =</span> <span class="dv">4</span>)</a></code></pre></div>
 &lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -2420,15 +2420,15 @@ VASE =&amp; (\gamma_{0}   + \gamma_{hi}) +
 </div>
 <div id="interpretation-of-random-effects" class="section level3">
 <h3><span class="header-section-number">8.7.3</span> Interpretation of Random Effects</h3>
-<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb420-1" title="1">lme4<span class="op">::</span><span class="kw">VarCorr</span>(fit_lmer_2a_re)<span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb420-2" title="2"><span class="st">  </span><span class="kw">print</span>(<span class="dt">comp =</span> <span class="kw">c</span>(<span class="st">&quot;Variance&quot;</span>, <span class="st">&quot;Std.Dev&quot;</span>),</a>
-<a class="sourceLine" id="cb420-3" title="3">        <span class="dt">digits =</span> <span class="dv">3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb418-1" title="1">lme4<span class="op">::</span><span class="kw">VarCorr</span>(fit_lmer_2a_re)<span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb418-2" title="2"><span class="st">  </span><span class="kw">print</span>(<span class="dt">comp =</span> <span class="kw">c</span>(<span class="st">&quot;Variance&quot;</span>, <span class="st">&quot;Std.Dev&quot;</span>),</a>
+<a class="sourceLine" id="cb418-3" title="3">        <span class="dt">digits =</span> <span class="dv">3</span>)</a></code></pre></div>
 <pre><code> Groups   Name      Variance Std.Dev. Corr 
  childid  age2      13.991   3.741         
           I(age2^2)  0.134   0.366    -0.32
  Residual           37.987   6.163         </code></pre>
-<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb422-1" title="1">fit_lmer_2a_re_sigmas &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">VarCorr</span>(fit_lmer_2a_re) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb422-2" title="2"><span class="st">  </span><span class="kw">data.frame</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb420-1" title="1">fit_lmer_2a_re_sigmas &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">VarCorr</span>(fit_lmer_2a_re) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb420-2" title="2"><span class="st">  </span><span class="kw">data.frame</span>()</a></code></pre></div>
 <p><strong>Here a group of observations = a CHILD</strong></p>
 <div id="residual-varaince" class="section level4">
 <h4><span class="header-section-number">8.7.3.1</span> Residual Varaince</h4>
@@ -2436,11 +2436,11 @@ VASE =&amp; (\gamma_{0}   + \gamma_{hi}) +
 <ul>
 <li><span class="math inline">\(e_{ti}\)</span> the residuals associated with observation at time <span class="math inline">\(t\)</span> on child <span class="math inline">\(i\)</span></li>
 </ul>
-<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb423-1" title="1">sigma_e &lt;-<span class="st"> </span>fit_lmer_2a_re_sigmas <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb423-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(grp <span class="op">==</span><span class="st"> &quot;Residual&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb423-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(vcov)</a>
-<a class="sourceLine" id="cb423-4" title="4"></a>
-<a class="sourceLine" id="cb423-5" title="5">sigma_e</a></code></pre></div>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb421-1" title="1">sigma_e &lt;-<span class="st"> </span>fit_lmer_2a_re_sigmas <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb421-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(grp <span class="op">==</span><span class="st"> &quot;Residual&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb421-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(vcov)</a>
+<a class="sourceLine" id="cb421-4" title="4"></a>
+<a class="sourceLine" id="cb421-5" title="5">sigma_e</a></code></pre></div>
 <pre><code>[1] 37.9869</code></pre>
 <p><span class="math display">\[
 \sigma^2 = \sigma^2_e 
@@ -2455,11 +2455,11 @@ VASE =&amp; (\gamma_{0}   + \gamma_{hi}) +
 <ul>
 <li><span class="math inline">\(u_{1i}\)</span> the DIFFERENCE between child <span class="math inline">\(i\)</span>’s specific linear component for age and the fixed linear component for age, given their SICD group</li>
 </ul>
-<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb425-1" title="1">tau_<span class="dv">11</span> &lt;-<span class="st"> </span>fit_lmer_2a_re_sigmas <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb425-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(grp <span class="op">==</span><span class="st"> &quot;childid&quot;</span>, var1 <span class="op">==</span><span class="st"> &quot;age2&quot;</span>, <span class="kw">is.na</span>(var2)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb425-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(vcov)</a>
-<a class="sourceLine" id="cb425-4" title="4"></a>
-<a class="sourceLine" id="cb425-5" title="5">tau_<span class="dv">11</span></a></code></pre></div>
+<div class="sourceCode" id="cb423"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb423-1" title="1">tau_<span class="dv">11</span> &lt;-<span class="st"> </span>fit_lmer_2a_re_sigmas <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb423-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(grp <span class="op">==</span><span class="st"> &quot;childid&quot;</span>, var1 <span class="op">==</span><span class="st"> &quot;age2&quot;</span>, <span class="kw">is.na</span>(var2)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb423-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(vcov)</a>
+<a class="sourceLine" id="cb423-4" title="4"></a>
+<a class="sourceLine" id="cb423-5" title="5">tau_<span class="dv">11</span></a></code></pre></div>
 <pre><code>[1] 13.9915</code></pre>
 <p><span class="math display">\[
 \tau_{11} = \sigma^2_{u1} 
@@ -2470,11 +2470,11 @@ VASE =&amp; (\gamma_{0}   + \gamma_{hi}) +
 <ul>
 <li><span class="math inline">\(u_{2i}\)</span> the DIFFERENCE between child <span class="math inline">\(i\)</span>’s specific quadratic component for age and the fixed quadratic component for age, given their SICD group</li>
 </ul>
-<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb427-1" title="1">tau_<span class="dv">22</span> &lt;-<span class="st"> </span>fit_lmer_2a_re_sigmas <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb427-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(grp <span class="op">==</span><span class="st"> &quot;childid&quot;</span>, var1 <span class="op">==</span><span class="st"> &quot;I(age2^2)&quot;</span>, <span class="kw">is.na</span>(var2)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb427-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(vcov)</a>
-<a class="sourceLine" id="cb427-4" title="4"></a>
-<a class="sourceLine" id="cb427-5" title="5">tau_<span class="dv">22</span></a></code></pre></div>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb425-1" title="1">tau_<span class="dv">22</span> &lt;-<span class="st"> </span>fit_lmer_2a_re_sigmas <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb425-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(grp <span class="op">==</span><span class="st"> &quot;childid&quot;</span>, var1 <span class="op">==</span><span class="st"> &quot;I(age2^2)&quot;</span>, <span class="kw">is.na</span>(var2)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb425-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(vcov)</a>
+<a class="sourceLine" id="cb425-4" title="4"></a>
+<a class="sourceLine" id="cb425-5" title="5">tau_<span class="dv">22</span></a></code></pre></div>
 <pre><code>[1] 0.1337579</code></pre>
 <p><span class="math display">\[
 \tau_{22} = \sigma^2_{u2} 
@@ -2486,11 +2486,11 @@ VASE =&amp; (\gamma_{0}   + \gamma_{hi}) +
 <h4><span class="header-section-number">8.7.3.3</span> 1 Covariance (or correlation) Components</h4>
 <p><strong>Slope-slope covariance</strong></p>
 <p>Random LINEAR and Quadratic effect of age covariance:</p>
-<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb429-1" title="1">tau_<span class="dv">12</span> &lt;-<span class="st"> </span>fit_lmer_2a_re_sigmas <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb429-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(grp <span class="op">==</span><span class="st"> &quot;childid&quot;</span>, var1 <span class="op">==</span><span class="st"> &quot;age2&quot;</span>, var2 <span class="op">==</span><span class="st"> &quot;I(age2^2)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb429-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(vcov)</a>
-<a class="sourceLine" id="cb429-4" title="4"></a>
-<a class="sourceLine" id="cb429-5" title="5">tau_<span class="dv">12</span></a></code></pre></div>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb427-1" title="1">tau_<span class="dv">12</span> &lt;-<span class="st"> </span>fit_lmer_2a_re_sigmas <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb427-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(grp <span class="op">==</span><span class="st"> &quot;childid&quot;</span>, var1 <span class="op">==</span><span class="st"> &quot;age2&quot;</span>, var2 <span class="op">==</span><span class="st"> &quot;I(age2^2)&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb427-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">pull</span>(vcov)</a>
+<a class="sourceLine" id="cb427-4" title="4"></a>
+<a class="sourceLine" id="cb427-5" title="5">tau_<span class="dv">12</span></a></code></pre></div>
 <pre><code>[1] -0.4436102</code></pre>
 <p><span class="math display">\[
 \tau_{12} = \sigma^2_{u12} 
@@ -2509,100 +2509,100 @@ VASE =&amp; (\gamma_{0}   + \gamma_{hi}) +
 <p><span class="math display">\[
 e_{ti}  \sim  N(0, \sigma^2)
 \]</span></p>
-<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb431-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_2a_re, <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb429"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb429-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_2a_re, <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</a></code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-360-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-367-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]
 [[2]]$childid</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-360-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-367-2.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 
 [[3]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-360-3.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-367-3.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[4]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-360-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-367-4.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="plot-of-the-estimated-marginal-means-1" class="section level3">
 <h3><span class="header-section-number">8.7.5</span> Plot of the Estimated Marginal Means</h3>
 <div id="quick-and-default" class="section level4">
 <h4><span class="header-section-number">8.7.5.1</span> Quick and Default</h4>
 <p>Note: the <span class="math inline">\(x-axis\)</span> is the <code>age2</code> (age - 2) variable, so it represents time since age 2 (or baseline)</p>
-<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb436-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_2a_re,</a>
-<a class="sourceLine" id="cb436-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,                 <span class="co"># estimated marginal means (no random effects)</span></a>
-<a class="sourceLine" id="cb436-3" title="3">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>, <span class="st">&quot;sicdegp&quot;</span>),  <span class="co"># 1st = x-axiz, 2nd = seperate lines</span></a>
-<a class="sourceLine" id="cb436-4" title="4">                   <span class="dt">title =</span> <span class="st">&quot;Final Model (2a)&quot;</span>)    <span class="co"># Optional title</span></a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-361-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb434-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_2a_re,</a>
+<a class="sourceLine" id="cb434-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,                 <span class="co"># estimated marginal means (no random effects)</span></a>
+<a class="sourceLine" id="cb434-3" title="3">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>, <span class="st">&quot;sicdegp&quot;</span>),  <span class="co"># 1st = x-axiz, 2nd = seperate lines</span></a>
+<a class="sourceLine" id="cb434-4" title="4">                   <span class="dt">title =</span> <span class="st">&quot;Final Model (2a)&quot;</span>)    <span class="co"># Optional title</span></a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-368-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="more-customized---color" class="section level4">
 <h4><span class="header-section-number">8.7.5.2</span> More Customized - Color</h4>
 <p>This version would look better on a poster or in a slide presentation.</p>
-<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb437-1" title="1">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>,<span class="st">&quot;sicdegp&quot;</span>),  <span class="co"># variables involved in interactions</span></a>
-<a class="sourceLine" id="cb437-2" title="2">                <span class="dt">mod =</span> fit_lmer_2a_re,</a>
-<a class="sourceLine" id="cb437-3" title="3">                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">age2 =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">11</span>, <span class="dt">by =</span> <span class="fl">.1</span>))) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># add more values to smooth out the prediction lines and ribbons</span></a>
-<a class="sourceLine" id="cb437-4" title="4"><span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb437-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age2 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># trandform back to standard years</span></a>
-<a class="sourceLine" id="cb437-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">factor</span>(sicdegp,</a>
-<a class="sourceLine" id="cb437-7" title="7">                                 <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;high&quot;</span>, <span class="st">&quot;med&quot;</span>, <span class="st">&quot;low&quot;</span>),</a>
-<a class="sourceLine" id="cb437-8" title="8">                                 <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;High&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;Low&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb437-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
-<a class="sourceLine" id="cb437-10" title="10">             <span class="dt">y =</span> fit,</a>
-<a class="sourceLine" id="cb437-11" title="11">             <span class="dt">group =</span> sicdegp)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb437-12" title="12"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower,        <span class="co"># 95% Confidence Intervals</span></a>
-<a class="sourceLine" id="cb437-13" title="13">                  <span class="dt">ymax =</span> upper,</a>
-<a class="sourceLine" id="cb437-14" title="14">                  <span class="dt">fill =</span> sicdegp),</a>
-<a class="sourceLine" id="cb437-15" title="15">              <span class="dt">alpha =</span> <span class="fl">.3</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb437-16" title="16"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> sicdegp,</a>
-<a class="sourceLine" id="cb437-17" title="17">                <span class="dt">color =</span> sicdegp),</a>
-<a class="sourceLine" id="cb437-18" title="18">            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb437-19" title="19"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span><span class="st">                  </span><span class="co"># mark values that were actually measured</span></a>
-<a class="sourceLine" id="cb437-20" title="20"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">120</span>, <span class="dt">by =</span> <span class="dv">20</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb437-21" title="21"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb437-22" title="22"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb437-23" title="23"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(.<span class="dv">2</span>, <span class="fl">.8</span>),</a>
-<a class="sourceLine" id="cb437-24" title="24">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),</a>
-<a class="sourceLine" id="cb437-25" title="25">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">2.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb437-26" title="26"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,</a>
-<a class="sourceLine" id="cb437-27" title="27">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,</a>
-<a class="sourceLine" id="cb437-28" title="28">       <span class="dt">linetype =</span> <span class="st">&quot;Communication&quot;</span>,</a>
-<a class="sourceLine" id="cb437-29" title="29">       <span class="dt">fill     =</span> <span class="st">&quot;Communication&quot;</span>,</a>
-<a class="sourceLine" id="cb437-30" title="30">       <span class="dt">color    =</span> <span class="st">&quot;Communication&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-362-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb435-1" title="1">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>,<span class="st">&quot;sicdegp&quot;</span>),  <span class="co"># variables involved in interactions</span></a>
+<a class="sourceLine" id="cb435-2" title="2">                <span class="dt">mod =</span> fit_lmer_2a_re,</a>
+<a class="sourceLine" id="cb435-3" title="3">                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">age2 =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">11</span>, <span class="dt">by =</span> <span class="fl">.1</span>))) <span class="op">%&gt;%</span><span class="st">   </span><span class="co"># add more values to smooth out the prediction lines and ribbons</span></a>
+<a class="sourceLine" id="cb435-4" title="4"><span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb435-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age2 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st">     </span><span class="co"># trandform back to standard years</span></a>
+<a class="sourceLine" id="cb435-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">factor</span>(sicdegp,</a>
+<a class="sourceLine" id="cb435-7" title="7">                                 <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;high&quot;</span>, <span class="st">&quot;med&quot;</span>, <span class="st">&quot;low&quot;</span>),</a>
+<a class="sourceLine" id="cb435-8" title="8">                                 <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;High&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;Low&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb435-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb435-10" title="10">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb435-11" title="11">             <span class="dt">group =</span> sicdegp)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb435-12" title="12"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower,        <span class="co"># 95% Confidence Intervals</span></a>
+<a class="sourceLine" id="cb435-13" title="13">                  <span class="dt">ymax =</span> upper,</a>
+<a class="sourceLine" id="cb435-14" title="14">                  <span class="dt">fill =</span> sicdegp),</a>
+<a class="sourceLine" id="cb435-15" title="15">              <span class="dt">alpha =</span> <span class="fl">.3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb435-16" title="16"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> sicdegp,</a>
+<a class="sourceLine" id="cb435-17" title="17">                <span class="dt">color =</span> sicdegp),</a>
+<a class="sourceLine" id="cb435-18" title="18">            <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb435-19" title="19"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span><span class="st">                  </span><span class="co"># mark values that were actually measured</span></a>
+<a class="sourceLine" id="cb435-20" title="20"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">120</span>, <span class="dt">by =</span> <span class="dv">20</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb435-21" title="21"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb435-22" title="22"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb435-23" title="23"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(.<span class="dv">2</span>, <span class="fl">.8</span>),</a>
+<a class="sourceLine" id="cb435-24" title="24">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),</a>
+<a class="sourceLine" id="cb435-25" title="25">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">2.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb435-26" title="26"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,</a>
+<a class="sourceLine" id="cb435-27" title="27">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,</a>
+<a class="sourceLine" id="cb435-28" title="28">       <span class="dt">linetype =</span> <span class="st">&quot;Communication&quot;</span>,</a>
+<a class="sourceLine" id="cb435-29" title="29">       <span class="dt">fill     =</span> <span class="st">&quot;Communication&quot;</span>,</a>
+<a class="sourceLine" id="cb435-30" title="30">       <span class="dt">color    =</span> <span class="st">&quot;Communication&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-369-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="more-customized---black-and-white" class="section level4">
 <h4><span class="header-section-number">8.7.5.3</span> More Customized - Black and White</h4>
 <p>This version would be better for a publication.</p>
-<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb438-1" title="1">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>,<span class="st">&quot;sicdegp&quot;</span>),</a>
-<a class="sourceLine" id="cb438-2" title="2">                <span class="dt">mod =</span> fit_lmer_2a_re,</a>
-<a class="sourceLine" id="cb438-3" title="3">                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">age2 =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">11</span>, <span class="dt">by =</span> <span class="fl">.1</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb438-4" title="4"><span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb438-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age2 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb438-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">factor</span>(sicdegp,</a>
-<a class="sourceLine" id="cb438-7" title="7">                                 <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;high&quot;</span>, <span class="st">&quot;med&quot;</span>, <span class="st">&quot;low&quot;</span>),</a>
-<a class="sourceLine" id="cb438-8" title="8">                                 <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;High&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;Low&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb438-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
-<a class="sourceLine" id="cb438-10" title="10">             <span class="dt">y =</span> fit,</a>
-<a class="sourceLine" id="cb438-11" title="11">             <span class="dt">group =</span> sicdegp)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb438-12" title="12"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower,</a>
-<a class="sourceLine" id="cb438-13" title="13">                  <span class="dt">ymax =</span> upper,</a>
-<a class="sourceLine" id="cb438-14" title="14">                  <span class="dt">fill =</span> sicdegp),</a>
-<a class="sourceLine" id="cb438-15" title="15">              <span class="dt">alpha =</span> <span class="fl">.4</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb438-16" title="16"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> sicdegp),</a>
-<a class="sourceLine" id="cb438-17" title="17">            <span class="dt">size =</span> <span class="fl">.7</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb438-18" title="18"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb438-19" title="19"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">120</span>, <span class="dt">by =</span> <span class="dv">20</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb438-20" title="20"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb438-21" title="21"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray10&quot;</span>, <span class="st">&quot;gray40&quot;</span>, <span class="st">&quot;gray60&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb438-22" title="22"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb438-23" title="23"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(.<span class="dv">15</span>, <span class="fl">.8</span>),</a>
-<a class="sourceLine" id="cb438-24" title="24">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),</a>
-<a class="sourceLine" id="cb438-25" title="25">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb438-26" title="26"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,</a>
-<a class="sourceLine" id="cb438-27" title="27">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,</a>
-<a class="sourceLine" id="cb438-28" title="28">       <span class="dt">linetype =</span> <span class="st">&quot;Communication&quot;</span>,</a>
-<a class="sourceLine" id="cb438-29" title="29">       <span class="dt">fill     =</span> <span class="st">&quot;Communication&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-363-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb436-1" title="1">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;age2&quot;</span>,<span class="st">&quot;sicdegp&quot;</span>),</a>
+<a class="sourceLine" id="cb436-2" title="2">                <span class="dt">mod =</span> fit_lmer_2a_re,</a>
+<a class="sourceLine" id="cb436-3" title="3">                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">age2 =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">11</span>, <span class="dt">by =</span> <span class="fl">.1</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb436-4" title="4"><span class="st">  </span><span class="kw">data.frame</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb436-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age =</span> age2 <span class="op">+</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb436-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">factor</span>(sicdegp,</a>
+<a class="sourceLine" id="cb436-7" title="7">                                 <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;high&quot;</span>, <span class="st">&quot;med&quot;</span>, <span class="st">&quot;low&quot;</span>),</a>
+<a class="sourceLine" id="cb436-8" title="8">                                 <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;High&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;Low&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb436-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb436-10" title="10">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb436-11" title="11">             <span class="dt">group =</span> sicdegp)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb436-12" title="12"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> lower,</a>
+<a class="sourceLine" id="cb436-13" title="13">                  <span class="dt">ymax =</span> upper,</a>
+<a class="sourceLine" id="cb436-14" title="14">                  <span class="dt">fill =</span> sicdegp),</a>
+<a class="sourceLine" id="cb436-15" title="15">              <span class="dt">alpha =</span> <span class="fl">.4</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb436-16" title="16"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">linetype =</span> sicdegp),</a>
+<a class="sourceLine" id="cb436-17" title="17">            <span class="dt">size =</span> <span class="fl">.7</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb436-18" title="18"><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb436-19" title="19"><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">120</span>, <span class="dt">by =</span> <span class="dv">20</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb436-20" title="20"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;dotted&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb436-21" title="21"><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray10&quot;</span>, <span class="st">&quot;gray40&quot;</span>, <span class="st">&quot;gray60&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb436-22" title="22"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb436-23" title="23"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(.<span class="dv">15</span>, <span class="fl">.8</span>),</a>
+<a class="sourceLine" id="cb436-24" title="24">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),</a>
+<a class="sourceLine" id="cb436-25" title="25">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb436-26" title="26"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,</a>
+<a class="sourceLine" id="cb436-27" title="27">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,</a>
+<a class="sourceLine" id="cb436-28" title="28">       <span class="dt">linetype =</span> <span class="st">&quot;Communication&quot;</span>,</a>
+<a class="sourceLine" id="cb436-29" title="29">       <span class="dt">fill     =</span> <span class="st">&quot;Communication&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-370-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="blups-vs.-fixed-effects" class="section level3">
@@ -2610,66 +2610,66 @@ e_{ti}  \sim  N(0, \sigma^2)
 <p><strong>BLUP</strong> = Best Linear Unbiased Predictor</p>
 <p>A BLUP is the specific prediction for an individual supject, showin by black lines below. This includes the fixed effects as well as the specific random effects for a given individual.</p>
 <p>Comparatively, the blue lines below display the predictions for fixed effects only.</p>
-<div class="sourceCode" id="cb439"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb439-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb439-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">fct_recode</span>(sicdegp,</a>
-<a class="sourceLine" id="cb439-3" title="3">                                     <span class="st">&quot;Low Communication&quot;</span> =<span class="st"> &quot;low&quot;</span>,</a>
-<a class="sourceLine" id="cb439-4" title="4">                                     <span class="st">&quot;Medium Communication&quot;</span> =<span class="st"> &quot;med&quot;</span>,</a>
-<a class="sourceLine" id="cb439-5" title="5">                                     <span class="st">&quot;High Communication&quot;</span> =<span class="st"> &quot;high&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb439-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_fixed =</span> <span class="kw">predict</span>(fit_lmer_2a_re, <span class="dt">re.form =</span> <span class="ot">NA</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># fixed effects only</span></a>
-<a class="sourceLine" id="cb439-7" title="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_wrand =</span> <span class="kw">predict</span>(fit_lmer_2a_re)) <span class="op">%&gt;%</span><span class="st">               </span><span class="co"># fixed and random effects together</span></a>
-<a class="sourceLine" id="cb439-8" title="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age2,</a>
-<a class="sourceLine" id="cb439-9" title="9">             <span class="dt">y =</span> vsae)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb439-10" title="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_wrand,           <span class="co"># BLUP = fixed and random effects together</span></a>
-<a class="sourceLine" id="cb439-11" title="11">                <span class="dt">group =</span> childid,</a>
-<a class="sourceLine" id="cb439-12" title="12">                <span class="dt">color =</span> <span class="st">&quot;BLUP&quot;</span>,</a>
-<a class="sourceLine" id="cb439-13" title="13">                <span class="dt">size  =</span> <span class="st">&quot;BLUP&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb439-14" title="14"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_fixed,           <span class="co"># fixed effects only</span></a>
-<a class="sourceLine" id="cb439-15" title="15">                <span class="dt">group =</span> sicdegp,</a>
-<a class="sourceLine" id="cb439-16" title="16">                <span class="dt">color =</span> <span class="st">&quot;Fixed&quot;</span>,</a>
-<a class="sourceLine" id="cb439-17" title="17">                <span class="dt">size  =</span> <span class="st">&quot;Fixed&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb439-18" title="18"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,</a>
-<a class="sourceLine" id="cb439-19" title="19">                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> &quot;black&quot;</span>,</a>
-<a class="sourceLine" id="cb439-20" title="20">                                <span class="st">&quot;Fixed&quot;</span> =<span class="st"> &quot;blue&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb439-21" title="21"><span class="st">  </span><span class="kw">scale_size_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,</a>
-<a class="sourceLine" id="cb439-22" title="22">                    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> </span><span class="fl">.5</span>,</a>
-<a class="sourceLine" id="cb439-23" title="23">                               <span class="st">&quot;Fixed&quot;</span> =<span class="st"> </span><span class="fl">1.5</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb439-24" title="24"><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>sicdegp) <span class="op">+</span></a>
-<a class="sourceLine" id="cb439-25" title="25"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb439-26" title="26"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,</a>
-<a class="sourceLine" id="cb439-27" title="27">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb439-28" title="28"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
-<a class="sourceLine" id="cb439-29" title="29">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-364-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb440"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb440-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb440-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_fixed =</span> <span class="kw">predict</span>(fit_lmer_2a_re, <span class="dt">re.form =</span> <span class="ot">NA</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb440-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_wrand =</span> <span class="kw">predict</span>(fit_lmer_2a_re)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb440-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(childid <span class="op">%in%</span><span class="st"> </span><span class="kw">sample</span>(<span class="kw">levels</span>(data_long<span class="op">$</span>childid), <span class="dv">25</span>)) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># 25 randomly sampled children</span></a>
-<a class="sourceLine" id="cb440-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
-<a class="sourceLine" id="cb440-6" title="6">             <span class="dt">y =</span> vsae)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb440-7" title="7"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> sicdegp),</a>
-<a class="sourceLine" id="cb440-8" title="8">             <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb440-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_wrand,</a>
-<a class="sourceLine" id="cb440-10" title="10">                <span class="dt">linetype =</span> <span class="st">&quot;BLUP&quot;</span>,</a>
-<a class="sourceLine" id="cb440-11" title="11">                <span class="dt">size     =</span> <span class="st">&quot;BLUP&quot;</span>),</a>
-<a class="sourceLine" id="cb440-12" title="12">            <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb440-13" title="13"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_fixed,</a>
-<a class="sourceLine" id="cb440-14" title="14">                <span class="dt">color =</span> sicdegp,</a>
-<a class="sourceLine" id="cb440-15" title="15">                <span class="dt">linetype =</span> <span class="st">&quot;Fixed&quot;</span>,</a>
-<a class="sourceLine" id="cb440-16" title="16">                <span class="dt">size     =</span> <span class="st">&quot;Fixed&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb440-17" title="17"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,</a>
-<a class="sourceLine" id="cb440-18" title="18">                        <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> &quot;longdash&quot;</span>,</a>
-<a class="sourceLine" id="cb440-19" title="19">                                   <span class="st">&quot;Fixed&quot;</span> =<span class="st"> &quot;solid&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb440-20" title="20"><span class="st">  </span><span class="kw">scale_size_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,</a>
-<a class="sourceLine" id="cb440-21" title="21">                    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> </span><span class="fl">.5</span>,</a>
-<a class="sourceLine" id="cb440-22" title="22">                               <span class="st">&quot;Fixed&quot;</span> =<span class="st"> </span><span class="dv">1</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb440-23" title="23"><span class="st">  </span><span class="kw">facet_wrap</span>(. <span class="op">~</span><span class="st"> </span>childid, <span class="dt">labeller =</span> <span class="st">&quot;label_both&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb440-24" title="24"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb440-25" title="25"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
-<a class="sourceLine" id="cb440-26" title="26">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb440-27" title="27"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,</a>
-<a class="sourceLine" id="cb440-28" title="28">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,</a>
-<a class="sourceLine" id="cb440-29" title="29">       <span class="dt">color =</span> <span class="st">&quot;Communication:&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-365-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb437"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb437-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb437-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">sicdegp =</span> <span class="kw">fct_recode</span>(sicdegp,</a>
+<a class="sourceLine" id="cb437-3" title="3">                                     <span class="st">&quot;Low Communication&quot;</span> =<span class="st"> &quot;low&quot;</span>,</a>
+<a class="sourceLine" id="cb437-4" title="4">                                     <span class="st">&quot;Medium Communication&quot;</span> =<span class="st"> &quot;med&quot;</span>,</a>
+<a class="sourceLine" id="cb437-5" title="5">                                     <span class="st">&quot;High Communication&quot;</span> =<span class="st"> &quot;high&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb437-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_fixed =</span> <span class="kw">predict</span>(fit_lmer_2a_re, <span class="dt">re.form =</span> <span class="ot">NA</span>)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># fixed effects only</span></a>
+<a class="sourceLine" id="cb437-7" title="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_wrand =</span> <span class="kw">predict</span>(fit_lmer_2a_re)) <span class="op">%&gt;%</span><span class="st">               </span><span class="co"># fixed and random effects together</span></a>
+<a class="sourceLine" id="cb437-8" title="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age2,</a>
+<a class="sourceLine" id="cb437-9" title="9">             <span class="dt">y =</span> vsae)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-10" title="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_wrand,           <span class="co"># BLUP = fixed and random effects together</span></a>
+<a class="sourceLine" id="cb437-11" title="11">                <span class="dt">group =</span> childid,</a>
+<a class="sourceLine" id="cb437-12" title="12">                <span class="dt">color =</span> <span class="st">&quot;BLUP&quot;</span>,</a>
+<a class="sourceLine" id="cb437-13" title="13">                <span class="dt">size  =</span> <span class="st">&quot;BLUP&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-14" title="14"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_fixed,           <span class="co"># fixed effects only</span></a>
+<a class="sourceLine" id="cb437-15" title="15">                <span class="dt">group =</span> sicdegp,</a>
+<a class="sourceLine" id="cb437-16" title="16">                <span class="dt">color =</span> <span class="st">&quot;Fixed&quot;</span>,</a>
+<a class="sourceLine" id="cb437-17" title="17">                <span class="dt">size  =</span> <span class="st">&quot;Fixed&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-18" title="18"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,</a>
+<a class="sourceLine" id="cb437-19" title="19">                     <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> &quot;black&quot;</span>,</a>
+<a class="sourceLine" id="cb437-20" title="20">                                <span class="st">&quot;Fixed&quot;</span> =<span class="st"> &quot;blue&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-21" title="21"><span class="st">  </span><span class="kw">scale_size_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,</a>
+<a class="sourceLine" id="cb437-22" title="22">                    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> </span><span class="fl">.5</span>,</a>
+<a class="sourceLine" id="cb437-23" title="23">                               <span class="st">&quot;Fixed&quot;</span> =<span class="st"> </span><span class="fl">1.5</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-24" title="24"><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>sicdegp) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-25" title="25"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-26" title="26"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,</a>
+<a class="sourceLine" id="cb437-27" title="27">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb437-28" title="28"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
+<a class="sourceLine" id="cb437-29" title="29">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-371-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb438"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb438-1" title="1">data_long <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb438-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_fixed =</span> <span class="kw">predict</span>(fit_lmer_2a_re, <span class="dt">re.form =</span> <span class="ot">NA</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb438-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">pred_wrand =</span> <span class="kw">predict</span>(fit_lmer_2a_re)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb438-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(childid <span class="op">%in%</span><span class="st"> </span><span class="kw">sample</span>(<span class="kw">levels</span>(data_long<span class="op">$</span>childid), <span class="dv">25</span>)) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># 25 randomly sampled children</span></a>
+<a class="sourceLine" id="cb438-5" title="5"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb438-6" title="6">             <span class="dt">y =</span> vsae)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb438-7" title="7"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> sicdegp),</a>
+<a class="sourceLine" id="cb438-8" title="8">             <span class="dt">size =</span> <span class="dv">3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb438-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_wrand,</a>
+<a class="sourceLine" id="cb438-10" title="10">                <span class="dt">linetype =</span> <span class="st">&quot;BLUP&quot;</span>,</a>
+<a class="sourceLine" id="cb438-11" title="11">                <span class="dt">size     =</span> <span class="st">&quot;BLUP&quot;</span>),</a>
+<a class="sourceLine" id="cb438-12" title="12">            <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb438-13" title="13"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">y =</span> pred_fixed,</a>
+<a class="sourceLine" id="cb438-14" title="14">                <span class="dt">color =</span> sicdegp,</a>
+<a class="sourceLine" id="cb438-15" title="15">                <span class="dt">linetype =</span> <span class="st">&quot;Fixed&quot;</span>,</a>
+<a class="sourceLine" id="cb438-16" title="16">                <span class="dt">size     =</span> <span class="st">&quot;Fixed&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb438-17" title="17"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,</a>
+<a class="sourceLine" id="cb438-18" title="18">                        <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> &quot;longdash&quot;</span>,</a>
+<a class="sourceLine" id="cb438-19" title="19">                                   <span class="st">&quot;Fixed&quot;</span> =<span class="st"> &quot;solid&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb438-20" title="20"><span class="st">  </span><span class="kw">scale_size_manual</span>(<span class="dt">name =</span> <span class="st">&quot;Model: &quot;</span>,</a>
+<a class="sourceLine" id="cb438-21" title="21">                    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;BLUP&quot;</span>  =<span class="st"> </span><span class="fl">.5</span>,</a>
+<a class="sourceLine" id="cb438-22" title="22">                               <span class="st">&quot;Fixed&quot;</span> =<span class="st"> </span><span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb438-23" title="23"><span class="st">  </span><span class="kw">facet_wrap</span>(. <span class="op">~</span><span class="st"> </span>childid, <span class="dt">labeller =</span> <span class="st">&quot;label_both&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb438-24" title="24"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb438-25" title="25"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</a>
+<a class="sourceLine" id="cb438-26" title="26">        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb438-27" title="27"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, in years&quot;</span>,</a>
+<a class="sourceLine" id="cb438-28" title="28">       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,</a>
+<a class="sourceLine" id="cb438-29" title="29">       <span class="dt">color =</span> <span class="st">&quot;Communication:&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-372-1.png" width="768" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

@@ -624,47 +624,47 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <a href="http://www.danielluedecke.de/">Daniel Lüdecke</a> is German researcher that has put together several GREAT packages, including <code>sjPlot</code> which we will detail here. Documentation can be found at: <a href="http://www.strengejacke.de/sjPlot/index.html" class="uri">http://www.strengejacke.de/sjPlot/index.html</a>
 </p>
 </div>
-<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb346-1" title="1"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></a>
-<a class="sourceLine" id="cb346-2" title="2"><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></a>
-<a class="sourceLine" id="cb346-3" title="3"></a>
-<a class="sourceLine" id="cb346-4" title="4"><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed modelsts models</span></a>
-<a class="sourceLine" id="cb346-5" title="5"></a>
-<a class="sourceLine" id="cb346-6" title="6"><span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span></a>
-<a class="sourceLine" id="cb346-7" title="7"></a>
-<a class="sourceLine" id="cb346-8" title="8"><span class="kw">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span></a></code></pre></div>
+<div class="sourceCode" id="cb344"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb344-1" title="1"><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></a>
+<a class="sourceLine" id="cb344-2" title="2"><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></a>
+<a class="sourceLine" id="cb344-3" title="3"></a>
+<a class="sourceLine" id="cb344-4" title="4"><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed modelsts models</span></a>
+<a class="sourceLine" id="cb344-5" title="5"></a>
+<a class="sourceLine" id="cb344-6" title="6"><span class="kw">library</span>(haven)        <span class="co"># read in SPSS dataset</span></a>
+<a class="sourceLine" id="cb344-7" title="7"></a>
+<a class="sourceLine" id="cb344-8" title="8"><span class="kw">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span></a></code></pre></div>
 <p>Read the SPSS data in with the <code>haven</code> package and prepare it (see previous chapter).</p>
-<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb347-1" title="1">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0&quot;</span>)</a>
-<a class="sourceLine" id="cb347-2" title="2"></a>
-<a class="sourceLine" id="cb347-3" title="3">data_achieve_center_scale &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb347-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(id, region, corp, school, class), factor) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb347-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gender =</span> gender <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb347-6" title="6"><span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb347-7" title="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">classize =</span> classize <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb347-8" title="8"><span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;12-17&quot;</span>, <span class="st">&quot;18-21&quot;</span>, </a>
-<a class="sourceLine" id="cb347-9" title="9">                                    <span class="st">&quot;22-26&quot;</span>, <span class="st">&quot;&gt;26&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb347-10" title="10"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, region, corp, school, class,           <span class="co"># Identifiers</span></a>
-<a class="sourceLine" id="cb347-11" title="11">                gender, age, geread, gevocab,              <span class="co"># Pupil-level vars</span></a>
-<a class="sourceLine" id="cb347-12" title="12">                classize,                                  <span class="co"># Class-Level vars</span></a>
-<a class="sourceLine" id="cb347-13" title="13">                senroll, ses) <span class="op">%&gt;%</span><span class="st">                          </span><span class="co"># School-level vars</span></a>
-<a class="sourceLine" id="cb347-14" title="14"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gevocab_c =</span> gevocab <span class="op">-</span><span class="st"> </span><span class="fl">4.4938</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb347-15" title="15"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age_c     =</span> age     <span class="op">-</span><span class="st"> </span><span class="fl">107.5290</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb347-16" title="16"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_c =</span> senroll <span class="op">-</span><span class="st"> </span><span class="fl">533.4148</span>) <span class="op">%&gt;%</span><span class="st">  </span></a>
-<a class="sourceLine" id="cb347-17" title="17"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_ch =</span> senroll_c <span class="op">/</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st">        </span><span class="co"># centered AND divided by one hundred</span></a>
-<a class="sourceLine" id="cb347-18" title="18"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">ses_t      =</span> ses <span class="op">/</span><span class="st"> </span><span class="dv">10</span>)                   <span class="co"># JUST divide by ten</span></a></code></pre></div>
+<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb345-1" title="1">data_raw &lt;-<span class="st"> </span>haven<span class="op">::</span><span class="kw">read_sav</span>(<span class="st">&quot;http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0&quot;</span>)</a>
+<a class="sourceLine" id="cb345-2" title="2"></a>
+<a class="sourceLine" id="cb345-3" title="3">data_achieve_center_scale &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-4" title="4"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_at</span>(<span class="kw">vars</span>(id, region, corp, school, class), factor) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gender =</span> gender <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-6" title="6"><span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-7" title="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">classize =</span> classize <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-8" title="8"><span class="st">                  </span><span class="kw">factor</span>(<span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;12-17&quot;</span>, <span class="st">&quot;18-21&quot;</span>, </a>
+<a class="sourceLine" id="cb345-9" title="9">                                    <span class="st">&quot;22-26&quot;</span>, <span class="st">&quot;&gt;26&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-10" title="10"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, region, corp, school, class,           <span class="co"># Identifiers</span></a>
+<a class="sourceLine" id="cb345-11" title="11">                gender, age, geread, gevocab,              <span class="co"># Pupil-level vars</span></a>
+<a class="sourceLine" id="cb345-12" title="12">                classize,                                  <span class="co"># Class-Level vars</span></a>
+<a class="sourceLine" id="cb345-13" title="13">                senroll, ses) <span class="op">%&gt;%</span><span class="st">                          </span><span class="co"># School-level vars</span></a>
+<a class="sourceLine" id="cb345-14" title="14"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">gevocab_c =</span> gevocab <span class="op">-</span><span class="st"> </span><span class="fl">4.4938</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-15" title="15"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">age_c     =</span> age     <span class="op">-</span><span class="st"> </span><span class="fl">107.5290</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb345-16" title="16"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_c =</span> senroll <span class="op">-</span><span class="st"> </span><span class="fl">533.4148</span>) <span class="op">%&gt;%</span><span class="st">  </span></a>
+<a class="sourceLine" id="cb345-17" title="17"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">senroll_ch =</span> senroll_c <span class="op">/</span><span class="st"> </span><span class="dv">100</span>) <span class="op">%&gt;%</span><span class="st">        </span><span class="co"># centered AND divided by one hundred</span></a>
+<a class="sourceLine" id="cb345-18" title="18"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">ses_t      =</span> ses <span class="op">/</span><span class="st"> </span><span class="dv">10</span>)                   <span class="co"># JUST divide by ten</span></a></code></pre></div>
 <p>Fit the final model (see previous chapter)</p>
-<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb348-1" title="1">fit_read_11re_s &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab_c<span class="op">*</span>age_c <span class="op">+</span><span class="st"> </span>gevocab_c<span class="op">*</span>ses_t <span class="op">+</span><span class="st">   </span><span class="co"># 2 2-way interactions</span></a>
-<a class="sourceLine" id="cb348-2" title="2"><span class="st">                                      </span>(gevocab_c <span class="op">|</span><span class="st"> </span>school),  </a>
-<a class="sourceLine" id="cb348-3" title="3">                             <span class="dt">data   =</span> data_achieve_center_scale,</a>
-<a class="sourceLine" id="cb348-4" title="4">                             <span class="dt">REML   =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb349-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
-<a class="sourceLine" id="cb349-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
-<a class="sourceLine" id="cb349-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
-<a class="sourceLine" id="cb349-4" title="4"></a>
-<a class="sourceLine" id="cb349-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_11re_s),</a>
-<a class="sourceLine" id="cb349-6" title="6">                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Final&quot;</span>), </a>
-<a class="sourceLine" id="cb349-7" title="7">                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,</a>
-<a class="sourceLine" id="cb349-8" title="8">                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb349-9" title="9">                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb346"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb346-1" title="1">fit_read_11re_s &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(geread <span class="op">~</span><span class="st"> </span>gevocab_c<span class="op">*</span>age_c <span class="op">+</span><span class="st"> </span>gevocab_c<span class="op">*</span>ses_t <span class="op">+</span><span class="st">   </span><span class="co"># 2 2-way interactions</span></a>
+<a class="sourceLine" id="cb346-2" title="2"><span class="st">                                      </span>(gevocab_c <span class="op">|</span><span class="st"> </span>school),  </a>
+<a class="sourceLine" id="cb346-3" title="3">                             <span class="dt">data   =</span> data_achieve_center_scale,</a>
+<a class="sourceLine" id="cb346-4" title="4">                             <span class="dt">REML   =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb347"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb347-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
+<a class="sourceLine" id="cb347-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
+<a class="sourceLine" id="cb347-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
+<a class="sourceLine" id="cb347-4" title="4"></a>
+<a class="sourceLine" id="cb347-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(fit_read_11re_s),</a>
+<a class="sourceLine" id="cb347-6" title="6">                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Final&quot;</span>), </a>
+<a class="sourceLine" id="cb347-7" title="7">                <span class="dt">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,</a>
+<a class="sourceLine" id="cb347-8" title="8">                <span class="dt">caption.above      =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb347-9" title="9">                <span class="dt">single.row         =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 &lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="top" style="margin-bottom:0.3em;">
@@ -812,16 +812,16 @@ Var: Residual
 <p>Another example for the iris-dataset: <code>terms = "Species"</code> would not work, instead you would write <code>terms = "Species [versicolor, virginica]"</code> to remove these two levels, or <code>terms = "Speciesversicolor"</code> if you just want to remove the level versicolor from the plot.</p>
 <div id="fixed-effects" class="section level3">
 <h3><span class="header-section-number">7.1.1</span> Fixed Effects</h3>
+<div class="sourceCode" id="cb348"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb348-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb348-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-306-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb349"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb349-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb349-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>,</a>
+<a class="sourceLine" id="cb349-3" title="3">                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb350"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb350-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb350-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-299-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb351-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb351-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;est&quot;</span>,</a>
-<a class="sourceLine" id="cb351-3" title="3">                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-300-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb352-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb352-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-301-1.png" width="576" style="display: block; margin: auto;" /></p>
+<a class="sourceLine" id="cb350-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-308-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Determines in which way estimates are sorted in the plot with the option: <code>sort.est =</code></p>
 <ul>
 <li>If <code>NULL</code> (default), no sorting is done and estimates are sorted in the same order as they appear in the model formula.<br />
@@ -832,34 +832,34 @@ Var: Residual
 </li>
 <li>If <code>type = "re"</code>, specify a predictor’s / coefficient’s name to sort estimates according to this random effect.</li>
 </ul>
-<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb353-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb353-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,</a>
-<a class="sourceLine" id="cb353-3" title="3">                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-302-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb354-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb354-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,</a>
-<a class="sourceLine" id="cb354-3" title="3">                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb354-4" title="4">                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-303-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb351"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb351-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb351-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,</a>
+<a class="sourceLine" id="cb351-3" title="3">                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb352"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb352-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb352-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;std&quot;</span>,</a>
+<a class="sourceLine" id="cb352-3" title="3">                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb352-4" title="4">                   <span class="dt">show.values =</span> <span class="ot">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-310-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Plots standardized beta values, however, standardization follows <span class="citation">Gelman (<a href="references.html#ref-gelman2008">2008</a>)</span> suggestion, rescaling the estimates by dividing them by two standard deviations instead of just one. Resulting coefficients are then directly comparable for untransformed <strong>binary predictors</strong>.</p>
-<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb355-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb355-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;std2&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-304-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb353"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb353-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb353-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;std2&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="random-effects" class="section level3">
 <h3><span class="header-section-number">7.1.2</span> Random Effects</h3>
-<div class="sourceCode" id="cb356"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb356-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb356-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-305-1.png" width="288" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb357"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb357-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb357-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>,</a>
-<a class="sourceLine" id="cb357-3" title="3">                   <span class="dt">grid =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb357-4" title="4">                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb354"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb354-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb354-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-1.png" width="288" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb355"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb355-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb355-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;re&quot;</span>,</a>
+<a class="sourceLine" id="cb355-3" title="3">                   <span class="dt">grid =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb355-4" title="4">                   <span class="dt">sort.est =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-306-1.png" width="288" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-1.png" width="288" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-306-2.png" width="288" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-2.png" width="288" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="plotting-marginal-effects" class="section level2">
@@ -873,25 +873,25 @@ Var: Residual
 <div id="predicted-values" class="section level3">
 <h3><span class="header-section-number">7.2.1</span> Predicted Values</h3>
 <p>Based on (i.e. is a wrapper for): <code>ggeffects::ggpredict()</code></p>
-<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb360-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb360-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,</a>
-<a class="sourceLine" id="cb360-3" title="3">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-307-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb358"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb358-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb358-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,</a>
+<a class="sourceLine" id="cb358-3" title="3">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>pred.type =</code> option only applies for Marginal Effects plots with <strong>mixed effects models</strong>. Indicates whether predicted values should be <strong>conditioned on random effects</strong> (<code>pred.type = "re"</code>) or fixed effects only (<code>pred.type = "fe"</code>, the default). For details, see documentation of the type-argument in <code>ggpredict()</code> function.</p>
-<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb361-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb361-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,</a>
-<a class="sourceLine" id="cb361-3" title="3">                   <span class="dt">pred.type =</span> <span class="st">&quot;re&quot;</span>,</a>
-<a class="sourceLine" id="cb361-4" title="4">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-308-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb359"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb359-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb359-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,</a>
+<a class="sourceLine" id="cb359-3" title="3">                   <span class="dt">pred.type =</span> <span class="st">&quot;re&quot;</span>,</a>
+<a class="sourceLine" id="cb359-4" title="4">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-315-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="effect-plots" class="section level3">
 <h3><span class="header-section-number">7.2.2</span> Effect Plots</h3>
 <p>Based on (i.e. is a wrapper for): <code>ggeffects::ggeffect()</code></p>
 <p>Similar to <code>type = "pred"</code>, however, discrete predictors are held constant at their proportions (not reference level). See the <code>ggeffect</code> package documentation for details.</p>
-<div class="sourceCode" id="cb362"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb362-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb362-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;eff&quot;</span>,</a>
-<a class="sourceLine" id="cb362-3" title="3">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-309-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb360"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb360-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb360-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;eff&quot;</span>,</a>
+<a class="sourceLine" id="cb360-3" title="3">                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-316-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="interaction-plots" class="section level3">
 <h3><span class="header-section-number">7.2.3</span> Interaction Plots</h3>
@@ -903,13 +903,13 @@ Var: Residual
 <li><strong>second</strong> (and possibly third) variable in an interaction is used as grouping factor(s) (moderating variable).</li>
 </ul>
 <p>Use <code>type = "pred"</code> or <code>type = "eff"</code> and specify a certain order in the terms-argument to indicate which variable(s) should be used as moderator.</p>
-<div class="sourceCode" id="cb363"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb363-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb363-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb361"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb361-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb361-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>)</a></code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-310-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-310-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-317-2.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>mdrt.values =</code> option indicates which values of the <strong>moderator variable</strong> should be used when plotting interaction terms (i.e. <code>type = "int"</code>).</p>
 <ul>
 <li><p><code>minmax</code> (default) minimum and maximum values (lower and upper bounds) of the moderator are used to plot the interaction between independent variable and moderator(s).</p></li>
@@ -918,14 +918,14 @@ Var: Residual
 <li><p><code>quart</code> calculates and uses the quartiles (lower, median and upper) of the moderator value.</p></li>
 <li><p><code>all</code> uses all values of the moderator variable.</p></li>
 </ul>
-<div class="sourceCode" id="cb366"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb366-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb366-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>,</a>
-<a class="sourceLine" id="cb366-3" title="3">                   <span class="dt">mdrt.values =</span> <span class="st">&quot;meansd&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb364"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb364-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb364-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;int&quot;</span>,</a>
+<a class="sourceLine" id="cb364-3" title="3">                   <span class="dt">mdrt.values =</span> <span class="st">&quot;meansd&quot;</span>)</a></code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-318-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-311-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-318-2.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="model-diagnostics" class="section level2">
@@ -934,35 +934,35 @@ Var: Residual
 <div id="slope-of-coefficentes" class="section level3">
 <h3><span class="header-section-number">7.3.1</span> Slope of Coefficentes</h3>
 <p>Slope of coefficients for each single predictor, against the response (linear relationship between each model term and response).</p>
-<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb369-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb369-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;slope&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-312-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb367"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb367-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb367-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;slope&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-319-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="residuals" class="section level3">
 <h3><span class="header-section-number">7.3.2</span> Residuals</h3>
 <p>Slope of coefficients for each single predictor, against the residuals (linear relationship between each model term and residuals).</p>
-<div class="sourceCode" id="cb370"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb370-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb370-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;resid&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-313-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb368"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb368-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb368-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;resid&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-320-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="diagnostics" class="section level3">
 <h3><span class="header-section-number">7.3.3</span> Diagnostics</h3>
 <p>Check model assumptions.</p>
-<div class="sourceCode" id="cb371"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb371-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
-<a class="sourceLine" id="cb371-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb369"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb369-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_read_11re_s,</a>
+<a class="sourceLine" id="cb369-2" title="2">                   <span class="dt">type =</span> <span class="st">&quot;diag&quot;</span>)</a></code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-321-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]
 [[2]]$school</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-321-2.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 
 [[3]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-3.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-321-3.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[4]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-314-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-321-4.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
