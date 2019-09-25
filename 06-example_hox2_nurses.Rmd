@@ -839,7 +839,10 @@ The approach presented by @hox2017 and shown above involved mean-centering categ
 @hox2017 presents a table on page 23 comparing various models.  Note, that table includes models only fit via maximum likelihood, not REML.  Also, the model $M_3$: with cross-level interaction is slightly different for an unknown reason.
 
 ```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_1d_ml, nurse_lmer_2_ml, nurse_lmer_3_ml))
+texreg::screenreg(list(nurse_lmer_0_ml, 
+                       nurse_lmer_1d_ml, 
+                       nurse_lmer_2_ml, 
+                       nurse_lmer_3_ml))
 ```
 
 ```{r, eval=FALSE}
