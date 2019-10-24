@@ -247,11 +247,11 @@ effects::Effect(focal.predictors = c("treatment", "month"),
 
 
 ```{r}
-btb_lmer_RI   <- lme4::lmer(bdi ~ bdi.pre + length + drug + treatment + month + (1 | id), 
+btb_lmer_RI   <- lmerTest::lmer(bdi ~ bdi.pre + length + drug + treatment + month + (1 | id), 
                             data = btb_long, 
                             REML = TRUE)
 
-btb_lmer_RIAS <- lme4::lmer(bdi ~ bdi.pre + length + drug + treatment + month + (month | id), 
+btb_lmer_RIAS <- lmerTest::lmer(bdi ~ bdi.pre + length + drug + treatment + month + (month | id), 
                             data = btb_long, 
                             REML = TRUE,
                             control = lmerControl(optimizer = "Nelder_Mead"))
@@ -401,34 +401,34 @@ texreg::htmlreg(list(btb_lm_1,
 
 
 ```{r}
-btb_geeglm_in <- geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
-                        data = btb_long, 
-                        id = id,
-                        wave = month,
-                        family = gaussian, 
-                        corstr = 'independence')
+btb_geeglm_in <- geepack::geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
+                                 data = btb_long, 
+                                 id = id,
+                                 wave = month,
+                                 family = gaussian, 
+                                 corstr = 'independence')
 
-btb_geeglm_ex <- geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
-                        data = btb_long, 
-                        id = id, 
-                        wave = month,
-                        family = gaussian, 
-                        corstr = 'exchangeable')
+btb_geeglm_ex <- geepack::geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
+                                 data = btb_long, 
+                                 id = id, 
+                                 wave = month,
+                                 family = gaussian, 
+                                 corstr = 'exchangeable')
 
 
-btb_geeglm_ar <- geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
-                        data = btb_long, 
-                        id = id, 
-                        wave = month,
-                        family = gaussian, 
-                        corstr = 'ar1')
+btb_geeglm_ar <- geepack::geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
+                                 data = btb_long, 
+                                 id = id, 
+                                 wave = month,
+                                 family = gaussian, 
+                                 corstr = 'ar1')
 
-btb_geeglm_un <- geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
-                        data = btb_long, 
-                        id = id,
-                        wave = month,
-                        family = gaussian, 
-                        corstr = 'unstructured')
+btb_geeglm_un <- geepack::geeglm(bdi ~ bdi.pre + length + drug + treatment + month, 
+                                 data = btb_long, 
+                                 id = id,
+                                 wave = month,
+                                 family = gaussian, 
+                                 corstr = 'unstructured')
 ```
 
 
@@ -522,29 +522,29 @@ expand.grid(bdi.pre = 23,
             drug = "No",
             treatment = levels(btb_long$treatment),
             month = seq(from = 2, to = 8, by = 2)) %>%  
-  mutate(fit_in = predict(btb_geeglm_in,
-                       newdata = .,
-                       type = "response")) %>% 
-  mutate(fit_ex = predict(btb_geeglm_ex,
-                       newdata = .,
-                       type = "response")) %>% 
-  mutate(fit_ar = predict(btb_geeglm_ar,
-                       newdata = .,
-                       type = "response")) %>% 
-  mutate(fit_un = predict(btb_geeglm_un,
-                       newdata = .,
-                       type = "response")) %>% 
+  dplyr::mutate(fit_in = predict(btb_geeglm_in,
+                                 newdata = .,
+                                 type = "response")) %>% 
+  dplyr::mutate(fit_ex = predict(btb_geeglm_ex,
+                                 newdata = .,
+                                 type = "response")) %>% 
+  dplyr::mutate(fit_ar = predict(btb_geeglm_ar,
+                                 newdata = .,
+                                 type = "response")) %>% 
+  dplyr::mutate(fit_un = predict(btb_geeglm_un,
+                                 newdata = .,
+                                 type = "response")) %>% 
   tidyr::pivot_longer(cols = starts_with("fit_"),
                       names_to = "covR",
                       names_pattern = "fit_(.*)",
                       names_ptype = list(covR = "factor()"),
                       values_to = "fit") %>% 
-  mutate(covR = factor(covR, 
-                       levels = c("un", "ar", "ex", "in"),
-                       labels = c("Unstructured",
-                                  "Auto-Regressive",
-                                  "Compound Symetry",
-                                  "Independence"))) %>% 
+  dplyr::mutate(covR = factor(covR, 
+                              levels = c("un", "ar", "ex", "in"),
+                              labels = c("Unstructured",
+                                         "Auto-Regressive",
+                                         "Compound Symetry",
+                                         "Independence"))) %>% 
   ggplot(aes(x = month,
              y = fit,
              linetype = treatment)) +
@@ -568,29 +568,29 @@ expand.grid(bdi.pre = 23,
             drug = "No",
             treatment = levels(btb_long$treatment),
             month = seq(from = 2, to = 8, by = 2)) %>%  
-  mutate(fit_in = predict(btb_geeglm_in,
-                       newdata = .,
-                       type = "response")) %>% 
-  mutate(fit_ex = predict(btb_geeglm_ex,
-                       newdata = .,
-                       type = "response")) %>% 
-  mutate(fit_ar = predict(btb_geeglm_ar,
-                       newdata = .,
-                       type = "response")) %>% 
-  mutate(fit_un = predict(btb_geeglm_un,
-                       newdata = .,
-                       type = "response")) %>% 
+  dplyr::mutate(fit_in = predict(btb_geeglm_in,
+                                 newdata = .,
+                                 type = "response")) %>% 
+  dplyr::mutate(fit_ex = predict(btb_geeglm_ex,
+                                 newdata = .,
+                                 type = "response")) %>% 
+  dplyr::mutate(fit_ar = predict(btb_geeglm_ar,
+                                 newdata = .,
+                                 type = "response")) %>% 
+  dplyr::mutate(fit_un = predict(btb_geeglm_un,
+                                 newdata = .,
+                                 type = "response")) %>% 
   tidyr::pivot_longer(cols = starts_with("fit_"),
                       names_to = "covR",
                       names_pattern = "fit_(.*)",
                       names_ptype = list(covR = "factor()"),
                       values_to = "fit") %>% 
-  mutate(covR = factor(covR, 
-                       levels = c("un", "ar", "ex", "in"),
-                       labels = c("Unstructured",
-                                  "Auto-Regressive",
-                                  "Compound Symetry",
-                                  "Independence"))) %>% 
+  dplyr::mutate(covR = factor(covR, 
+                              levels = c("un", "ar", "ex", "in"),
+                              labels = c("Unstructured",
+                                         "Auto-Regressive",
+                                         "Compound Symetry",
+                                         "Independence"))) %>% 
   ggplot(aes(x = month,
              y = fit,
              color = covR,
@@ -612,5 +612,31 @@ expand.grid(bdi.pre = 23,
 ```
 
 
+Now only plot the significant variables for the 'best' model.
 
+```{r}
+expand.grid(bdi.pre = c(10, 20, 30),
+            length = "<6m",
+            drug = levels(btb_long$drug),
+            treatment = "TAU",
+            month = seq(from = 2, to = 8, by = 2)) %>%  
+  dplyr::mutate(fit = predict(btb_geeglm_ex,
+                                 newdata = .,
+                                 type = "response")) %>% 
+  dplyr::mutate(bdi.pre = factor(bdi.pre)) %>% 
+  ggplot(aes(x = month,
+             y = fit,
+             linetype = fct_rev(bdi.pre),
+             color = drug)) +
+  geom_line(size = 1) +
+  theme_bw() +
+  labs(title    = "BtheB - Predictions from the GEE model (exchangable)",
+       subtitle = "Trajectory for a person with BL depression < 6 months and randomized to TAU",
+       x = "Month",
+       y = "Predicted BDI",
+       color = "Antidepressant Use:",
+       linetype = "Baseline BDI:") +
+  theme(legend.key.width = unit(1.5, "cm")) +
+  scale_linetype_manual(values = c("solid", "longdash", "dotted"))
+```
 

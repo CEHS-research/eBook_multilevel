@@ -1420,11 +1420,11 @@ RMSE
 <h2><span class="header-section-number">12.3</span> Multilevel Models (MLM)</h2>
 <div id="fit-the-models-3" class="section level3">
 <h3><span class="header-section-number">12.3.1</span> Fit the models</h3>
-<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb606-1" title="1">btb_lmer_RI   &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id), </a>
+<div class="sourceCode" id="cb606"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb606-1" title="1">btb_lmer_RI   &lt;-<span class="st"> </span>lmerTest<span class="op">::</span><span class="kw">lmer</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>id), </a>
 <a class="sourceLine" id="cb606-2" title="2">                            <span class="dt">data =</span> btb_long, </a>
 <a class="sourceLine" id="cb606-3" title="3">                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb606-4" title="4"></a>
-<a class="sourceLine" id="cb606-5" title="5">btb_lmer_RIAS &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month <span class="op">+</span><span class="st"> </span>(month <span class="op">|</span><span class="st"> </span>id), </a>
+<a class="sourceLine" id="cb606-5" title="5">btb_lmer_RIAS &lt;-<span class="st"> </span>lmerTest<span class="op">::</span><span class="kw">lmer</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month <span class="op">+</span><span class="st"> </span>(month <span class="op">|</span><span class="st"> </span>id), </a>
 <a class="sourceLine" id="cb606-6" title="6">                            <span class="dt">data =</span> btb_long, </a>
 <a class="sourceLine" id="cb606-7" title="7">                            <span class="dt">REML =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb606-8" title="8">                            <span class="dt">control =</span> <span class="kw">lmerControl</span>(<span class="dt">optimizer =</span> <span class="st">&quot;Nelder_Mead&quot;</span>))</a></code></pre></div>
@@ -1819,7 +1819,7 @@ btb_lmer_RIAS 10 1885.2 1921.5 -932.58   1865.2 0.9236      2     0.6301</code><
 <h2><span class="header-section-number">12.4</span> General Estimating Equations, GEE</h2>
 <div id="fit-the-models-4" class="section level3">
 <h3><span class="header-section-number">12.4.1</span> Fit the models</h3>
-<p>Use the <code>gee()</code> function from the <strong>gee</strong> package for the results to be used in a <code>texreg()</code> table.</p>
+<p><strong>Use the <code>gee()</code> function from the <code>gee</code> package for the results to be used in a <code>texreg()</code> table.</strong></p>
 <div class="sourceCode" id="cb611"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb611-1" title="1">btb_gee_in &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
 <a class="sourceLine" id="cb611-2" title="2">                       <span class="dt">data =</span> btb_long, </a>
 <a class="sourceLine" id="cb611-3" title="3">                       <span class="dt">id =</span> id, </a>
@@ -1840,18 +1840,19 @@ btb_lmer_RIAS 10 1885.2 1921.5 -932.58   1865.2 0.9236      2     0.6301</code><
     -0.9608077 </code></pre>
 <div class="sourceCode" id="cb615"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb615-1" title="1"><span class="co"># The AR-1 fails if any subjects have only 1 observation</span></a>
 <a class="sourceLine" id="cb615-2" title="2"><span class="co"># to use this one, we would need to remove participants with only 1 BDI</span></a>
-<a class="sourceLine" id="cb615-3" title="3"><span class="co"># btb_gee_ar &lt;- gee(bdi ~ bdi.pre + length + drug + treatment + month,</span></a>
-<a class="sourceLine" id="cb615-4" title="4"><span class="co">#                  data = btb_long,</span></a>
-<a class="sourceLine" id="cb615-5" title="5"><span class="co">#                  id = id,</span></a>
-<a class="sourceLine" id="cb615-6" title="6"><span class="co">#                  family = gaussian,</span></a>
-<a class="sourceLine" id="cb615-7" title="7"><span class="co">#                  corstr = &#39;AR-M&#39;,</span></a>
-<a class="sourceLine" id="cb615-8" title="8"><span class="co">#                  Mv = 1)</span></a>
-<a class="sourceLine" id="cb615-9" title="9"></a>
-<a class="sourceLine" id="cb615-10" title="10">btb_gee_un &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
-<a class="sourceLine" id="cb615-11" title="11">                       <span class="dt">data =</span> btb_long, </a>
-<a class="sourceLine" id="cb615-12" title="12">                       <span class="dt">id =</span> id, </a>
-<a class="sourceLine" id="cb615-13" title="13">                       <span class="dt">family =</span> gaussian, </a>
-<a class="sourceLine" id="cb615-14" title="14">                       <span class="dt">corstr =</span> <span class="st">&#39;unstructured&#39;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb615-3" title="3"></a>
+<a class="sourceLine" id="cb615-4" title="4"><span class="co"># btb_gee_ar &lt;- gee(bdi ~ bdi.pre + length + drug + treatment + month,</span></a>
+<a class="sourceLine" id="cb615-5" title="5"><span class="co">#                  data = btb_long,</span></a>
+<a class="sourceLine" id="cb615-6" title="6"><span class="co">#                  id = id,</span></a>
+<a class="sourceLine" id="cb615-7" title="7"><span class="co">#                  family = gaussian,</span></a>
+<a class="sourceLine" id="cb615-8" title="8"><span class="co">#                  corstr = &#39;AR-M&#39;,</span></a>
+<a class="sourceLine" id="cb615-9" title="9"><span class="co">#                  Mv = 1)</span></a>
+<a class="sourceLine" id="cb615-10" title="10"></a>
+<a class="sourceLine" id="cb615-11" title="11">btb_gee_un &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
+<a class="sourceLine" id="cb615-12" title="12">                       <span class="dt">data =</span> btb_long, </a>
+<a class="sourceLine" id="cb615-13" title="13">                       <span class="dt">id =</span> id, </a>
+<a class="sourceLine" id="cb615-14" title="14">                       <span class="dt">family =</span> gaussian, </a>
+<a class="sourceLine" id="cb615-15" title="15">                       <span class="dt">corstr =</span> <span class="st">&#39;unstructured&#39;</span>)</a></code></pre></div>
 <pre><code>   (Intercept)        bdi.pre      length&gt;6m        drugYes treatmentBtheB 
      7.8830747      0.5723729      1.7530800     -3.5460058     -3.3539662 
          month 
@@ -2436,35 +2437,35 @@ Dispersion
 </div>
 <div id="re-fit-models" class="section level3">
 <h3><span class="header-section-number">12.4.3</span> Re-Fit Models</h3>
-<p>Use the <code>geeglm()</code> function from the <strong>geepack</strong> package for the results to be used in a <code>anova()</code> table.</p>
-<div class="sourceCode" id="cb624"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb624-1" title="1">btb_geeglm_in &lt;-<span class="st"> </span><span class="kw">geeglm</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
-<a class="sourceLine" id="cb624-2" title="2">                        <span class="dt">data =</span> btb_long, </a>
-<a class="sourceLine" id="cb624-3" title="3">                        <span class="dt">id =</span> id,</a>
-<a class="sourceLine" id="cb624-4" title="4">                        <span class="dt">wave =</span> month,</a>
-<a class="sourceLine" id="cb624-5" title="5">                        <span class="dt">family =</span> gaussian, </a>
-<a class="sourceLine" id="cb624-6" title="6">                        <span class="dt">corstr =</span> <span class="st">&#39;independence&#39;</span>)</a>
+<p><strong>Use the <code>geeglm()</code> function from the <code>geepack</code> package for the results to be used in a <code>anova()</code> table.</strong></p>
+<div class="sourceCode" id="cb624"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb624-1" title="1">btb_geeglm_in &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
+<a class="sourceLine" id="cb624-2" title="2">                                 <span class="dt">data =</span> btb_long, </a>
+<a class="sourceLine" id="cb624-3" title="3">                                 <span class="dt">id =</span> id,</a>
+<a class="sourceLine" id="cb624-4" title="4">                                 <span class="dt">wave =</span> month,</a>
+<a class="sourceLine" id="cb624-5" title="5">                                 <span class="dt">family =</span> gaussian, </a>
+<a class="sourceLine" id="cb624-6" title="6">                                 <span class="dt">corstr =</span> <span class="st">&#39;independence&#39;</span>)</a>
 <a class="sourceLine" id="cb624-7" title="7"></a>
-<a class="sourceLine" id="cb624-8" title="8">btb_geeglm_ex &lt;-<span class="st"> </span><span class="kw">geeglm</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
-<a class="sourceLine" id="cb624-9" title="9">                        <span class="dt">data =</span> btb_long, </a>
-<a class="sourceLine" id="cb624-10" title="10">                        <span class="dt">id =</span> id, </a>
-<a class="sourceLine" id="cb624-11" title="11">                        <span class="dt">wave =</span> month,</a>
-<a class="sourceLine" id="cb624-12" title="12">                        <span class="dt">family =</span> gaussian, </a>
-<a class="sourceLine" id="cb624-13" title="13">                        <span class="dt">corstr =</span> <span class="st">&#39;exchangeable&#39;</span>)</a>
+<a class="sourceLine" id="cb624-8" title="8">btb_geeglm_ex &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
+<a class="sourceLine" id="cb624-9" title="9">                                 <span class="dt">data =</span> btb_long, </a>
+<a class="sourceLine" id="cb624-10" title="10">                                 <span class="dt">id =</span> id, </a>
+<a class="sourceLine" id="cb624-11" title="11">                                 <span class="dt">wave =</span> month,</a>
+<a class="sourceLine" id="cb624-12" title="12">                                 <span class="dt">family =</span> gaussian, </a>
+<a class="sourceLine" id="cb624-13" title="13">                                 <span class="dt">corstr =</span> <span class="st">&#39;exchangeable&#39;</span>)</a>
 <a class="sourceLine" id="cb624-14" title="14"></a>
 <a class="sourceLine" id="cb624-15" title="15"></a>
-<a class="sourceLine" id="cb624-16" title="16">btb_geeglm_ar &lt;-<span class="st"> </span><span class="kw">geeglm</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
-<a class="sourceLine" id="cb624-17" title="17">                        <span class="dt">data =</span> btb_long, </a>
-<a class="sourceLine" id="cb624-18" title="18">                        <span class="dt">id =</span> id, </a>
-<a class="sourceLine" id="cb624-19" title="19">                        <span class="dt">wave =</span> month,</a>
-<a class="sourceLine" id="cb624-20" title="20">                        <span class="dt">family =</span> gaussian, </a>
-<a class="sourceLine" id="cb624-21" title="21">                        <span class="dt">corstr =</span> <span class="st">&#39;ar1&#39;</span>)</a>
+<a class="sourceLine" id="cb624-16" title="16">btb_geeglm_ar &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
+<a class="sourceLine" id="cb624-17" title="17">                                 <span class="dt">data =</span> btb_long, </a>
+<a class="sourceLine" id="cb624-18" title="18">                                 <span class="dt">id =</span> id, </a>
+<a class="sourceLine" id="cb624-19" title="19">                                 <span class="dt">wave =</span> month,</a>
+<a class="sourceLine" id="cb624-20" title="20">                                 <span class="dt">family =</span> gaussian, </a>
+<a class="sourceLine" id="cb624-21" title="21">                                 <span class="dt">corstr =</span> <span class="st">&#39;ar1&#39;</span>)</a>
 <a class="sourceLine" id="cb624-22" title="22"></a>
-<a class="sourceLine" id="cb624-23" title="23">btb_geeglm_un &lt;-<span class="st"> </span><span class="kw">geeglm</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
-<a class="sourceLine" id="cb624-24" title="24">                        <span class="dt">data =</span> btb_long, </a>
-<a class="sourceLine" id="cb624-25" title="25">                        <span class="dt">id =</span> id,</a>
-<a class="sourceLine" id="cb624-26" title="26">                        <span class="dt">wave =</span> month,</a>
-<a class="sourceLine" id="cb624-27" title="27">                        <span class="dt">family =</span> gaussian, </a>
-<a class="sourceLine" id="cb624-28" title="28">                        <span class="dt">corstr =</span> <span class="st">&#39;unstructured&#39;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb624-23" title="23">btb_geeglm_un &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month, </a>
+<a class="sourceLine" id="cb624-24" title="24">                                 <span class="dt">data =</span> btb_long, </a>
+<a class="sourceLine" id="cb624-25" title="25">                                 <span class="dt">id =</span> id,</a>
+<a class="sourceLine" id="cb624-26" title="26">                                 <span class="dt">wave =</span> month,</a>
+<a class="sourceLine" id="cb624-27" title="27">                                 <span class="dt">family =</span> gaussian, </a>
+<a class="sourceLine" id="cb624-28" title="28">                                 <span class="dt">corstr =</span> <span class="st">&#39;unstructured&#39;</span>)</a></code></pre></div>
 </div>
 <div id="cant-use-the-likelihood-ratio-test" class="section level3">
 <h3><span class="header-section-number">12.4.4</span> Can’t Use the Likelihood Ratio Test</h3>
@@ -2591,29 +2592,29 @@ Models ranked by QIC(x) </code></pre>
 <a class="sourceLine" id="cb643-3" title="3">            <span class="dt">drug =</span> <span class="st">&quot;No&quot;</span>,</a>
 <a class="sourceLine" id="cb643-4" title="4">            <span class="dt">treatment =</span> <span class="kw">levels</span>(btb_long<span class="op">$</span>treatment),</a>
 <a class="sourceLine" id="cb643-5" title="5">            <span class="dt">month =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">2</span>, <span class="dt">to =</span> <span class="dv">8</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st">  </span></a>
-<a class="sourceLine" id="cb643-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_in =</span> <span class="kw">predict</span>(btb_geeglm_in,</a>
-<a class="sourceLine" id="cb643-7" title="7">                       <span class="dt">newdata =</span> .,</a>
-<a class="sourceLine" id="cb643-8" title="8">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb643-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_ex =</span> <span class="kw">predict</span>(btb_geeglm_ex,</a>
-<a class="sourceLine" id="cb643-10" title="10">                       <span class="dt">newdata =</span> .,</a>
-<a class="sourceLine" id="cb643-11" title="11">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb643-12" title="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_ar =</span> <span class="kw">predict</span>(btb_geeglm_ar,</a>
-<a class="sourceLine" id="cb643-13" title="13">                       <span class="dt">newdata =</span> .,</a>
-<a class="sourceLine" id="cb643-14" title="14">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb643-15" title="15"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_un =</span> <span class="kw">predict</span>(btb_geeglm_un,</a>
-<a class="sourceLine" id="cb643-16" title="16">                       <span class="dt">newdata =</span> .,</a>
-<a class="sourceLine" id="cb643-17" title="17">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit_in =</span> <span class="kw">predict</span>(btb_geeglm_in,</a>
+<a class="sourceLine" id="cb643-7" title="7">                                 <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb643-8" title="8">                                 <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-9" title="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit_ex =</span> <span class="kw">predict</span>(btb_geeglm_ex,</a>
+<a class="sourceLine" id="cb643-10" title="10">                                 <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb643-11" title="11">                                 <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-12" title="12"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit_ar =</span> <span class="kw">predict</span>(btb_geeglm_ar,</a>
+<a class="sourceLine" id="cb643-13" title="13">                                 <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb643-14" title="14">                                 <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-15" title="15"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit_un =</span> <span class="kw">predict</span>(btb_geeglm_un,</a>
+<a class="sourceLine" id="cb643-16" title="16">                                 <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb643-17" title="17">                                 <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb643-18" title="18"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">starts_with</span>(<span class="st">&quot;fit_&quot;</span>),</a>
 <a class="sourceLine" id="cb643-19" title="19">                      <span class="dt">names_to =</span> <span class="st">&quot;covR&quot;</span>,</a>
 <a class="sourceLine" id="cb643-20" title="20">                      <span class="dt">names_pattern =</span> <span class="st">&quot;fit_(.*)&quot;</span>,</a>
 <a class="sourceLine" id="cb643-21" title="21">                      <span class="dt">names_ptype =</span> <span class="kw">list</span>(<span class="dt">covR =</span> <span class="st">&quot;factor()&quot;</span>),</a>
 <a class="sourceLine" id="cb643-22" title="22">                      <span class="dt">values_to =</span> <span class="st">&quot;fit&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb643-23" title="23"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">covR =</span> <span class="kw">factor</span>(covR, </a>
-<a class="sourceLine" id="cb643-24" title="24">                       <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;un&quot;</span>, <span class="st">&quot;ar&quot;</span>, <span class="st">&quot;ex&quot;</span>, <span class="st">&quot;in&quot;</span>),</a>
-<a class="sourceLine" id="cb643-25" title="25">                       <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Unstructured&quot;</span>,</a>
-<a class="sourceLine" id="cb643-26" title="26">                                  <span class="st">&quot;Auto-Regressive&quot;</span>,</a>
-<a class="sourceLine" id="cb643-27" title="27">                                  <span class="st">&quot;Compound Symetry&quot;</span>,</a>
-<a class="sourceLine" id="cb643-28" title="28">                                  <span class="st">&quot;Independence&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-23" title="23"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">covR =</span> <span class="kw">factor</span>(covR, </a>
+<a class="sourceLine" id="cb643-24" title="24">                              <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;un&quot;</span>, <span class="st">&quot;ar&quot;</span>, <span class="st">&quot;ex&quot;</span>, <span class="st">&quot;in&quot;</span>),</a>
+<a class="sourceLine" id="cb643-25" title="25">                              <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Unstructured&quot;</span>,</a>
+<a class="sourceLine" id="cb643-26" title="26">                                         <span class="st">&quot;Auto-Regressive&quot;</span>,</a>
+<a class="sourceLine" id="cb643-27" title="27">                                         <span class="st">&quot;Compound Symetry&quot;</span>,</a>
+<a class="sourceLine" id="cb643-28" title="28">                                         <span class="st">&quot;Independence&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb643-29" title="29"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
 <a class="sourceLine" id="cb643-30" title="30">             <span class="dt">y =</span> fit,</a>
 <a class="sourceLine" id="cb643-31" title="31">             <span class="dt">linetype =</span> treatment)) <span class="op">+</span></a>
@@ -2632,29 +2633,29 @@ Models ranked by QIC(x) </code></pre>
 <a class="sourceLine" id="cb644-3" title="3">            <span class="dt">drug =</span> <span class="st">&quot;No&quot;</span>,</a>
 <a class="sourceLine" id="cb644-4" title="4">            <span class="dt">treatment =</span> <span class="kw">levels</span>(btb_long<span class="op">$</span>treatment),</a>
 <a class="sourceLine" id="cb644-5" title="5">            <span class="dt">month =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">2</span>, <span class="dt">to =</span> <span class="dv">8</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st">  </span></a>
-<a class="sourceLine" id="cb644-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_in =</span> <span class="kw">predict</span>(btb_geeglm_in,</a>
-<a class="sourceLine" id="cb644-7" title="7">                       <span class="dt">newdata =</span> .,</a>
-<a class="sourceLine" id="cb644-8" title="8">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb644-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_ex =</span> <span class="kw">predict</span>(btb_geeglm_ex,</a>
-<a class="sourceLine" id="cb644-10" title="10">                       <span class="dt">newdata =</span> .,</a>
-<a class="sourceLine" id="cb644-11" title="11">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb644-12" title="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_ar =</span> <span class="kw">predict</span>(btb_geeglm_ar,</a>
-<a class="sourceLine" id="cb644-13" title="13">                       <span class="dt">newdata =</span> .,</a>
-<a class="sourceLine" id="cb644-14" title="14">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb644-15" title="15"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_un =</span> <span class="kw">predict</span>(btb_geeglm_un,</a>
-<a class="sourceLine" id="cb644-16" title="16">                       <span class="dt">newdata =</span> .,</a>
-<a class="sourceLine" id="cb644-17" title="17">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb644-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit_in =</span> <span class="kw">predict</span>(btb_geeglm_in,</a>
+<a class="sourceLine" id="cb644-7" title="7">                                 <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb644-8" title="8">                                 <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb644-9" title="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit_ex =</span> <span class="kw">predict</span>(btb_geeglm_ex,</a>
+<a class="sourceLine" id="cb644-10" title="10">                                 <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb644-11" title="11">                                 <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb644-12" title="12"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit_ar =</span> <span class="kw">predict</span>(btb_geeglm_ar,</a>
+<a class="sourceLine" id="cb644-13" title="13">                                 <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb644-14" title="14">                                 <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb644-15" title="15"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit_un =</span> <span class="kw">predict</span>(btb_geeglm_un,</a>
+<a class="sourceLine" id="cb644-16" title="16">                                 <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb644-17" title="17">                                 <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb644-18" title="18"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">starts_with</span>(<span class="st">&quot;fit_&quot;</span>),</a>
 <a class="sourceLine" id="cb644-19" title="19">                      <span class="dt">names_to =</span> <span class="st">&quot;covR&quot;</span>,</a>
 <a class="sourceLine" id="cb644-20" title="20">                      <span class="dt">names_pattern =</span> <span class="st">&quot;fit_(.*)&quot;</span>,</a>
 <a class="sourceLine" id="cb644-21" title="21">                      <span class="dt">names_ptype =</span> <span class="kw">list</span>(<span class="dt">covR =</span> <span class="st">&quot;factor()&quot;</span>),</a>
 <a class="sourceLine" id="cb644-22" title="22">                      <span class="dt">values_to =</span> <span class="st">&quot;fit&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb644-23" title="23"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">covR =</span> <span class="kw">factor</span>(covR, </a>
-<a class="sourceLine" id="cb644-24" title="24">                       <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;un&quot;</span>, <span class="st">&quot;ar&quot;</span>, <span class="st">&quot;ex&quot;</span>, <span class="st">&quot;in&quot;</span>),</a>
-<a class="sourceLine" id="cb644-25" title="25">                       <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Unstructured&quot;</span>,</a>
-<a class="sourceLine" id="cb644-26" title="26">                                  <span class="st">&quot;Auto-Regressive&quot;</span>,</a>
-<a class="sourceLine" id="cb644-27" title="27">                                  <span class="st">&quot;Compound Symetry&quot;</span>,</a>
-<a class="sourceLine" id="cb644-28" title="28">                                  <span class="st">&quot;Independence&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb644-23" title="23"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">covR =</span> <span class="kw">factor</span>(covR, </a>
+<a class="sourceLine" id="cb644-24" title="24">                              <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;un&quot;</span>, <span class="st">&quot;ar&quot;</span>, <span class="st">&quot;ex&quot;</span>, <span class="st">&quot;in&quot;</span>),</a>
+<a class="sourceLine" id="cb644-25" title="25">                              <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Unstructured&quot;</span>,</a>
+<a class="sourceLine" id="cb644-26" title="26">                                         <span class="st">&quot;Auto-Regressive&quot;</span>,</a>
+<a class="sourceLine" id="cb644-27" title="27">                                         <span class="st">&quot;Compound Symetry&quot;</span>,</a>
+<a class="sourceLine" id="cb644-28" title="28">                                         <span class="st">&quot;Independence&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb644-29" title="29"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
 <a class="sourceLine" id="cb644-30" title="30">             <span class="dt">y =</span> fit,</a>
 <a class="sourceLine" id="cb644-31" title="31">             <span class="dt">color =</span> covR,</a>
@@ -2674,6 +2675,31 @@ Models ranked by QIC(x) </code></pre>
 <a class="sourceLine" id="cb644-45" title="45">                                   <span class="st">&quot;darkgreen&quot;</span>)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb644-46" title="46"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-527-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p>Now only plot the significant variables for the ‘best’ model.</p>
+<div class="sourceCode" id="cb645"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb645-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">bdi.pre =</span> <span class="kw">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>),</a>
+<a class="sourceLine" id="cb645-2" title="2">            <span class="dt">length =</span> <span class="st">&quot;&lt;6m&quot;</span>,</a>
+<a class="sourceLine" id="cb645-3" title="3">            <span class="dt">drug =</span> <span class="kw">levels</span>(btb_long<span class="op">$</span>drug),</a>
+<a class="sourceLine" id="cb645-4" title="4">            <span class="dt">treatment =</span> <span class="st">&quot;TAU&quot;</span>,</a>
+<a class="sourceLine" id="cb645-5" title="5">            <span class="dt">month =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">2</span>, <span class="dt">to =</span> <span class="dv">8</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st">  </span></a>
+<a class="sourceLine" id="cb645-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(btb_geeglm_ex,</a>
+<a class="sourceLine" id="cb645-7" title="7">                                 <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb645-8" title="8">                                 <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb645-9" title="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">bdi.pre =</span> <span class="kw">factor</span>(bdi.pre)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb645-10" title="10"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
+<a class="sourceLine" id="cb645-11" title="11">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb645-12" title="12">             <span class="dt">linetype =</span> <span class="kw">fct_rev</span>(bdi.pre),</a>
+<a class="sourceLine" id="cb645-13" title="13">             <span class="dt">color =</span> drug)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb645-14" title="14"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb645-15" title="15"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb645-16" title="16"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title    =</span> <span class="st">&quot;BtheB - Predictions from the GEE model (exchangable)&quot;</span>,</a>
+<a class="sourceLine" id="cb645-17" title="17">       <span class="dt">subtitle =</span> <span class="st">&quot;Trajectory for a person with BL depression &lt; 6 months and randomized to TAU&quot;</span>,</a>
+<a class="sourceLine" id="cb645-18" title="18">       <span class="dt">x =</span> <span class="st">&quot;Month&quot;</span>,</a>
+<a class="sourceLine" id="cb645-19" title="19">       <span class="dt">y =</span> <span class="st">&quot;Predicted BDI&quot;</span>,</a>
+<a class="sourceLine" id="cb645-20" title="20">       <span class="dt">color =</span> <span class="st">&quot;Antidepressant Use:&quot;</span>,</a>
+<a class="sourceLine" id="cb645-21" title="21">       <span class="dt">linetype =</span> <span class="st">&quot;Baseline BDI:&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb645-22" title="22"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb645-23" title="23"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;dotted&quot;</span>))</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-528-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
