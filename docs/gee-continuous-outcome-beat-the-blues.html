@@ -847,40 +847,38 @@ bdi 8m
 <div id="restructure-to-long-format" class="section level3">
 <h3><span class="header-section-number">12.1.3</span> Restructure to long format</h3>
 <div class="sourceCode" id="cb593"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb593-1" title="1">btb_long &lt;-<span class="st"> </span>btb_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb593-2" title="2"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(<span class="dt">key   =</span> month,</a>
-<a class="sourceLine" id="cb593-3" title="3">                <span class="dt">value =</span> bdi,</a>
-<a class="sourceLine" id="cb593-4" title="4">                bdi<span class="fl">.2</span>m, bdi<span class="fl">.4</span>m, bdi<span class="fl">.6</span>m, bdi<span class="fl">.8</span>m) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb593-5" title="5"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">case_when</span>(month <span class="op">==</span><span class="st"> &quot;bdi.2m&quot;</span>  <span class="op">~</span><span class="st"> </span><span class="dv">2</span>,</a>
-<a class="sourceLine" id="cb593-6" title="6">                                  month <span class="op">==</span><span class="st"> &quot;bdi.4m&quot;</span>  <span class="op">~</span><span class="st"> </span><span class="dv">4</span>,</a>
-<a class="sourceLine" id="cb593-7" title="7">                                  month <span class="op">==</span><span class="st"> &quot;bdi.6m&quot;</span>  <span class="op">~</span><span class="st"> </span><span class="dv">6</span>,</a>
-<a class="sourceLine" id="cb593-8" title="8">                                  month <span class="op">==</span><span class="st"> &quot;bdi.8m&quot;</span>  <span class="op">~</span><span class="st"> </span><span class="dv">8</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb593-9" title="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="kw">complete.cases</span>(id, bdi, treatment, month)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb593-10" title="10"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(id, month) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb593-11" title="11"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, treatment, drug, length, bdi.pre, month, bdi)</a></code></pre></div>
+<a class="sourceLine" id="cb593-2" title="2"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">c</span>(bdi<span class="fl">.2</span>m, bdi<span class="fl">.4</span>m, bdi<span class="fl">.6</span>m, bdi<span class="fl">.8</span>m),  <span class="co"># all existing variables (not quoted)</span></a>
+<a class="sourceLine" id="cb593-3" title="3">                      <span class="dt">names_to =</span> <span class="st">&quot;month&quot;</span>, </a>
+<a class="sourceLine" id="cb593-4" title="4">                      <span class="dt">names_pattern =</span> <span class="st">&quot;bdi.(.)m&quot;</span>,</a>
+<a class="sourceLine" id="cb593-5" title="5">                      <span class="dt">names_ptype =</span> <span class="kw">list</span>(<span class="dt">month =</span> <span class="kw">numeric</span>()),</a>
+<a class="sourceLine" id="cb593-6" title="6">                      <span class="dt">values_to =</span> <span class="st">&quot;bdi&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb593-7" title="7"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">filter</span>(<span class="kw">complete.cases</span>(id, bdi, treatment, month)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb593-8" title="8"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(id, month) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb593-9" title="9"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(id, treatment, drug, length, bdi.pre, month, bdi)</a></code></pre></div>
 <div class="sourceCode" id="cb594"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb594-1" title="1">btb_long <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb594-2" title="2"><span class="st">  </span>psych<span class="op">::</span><span class="kw">headTail</span>(<span class="dt">top =</span> <span class="dv">10</span>, <span class="dt">bottom =</span> <span class="dv">10</span>) </a></code></pre></div>
-<pre><code>     id treatment drug length bdi.pre month bdi
-1     1       TAU   No    &gt;6m      29     2   2
-2     1       TAU   No    &gt;6m      29     4   2
-3     2     BtheB  Yes    &gt;6m      32     2  16
-4     2     BtheB  Yes    &gt;6m      32     4  24
-5     2     BtheB  Yes    &gt;6m      32     6  17
-6     2     BtheB  Yes    &gt;6m      32     8  20
-7     3       TAU  Yes    &lt;6m      25     2  20
-8     4     BtheB   No    &gt;6m      21     2  17
-9     4     BtheB   No    &gt;6m      21     4  16
-10    4     BtheB   No    &gt;6m      21     6  10
-... ...      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;     ...   ... ...
-271  96     BtheB  Yes    &gt;6m      16     6  10
-272  96     BtheB  Yes    &gt;6m      16     8   8
-273  98     BtheB   No    &gt;6m      11     2  22
-274  98     BtheB   No    &gt;6m      11     4   9
-275  98     BtheB   No    &gt;6m      11     6  11
-276  98     BtheB   No    &gt;6m      11     8  11
-277  99       TAU   No    &lt;6m      13     2   5
-278  99       TAU   No    &lt;6m      13     4   5
-279  99       TAU   No    &lt;6m      13     6   0
-280  99       TAU   No    &lt;6m      13     8   6</code></pre>
+<pre><code>    id treatment drug length bdi.pre month bdi
+1    1       TAU   No    &gt;6m      29     2   2
+2    1       TAU   No    &gt;6m      29     4   2
+3    2     BtheB  Yes    &gt;6m      32     2  16
+4    2     BtheB  Yes    &gt;6m      32     4  24
+5    2     BtheB  Yes    &gt;6m      32     6  17
+6    2     BtheB  Yes    &gt;6m      32     8  20
+7    3       TAU  Yes    &lt;6m      25     2  20
+8    4     BtheB   No    &gt;6m      21     2  17
+9    4     BtheB   No    &gt;6m      21     4  16
+10   4     BtheB   No    &gt;6m      21     6  10
+11 ...      &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;     ...   ... ...
+12  96     BtheB  Yes    &gt;6m      16     6  10
+13  96     BtheB  Yes    &gt;6m      16     8   8
+14  98     BtheB   No    &gt;6m      11     2  22
+15  98     BtheB   No    &gt;6m      11     4   9
+16  98     BtheB   No    &gt;6m      11     6  11
+17  98     BtheB   No    &gt;6m      11     8  11
+18  99       TAU   No    &lt;6m      13     2   5
+19  99       TAU   No    &lt;6m      13     4   5
+20  99       TAU   No    &lt;6m      13     6   0
+21  99       TAU   No    &lt;6m      13     8   6</code></pre>
 </div>
 <div id="visualize-person-profile-plots" class="section level3">
 <h3><span class="header-section-number">12.1.4</span> Visualize: Person-profile Plots</h3>
@@ -897,7 +895,7 @@ bdi 8m
 <a class="sourceLine" id="cb596-10" title="10"><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment) <span class="op">+</span></a>
 <a class="sourceLine" id="cb596-11" title="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;BtheB - Observed Data Across Time with LM Smoother&quot;</span>,</a>
 <a class="sourceLine" id="cb596-12" title="12">       <span class="dt">subtitle =</span> <span class="st">&quot;Seperate by Treatment&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-499-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-498-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb597"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb597-1" title="1">btb_long <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb597-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
 <a class="sourceLine" id="cb597-3" title="3">             <span class="dt">y =</span> bdi)) <span class="op">+</span></a>
@@ -910,7 +908,7 @@ bdi 8m
 <a class="sourceLine" id="cb597-10" title="10"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb597-11" title="11"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;BtheB - Observed Data Across Time with LM Smoother&quot;</span>,</a>
 <a class="sourceLine" id="cb597-12" title="12">       <span class="dt">subtitle =</span> <span class="st">&quot;Seperate by Treatment &amp; Antidepressant Use&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-500-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-499-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb598"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb598-1" title="1">btb_long <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb598-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
 <a class="sourceLine" id="cb598-3" title="3">             <span class="dt">y =</span> bdi)) <span class="op">+</span></a>
@@ -927,7 +925,7 @@ bdi 8m
 <a class="sourceLine" id="cb598-14" title="14"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb598-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;BtheB - Observed Data Across Time with LM Smoother&quot;</span>,</a>
 <a class="sourceLine" id="cb598-16" title="16">       <span class="dt">subtitle =</span> <span class="st">&quot;Seperate by Treatment, Antidepressant Use, &amp; Length of Current Episode&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-501-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-500-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb599"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb599-1" title="1">btb_long <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb599-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
 <a class="sourceLine" id="cb599-3" title="3">             <span class="dt">y =</span> bdi,</a>
@@ -937,7 +935,7 @@ bdi 8m
 <a class="sourceLine" id="cb599-7" title="7"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb599-8" title="8"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;BtheB - Predictions from TWO Seperate Single Simple Linear Models (lm)&quot;</span>,</a>
 <a class="sourceLine" id="cb599-9" title="9">       <span class="dt">subtitle =</span> <span class="st">&quot;Assumes Independence of Repeated Measures&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-502-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-501-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="calculate-the-observed-correlation-structure" class="section level3">
 <h3><span class="header-section-number">12.1.5</span> Calculate the Observed Correlation Structure</h3>
@@ -956,7 +954,7 @@ bdi.8m  0.3835090 0.7038158 0.7220149 0.8107773 1.0000000</code></pre>
 <div id="plot-the-correlation-matrix-to-get-a-better-feel-for-the-pattern" class="section level3">
 <h3><span class="header-section-number">12.1.6</span> Plot the correlation matrix to get a better feel for the pattern</h3>
 <div class="sourceCode" id="cb602"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb602-1" title="1">corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(bdi_corr)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-504-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-503-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="multiple-regression-ols" class="section level2">
@@ -983,7 +981,8 @@ bdi.8m  0.3835090 0.7038158 0.7220149 0.8107773 1.0000000</code></pre>
 <a class="sourceLine" id="cb604-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
 <a class="sourceLine" id="cb604-4" title="4"></a>
 <a class="sourceLine" id="cb604-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(btb_lm_<span class="dv">1</span>, btb_lm_<span class="dv">2</span>, btb_lm_<span class="dv">3</span>, btb_lm_<span class="dv">4</span>),</a>
-<a class="sourceLine" id="cb604-6" title="6">                <span class="dt">caption =</span> <span class="st">&quot;OLS&quot;</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb604-6" title="6">                <span class="dt">label =</span> <span class="st">&quot;lm&quot;</span>,</a>
+<a class="sourceLine" id="cb604-7" title="7">                <span class="dt">caption =</span> <span class="st">&quot;OLS&quot;</span>)</a></code></pre></div>
 &lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">
@@ -1414,7 +1413,7 @@ RMSE
 <a class="sourceLine" id="cb605-19" title="19"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</a>
 <a class="sourceLine" id="cb605-20" title="20">        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="fl">1.1</span>, <span class="fl">1.1</span>),</a>
 <a class="sourceLine" id="cb605-21" title="21">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-508-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-507-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="multilevel-models-mlm" class="section level2">
@@ -1427,7 +1426,8 @@ RMSE
 <a class="sourceLine" id="cb606-4" title="4"></a>
 <a class="sourceLine" id="cb606-5" title="5">btb_lmer_RIAS &lt;-<span class="st"> </span>lme4<span class="op">::</span><span class="kw">lmer</span>(bdi <span class="op">~</span><span class="st"> </span>bdi.pre <span class="op">+</span><span class="st"> </span>length <span class="op">+</span><span class="st"> </span>drug <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>month <span class="op">+</span><span class="st"> </span>(month <span class="op">|</span><span class="st"> </span>id), </a>
 <a class="sourceLine" id="cb606-6" title="6">                            <span class="dt">data =</span> btb_long, </a>
-<a class="sourceLine" id="cb606-7" title="7">                            <span class="dt">REML =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb606-7" title="7">                            <span class="dt">REML =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb606-8" title="8">                            <span class="dt">control =</span> <span class="kw">lmerControl</span>(<span class="dt">optimizer =</span> <span class="st">&quot;Nelder_Mead&quot;</span>))</a></code></pre></div>
 </div>
 <div id="parameter-estimates-table-1" class="section level3">
 <h3><span class="header-section-number">12.3.2</span> Parameter Estimates Table</h3>
@@ -1436,11 +1436,13 @@ RMSE
 <a class="sourceLine" id="cb607-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
 <a class="sourceLine" id="cb607-4" title="4"></a>
 <a class="sourceLine" id="cb607-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(btb_lm_<span class="dv">1</span>, btb_lmer_RI, btb_lmer_RIAS), </a>
-<a class="sourceLine" id="cb607-6" title="6">                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;OLS&quot;</span>, <span class="st">&quot;MLM-RI&quot;</span>, <span class="st">&quot;MLM-RIAS&quot;</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb607-6" title="6">                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;OLS&quot;</span>, <span class="st">&quot;MLM-RI&quot;</span>, <span class="st">&quot;MLM-RIAS&quot;</span>),</a>
+<a class="sourceLine" id="cb607-7" title="7">                <span class="dt">label =</span> <span class="st">&quot;mlm&quot;</span>,</a>
+<a class="sourceLine" id="cb607-8" title="8">                <span class="dt">caption =</span> <span class="st">&quot;LM vs. MLM&quot;</span>)</a></code></pre></div>
 &lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">
-Statistical models
+LM vs. MLM
 </caption>
 <tr>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
@@ -1810,7 +1812,7 @@ btb_lmer_RIAS 10 1885.2 1921.5 -932.58   1865.2 0.9236      2     0.6301</code><
 <a class="sourceLine" id="cb610-15" title="15"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</a>
 <a class="sourceLine" id="cb610-16" title="16">        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">-0.1</span>),</a>
 <a class="sourceLine" id="cb610-17" title="17">        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-513-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-512-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="general-estimating-equations-gee" class="section level2">
@@ -1981,11 +1983,13 @@ Working Correlation
 <a class="sourceLine" id="cb623-11" title="11">                                       <span class="st">&quot;MLM-RI&quot;</span>, </a>
 <a class="sourceLine" id="cb623-12" title="12">                                       <span class="st">&quot;GEE-in&quot;</span>, </a>
 <a class="sourceLine" id="cb623-13" title="13">                                       <span class="st">&quot;GEE-ex&quot;</span>, </a>
-<a class="sourceLine" id="cb623-14" title="14">                                       <span class="st">&quot;GEE-un&quot;</span>))</a></code></pre></div>
+<a class="sourceLine" id="cb623-14" title="14">                                       <span class="st">&quot;GEE-un&quot;</span>),</a>
+<a class="sourceLine" id="cb623-15" title="15">                  <span class="dt">label =</span> <span class="st">&quot;GEEs&quot;</span>,</a>
+<a class="sourceLine" id="cb623-16" title="16">                  <span class="dt">caption =</span> <span class="st">&quot;LM, MLM, and GEE&quot;</span>)</a></code></pre></div>
 &lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">
-Statistical models
+LM, MLM, and GEE
 </caption>
 <tr>
 <th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
@@ -2489,38 +2493,65 @@ Dispersion
 <a class="sourceLine" id="cb634-2" title="2">           btb_geeglm_ex, </a>
 <a class="sourceLine" id="cb634-3" title="3">           btb_geeglm_ar, </a>
 <a class="sourceLine" id="cb634-4" title="4">           btb_geeglm_un, </a>
-<a class="sourceLine" id="cb634-5" title="5">           <span class="dt">typeR =</span> <span class="ot">FALSE</span>) <span class="co"># default</span></a></code></pre></div>
-<pre><code>                   QIC
-btb_geeglm_in 306.5589
-btb_geeglm_ex 296.2554
-btb_geeglm_ar 298.2556
-btb_geeglm_un 296.5794</code></pre>
+<a class="sourceLine" id="cb634-5" title="5">           <span class="dt">typeR =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># default</span></a>
+<a class="sourceLine" id="cb634-6" title="6"><span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>(<span class="dt">caption =</span> <span class="st">&quot;QIC&quot;</span>)</a></code></pre></div>
+<table style="width:36%;">
+<caption>QIC</caption>
+<colgroup>
+<col width="27%" />
+<col width="8%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">QIC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>btb_geeglm_in</strong></td>
+<td align="center">307</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>btb_geeglm_ex</strong></td>
+<td align="center">296</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>btb_geeglm_ar</strong></td>
+<td align="center">298</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>btb_geeglm_un</strong></td>
+<td align="center">297</td>
+</tr>
+</tbody>
+</table>
 <p>QIC(R) is based on quasi-likelihood of a working correlation R model, can <strong>NOT</strong> be used to select the working correlation matrix.</p>
-<div class="sourceCode" id="cb636"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb636-1" title="1">MuMIn<span class="op">::</span><span class="kw">QIC</span>(btb_geeglm_in, </a>
-<a class="sourceLine" id="cb636-2" title="2">           btb_geeglm_ex, </a>
-<a class="sourceLine" id="cb636-3" title="3">           btb_geeglm_ar, </a>
-<a class="sourceLine" id="cb636-4" title="4">           btb_geeglm_un, </a>
-<a class="sourceLine" id="cb636-5" title="5">           <span class="dt">typeR =</span> <span class="ot">TRUE</span>)    <span class="co"># NOT the default</span></a></code></pre></div>
+<div class="sourceCode" id="cb635"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb635-1" title="1">MuMIn<span class="op">::</span><span class="kw">QIC</span>(btb_geeglm_in, </a>
+<a class="sourceLine" id="cb635-2" title="2">           btb_geeglm_ex, </a>
+<a class="sourceLine" id="cb635-3" title="3">           btb_geeglm_ar, </a>
+<a class="sourceLine" id="cb635-4" title="4">           btb_geeglm_un, </a>
+<a class="sourceLine" id="cb635-5" title="5">           <span class="dt">typeR =</span> <span class="ot">TRUE</span>)    <span class="co"># NOT the default</span></a></code></pre></div>
 <pre><code>                   QIC
 btb_geeglm_in 306.5589
 btb_geeglm_ex 304.5003
 btb_geeglm_ar 304.6425
 btb_geeglm_un 304.4087</code></pre>
 <p>QIC_U(R) approximates QIC(R), and while both are useful for variable selection, they can NOT be applied to select the working correlation matrix.</p>
-<div class="sourceCode" id="cb638"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb638-1" title="1">MuMIn<span class="op">::</span><span class="kw">QICu</span>(btb_geeglm_in, </a>
-<a class="sourceLine" id="cb638-2" title="2">            btb_geeglm_ex, </a>
-<a class="sourceLine" id="cb638-3" title="3">            btb_geeglm_ar, </a>
-<a class="sourceLine" id="cb638-4" title="4">            btb_geeglm_un) </a></code></pre></div>
+<div class="sourceCode" id="cb637"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb637-1" title="1">MuMIn<span class="op">::</span><span class="kw">QICu</span>(btb_geeglm_in, </a>
+<a class="sourceLine" id="cb637-2" title="2">            btb_geeglm_ex, </a>
+<a class="sourceLine" id="cb637-3" title="3">            btb_geeglm_ar, </a>
+<a class="sourceLine" id="cb637-4" title="4">            btb_geeglm_un) </a></code></pre></div>
 <pre><code>                  QICu
 btb_geeglm_in 292.0000
 btb_geeglm_ex 283.7551
 btb_geeglm_ar 285.6132
 btb_geeglm_un 284.1707</code></pre>
-<div class="sourceCode" id="cb640"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb640-1" title="1">MuMIn<span class="op">::</span><span class="kw">model.sel</span>(btb_geeglm_in, </a>
-<a class="sourceLine" id="cb640-2" title="2">                 btb_geeglm_ex, </a>
-<a class="sourceLine" id="cb640-3" title="3">                 btb_geeglm_ar, </a>
-<a class="sourceLine" id="cb640-4" title="4">                 btb_geeglm_un, </a>
-<a class="sourceLine" id="cb640-5" title="5">                 <span class="dt">rank =</span> <span class="st">&quot;QIC&quot;</span>)    <span class="co">#sorts the best to the TOP, uses QIC(I)</span></a></code></pre></div>
+<div class="sourceCode" id="cb639"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb639-1" title="1">MuMIn<span class="op">::</span><span class="kw">model.sel</span>(btb_geeglm_in, </a>
+<a class="sourceLine" id="cb639-2" title="2">                 btb_geeglm_ex, </a>
+<a class="sourceLine" id="cb639-3" title="3">                 btb_geeglm_ar, </a>
+<a class="sourceLine" id="cb639-4" title="4">                 btb_geeglm_un, </a>
+<a class="sourceLine" id="cb639-5" title="5">                 <span class="dt">rank =</span> <span class="st">&quot;QIC&quot;</span>)     <span class="co">#sorts the best to the TOP, uses QIC(I)</span></a></code></pre></div>
 <pre><code>Model selection table 
               (Int) bdi.pre drg lng     mnt trt corstr qLik   QIC delta
 btb_geeglm_ex 5.880  0.6402   +   + -0.7070   + exchng -140 296.3  0.00
@@ -2539,7 +2570,7 @@ Models ranked by QIC(x) </code></pre>
 </div>
 <div id="plot-the-model-predictions-2" class="section level3">
 <h3><span class="header-section-number">12.4.6</span> Plot the model predictions</h3>
-<div class="sourceCode" id="cb642"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb642-1" title="1"><span class="kw">summary</span>(btb_long)</a></code></pre></div>
+<div class="sourceCode" id="cb641"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb641-1" title="1"><span class="kw">summary</span>(btb_long)</a></code></pre></div>
 <pre><code>       id        treatment    drug     length       bdi.pre     
  Min.   : 1.00   TAU  :135   No :156   &lt;6m:122   Min.   : 2.00  
  1st Qu.:22.75   BtheB:145   Yes:124   &gt;6m:158   1st Qu.:15.00  
@@ -2555,6 +2586,47 @@ Models ranked by QIC(x) </code></pre>
  3rd Qu.:6.000   3rd Qu.:21.00  
  Max.   :8.000   Max.   :53.00  </code></pre>
 <p>Do not worry about confidence intervals.</p>
+<div class="sourceCode" id="cb643"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb643-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">bdi.pre =</span> <span class="dv">23</span>,</a>
+<a class="sourceLine" id="cb643-2" title="2">            <span class="dt">length =</span> <span class="st">&quot;&lt;6m&quot;</span>,</a>
+<a class="sourceLine" id="cb643-3" title="3">            <span class="dt">drug =</span> <span class="st">&quot;No&quot;</span>,</a>
+<a class="sourceLine" id="cb643-4" title="4">            <span class="dt">treatment =</span> <span class="kw">levels</span>(btb_long<span class="op">$</span>treatment),</a>
+<a class="sourceLine" id="cb643-5" title="5">            <span class="dt">month =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">2</span>, <span class="dt">to =</span> <span class="dv">8</span>, <span class="dt">by =</span> <span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st">  </span></a>
+<a class="sourceLine" id="cb643-6" title="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_in =</span> <span class="kw">predict</span>(btb_geeglm_in,</a>
+<a class="sourceLine" id="cb643-7" title="7">                       <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb643-8" title="8">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-9" title="9"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_ex =</span> <span class="kw">predict</span>(btb_geeglm_ex,</a>
+<a class="sourceLine" id="cb643-10" title="10">                       <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb643-11" title="11">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-12" title="12"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_ar =</span> <span class="kw">predict</span>(btb_geeglm_ar,</a>
+<a class="sourceLine" id="cb643-13" title="13">                       <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb643-14" title="14">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-15" title="15"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_un =</span> <span class="kw">predict</span>(btb_geeglm_un,</a>
+<a class="sourceLine" id="cb643-16" title="16">                       <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb643-17" title="17">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-18" title="18"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">starts_with</span>(<span class="st">&quot;fit_&quot;</span>),</a>
+<a class="sourceLine" id="cb643-19" title="19">                      <span class="dt">names_to =</span> <span class="st">&quot;covR&quot;</span>,</a>
+<a class="sourceLine" id="cb643-20" title="20">                      <span class="dt">names_pattern =</span> <span class="st">&quot;fit_(.*)&quot;</span>,</a>
+<a class="sourceLine" id="cb643-21" title="21">                      <span class="dt">names_ptype =</span> <span class="kw">list</span>(<span class="dt">covR =</span> <span class="st">&quot;factor()&quot;</span>),</a>
+<a class="sourceLine" id="cb643-22" title="22">                      <span class="dt">values_to =</span> <span class="st">&quot;fit&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-23" title="23"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">covR =</span> <span class="kw">factor</span>(covR, </a>
+<a class="sourceLine" id="cb643-24" title="24">                       <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;un&quot;</span>, <span class="st">&quot;ar&quot;</span>, <span class="st">&quot;ex&quot;</span>, <span class="st">&quot;in&quot;</span>),</a>
+<a class="sourceLine" id="cb643-25" title="25">                       <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Unstructured&quot;</span>,</a>
+<a class="sourceLine" id="cb643-26" title="26">                                  <span class="st">&quot;Auto-Regressive&quot;</span>,</a>
+<a class="sourceLine" id="cb643-27" title="27">                                  <span class="st">&quot;Compound Symetry&quot;</span>,</a>
+<a class="sourceLine" id="cb643-28" title="28">                                  <span class="st">&quot;Independence&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb643-29" title="29"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
+<a class="sourceLine" id="cb643-30" title="30">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb643-31" title="31">             <span class="dt">linetype =</span> treatment)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb643-32" title="32"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb643-33" title="33"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb643-34" title="34"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title    =</span> <span class="st">&quot;BtheB - Predictions from four GEE models (geeglm)&quot;</span>,</a>
+<a class="sourceLine" id="cb643-35" title="35">       <span class="dt">x =</span> <span class="st">&quot;Month&quot;</span>,</a>
+<a class="sourceLine" id="cb643-36" title="36">       <span class="dt">y =</span> <span class="st">&quot;Predicted BDI&quot;</span>,</a>
+<a class="sourceLine" id="cb643-37" title="37">       <span class="dt">linetype =</span> <span class="st">&quot;Treatment:&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb643-38" title="38"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb643-39" title="39"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb643-40" title="40"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>covR)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-526-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb644-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">bdi.pre =</span> <span class="dv">23</span>,</a>
 <a class="sourceLine" id="cb644-2" title="2">            <span class="dt">length =</span> <span class="st">&quot;&lt;6m&quot;</span>,</a>
 <a class="sourceLine" id="cb644-3" title="3">            <span class="dt">drug =</span> <span class="st">&quot;No&quot;</span>,</a>
@@ -2572,33 +2644,35 @@ Models ranked by QIC(x) </code></pre>
 <a class="sourceLine" id="cb644-15" title="15"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">fit_un =</span> <span class="kw">predict</span>(btb_geeglm_un,</a>
 <a class="sourceLine" id="cb644-16" title="16">                       <span class="dt">newdata =</span> .,</a>
 <a class="sourceLine" id="cb644-17" title="17">                       <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb644-18" title="18"><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> variable,</a>
-<a class="sourceLine" id="cb644-19" title="19">         <span class="dt">value =</span> fit,</a>
-<a class="sourceLine" id="cb644-20" title="20">         <span class="kw">starts_with</span>(<span class="st">&quot;fit&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb644-21" title="21"><span class="st">  </span><span class="kw">separate</span>(<span class="dt">col =</span> variable,</a>
-<a class="sourceLine" id="cb644-22" title="22">           <span class="dt">into =</span> <span class="kw">c</span>(<span class="st">&quot;junk&quot;</span>, <span class="st">&quot;covR&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb644-23" title="23"><span class="st">  </span><span class="kw">select</span>(<span class="op">-</span>junk) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb644-24" title="24"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">covR =</span> <span class="kw">factor</span>(covR, </a>
-<a class="sourceLine" id="cb644-25" title="25">                       <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;un&quot;</span>, <span class="st">&quot;ar&quot;</span>, <span class="st">&quot;ex&quot;</span>, <span class="st">&quot;in&quot;</span>),</a>
-<a class="sourceLine" id="cb644-26" title="26">                       <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Unstructured&quot;</span>,</a>
-<a class="sourceLine" id="cb644-27" title="27">                                  <span class="st">&quot;Auto-Regressive&quot;</span>,</a>
-<a class="sourceLine" id="cb644-28" title="28">                                  <span class="st">&quot;Compound Symetry&quot;</span>,</a>
-<a class="sourceLine" id="cb644-29" title="29">                                  <span class="st">&quot;Independence&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb644-30" title="30"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
-<a class="sourceLine" id="cb644-31" title="31">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb644-18" title="18"><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">pivot_longer</span>(<span class="dt">cols =</span> <span class="kw">starts_with</span>(<span class="st">&quot;fit_&quot;</span>),</a>
+<a class="sourceLine" id="cb644-19" title="19">                      <span class="dt">names_to =</span> <span class="st">&quot;covR&quot;</span>,</a>
+<a class="sourceLine" id="cb644-20" title="20">                      <span class="dt">names_pattern =</span> <span class="st">&quot;fit_(.*)&quot;</span>,</a>
+<a class="sourceLine" id="cb644-21" title="21">                      <span class="dt">names_ptype =</span> <span class="kw">list</span>(<span class="dt">covR =</span> <span class="st">&quot;factor()&quot;</span>),</a>
+<a class="sourceLine" id="cb644-22" title="22">                      <span class="dt">values_to =</span> <span class="st">&quot;fit&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb644-23" title="23"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">covR =</span> <span class="kw">factor</span>(covR, </a>
+<a class="sourceLine" id="cb644-24" title="24">                       <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;un&quot;</span>, <span class="st">&quot;ar&quot;</span>, <span class="st">&quot;ex&quot;</span>, <span class="st">&quot;in&quot;</span>),</a>
+<a class="sourceLine" id="cb644-25" title="25">                       <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Unstructured&quot;</span>,</a>
+<a class="sourceLine" id="cb644-26" title="26">                                  <span class="st">&quot;Auto-Regressive&quot;</span>,</a>
+<a class="sourceLine" id="cb644-27" title="27">                                  <span class="st">&quot;Compound Symetry&quot;</span>,</a>
+<a class="sourceLine" id="cb644-28" title="28">                                  <span class="st">&quot;Independence&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb644-29" title="29"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</a>
+<a class="sourceLine" id="cb644-30" title="30">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb644-31" title="31">             <span class="dt">color =</span> covR,</a>
 <a class="sourceLine" id="cb644-32" title="32">             <span class="dt">linetype =</span> treatment)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb644-33" title="33"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">alpha =</span> <span class="fl">0.6</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb644-34" title="34"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb644-35" title="35"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title    =</span> <span class="st">&quot;BtheB - Predictions from four GEE models (geeglm)&quot;</span>,</a>
-<a class="sourceLine" id="cb644-36" title="36">       <span class="dt">linetype =</span> <span class="st">&quot;Treatment&quot;</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb644-37" title="37"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb644-38" title="38"><span class="st">  </span><span class="kw">scale_size_manual</span>(<span class="dt">values     =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb644-39" title="39"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values    =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, </a>
-<a class="sourceLine" id="cb644-40" title="40">                                   <span class="st">&quot;dodgerblue&quot;</span>,</a>
-<a class="sourceLine" id="cb644-41" title="41">                                   <span class="st">&quot;blue&quot;</span>,</a>
-<a class="sourceLine" id="cb644-42" title="42">                                   <span class="st">&quot;darkgreen&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb644-43" title="43"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb644-44" title="44"><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>covR)</a></code></pre></div>
+<a class="sourceLine" id="cb644-36" title="36">       <span class="dt">x =</span> <span class="st">&quot;Month&quot;</span>,</a>
+<a class="sourceLine" id="cb644-37" title="37">       <span class="dt">y =</span> <span class="st">&quot;Predicted BDI&quot;</span>,</a>
+<a class="sourceLine" id="cb644-38" title="38">       <span class="dt">color =</span> <span class="st">&quot;Covariance Pattern:&quot;</span>,</a>
+<a class="sourceLine" id="cb644-39" title="39">       <span class="dt">linetype =</span> <span class="st">&quot;Treatment:&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb644-40" title="40"><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb644-41" title="41"><span class="st">  </span><span class="kw">scale_size_manual</span>(<span class="dt">values     =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb644-42" title="42"><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values    =</span> <span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, </a>
+<a class="sourceLine" id="cb644-43" title="43">                                   <span class="st">&quot;dodgerblue&quot;</span>,</a>
+<a class="sourceLine" id="cb644-44" title="44">                                   <span class="st">&quot;blue&quot;</span>,</a>
+<a class="sourceLine" id="cb644-45" title="45">                                   <span class="st">&quot;darkgreen&quot;</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb644-46" title="46"><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">&quot;cm&quot;</span>))</a></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-527-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>

@@ -1,14 +1,6 @@
 # GEE, Continuous Outcome: Beat the Blues
 
-```{r, include=FALSE}
-knitr::opts_chunk$set(comment     = "",
-                      echo        = TRUE, 
-                      warning     = FALSE, 
-                      message     = FALSE,
-                      fig.align   = "center", # center all figures
-                      fig.width   = 6,        # set default figure width to 4 inches
-                      fig.height  = 4)        # set default figure height to 3 inches
-```
+
 
 ```{r, message=FALSE, error=FALSE}
 library(tidyverse)    # all things tidy
@@ -78,13 +70,11 @@ btb_wide %>%
 
 ```{r}
 btb_long <- btb_wide %>% 
-  tidyr::gather(key   = month,
-                value = bdi,
-                bdi.2m, bdi.4m, bdi.6m, bdi.8m) %>% 
-  dplyr::mutate(month = case_when(month == "bdi.2m"  ~ 2,
-                                  month == "bdi.4m"  ~ 4,
-                                  month == "bdi.6m"  ~ 6,
-                                  month == "bdi.8m"  ~ 8)) %>% 
+  tidyr::pivot_longer(cols = c(bdi.2m, bdi.4m, bdi.6m, bdi.8m),  # all existing variables (not quoted)
+                      names_to = "month", 
+                      names_pattern = "bdi.(.)m",
+                      names_ptype = list(month = numeric()),
+                      values_to = "bdi") %>% 
   dplyr::filter(complete.cases(id, bdi, treatment, month)) %>% 
   dplyr::arrange(id, month) %>% 
   dplyr::select(id, treatment, drug, length, bdi.pre, month, bdi)
@@ -220,6 +210,7 @@ texreg::screenreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4))
 # View on Screen:  texreg::screenreg()
 
 texreg::htmlreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4),
+                label = "lm",
                 caption = "OLS")
 ```
 
@@ -262,7 +253,8 @@ btb_lmer_RI   <- lme4::lmer(bdi ~ bdi.pre + length + drug + treatment + month + 
 
 btb_lmer_RIAS <- lme4::lmer(bdi ~ bdi.pre + length + drug + treatment + month + (month | id), 
                             data = btb_long, 
-                            REML = TRUE)
+                            REML = TRUE,
+                            control = lmerControl(optimizer = "Nelder_Mead"))
 ```
 
 
@@ -279,7 +271,9 @@ texreg::screenreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS),
 # View on Screen:  texreg::screenreg()
 
 texreg::htmlreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
-                custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"))
+                custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"),
+                label = "mlm",
+                caption = "LM vs. MLM")
 ```
 
 
@@ -323,7 +317,7 @@ effects::Effect(c("treatment", "month", "drug"),
 
 ### Fit the models
 
-Use the `gee()` function from the **gee** package for the results to be used in a `texreg()` table.
+**Use the `gee()` function from the `gee` package for the results to be used in a `texreg()` table.**
 
 ```{r}
 btb_gee_in <- gee::gee(bdi ~ bdi.pre + length + drug + treatment + month, 
@@ -340,6 +334,7 @@ btb_gee_ex <- gee::gee(bdi ~ bdi.pre + length + drug + treatment + month,
 
 # The AR-1 fails if any subjects have only 1 observation
 # to use this one, we would need to remove participants with only 1 BDI
+
 # btb_gee_ar <- gee(bdi ~ bdi.pre + length + drug + treatment + month,
 #                  data = btb_long,
 #                  id = id,
@@ -392,7 +387,9 @@ texreg::htmlreg(list(btb_lm_1,
                                        "MLM-RI", 
                                        "GEE-in", 
                                        "GEE-ex", 
-                                       "GEE-un"))
+                                       "GEE-un"),
+                  label = "GEEs",
+                  caption = "LM, MLM, and GEE")
 ```
 
 
@@ -400,7 +397,7 @@ texreg::htmlreg(list(btb_lm_1,
 
 ### Re-Fit Models
 
-Use the `geeglm()` function from the **geepack** package for the results to be used in a `anova()` table.
+**Use the `geeglm()` function from the `geepack` package for the results to be used in a `anova()` table.**
 
 
 ```{r}
@@ -467,7 +464,8 @@ MuMIn::QIC(btb_geeglm_in,
            btb_geeglm_ex, 
            btb_geeglm_ar, 
            btb_geeglm_un, 
-           typeR = FALSE) # default
+           typeR = FALSE) %>%  # default
+  pander::pander(caption = "QIC")
 ```
 
 
@@ -500,7 +498,7 @@ MuMIn::model.sel(btb_geeglm_in,
                  btb_geeglm_ex, 
                  btb_geeglm_ar, 
                  btb_geeglm_un, 
-                 rank = "QIC")    #sorts the best to the TOP, uses QIC(I)
+                 rank = "QIC")     #sorts the best to the TOP, uses QIC(I)
 ```
 
 
@@ -536,12 +534,11 @@ expand.grid(bdi.pre = 23,
   mutate(fit_un = predict(btb_geeglm_un,
                        newdata = .,
                        type = "response")) %>% 
-  gather(key = variable,
-         value = fit,
-         starts_with("fit")) %>% 
-  separate(col = variable,
-           into = c("junk", "covR")) %>% 
-  select(-junk) %>% 
+  tidyr::pivot_longer(cols = starts_with("fit_"),
+                      names_to = "covR",
+                      names_pattern = "fit_(.*)",
+                      names_ptype = list(covR = "factor()"),
+                      values_to = "fit") %>% 
   mutate(covR = factor(covR, 
                        levels = c("un", "ar", "ex", "in"),
                        labels = c("Unstructured",
@@ -554,13 +551,10 @@ expand.grid(bdi.pre = 23,
   geom_line(alpha = 0.6) +
   theme_bw() +
   labs(title    = "BtheB - Predictions from four GEE models (geeglm)",
-       linetype = "Treatment") +
+       x = "Month",
+       y = "Predicted BDI",
+       linetype = "Treatment:") +
   scale_linetype_manual(values = c("solid", "longdash")) +
-  scale_size_manual(values     = c(2, 1, 1, 1)) +
-  scale_color_manual(values    = c("red", 
-                                   "dodgerblue",
-                                   "blue",
-                                   "darkgreen")) +
   theme(legend.key.width = unit(1, "cm")) +
   facet_wrap(~ covR)
 ```
@@ -568,6 +562,54 @@ expand.grid(bdi.pre = 23,
 
 
 
+```{r}
+expand.grid(bdi.pre = 23,
+            length = "<6m",
+            drug = "No",
+            treatment = levels(btb_long$treatment),
+            month = seq(from = 2, to = 8, by = 2)) %>%  
+  mutate(fit_in = predict(btb_geeglm_in,
+                       newdata = .,
+                       type = "response")) %>% 
+  mutate(fit_ex = predict(btb_geeglm_ex,
+                       newdata = .,
+                       type = "response")) %>% 
+  mutate(fit_ar = predict(btb_geeglm_ar,
+                       newdata = .,
+                       type = "response")) %>% 
+  mutate(fit_un = predict(btb_geeglm_un,
+                       newdata = .,
+                       type = "response")) %>% 
+  tidyr::pivot_longer(cols = starts_with("fit_"),
+                      names_to = "covR",
+                      names_pattern = "fit_(.*)",
+                      names_ptype = list(covR = "factor()"),
+                      values_to = "fit") %>% 
+  mutate(covR = factor(covR, 
+                       levels = c("un", "ar", "ex", "in"),
+                       labels = c("Unstructured",
+                                  "Auto-Regressive",
+                                  "Compound Symetry",
+                                  "Independence"))) %>% 
+  ggplot(aes(x = month,
+             y = fit,
+             color = covR,
+             linetype = treatment)) +
+  geom_line(alpha = 0.6) +
+  theme_bw() +
+  labs(title    = "BtheB - Predictions from four GEE models (geeglm)",
+       x = "Month",
+       y = "Predicted BDI",
+       color = "Covariance Pattern:",
+       linetype = "Treatment:") +
+  scale_linetype_manual(values = c("solid", "longdash")) +
+  scale_size_manual(values     = c(2, 1, 1, 1)) +
+  scale_color_manual(values    = c("red", 
+                                   "dodgerblue",
+                                   "blue",
+                                   "darkgreen")) +
+  theme(legend.key.width = unit(1, "cm"))
+```
 
 
 
