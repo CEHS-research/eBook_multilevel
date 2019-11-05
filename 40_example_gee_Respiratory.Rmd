@@ -283,14 +283,22 @@ texreg::screenreg(list(extract_glm_exp(resp_glm),
                                          "GEE-EXCH"),
                   caption = "Estimates on Odds-Ratio Scale",
                   ci.test = 1,
-                  digits = 4)
+                  digits = 3)
 ```
 
-```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
+```{r, eval=FALSE}
+texreg::texreg(list(extract_glm_exp(resp_glm), 
+                    extract_gee_exp(resp_gee_in), 
+                    extract_gee_exp(resp_gee_ex)),
+               custom.model.names = c("GLM", 
+                                      "GEE-INDEP", 
+                                      "GEE-EXCH"),
+               caption = "Estimates on Odds-Ratio Scale",
+               ci.test = 1,
+               digits = 3)
+```
 
+```{r, echo=FALSE, results="asis"}
 texreg::htmlreg(list(extract_glm_exp(resp_glm), 
                      extract_gee_exp(resp_gee_in), 
                      extract_gee_exp(resp_gee_ex)),
@@ -299,7 +307,7 @@ texreg::htmlreg(list(extract_glm_exp(resp_glm),
                                        "GEE-EXCH"),
                 caption = "Estimates on Odds-Ratio Scale",
                 ci.test = 1,
-                digits = 4)
+                digits = 3)
 ```
 
 
@@ -308,9 +316,6 @@ texreg::htmlreg(list(extract_glm_exp(resp_glm),
 ```{r}
 resp_gee_ex %>% coef() %>% exp()
 ```
-
-
-
 
 
 ```{r}
@@ -331,6 +336,77 @@ trt_95ci
 exp(trt_95ci)
 ```
 
+
+
+```{r, include=FALSE}
+texreg::screenreg(list(resp_gee_ex, 
+                       extract_gee_exp(resp_gee_ex,
+                                    include.dispersion = FALSE,
+                                    include.nobs = FALSE)),
+                  custom.model.names = c("b (SE)", 
+                                         "OR [95% CI]"),
+                  custom.coef.map = list(centre2 = "Center 2",
+                                         sexmale = "Male",
+                                         BL_statusgood = "Good at BL",
+                                         "I(age - 33)" = "Age (Yrs post 33)",
+                                         "I((age - 33)^2)" = "Age-Squared",
+                                         treatmenttreatment = "Treatment"), 
+                  caption = "GEE: Final Model (exchangable)",
+                  ci.test = 1,
+                  single.row = TRUE,
+                  digits = 3)
+```
+
+```{r, eval=FALSE}
+texreg::texreg(list(resp_gee_ex, 
+                    extract_gee_exp(resp_gee_ex,
+                                    include.dispersion = FALSE,
+                                    include.nobs = FALSE)),
+               custom.model.names = c("b (SE)", 
+                                      "OR [95% CI]"),
+               custom.coef.map = list(centre2 = "Center 2",
+                                      sexmale = "Male",
+                                      BL_statusgood = "Good at BL",
+                                      "I(age - 33)" = "Age (Yrs post 33)",
+                                      "I((age - 33)^2)" = "Age-Squared",
+                                      treatmenttreatment = "Treatment"), 
+               caption = "GEE: Final Model (exchangable)",
+               ci.test = 1,
+               single.row = TRUE,
+               digits = 3)
+```
+
+
+```{r, echo=FALSE, results='asis'}
+texreg::htmlreg(list(resp_gee_ex, 
+                     extract_gee_exp(resp_gee_ex,
+                                     include.dispersion = FALSE,
+                                     include.nobs = FALSE)),
+                custom.model.names = c("b (SE)", 
+                                       "OR [95% CI]"),
+                custom.coef.map = list(centre2 = "Center 2",
+                                       sexmale = "Male",
+                                       BL_statusgood = "Good at BL",
+                                       "I(age - 33)" = "Age (Yrs post 33)",
+                                       "I((age - 33)^2)" = "Age-Squared",
+                                       treatmenttreatment = "Treatment"), 
+                caption = "GEE: Final Model (exchangable)",
+                ci.test = 1,
+                single.row = TRUE,
+                digits = 3)
+```
+
+
+* `centre`: Controlling for baseline status, sex, age, and treatetment, thoes in center 2 had 71% higher odds of having a good respiratory status.
+
+
+* `sex`: Controlling for baseline status, center, age, and treatetment, males had 53% higher odds of having a good respiratory status.
+
+* `BL_status`: Controlling for sex, center, age, and treatetment, thoes with bood baseline staus had nearly 7 times higher odds of having a good respiratory status.
+
+* `age`:  Controlling for baseline status, sex, center, and treatment, the role of age was non-linear, such that the odds of a good respiratory statust was lowerst for patients age 40 and better for patiers that were either yonger or older.
+
+* `treatment`: Controlling for baseline status, sex, age, and center, thoes on the treatetment had 3.88 time higher odds of having a good respiratory status.
 
 
 
@@ -371,6 +447,32 @@ resp_geeglm_ex %>% coef() %>% exp()
 summary(data_long)
 ```
 
+
+#### Females in Center 1
+
+```{r}
+expand.grid(centre = levels(data_long$centre),
+            treatment = levels(data_long$treatment),
+            sex = levels(data_long$sex),
+            age = seq(from = 11, to = 68, by = 1),
+            BL_status = levels(data_long$BL_status)) %>% 
+  dplyr::mutate(fit = predict(resp_geeglm_ex,
+                              newdata = .,
+                              type = "response")) %>% 
+  ggplot(aes(x = age,
+             y = fit,
+             color = fct_rev(sex),
+             linetype = fct_rev(treatment))) +
+  geom_line() +
+  theme_bw() + 
+  facet_grid(centre ~ BL_status, labeller = label_both) +
+  labs(x = "Age, years",
+       y = "Predicted Probability of GOOD Respiratory Status",
+       color = "Sex:",
+       linetype = "Assignment:")
+```
+
+
 #### Females in Center 1
 
 ```{r}
@@ -393,6 +495,8 @@ expand.grid(centre = "1",
        title = "For Females at Center 1, by Baseline Status")
 ```
 
+
+#### Males in Center 2
 
 ```{r}
 expand.grid(centre = "2",
