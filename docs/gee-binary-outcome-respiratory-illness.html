@@ -1676,19 +1676,15 @@ Dispersion
 </div>
 <div id="exponentiate-the-estimates-odds-ratio-scale" class="section level4">
 <h4><span class="header-section-number">13.5.3.2</span> Exponentiate the Estimates (odds ratio scale)</h4>
-<div class="sourceCode" id="cb681"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb681-1" title="1"><span class="co"># Knit to Website: texreg::htmlreg()</span></a>
-<a class="sourceLine" id="cb681-2" title="2"><span class="co"># Knit to PDF:     texreg::texreg()</span></a>
-<a class="sourceLine" id="cb681-3" title="3"><span class="co"># View on Screen:  texreg::screenreg()</span></a>
-<a class="sourceLine" id="cb681-4" title="4"></a>
-<a class="sourceLine" id="cb681-5" title="5">texreg<span class="op">::</span><span class="kw">htmlreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(resp_glm), </a>
-<a class="sourceLine" id="cb681-6" title="6">                     <span class="kw">extract_gee_exp</span>(resp_gee_in), </a>
-<a class="sourceLine" id="cb681-7" title="7">                     <span class="kw">extract_gee_exp</span>(resp_gee_ex)),</a>
-<a class="sourceLine" id="cb681-8" title="8">                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, </a>
-<a class="sourceLine" id="cb681-9" title="9">                                       <span class="st">&quot;GEE-INDEP&quot;</span>, </a>
-<a class="sourceLine" id="cb681-10" title="10">                                       <span class="st">&quot;GEE-EXCH&quot;</span>),</a>
-<a class="sourceLine" id="cb681-11" title="11">                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Odds-Ratio Scale&quot;</span>,</a>
-<a class="sourceLine" id="cb681-12" title="12">                <span class="dt">ci.test =</span> <span class="dv">1</span>,</a>
-<a class="sourceLine" id="cb681-13" title="13">                <span class="dt">digits =</span> <span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb681"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb681-1" title="1">texreg<span class="op">::</span><span class="kw">texreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(resp_glm), </a>
+<a class="sourceLine" id="cb681-2" title="2">                    <span class="kw">extract_gee_exp</span>(resp_gee_in), </a>
+<a class="sourceLine" id="cb681-3" title="3">                    <span class="kw">extract_gee_exp</span>(resp_gee_ex)),</a>
+<a class="sourceLine" id="cb681-4" title="4">               <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, </a>
+<a class="sourceLine" id="cb681-5" title="5">                                      <span class="st">&quot;GEE-INDEP&quot;</span>, </a>
+<a class="sourceLine" id="cb681-6" title="6">                                      <span class="st">&quot;GEE-EXCH&quot;</span>),</a>
+<a class="sourceLine" id="cb681-7" title="7">               <span class="dt">caption =</span> <span class="st">&quot;Estimates on Odds-Ratio Scale&quot;</span>,</a>
+<a class="sourceLine" id="cb681-8" title="8">               <span class="dt">ci.test =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb681-9" title="9">               <span class="dt">digits =</span> <span class="dv">3</span>)</a></code></pre></div>
 &lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
 <table cellspacing="0" align="center" style="border: none;">
 <caption align="bottom" style="margin-top:0.3em;">
@@ -1713,26 +1709,26 @@ Estimates on Odds-Ratio Scale
 (Intercept)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1397<sup style="vertical-align: 0px;">*</sup>
+0.140<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1397<sup style="vertical-align: 0px;">*</sup>
+0.140<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.1397<sup style="vertical-align: 0px;">*</sup>
+0.140<sup style="vertical-align: 0px;">*</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.0801; 0.2343]
+[0.080; 0.234]
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.0583; 0.3345]
+[0.058; 0.335]
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.0583; 0.3345]
+[0.058; 0.335]
 </td>
 </tr>
 <tr>
@@ -1740,26 +1736,26 @@ Estimates on Odds-Ratio Scale
 centre2
 </td>
 <td style="padding-right: 12px; border: none;">
-1.7071<sup style="vertical-align: 0px;">*</sup>
+1.707<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-1.7071
+1.707
 </td>
 <td style="padding-right: 12px; border: none;">
-1.7071
+1.707
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-[1.0540; 2.7748]
+[1.054; 2.775]
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.8113; 3.5922]
+[0.811; 3.592]
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.8113; 3.5922]
+[0.811; 3.592]
 </td>
 </tr>
 <tr>
@@ -1767,26 +1763,26 @@ centre2
 treatmenttreatment
 </td>
 <td style="padding-right: 12px; border: none;">
-3.8813<sup style="vertical-align: 0px;">*</sup>
+3.881<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-3.8813<sup style="vertical-align: 0px;">*</sup>
+3.881<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-3.8813<sup style="vertical-align: 0px;">*</sup>
+3.881<sup style="vertical-align: 0px;">*</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-[2.4221; 6.3344]
+[2.422; 6.334]
 </td>
 <td style="padding-right: 12px; border: none;">
-[1.8509; 8.1390]
+[1.851; 8.139]
 </td>
 <td style="padding-right: 12px; border: none;">
-[1.8509; 8.1390]
+[1.851; 8.139]
 </td>
 </tr>
 <tr>
@@ -1794,26 +1790,26 @@ treatmenttreatment
 sexmale
 </td>
 <td style="padding-right: 12px; border: none;">
-1.5316
+1.532
 </td>
 <td style="padding-right: 12px; border: none;">
-1.5316
+1.532
 </td>
 <td style="padding-right: 12px; border: none;">
-1.5316
+1.532
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.8257; 2.8745]
+[0.826; 2.875]
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.5940; 3.9491]
+[0.594; 3.949]
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.5940; 3.9491]
+[0.594; 3.949]
 </td>
 </tr>
 <tr>
@@ -1821,26 +1817,26 @@ sexmale
 BL_statusgood
 </td>
 <td style="padding-right: 12px; border: none;">
-6.8165<sup style="vertical-align: 0px;">*</sup>
+6.816<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-6.8165<sup style="vertical-align: 0px;">*</sup>
+6.816<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-6.8165<sup style="vertical-align: 0px;">*</sup>
+6.816<sup style="vertical-align: 0px;">*</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-[4.2214; 11.2710]
+[4.221; 11.271]
 </td>
 <td style="padding-right: 12px; border: none;">
-[3.2539; 14.2793]
+[3.254; 14.279]
 </td>
 <td style="padding-right: 12px; border: none;">
-[3.2539; 14.2793]
+[3.254; 14.279]
 </td>
 </tr>
 <tr>
@@ -1848,26 +1844,26 @@ BL_statusgood
 I(age - 33)
 </td>
 <td style="padding-right: 12px; border: none;">
-0.9638<sup style="vertical-align: 0px;">*</sup>
+0.964<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.9638<sup style="vertical-align: 0px;">*</sup>
+0.964<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-0.9638<sup style="vertical-align: 0px;">*</sup>
+0.964<sup style="vertical-align: 0px;">*</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.9435; 0.9837]
+[0.943; 0.984]
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.9359; 0.9926]
+[0.936; 0.993]
 </td>
 <td style="padding-right: 12px; border: none;">
-[0.9359; 0.9926]
+[0.936; 0.993]
 </td>
 </tr>
 <tr>
@@ -1875,26 +1871,26 @@ I(age - 33)
 I((age - 33)^2)
 </td>
 <td style="padding-right: 12px; border: none;">
-1.0025<sup style="vertical-align: 0px;">*</sup>
+1.003<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-1.0025<sup style="vertical-align: 0px;">*</sup>
+1.003<sup style="vertical-align: 0px;">*</sup>
 </td>
 <td style="padding-right: 12px; border: none;">
-1.0025<sup style="vertical-align: 0px;">*</sup>
+1.003<sup style="vertical-align: 0px;">*</sup>
 </td>
 </tr>
 <tr>
 <td style="padding-right: 12px; border: none;">
 </td>
 <td style="padding-right: 12px; border: none;">
-[1.0013; 1.0038]
+[1.001; 1.004]
 </td>
 <td style="padding-right: 12px; border: none;">
-[1.0010; 1.0040]
+[1.001; 1.004]
 </td>
 <td style="padding-right: 12px; border: none;">
-[1.0010; 1.0040]
+[1.001; 1.004]
 </td>
 </tr>
 <tr>
@@ -1902,7 +1898,7 @@ I((age - 33)^2)
 AIC
 </td>
 <td style="border-top: 1px solid black;">
-479.2530
+479.253
 </td>
 <td style="border-top: 1px solid black;">
 </td>
@@ -1914,7 +1910,7 @@ AIC
 BIC
 </td>
 <td style="padding-right: 12px; border: none;">
-507.9238
+507.924
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -1926,7 +1922,7 @@ BIC
 Log Likelihood
 </td>
 <td style="padding-right: 12px; border: none;">
--232.6265
+-232.626
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -1938,7 +1934,7 @@ Log Likelihood
 Deviance
 </td>
 <td style="padding-right: 12px; border: none;">
-465.2530
+465.253
 </td>
 <td style="padding-right: 12px; border: none;">
 </td>
@@ -1966,10 +1962,10 @@ Dispersion
 <td style="border-bottom: 2px solid black;">
 </td>
 <td style="border-bottom: 2px solid black;">
-1.0000
+1.000
 </td>
 <td style="border-bottom: 2px solid black;">
-1.0000
+1.000
 </td>
 </tr>
 <tr>
@@ -2001,17 +1997,148 @@ Dispersion
 <pre><code>[1] 0.6156936 2.0966692</code></pre>
 <div class="sourceCode" id="cb692"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb692-1" title="1"><span class="kw">exp</span>(trt_95ci)</a></code></pre></div>
 <pre><code>[1] 1.850940 8.139015</code></pre>
+<div class="sourceCode" id="cb694"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb694-1" title="1">texreg<span class="op">::</span><span class="kw">texreg</span>(<span class="kw">list</span>(resp_gee_ex, </a>
+<a class="sourceLine" id="cb694-2" title="2">                    <span class="kw">extract_gee_exp</span>(resp_gee_ex,</a>
+<a class="sourceLine" id="cb694-3" title="3">                                    <span class="dt">include.dispersion =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb694-4" title="4">                                    <span class="dt">include.nobs =</span> <span class="ot">FALSE</span>)),</a>
+<a class="sourceLine" id="cb694-5" title="5">               <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;b (SE)&quot;</span>, </a>
+<a class="sourceLine" id="cb694-6" title="6">                                      <span class="st">&quot;OR [95% CI]&quot;</span>),</a>
+<a class="sourceLine" id="cb694-7" title="7">               <span class="dt">custom.coef.map =</span> <span class="kw">list</span>(<span class="dt">centre2 =</span> <span class="st">&quot;Center 2&quot;</span>,</a>
+<a class="sourceLine" id="cb694-8" title="8">                                      <span class="dt">sexmale =</span> <span class="st">&quot;Male&quot;</span>,</a>
+<a class="sourceLine" id="cb694-9" title="9">                                      <span class="dt">BL_statusgood =</span> <span class="st">&quot;Good at BL&quot;</span>,</a>
+<a class="sourceLine" id="cb694-10" title="10">                                      <span class="st">&quot;I(age - 33)&quot;</span> =<span class="st"> &quot;Age (Yrs post 33)&quot;</span>,</a>
+<a class="sourceLine" id="cb694-11" title="11">                                      <span class="st">&quot;I((age - 33)^2)&quot;</span> =<span class="st"> &quot;Age-Squared&quot;</span>,</a>
+<a class="sourceLine" id="cb694-12" title="12">                                      <span class="dt">treatmenttreatment =</span> <span class="st">&quot;Treatment&quot;</span>), </a>
+<a class="sourceLine" id="cb694-13" title="13">               <span class="dt">caption =</span> <span class="st">&quot;GEE: Final Model (exchangable)&quot;</span>,</a>
+<a class="sourceLine" id="cb694-14" title="14">               <span class="dt">ci.test =</span> <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb694-15" title="15">               <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb694-16" title="16">               <span class="dt">digits =</span> <span class="dv">3</span>)</a></code></pre></div>
+&lt;!DOCTYPE HTML PUBLIC “-//W3C//DTD HTML 4.01 Transitional//EN” “<a href="http://www.w3.org/TR/html4/loose.dtd" class="uri">http://www.w3.org/TR/html4/loose.dtd</a>”&gt;
+<table cellspacing="0" align="center" style="border: none;">
+<caption align="bottom" style="margin-top:0.3em;">
+GEE: Final Model (exchangable)
+</caption>
+<tr>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b></b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>b (SE)</b>
+</th>
+<th style="text-align: left; border-top: 2px solid black; border-bottom: 1px solid black; padding-right: 12px;">
+<b>OR [95% CI]</b>
+</th>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Center 2
+</td>
+<td style="padding-right: 12px; border: none;">
+0.535 (0.380)
+</td>
+<td style="padding-right: 12px; border: none;">
+1.707 [0.811; 3.592]
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Male
+</td>
+<td style="padding-right: 12px; border: none;">
+0.426 (0.483)
+</td>
+<td style="padding-right: 12px; border: none;">
+1.532 [0.594; 3.949]
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Good at BL
+</td>
+<td style="padding-right: 12px; border: none;">
+1.919 (0.377)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+6.816 [3.254; 14.279]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Age (Yrs post 33)
+</td>
+<td style="padding-right: 12px; border: none;">
+-0.037 (0.015)<sup style="vertical-align: 0px;">*</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+0.964 [0.936; 0.993]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Age-Squared
+</td>
+<td style="padding-right: 12px; border: none;">
+0.003 (0.001)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+1.003 [1.001; 1.004]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;">
+Treatment
+</td>
+<td style="padding-right: 12px; border: none;">
+1.356 (0.378)<sup style="vertical-align: 0px;">***</sup>
+</td>
+<td style="padding-right: 12px; border: none;">
+3.881 [1.851; 8.139]<sup style="vertical-align: 0px;">*</sup>
+</td>
+</tr>
+<tr>
+<td style="border-top: 1px solid black;">
+Dispersion
+</td>
+<td style="border-top: 1px solid black;">
+1.000
+</td>
+<td style="border-top: 1px solid black;">
+</td>
+</tr>
+<tr>
+<td style="border-bottom: 2px solid black;">
+Num. obs.
+</td>
+<td style="border-bottom: 2px solid black;">
+444
+</td>
+<td style="border-bottom: 2px solid black;">
+</td>
+</tr>
+<tr>
+<td style="padding-right: 12px; border: none;" colspan="4">
+<span style="font-size:0.8em"><sup style="vertical-align: 0px;"><em><strong></sup>p &lt; 0.001, <sup style="vertical-align: 0px;"></strong></sup>p &lt; 0.01, <sup style="vertical-align: 0px;"></em></sup>p &lt; 0.05 (or 1 outside the confidence interval).</span>
+</td>
+</tr>
+</table>
+<ul>
+<li><p><code>centre</code>: Controlling for baseline status, sex, age, and treatetment, thoes in center 2 had 71% higher odds of having a good respiratory status.</p></li>
+<li><p><code>sex</code>: Controlling for baseline status, center, age, and treatetment, males had 53% higher odds of having a good respiratory status.</p></li>
+<li><p><code>BL_status</code>: Controlling for sex, center, age, and treatetment, thoes with bood baseline staus had nearly 7 times higher odds of having a good respiratory status.</p></li>
+<li><p><code>age</code>: Controlling for baseline status, sex, center, and treatment, the role of age was non-linear, such that the odds of a good respiratory statust was lowerst for patients age 40 and better for patiers that were either yonger or older.</p></li>
+<li><p><code>treatment</code>: Controlling for baseline status, sex, age, and center, thoes on the treatetment had 3.88 time higher odds of having a good respiratory status.</p></li>
+</ul>
 </div>
 </div>
 <div id="refit-with-the-geepack-package" class="section level3">
 <h3><span class="header-section-number">13.5.4</span> Refit with the <code>geepack</code> package</h3>
-<div class="sourceCode" id="cb694"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb694-1" title="1">resp_geeglm_ex &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb694-2" title="2">                        <span class="dt">data =</span> data_long,</a>
-<a class="sourceLine" id="cb694-3" title="3">                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</a>
-<a class="sourceLine" id="cb694-4" title="4">                        <span class="dt">id =</span> subject,</a>
-<a class="sourceLine" id="cb694-5" title="5">                        <span class="dt">waves =</span> month,</a>
-<a class="sourceLine" id="cb694-6" title="6">                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb695"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb695-1" title="1"><span class="kw">summary</span>(resp_geeglm_ex)</a></code></pre></div>
+<div class="sourceCode" id="cb695"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb695-1" title="1">resp_geeglm_ex &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb695-2" title="2">                        <span class="dt">data =</span> data_long,</a>
+<a class="sourceLine" id="cb695-3" title="3">                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</a>
+<a class="sourceLine" id="cb695-4" title="4">                        <span class="dt">id =</span> subject,</a>
+<a class="sourceLine" id="cb695-5" title="5">                        <span class="dt">waves =</span> month,</a>
+<a class="sourceLine" id="cb695-6" title="6">                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb696"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb696-1" title="1"><span class="kw">summary</span>(resp_geeglm_ex)</a></code></pre></div>
 <pre><code>
 Call:
 geepack::geeglm(formula = status ~ centre + treatment + sex + 
@@ -2040,7 +2167,7 @@ Estimated Correlation Parameters:
       Estimate Std.err
 alpha   0.3119  0.1515
 Number of clusters:   111   Maximum cluster size: 4 </code></pre>
-<div class="sourceCode" id="cb697"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb697-1" title="1">resp_geeglm_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb698"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb698-1" title="1">resp_geeglm_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</a></code></pre></div>
 <pre><code>       (Intercept)            centre2 treatmenttreatment 
             0.1397             1.7071             3.8813 
            sexmale      BL_statusgood        I(age - 33) 
@@ -2052,7 +2179,7 @@ Number of clusters:   111   Maximum cluster size: 4 </code></pre>
 <h3><span class="header-section-number">13.5.5</span> Visualize the Model</h3>
 <div id="range-of-data-values" class="section level4">
 <h4><span class="header-section-number">13.5.5.1</span> Range of Data Values</h4>
-<div class="sourceCode" id="cb699"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb699-1" title="1"><span class="kw">summary</span>(data_long)</a></code></pre></div>
+<div class="sourceCode" id="cb700"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb700-1" title="1"><span class="kw">summary</span>(data_long)</a></code></pre></div>
 <pre><code>    subject    centre      sex           age           treatment  
  1      :  4   1:224   female:352   Min.   :11.0   placebo  :228  
  2      :  4   2:220   male  : 92   1st Qu.:23.0   treatment:216  
@@ -2072,27 +2199,9 @@ Number of clusters:   111   Maximum cluster size: 4 </code></pre>
 </div>
 <div id="females-in-center-1" class="section level4">
 <h4><span class="header-section-number">13.5.5.2</span> Females in Center 1</h4>
-<div class="sourceCode" id="cb701"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb701-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,</a>
-<a class="sourceLine" id="cb701-2" title="2">            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</a>
-<a class="sourceLine" id="cb701-3" title="3">            <span class="dt">sex =</span> <span class="st">&quot;female&quot;</span>,</a>
-<a class="sourceLine" id="cb701-4" title="4">            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb701-5" title="5">            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb701-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</a>
-<a class="sourceLine" id="cb701-7" title="7">                              <span class="dt">newdata =</span> .,</a>
-<a class="sourceLine" id="cb701-8" title="8">                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb701-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
-<a class="sourceLine" id="cb701-10" title="10">             <span class="dt">y =</span> fit,</a>
-<a class="sourceLine" id="cb701-11" title="11">             <span class="dt">linetype =</span> treatment)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb701-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb701-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb701-14" title="14"><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span></a>
-<a class="sourceLine" id="cb701-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,</a>
-<a class="sourceLine" id="cb701-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</a>
-<a class="sourceLine" id="cb701-17" title="17">       <span class="dt">title =</span> <span class="st">&quot;For Females at Center 1, by Baseline Status&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-565-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb702"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb702-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;2&quot;</span>,</a>
+<div class="sourceCode" id="cb702"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb702-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>centre),</a>
 <a class="sourceLine" id="cb702-2" title="2">            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</a>
-<a class="sourceLine" id="cb702-3" title="3">            <span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,</a>
+<a class="sourceLine" id="cb702-3" title="3">            <span class="dt">sex =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>sex),</a>
 <a class="sourceLine" id="cb702-4" title="4">            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),</a>
 <a class="sourceLine" id="cb702-5" title="5">            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb702-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</a>
@@ -2100,14 +2209,58 @@ Number of clusters:   111   Maximum cluster size: 4 </code></pre>
 <a class="sourceLine" id="cb702-8" title="8">                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb702-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
 <a class="sourceLine" id="cb702-10" title="10">             <span class="dt">y =</span> fit,</a>
-<a class="sourceLine" id="cb702-11" title="11">             <span class="dt">linetype =</span> treatment)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb702-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb702-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb702-14" title="14"><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span></a>
-<a class="sourceLine" id="cb702-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,</a>
-<a class="sourceLine" id="cb702-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</a>
-<a class="sourceLine" id="cb702-17" title="17">       <span class="dt">title =</span> <span class="st">&quot;For Males at Center 2, by Baseline Status&quot;</span>)</a></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-566-1.png" width="576" style="display: block; margin: auto;" /></p>
+<a class="sourceLine" id="cb702-11" title="11">             <span class="dt">color =</span> <span class="kw">fct_rev</span>(sex),</a>
+<a class="sourceLine" id="cb702-12" title="12">             <span class="dt">linetype =</span> <span class="kw">fct_rev</span>(treatment))) <span class="op">+</span></a>
+<a class="sourceLine" id="cb702-13" title="13"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb702-14" title="14"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb702-15" title="15"><span class="st">  </span><span class="kw">facet_grid</span>(centre <span class="op">~</span><span class="st"> </span>BL_status, <span class="dt">labeller =</span> label_both) <span class="op">+</span></a>
+<a class="sourceLine" id="cb702-16" title="16"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,</a>
+<a class="sourceLine" id="cb702-17" title="17">       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</a>
+<a class="sourceLine" id="cb702-18" title="18">       <span class="dt">color =</span> <span class="st">&quot;Sex:&quot;</span>,</a>
+<a class="sourceLine" id="cb702-19" title="19">       <span class="dt">linetype =</span> <span class="st">&quot;Assignment:&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-569-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="females-in-center-1-1" class="section level4">
+<h4><span class="header-section-number">13.5.5.3</span> Females in Center 1</h4>
+<div class="sourceCode" id="cb703"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb703-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,</a>
+<a class="sourceLine" id="cb703-2" title="2">            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</a>
+<a class="sourceLine" id="cb703-3" title="3">            <span class="dt">sex =</span> <span class="st">&quot;female&quot;</span>,</a>
+<a class="sourceLine" id="cb703-4" title="4">            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb703-5" title="5">            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb703-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</a>
+<a class="sourceLine" id="cb703-7" title="7">                              <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb703-8" title="8">                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb703-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb703-10" title="10">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb703-11" title="11">             <span class="dt">linetype =</span> treatment)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb703-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb703-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb703-14" title="14"><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span></a>
+<a class="sourceLine" id="cb703-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,</a>
+<a class="sourceLine" id="cb703-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</a>
+<a class="sourceLine" id="cb703-17" title="17">       <span class="dt">title =</span> <span class="st">&quot;For Females at Center 1, by Baseline Status&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-570-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="males-in-center-2" class="section level4">
+<h4><span class="header-section-number">13.5.5.4</span> Males in Center 2</h4>
+<div class="sourceCode" id="cb704"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb704-1" title="1"><span class="kw">expand.grid</span>(<span class="dt">centre =</span> <span class="st">&quot;2&quot;</span>,</a>
+<a class="sourceLine" id="cb704-2" title="2">            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</a>
+<a class="sourceLine" id="cb704-3" title="3">            <span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,</a>
+<a class="sourceLine" id="cb704-4" title="4">            <span class="dt">age =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb704-5" title="5">            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb704-6" title="6"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</a>
+<a class="sourceLine" id="cb704-7" title="7">                              <span class="dt">newdata =</span> .,</a>
+<a class="sourceLine" id="cb704-8" title="8">                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb704-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</a>
+<a class="sourceLine" id="cb704-10" title="10">             <span class="dt">y =</span> fit,</a>
+<a class="sourceLine" id="cb704-11" title="11">             <span class="dt">linetype =</span> treatment)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb704-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb704-13" title="13"><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb704-14" title="14"><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>BL_status) <span class="op">+</span></a>
+<a class="sourceLine" id="cb704-15" title="15"><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,</a>
+<a class="sourceLine" id="cb704-16" title="16">       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</a>
+<a class="sourceLine" id="cb704-17" title="17">       <span class="dt">title =</span> <span class="st">&quot;For Males at Center 2, by Baseline Status&quot;</span>)</a></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-571-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
