@@ -1,4 +1,4 @@
-# GLMM, Binary Outcome: Antibiotics for Leprosy
+# GLMM, Binary Outcome: Contraception & Amenorrhea
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(comment     = "",
@@ -114,9 +114,10 @@ psych::headTail(data_long, bottom = 10)
 ```{r}
 data_wide <- data_long %>% 
   dplyr::select(-time) %>% 
-  tidyr::spread(key = occasion,
-                value = amenorrhea,
-                sep = "_")
+  tidyr::pivot_wider(id_cols = c(id, dose),
+                     names_from = occasion,
+                     names_prefix = "occasion_",
+                     values_from = amenorrhea)
 
 str(data_wide)
 
@@ -283,30 +284,6 @@ texreg::htmlreg(list(extract_glmer_exp(fit_1),
 
 
 ### Visualize the Model
-
-#### Scale = Logit
-
-```{r}
-effects::Effect(focal.predictors = c("dose", "time"),
-                xlevels = list(time = seq(from = 0, to = 3, by = .1)),
-                mod = fit_2,
-                transform = NULL) %>% 
-  data.frame %>% 
-  ggplot(aes(x = time,
-             y = fit)) +
-  geom_hline(yintercept = 0,         # reference line
-             color = "gray",
-             size = 1.5) +
-  geom_ribbon(aes(ymin = fit - se,   # Mean +/- 1 SEM
-                  ymax = fit + se,
-                  fill = dose),
-              alpha = .2) +
-  geom_line(aes(color = dose),
-            size = 1.5) +
-  theme_bw() +
-  labs(y = "Logit Scale")
-```
-
 
 #### Scale = Probability
 
