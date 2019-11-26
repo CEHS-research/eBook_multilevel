@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -1243,12 +1255,10 @@ R<sup>2</sup> Tjur
 <a class="sourceLine" id="cb672-6" title="6">                        <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>,</a>
 <a class="sourceLine" id="cb672-7" title="7">                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb672-8" title="8">                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</a></code></pre></div>
-<pre><code>       (Intercept)            centre2 treatmenttreatment 
-      -1.968572485        0.534793799        1.356181372 
-           sexmale      BL_statusgood        I(age - 33) 
-       0.426343291        1.919340141       -0.036853528 
-   I((age - 33)^2) 
-       0.002516859 </code></pre>
+<pre><code>       (Intercept)            centre2 treatmenttreatment            sexmale 
+      -1.968572485        0.534793799        1.356181372        0.426343291 
+     BL_statusgood        I(age - 33)    I((age - 33)^2) 
+       1.919340141       -0.036853528        0.002516859 </code></pre>
 <div class="sourceCode" id="cb674"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb674-1" title="1"><span class="kw">summary</span>(resp_gee_in)</a></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
@@ -1271,22 +1281,14 @@ Summary of Residuals:
 
 
 Coefficients:
-                       Estimate   Naive S.E.   Naive z  Robust S.E.
-(Intercept)        -1.968572493 0.2733635751 -7.201298 0.4457014141
-centre2             0.534793799 0.2464443046  2.170039 0.3795759846
-treatmenttreatment  1.356181377 0.2447584751  5.540896 0.3777998909
-sexmale             0.426343293 0.3175134753  1.342757 0.4832336627
-BL_statusgood       1.919340146 0.2500092510  7.677077 0.3772812271
-I(age - 33)        -0.036853528 0.0106384086 -3.464196 0.0150120266
-I((age - 33)^2)     0.002516859 0.0006351834  3.962414 0.0007592432
-                     Robust z
-(Intercept)        -4.4167966
-centre2             1.4089242
-treatmenttreatment  3.5896818
-sexmale             0.8822715
-BL_statusgood       5.0872930
-I(age - 33)        -2.4549336
-I((age - 33)^2)     3.3149582
+                       Estimate   Naive S.E.   Naive z  Robust S.E.   Robust z
+(Intercept)        -1.968572493 0.2733635751 -7.201298 0.4457014141 -4.4167966
+centre2             0.534793799 0.2464443046  2.170039 0.3795759846  1.4089242
+treatmenttreatment  1.356181377 0.2447584751  5.540896 0.3777998909  3.5896818
+sexmale             0.426343293 0.3175134753  1.342757 0.4832336627  0.8822715
+BL_statusgood       1.919340146 0.2500092510  7.677077 0.3772812271  5.0872930
+I(age - 33)        -0.036853528 0.0106384086 -3.464196 0.0150120266 -2.4549336
+I((age - 33)^2)     0.002516859 0.0006351834  3.962414 0.0007592432  3.3149582
 
 Estimated Scale Parameter:  1
 Number of Iterations:  1
@@ -1310,12 +1312,10 @@ Working Correlation
 <a class="sourceLine" id="cb676-6" title="6">                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</a>
 <a class="sourceLine" id="cb676-7" title="7">                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb676-8" title="8">                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</a></code></pre></div>
-<pre><code>       (Intercept)            centre2 treatmenttreatment 
-      -1.968572485        0.534793799        1.356181372 
-           sexmale      BL_statusgood        I(age - 33) 
-       0.426343291        1.919340141       -0.036853528 
-   I((age - 33)^2) 
-       0.002516859 </code></pre>
+<pre><code>       (Intercept)            centre2 treatmenttreatment            sexmale 
+      -1.968572485        0.534793799        1.356181372        0.426343291 
+     BL_statusgood        I(age - 33)    I((age - 33)^2) 
+       1.919340141       -0.036853528        0.002516859 </code></pre>
 <div class="sourceCode" id="cb678"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb678-1" title="1"><span class="kw">summary</span>(resp_gee_ex)</a></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
@@ -1338,22 +1338,14 @@ Summary of Residuals:
 
 
 Coefficients:
-                       Estimate  Naive S.E.    Naive z  Robust S.E.
-(Intercept)        -1.968572493 0.379830796 -5.1827617 0.4457014141
-centre2             0.534793799 0.342427246  1.5617735 0.3795759846
-treatmenttreatment  1.356181377 0.340084835  3.9877737 0.3777998909
-sexmale             0.426343293 0.441175807  0.9663796 0.4832336627
-BL_statusgood       1.919340146 0.347380636  5.5251789 0.3772812271
-I(age - 33)        -0.036853528 0.014781762 -2.4931757 0.0150120266
-I((age - 33)^2)     0.002516859 0.000882569  2.8517424 0.0007592432
-                     Robust z
-(Intercept)        -4.4167966
-centre2             1.4089242
-treatmenttreatment  3.5896818
-sexmale             0.8822715
-BL_statusgood       5.0872930
-I(age - 33)        -2.4549336
-I((age - 33)^2)     3.3149582
+                       Estimate  Naive S.E.    Naive z  Robust S.E.   Robust z
+(Intercept)        -1.968572493 0.379830796 -5.1827617 0.4457014141 -4.4167966
+centre2             0.534793799 0.342427246  1.5617735 0.3795759846  1.4089242
+treatmenttreatment  1.356181377 0.340084835  3.9877737 0.3777998909  3.5896818
+sexmale             0.426343293 0.441175807  0.9663796 0.4832336627  0.8822715
+BL_statusgood       1.919340146 0.347380636  5.5251789 0.3772812271  5.0872930
+I(age - 33)        -0.036853528 0.014781762 -2.4931757 0.0150120266 -2.4549336
+I((age - 33)^2)     0.002516859 0.000882569  2.8517424 0.0007592432  3.3149582
 
 Estimated Scale Parameter:  1
 Number of Iterations:  1
@@ -1978,12 +1970,10 @@ Dispersion
 <div id="manual-extraction" class="section level4">
 <h4><span class="header-section-number">13.5.3.3</span> Manual Extraction</h4>
 <div class="sourceCode" id="cb682"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb682-1" title="1">resp_gee_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</a></code></pre></div>
-<pre><code>       (Intercept)            centre2 treatmenttreatment 
-         0.1396561          1.7070962          3.8813436 
-           sexmale      BL_statusgood        I(age - 33) 
-         1.5316465          6.8164591          0.9638173 
-   I((age - 33)^2) 
-         1.0025200 </code></pre>
+<pre><code>       (Intercept)            centre2 treatmenttreatment            sexmale 
+         0.1396561          1.7070962          3.8813436          1.5316465 
+     BL_statusgood        I(age - 33)    I((age - 33)^2) 
+         6.8164591          0.9638173          1.0025200 </code></pre>
 <div class="sourceCode" id="cb684"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb684-1" title="1">trt_EST &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Estimate&quot;</span>] </a>
 <a class="sourceLine" id="cb684-2" title="2">trt_EST</a></code></pre></div>
 <pre><code>[1] 1.356181</code></pre>
@@ -2168,34 +2158,32 @@ Estimated Correlation Parameters:
 alpha   0.3119  0.1515
 Number of clusters:   111   Maximum cluster size: 4 </code></pre>
 <div class="sourceCode" id="cb698"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb698-1" title="1">resp_geeglm_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</a></code></pre></div>
-<pre><code>       (Intercept)            centre2 treatmenttreatment 
-            0.1397             1.7071             3.8813 
-           sexmale      BL_statusgood        I(age - 33) 
-            1.5316             6.8165             0.9638 
-   I((age - 33)^2) 
-            1.0025 </code></pre>
+<pre><code>       (Intercept)            centre2 treatmenttreatment            sexmale 
+            0.1397             1.7071             3.8813             1.5316 
+     BL_statusgood        I(age - 33)    I((age - 33)^2) 
+            6.8165             0.9638             1.0025 </code></pre>
 </div>
 <div id="visualize-the-model-3" class="section level3">
 <h3><span class="header-section-number">13.5.5</span> Visualize the Model</h3>
 <div id="range-of-data-values" class="section level4">
 <h4><span class="header-section-number">13.5.5.1</span> Range of Data Values</h4>
 <div class="sourceCode" id="cb700"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb700-1" title="1"><span class="kw">summary</span>(data_long)</a></code></pre></div>
-<pre><code>    subject    centre      sex           age           treatment  
- 1      :  4   1:224   female:352   Min.   :11.0   placebo  :228  
- 2      :  4   2:220   male  : 92   1st Qu.:23.0   treatment:216  
- 3      :  4                        Median :31.0                  
- 4      :  4                        Mean   :33.3                  
- 5      :  4                        3rd Qu.:43.0                  
- 6      :  4                        Max.   :68.0                  
- (Other):420                                                      
- BL_status      month          status     
- poor:244   Min.   :1.00   Min.   :0.000  
- good:200   1st Qu.:1.75   1st Qu.:0.000  
-            Median :2.50   Median :1.000  
-            Mean   :2.50   Mean   :0.561  
-            3rd Qu.:3.25   3rd Qu.:1.000  
-            Max.   :4.00   Max.   :1.000  
-                                          </code></pre>
+<pre><code>    subject    centre      sex           age           treatment   BL_status 
+ 1      :  4   1:224   female:352   Min.   :11.0   placebo  :228   poor:244  
+ 2      :  4   2:220   male  : 92   1st Qu.:23.0   treatment:216   good:200  
+ 3      :  4                        Median :31.0                             
+ 4      :  4                        Mean   :33.3                             
+ 5      :  4                        3rd Qu.:43.0                             
+ 6      :  4                        Max.   :68.0                             
+ (Other):420                                                                 
+     month          status     
+ Min.   :1.00   Min.   :0.000  
+ 1st Qu.:1.75   1st Qu.:0.000  
+ Median :2.50   Median :1.000  
+ Mean   :2.50   Mean   :0.561  
+ 3rd Qu.:3.25   3rd Qu.:1.000  
+ Max.   :4.00   Max.   :1.000  
+                               </code></pre>
 </div>
 <div id="females-in-center-1" class="section level4">
 <h4><span class="header-section-number">13.5.5.2</span> Females in Center 1</h4>

@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -647,13 +659,13 @@ The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edit
 <a class="sourceLine" id="cb524-4" title="4">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw) </a></code></pre></div>
 <pre><code>Observations: 1,200
 Variables: 7
-$ student  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3,...
-$ occas    &lt;fct&gt; year 1 semester 1, year 1 semester 2, year 2 semester...
-$ gpa      &lt;dbl&gt; 2.3, 2.1, 3.0, 3.0, 3.0, 3.3, 2.2, 2.5, 2.6, 2.6, 3.0...
-$ job      &lt;fct&gt; 2 hours, 2 hours, 2 hours, 2 hours, 2 hours, 2 hours,...
-$ sex      &lt;fct&gt; female, female, female, female, female, female, male,...
-$ highgpa  &lt;dbl&gt; 2.8, 2.8, 2.8, 2.8, 2.8, 2.8, 2.5, 2.5, 2.5, 2.5, 2.5...
-$ admitted &lt;fct&gt; yes, yes, yes, yes, yes, yes, no, no, no, no, no, no,...</code></pre>
+$ student  &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4...
+$ occas    &lt;fct&gt; year 1 semester 1, year 1 semester 2, year 2 semester 1, y...
+$ gpa      &lt;dbl&gt; 2.3, 2.1, 3.0, 3.0, 3.0, 3.3, 2.2, 2.5, 2.6, 2.6, 3.0, 2.8...
+$ job      &lt;fct&gt; 2 hours, 2 hours, 2 hours, 2 hours, 2 hours, 2 hours, 2 ho...
+$ sex      &lt;fct&gt; female, female, female, female, female, female, male, male...
+$ highgpa  &lt;dbl&gt; 2.8, 2.8, 2.8, 2.8, 2.8, 2.8, 2.5, 2.5, 2.5, 2.5, 2.5, 2.5...
+$ admitted &lt;fct&gt; yes, yes, yes, yes, yes, yes, no, no, no, no, no, no, yes,...</code></pre>
 <div class="sourceCode" id="cb526"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb526-1" title="1">data_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb526-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(occas, job) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb526-3" title="3"><span class="st">  </span><span class="kw">table</span>(<span class="dt">useNA =</span> <span class="st">&quot;always&quot;</span>)</a></code></pre></div>
@@ -718,26 +730,26 @@ occas               no job 1 hour 2 hours 3 hours 4 or more hours &lt;NA&gt;
 1183     198   male       4    0 2 hours     2   2.5 2 hours     2   2.9
 1189     199 female     2.3    0 2 hours     2   2.6 2 hours     2   2.3
 1195     200   male     3.4    0 2 hours     2   2.8 2 hours     2   3.2
-       job.3 hrs.3 gpa.3   job.4 hrs.4 gpa.4   job.5 hrs.5 gpa.5   job.6
-1    2 hours     2     3 2 hours     2     3 2 hours     2     3 2 hours
-7    2 hours     2   2.6 2 hours     2   2.6 2 hours     2     3 2 hours
-13   2 hours     2     3 3 hours     3   2.8 2 hours     2   3.3 2 hours
-19   2 hours     2   2.4 2 hours     2   2.7 2 hours     2   2.9 2 hours
-...     &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;
-1177 3 hours     3   2.8 2 hours     2   3.2 2 hours     2   3.3 2 hours
-1183 2 hours     2     3 2 hours     2   3.2  1 hour     1   3.3 2 hours
-1189 3 hours     3   2.7 2 hours     2   2.7 2 hours     2   2.8 3 hours
-1195 2 hours     2   3.4 2 hours     2   3.5  1 hour     1   3.3  1 hour
-     hrs.6 gpa.6
-1        2   3.3
-7        2   2.8
-13       2   3.4
-19       2   2.7
-...    ...   ...
-1177     2   3.8
-1183     2   3.4
-1189     3   2.8
-1195     1   3.4</code></pre>
+       job.3 hrs.3 gpa.3   job.4 hrs.4 gpa.4   job.5 hrs.5 gpa.5   job.6 hrs.6
+1    2 hours     2     3 2 hours     2     3 2 hours     2     3 2 hours     2
+7    2 hours     2   2.6 2 hours     2   2.6 2 hours     2     3 2 hours     2
+13   2 hours     2     3 3 hours     3   2.8 2 hours     2   3.3 2 hours     2
+19   2 hours     2   2.4 2 hours     2   2.7 2 hours     2   2.9 2 hours     2
+...     &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...   ...    &lt;NA&gt;   ...
+1177 3 hours     3   2.8 2 hours     2   3.2 2 hours     2   3.3 2 hours     2
+1183 2 hours     2     3 2 hours     2   3.2  1 hour     1   3.3 2 hours     2
+1189 3 hours     3   2.7 2 hours     2   2.7 2 hours     2   2.8 3 hours     3
+1195 2 hours     2   3.4 2 hours     2   3.5  1 hour     1   3.3  1 hour     1
+     gpa.6
+1      3.3
+7      2.8
+13     3.4
+19     2.7
+...    ...
+1177   3.8
+1183   3.4
+1189   2.8
+1195   3.4</code></pre>
 <div class="sourceCode" id="cb532"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb532-1" title="1">data_wide <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb532-2" title="2"><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(highgpa, gpa<span class="fl">.1</span>, job<span class="fl">.1</span>, hrs<span class="fl">.1</span>,</a>
 <a class="sourceLine" id="cb532-3" title="3">                    <span class="dt">splitby =</span> <span class="op">~</span><span class="st"> </span>sex,</a>
@@ -1117,16 +1129,11 @@ fit_lmer_0_ml: gpa ~ 1 + (1 | student)
 fit_lmer_1_ml: gpa ~ semc + (1 | student)
 fit_lmer_2_ml: gpa ~ semc + hrs + (1 | student)
 fit_lmer_3_ml: gpa ~ semc + hrs + highgpa + sex + (1 | student)
-              Df    AIC    BIC  logLik deviance   Chisq Chi Df Pr(&gt;Chisq)
-fit_lmer_0_ml  3 919.46 934.73 -456.73   913.46                          
-fit_lmer_1_ml  4 401.65 422.01 -196.82   393.65 519.807      1  &lt; 2.2e-16
-fit_lmer_2_ml  5 318.40 343.85 -154.20   308.40  85.250      1  &lt; 2.2e-16
-fit_lmer_3_ml  7 296.76 332.39 -141.38   282.76  25.639      2  2.707e-06
-                 
-fit_lmer_0_ml    
-fit_lmer_1_ml ***
-fit_lmer_2_ml ***
-fit_lmer_3_ml ***
+              Df    AIC    BIC  logLik deviance   Chisq Chi Df Pr(&gt;Chisq)    
+fit_lmer_0_ml  3 919.46 934.73 -456.73   913.46                              
+fit_lmer_1_ml  4 401.65 422.01 -196.82   393.65 519.807      1  &lt; 2.2e-16 ***
+fit_lmer_2_ml  5 318.40 343.85 -154.20   308.40  85.250      1  &lt; 2.2e-16 ***
+fit_lmer_3_ml  7 296.76 332.39 -141.38   282.76  25.639      2  2.707e-06 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
@@ -1229,12 +1236,9 @@ R^2_2 = 1 - \frac{\frac{\sigma^2_{e-MC}}{B} + \sigma^2_{u0-MC}}
 Models:
 fit_lmer_3_re: gpa ~ semc + hrs + highgpa + sex + (1 | student)
 fit_lmer_4_re: gpa ~ semc + hrs + highgpa + sex + (semc | student)
-              Df    AIC    BIC  logLik deviance Chisq Chi Df Pr(&gt;Chisq)
-fit_lmer_3_re  7 328.84 364.47 -157.42   314.84                        
-fit_lmer_4_re  9 219.93 265.75 -100.97   201.94 112.9      2  &lt; 2.2e-16
-                 
-fit_lmer_3_re    
-fit_lmer_4_re ***
+              Df    AIC    BIC  logLik deviance Chisq Chi Df Pr(&gt;Chisq)    
+fit_lmer_3_re  7 328.84 364.47 -157.42   314.84                            
+fit_lmer_4_re  9 219.93 265.75 -100.97   201.94 112.9      2  &lt; 2.2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
@@ -1291,12 +1295,9 @@ Var: Residual                     0.04         0.04         0.04
 Models:
 fit_lmer_4_ml: gpa ~ semc + hrs + highgpa + sex + (semc | student)
 fit_lmer_5_ml: gpa ~ semc + hrs + highgpa + sex + semc:sex + (semc | student)
-              Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
-fit_lmer_4_ml  9 188.12 233.93 -85.059   170.12                         
-fit_lmer_5_ml 10 182.97 233.87 -81.486   162.97 7.1464      1   0.007511
-                
-fit_lmer_4_ml   
-fit_lmer_5_ml **
+              Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)   
+fit_lmer_4_ml  9 188.12 233.93 -85.059   170.12                            
+fit_lmer_5_ml 10 182.97 233.87 -81.486   162.97 7.1464      1   0.007511 **
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <div class="sourceCode" id="cb565"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb565-1" title="1">sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_<span class="dv">5</span>_re,</a>

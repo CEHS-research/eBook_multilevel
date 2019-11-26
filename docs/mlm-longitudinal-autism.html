@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -657,13 +669,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb376"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb376-1" title="1">tibble<span class="op">::</span><span class="kw">glimpse</span>(autism)             <span class="co"># first look at the dataset and its varaibles</span></a></code></pre></div>
 <pre><code>Observations: 604
 Variables: 7
-$ childid  &lt;int&gt; 1, 1, 1, 1, 1, 10, 10, 10, 10, 100, 100, 100, 100, 10...
-$ sicdegp  &lt;fct&gt; high, high, high, high, high, low, low, low, low, hig...
-$ age2     &lt;dbl&gt; 0, 1, 3, 7, 11, 0, 1, 7, 11, 0, 1, 3, 7, 0, 1, 7, 11,...
-$ vsae     &lt;int&gt; 6, 7, 18, 25, 27, 9, 11, 18, 39, 15, 24, 37, 135, 8, ...
-$ gender   &lt;fct&gt; male, male, male, male, male, male, male, male, male,...
-$ race     &lt;fct&gt; white, white, white, white, white, white, white, whit...
-$ bestest2 &lt;fct&gt; pdd, pdd, pdd, pdd, pdd, autism, autism, autism, auti...</code></pre>
+$ childid  &lt;int&gt; 1, 1, 1, 1, 1, 10, 10, 10, 10, 100, 100, 100, 100, 101, 10...
+$ sicdegp  &lt;fct&gt; high, high, high, high, high, low, low, low, low, high, hi...
+$ age2     &lt;dbl&gt; 0, 1, 3, 7, 11, 0, 1, 7, 11, 0, 1, 3, 7, 0, 1, 7, 11, 0, 1...
+$ vsae     &lt;int&gt; 6, 7, 18, 25, 27, 9, 11, 18, 39, 15, 24, 37, 135, 8, 24, 7...
+$ gender   &lt;fct&gt; male, male, male, male, male, male, male, male, male, male...
+$ race     &lt;fct&gt; white, white, white, white, white, white, white, white, wh...
+$ bestest2 &lt;fct&gt; pdd, pdd, pdd, pdd, pdd, autism, autism, autism, autism, p...</code></pre>
 <div id="long-format" class="section level3">
 <h3><span class="header-section-number">8.1.1</span> Long Format</h3>
 <div class="sourceCode" id="cb378"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb378-1" title="1">data_long &lt;-<span class="st"> </span>autism <span class="op">%&gt;%</span><span class="st">                                    </span><span class="co"># save the dataset as a new name</span></a>
@@ -2129,12 +2141,9 @@ Models:
 fit_lmer_2b_re: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (-1 + age2 | childid)
 fit_lmer_2a_re: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (-1 + age2 + I(age2^2) | 
 fit_lmer_2a_re:     childid)
-               Df    AIC    BIC  logLik deviance Chisq Chi Df Pr(&gt;Chisq)
-fit_lmer_2b_re 11 4669.3 4717.7 -2323.7   4647.3                        
-fit_lmer_2a_re 13 4587.0 4644.2 -2280.5   4561.0 86.34      2  &lt; 2.2e-16
-                  
-fit_lmer_2b_re    
-fit_lmer_2a_re ***
+               Df    AIC    BIC  logLik deviance Chisq Chi Df Pr(&gt;Chisq)    
+fit_lmer_2b_re 11 4669.3 4717.7 -2323.7   4647.3                            
+fit_lmer_2a_re 13 4587.0 4644.2 -2280.5   4561.0 86.34      2  &lt; 2.2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>The more complicated model (including random intercepts) DOES fit better, thus the random sopes for both the linear AND the quadratic effect of age should be retained in the model. Model 2a is better than model 2b</p>
@@ -2163,12 +2172,9 @@ Models:
 fit_lmer_3_ml: vsae ~ age2 * sicdegp + (-1 + age2 + I(age2^2) | childid)
 fit_lmer_2a_ml: vsae ~ age2 * sicdegp + I(age2^2) * sicdegp + (-1 + age2 + I(age2^2) | 
 fit_lmer_2a_ml:     childid)
-               Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
-fit_lmer_3_ml  10 4584.4 4628.5 -2282.2   4564.4                         
-fit_lmer_2a_ml 13 4582.1 4639.3 -2278.0   4556.1 8.3704      3    0.03895
-                
-fit_lmer_3_ml   
-fit_lmer_2a_ml *
+               Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)  
+fit_lmer_3_ml  10 4584.4 4628.5 -2282.2   4564.4                           
+fit_lmer_2a_ml 13 4582.1 4639.3 -2278.0   4556.1 8.3704      3    0.03895 *
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>The more complicated model (including fixed interaction between quadratic time and SICD group) DOES fit better, thus the higher level interaction should be retained in the model. Model 2a is better than model 3.</p>

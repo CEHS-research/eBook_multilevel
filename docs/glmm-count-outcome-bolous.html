@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -662,6 +674,7 @@ GLMM FAQ by: Ben Bolker and others
 <p>Bolus data from Weiss 2005</p>
 </blockquote>
 <p>Patient controlled analgesia (PCA) comparing 2 dosing regimes to self-control pain</p>
+<p>The dataset has the number of requests per interval in 12 successive four-hourly intervals following abdominal surgery for 65 patients in a clinical trial to compare two groups (bolus/lock-out combinations).</p>
 <p>Bolus= Large dose of medication given (usually intravenously by direct infusion injection or gravity drip) to raise blood-level concentrations to a therapeutic level</p>
 <p>A ‘lock-out’ period followed each dose, where subject may not administer more medication.</p>
 <ul>
@@ -688,9 +701,10 @@ GLMM FAQ by: Ben Bolker and others
 <div id="import-3" class="section level3">
 <h3><span class="header-section-number">18.2.1</span> Import</h3>
 <div class="sourceCode" id="cb875"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb875-1" title="1">data_raw &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/data/master/MLM/bolus.txt&quot;</span>,</a>
-<a class="sourceLine" id="cb875-2" title="2">                       <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb875-3" title="3"></a>
-<a class="sourceLine" id="cb875-4" title="4"><span class="kw">str</span>(data_raw) <span class="co"># see the structure</span></a></code></pre></div>
+<a class="sourceLine" id="cb875-2" title="2">  <span class="dt">header =</span> <span class="ot">TRUE</span></a>
+<a class="sourceLine" id="cb875-3" title="3">)</a>
+<a class="sourceLine" id="cb875-4" title="4"></a>
+<a class="sourceLine" id="cb875-5" title="5"><span class="kw">str</span>(data_raw) <span class="co"># see the structure</span></a></code></pre></div>
 <pre><code>&#39;data.frame&#39;:   715 obs. of  4 variables:
  $ id   : int  1 1 1 1 1 1 1 1 1 1 ...
  $ group: Factor w/ 2 levels &quot;1mg&quot;,&quot;2mg&quot;: 1 1 1 1 1 1 1 1 1 1 ...
@@ -757,26 +771,26 @@ GLMM FAQ by: Ben Bolker and others
  $ time_9 : int  4 7 3 1 5 4 4 1 5 1 ...
  $ time_10: int  2 4 5 1 0 4 6 4 5 0 ...</code></pre>
 <div class="sourceCode" id="cb885"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb885-1" title="1">psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</a></code></pre></div>
-<pre><code>      id group time_0 time_1 time_2 time_3 time_4 time_5 time_6 time_7
-1      1   1mg      2      2      5      2      4      0      2      4
-2      2   1mg      3      5      4      4      5      0      6      3
-3      3   1mg      4      8      4      3     12      1      0      6
-4      4   1mg      1      4      3      3      3      1      7      5
-... &lt;NA&gt;  &lt;NA&gt;    ...    ...    ...    ...    ...    ...    ...    ...
-62    62   2mg      0     13      7      9     19      4      5     11
-63    63   2mg     11      7      6      9      3      4      6      6
-64    64   2mg      8      4     22     11     16      4      5      9
-65    65   2mg      2      2      2      4      4      3      7      6
-    time_8 time_9 time_10
-1        4      4       2
-2        2      7       4
-3        5      3       5
-4        0      1       1
-...    ...    ...     ...
-62      10      6       9
-63       6      6       0
-64      12     12       7
-65       1      2       0</code></pre>
+<pre><code>      id group time_0 time_1 time_2 time_3 time_4 time_5 time_6 time_7 time_8
+1      1   1mg      2      2      5      2      4      0      2      4      4
+2      2   1mg      3      5      4      4      5      0      6      3      2
+3      3   1mg      4      8      4      3     12      1      0      6      5
+4      4   1mg      1      4      3      3      3      1      7      5      0
+... &lt;NA&gt;  &lt;NA&gt;    ...    ...    ...    ...    ...    ...    ...    ...    ...
+62    62   2mg      0     13      7      9     19      4      5     11     10
+63    63   2mg     11      7      6      9      3      4      6      6      6
+64    64   2mg      8      4     22     11     16      4      5      9     12
+65    65   2mg      2      2      2      4      4      3      7      6      1
+    time_9 time_10
+1        4       2
+2        7       4
+3        3       5
+4        1       1
+...    ...     ...
+62       6       9
+63       6       0
+64      12       7
+65       2       0</code></pre>
 </div>
 </div>
 <div id="exploratory-data-analysis-11" class="section level2">
@@ -1459,14 +1473,10 @@ Working Correlation
 <a class="sourceLine" id="cb910-3" title="3">                 mod_gee_un, </a>
 <a class="sourceLine" id="cb910-4" title="4">                 <span class="dt">rank =</span> <span class="st">&quot;QIC&quot;</span>)    <span class="co">#sorts the best to the TOP, uses QIC(I) to choose corelation structure</span></a></code></pre></div>
 <pre><code>Model selection table 
-           (Intrc) group     time   time^2 corstr Mv qLik   QIC delta
-mod_gee_ex    1.73     + -0.00222 -0.00417     ex    3464 -6904  0.00
-mod_gee_ar    1.66     +  0.02250 -0.00587   AR-M  1 3462 -6904  0.18
-mod_gee_un    1.56     +  0.04398 -0.00942     un    3407 -6902  1.83
-           weight
-mod_gee_ex  0.432
-mod_gee_ar  0.395
-mod_gee_un  0.173
+           (Intrc) group     time   time^2 corstr Mv qLik   QIC delta weight
+mod_gee_ex    1.73     + -0.00222 -0.00417     ex    3464 -6904  0.00  0.432
+mod_gee_ar    1.66     +  0.02250 -0.00587   AR-M  1 3462 -6904  0.18  0.395
+mod_gee_un    1.56     +  0.04398 -0.00942     un    3407 -6902  1.83  0.173
 Abbreviations:
 corstr: ex = &#39;exchangeable&#39;, un = &#39;unstructured&#39;
 Models ranked by QIC(x) </code></pre>
@@ -1605,10 +1615,10 @@ Num. obs.
 <a class="sourceLine" id="cb913-4" title="4">                        <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>),</a>
 <a class="sourceLine" id="cb913-5" title="5">                        <span class="dt">corstr =</span> <span class="st">&quot;AR-M&quot;</span>,</a>
 <a class="sourceLine" id="cb913-6" title="6">                        <span class="dt">Mv =</span> <span class="dv">1</span>) </a></code></pre></div>
-<pre><code>       (Intercept)           group2mg               time 
-          1.740051           0.333462           0.000475 
-         I(time^2)      group2mg:time group2mg:I(time^2) 
-         -0.005176          -0.004097           0.001582 </code></pre>
+<pre><code>       (Intercept)           group2mg               time          I(time^2) 
+          1.740051           0.333462           0.000475          -0.005176 
+     group2mg:time group2mg:I(time^2) 
+         -0.004097           0.001582 </code></pre>
 <div class="sourceCode" id="cb915"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb915-1" title="1"><span class="kw">summary</span>(mod_gee_ar2)</a></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA

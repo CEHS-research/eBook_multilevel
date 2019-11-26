@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -658,14 +670,14 @@ The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edit
 <a class="sourceLine" id="cb270-10" title="10">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_pop)</a></code></pre></div>
 <pre><code>Observations: 2,000
 Variables: 8
-$ id       &lt;fct&gt; 1_1, 1_2, 1_3, 1_4, 1_5, 1_6, 1_7, 1_8, 1_9, 1_10, 1_...
-$ pupil    &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16...
-$ class    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
-$ extrav   &lt;dbl&gt; 5, 7, 4, 3, 5, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 6, 4, 4,...
-$ sex      &lt;fct&gt; girl, boy, girl, girl, girl, boy, boy, boy, boy, boy,...
-$ texp     &lt;dbl&gt; 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 2...
-$ popular  &lt;dbl&gt; 6.3, 4.9, 5.3, 4.7, 6.0, 4.7, 5.9, 4.2, 5.2, 3.9, 5.7...
-$ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3,...</code></pre>
+$ id       &lt;fct&gt; 1_1, 1_2, 1_3, 1_4, 1_5, 1_6, 1_7, 1_8, 1_9, 1_10, 1_11, 1...
+$ pupil    &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,...
+$ class    &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+$ extrav   &lt;dbl&gt; 5, 7, 4, 3, 5, 4, 5, 4, 5, 5, 5, 5, 5, 5, 5, 6, 4, 4, 7, 4...
+$ sex      &lt;fct&gt; girl, boy, girl, girl, girl, boy, boy, boy, boy, boy, girl...
+$ texp     &lt;dbl&gt; 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24...
+$ popular  &lt;dbl&gt; 6.3, 4.9, 5.3, 4.7, 6.0, 4.7, 5.9, 4.2, 5.2, 3.9, 5.7, 4.8...
+$ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3, 7, 4...</code></pre>
 <div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb272-1" title="1">data_pop <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb272-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
 <a class="sourceLine" id="cb272-3" title="3"><span class="st">  </span><span class="kw">aes</span>(<span class="dt">x =</span> extrav,</a>
@@ -1123,20 +1135,20 @@ model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or devia
 <div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb285-1" title="1">pop_lmer_<span class="dv">1</span>_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb285-2" title="2"><span class="st">  </span>broom<span class="op">::</span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb285-3" title="3"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per observation (2000 students)</span></a></code></pre></div>
-<pre><code>  popular extrav class  .fitted      .resid       .hat      .cooksd
-1     6.3      5     1 5.138703  1.16129690 0.04738598 2.712824e-05
-2     4.9      7     1 6.111104 -1.21110356 0.04935992 1.752270e-03
-3     5.3      4     1 4.652503  0.64749713 0.04770832 8.856822e-05
-4     4.7      3     1 4.166303  0.53369736 0.04890355 2.626814e-04
-5     6.0      5     1 5.138703  0.86129690 0.04738598 1.492248e-05
-6     4.7      4     1 4.652503  0.04749713 0.04770832 4.765813e-07
-    .fixed      .mu .offset .sqrtXwt .sqrtrwt .weights      .wtres
-1 4.973704 5.138703       0        1        1        1  1.16129690
-2 5.946104 6.111104       0        1        1        1 -1.21110356
-3 4.487503 4.652503       0        1        1        1  0.64749713
-4 4.001303 4.166303       0        1        1        1  0.53369736
-5 4.973704 5.138703       0        1        1        1  0.86129690
-6 4.487503 4.652503       0        1        1        1  0.04749713</code></pre>
+<pre><code>  popular extrav class  .fitted      .resid       .hat      .cooksd   .fixed
+1     6.3      5     1 5.138703  1.16129690 0.04738598 2.712824e-05 4.973704
+2     4.9      7     1 6.111104 -1.21110356 0.04935992 1.752270e-03 5.946104
+3     5.3      4     1 4.652503  0.64749713 0.04770832 8.856822e-05 4.487503
+4     4.7      3     1 4.166303  0.53369736 0.04890355 2.626814e-04 4.001303
+5     6.0      5     1 5.138703  0.86129690 0.04738598 1.492248e-05 4.973704
+6     4.7      4     1 4.652503  0.04749713 0.04770832 4.765813e-07 4.487503
+       .mu .offset .sqrtXwt .sqrtrwt .weights      .wtres
+1 5.138703       0        1        1        1  1.16129690
+2 6.111104       0        1        1        1 -1.21110356
+3 4.652503       0        1        1        1  0.64749713
+4 4.166303       0        1        1        1  0.53369736
+5 5.138703       0        1        1        1  0.86129690
+6 4.652503       0        1        1        1  0.04749713</code></pre>
 <div id="fixed-effects-intercept-and-slope" class="section level4">
 <h4><span class="header-section-number">5.3.2.1</span> Fixed Effects: intercept and slope</h4>
 <p>There is only ONE fixed intercept and ONE fixed slope.</p>
@@ -1736,20 +1748,20 @@ model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or devia
 <div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb317-1" title="1">pop_lmer_<span class="dv">2</span>_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb317-2" title="2"><span class="st">  </span>broom<span class="op">::</span><span class="kw">augment</span>() <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb317-3" title="3"><span class="st">  </span><span class="kw">head</span>()                  <span class="co"># onle line per observation (2000 students)</span></a></code></pre></div>
-<pre><code>  popular extrav class  .fitted      .resid       .hat      .cooksd
-1     6.3      5     1 5.131081  1.16891931 0.04533781 3.873049e-05
-2     4.9      7     1 6.062459 -1.16245914 0.04799095 1.546691e-03
-3     5.3      4     1 4.665391  0.63460853 0.06181574 5.582510e-05
-4     4.7      3     1 4.199702  0.50029776 0.09016335 1.873083e-04
-5     6.0      5     1 5.131081  0.86891931 0.04533781 2.140143e-05
-6     4.7      4     1 4.665391  0.03460853 0.06181574 1.660290e-07
-    .fixed      .mu .offset .sqrtXwt .sqrtrwt .weights      .wtres
-1 4.925859 5.131081       0        1        1        1  1.16891931
-2 5.911662 6.062459       0        1        1        1 -1.16245914
-3 4.432958 4.665391       0        1        1        1  0.63460853
-4 3.940056 4.199702       0        1        1        1  0.50029776
-5 4.925859 5.131081       0        1        1        1  0.86891931
-6 4.432958 4.665391       0        1        1        1  0.03460853</code></pre>
+<pre><code>  popular extrav class  .fitted      .resid       .hat      .cooksd   .fixed
+1     6.3      5     1 5.131081  1.16891931 0.04533781 3.873049e-05 4.925859
+2     4.9      7     1 6.062459 -1.16245914 0.04799095 1.546691e-03 5.911662
+3     5.3      4     1 4.665391  0.63460853 0.06181574 5.582510e-05 4.432958
+4     4.7      3     1 4.199702  0.50029776 0.09016335 1.873083e-04 3.940056
+5     6.0      5     1 5.131081  0.86891931 0.04533781 2.140143e-05 4.925859
+6     4.7      4     1 4.665391  0.03460853 0.06181574 1.660290e-07 4.432958
+       .mu .offset .sqrtXwt .sqrtrwt .weights      .wtres
+1 5.131081       0        1        1        1  1.16891931
+2 6.062459       0        1        1        1 -1.16245914
+3 4.665391       0        1        1        1  0.63460853
+4 4.199702       0        1        1        1  0.50029776
+5 5.131081       0        1        1        1  0.86891931
+6 4.665391       0        1        1        1  0.03460853</code></pre>
 <div id="fixed-effects-intercept-and-slope-1" class="section level4">
 <h4><span class="header-section-number">5.4.2.1</span> Fixed Effects: intercept and slope</h4>
 <p>There is only ONE fixed intercept and ONE fixed slope.</p>

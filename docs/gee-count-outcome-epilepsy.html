@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -749,26 +761,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  $ period_3 : int  3 3 0 1 9 8 0 23 6 6 ...
  $ period_4 : int  3 3 5 4 21 7 2 12 5 0 ...</code></pre>
 <div class="sourceCode" id="cb714"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb714-1" title="1">psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</a></code></pre></div>
-<pre><code>    subject age treatment base  per base_wk period_1 period_2 period_3
-1         1  31   placebo   11 0.69    1.38        5        3        3
-2         2  30   placebo   11 0.69    1.38        3        5        3
-3         3  25   placebo    6 0.69    0.75        2        4        0
-4         4  36   placebo    8 0.69       1        4        4        1
-...    &lt;NA&gt; ...      &lt;NA&gt;  ...  ...     ...      ...      ...      ...
-56       56  26 Progabide   22 0.69    2.75        1       23       19
-57       57  21 Progabide   25 0.69    3.12        2        3        0
-58       58  36 Progabide   13 0.69    1.62        0        0        0
-59       59  37 Progabide   12 0.69     1.5        1        4        3
-    period_4
-1          3
-2          3
-3          5
-4          4
-...      ...
-56         8
-57         1
-58         0
-59         2</code></pre>
+<pre><code>    subject age treatment base  per base_wk period_1 period_2 period_3 period_4
+1         1  31   placebo   11 0.69    1.38        5        3        3        3
+2         2  30   placebo   11 0.69    1.38        3        5        3        3
+3         3  25   placebo    6 0.69    0.75        2        4        0        5
+4         4  36   placebo    8 0.69       1        4        4        1        4
+...    &lt;NA&gt; ...      &lt;NA&gt;  ...  ...     ...      ...      ...      ...      ...
+56       56  26 Progabide   22 0.69    2.75        1       23       19        8
+57       57  21 Progabide   25 0.69    3.12        2        3        0        1
+58       58  36 Progabide   13 0.69    1.62        0        0        0        0
+59       59  37 Progabide   12 0.69     1.5        1        4        3        2</code></pre>
 </div>
 </div>
 <div id="exploratory-data-analysis-7" class="section level2">
@@ -1066,10 +1068,8 @@ Number of Fisher Scoring iterations: 5</code></pre>
 <a class="sourceLine" id="cb726-5" title="5">                           <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>,</a>
 <a class="sourceLine" id="cb726-6" title="6">                           <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb726-7" title="7">                           <span class="dt">scale.value =</span> <span class="dv">1</span>)</a></code></pre></div>
-<pre><code>       (Intercept)               base                age 
-          -0.13062            0.02265            0.02274 
-treatmentProgabide 
-          -0.15270 </code></pre>
+<pre><code>       (Intercept)               base                age treatmentProgabide 
+          -0.13062            0.02265            0.02274           -0.15270 </code></pre>
 <div class="sourceCode" id="cb728"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb728-1" title="1"><span class="kw">summary</span>(fit_gee_ind_s1)</a></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
@@ -1124,10 +1124,8 @@ Working Correlation
 <a class="sourceLine" id="cb730-5" title="5">                           <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</a>
 <a class="sourceLine" id="cb730-6" title="6">                           <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb730-7" title="7">                           <span class="dt">scale.value =</span> <span class="dv">1</span>)</a></code></pre></div>
-<pre><code>       (Intercept)               base                age 
-          -0.13062            0.02265            0.02274 
-treatmentProgabide 
-          -0.15270 </code></pre>
+<pre><code>       (Intercept)               base                age treatmentProgabide 
+          -0.13062            0.02265            0.02274           -0.15270 </code></pre>
 <div class="sourceCode" id="cb732"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb732-1" title="1"><span class="kw">summary</span>(fit_gee_exc_s1)</a></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
@@ -1180,10 +1178,8 @@ Working Correlation
 <a class="sourceLine" id="cb734-4" title="4">                           <span class="dt">id =</span> subject,</a>
 <a class="sourceLine" id="cb734-5" title="5">                           <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</a>
 <a class="sourceLine" id="cb734-6" title="6">                           <span class="dt">scale.fix =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<pre><code>       (Intercept)               base                age 
-          -0.13062            0.02265            0.02274 
-treatmentProgabide 
-          -0.15270 </code></pre>
+<pre><code>       (Intercept)               base                age treatmentProgabide 
+          -0.13062            0.02265            0.02274           -0.15270 </code></pre>
 <div class="sourceCode" id="cb736"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb736-1" title="1"><span class="kw">summary</span>(fit_gee_exc_sf)</a></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA

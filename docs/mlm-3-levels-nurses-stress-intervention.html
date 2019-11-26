@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -671,19 +683,19 @@ The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edit
 <a class="sourceLine" id="cb98-15" title="15">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_nurse)</a></code></pre></div>
 <pre><code>Observations: 1,000
 Variables: 13
-$ id       &lt;fct&gt; 1_1_1, 1_1_2, 1_1_3, 1_1_4, 1_1_5, 1_1_6, 1_1_7, 1_1_...
-$ wardid   &lt;fct&gt; 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 1...
-$ nurse    &lt;fct&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16...
-$ ward     &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2,...
-$ hospital &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
-$ age      &lt;dbl&gt; 36, 45, 32, 57, 46, 60, 23, 32, 60, 45, 57, 47, 32, 4...
-$ gender   &lt;dbl&gt; 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1,...
-$ genderF  &lt;fct&gt; Male, Male, Male, Female, Female, Female, Female, Fem...
-$ experien &lt;dbl&gt; 11, 20, 7, 25, 22, 22, 13, 13, 17, 21, 24, 24, 14, 13...
-$ wardtype &lt;fct&gt; general care, general care, general care, general car...
-$ hospsize &lt;fct&gt; large, large, large, large, large, large, large, larg...
-$ expcon   &lt;fct&gt; experiment, experiment, experiment, experiment, exper...
-$ stress   &lt;dbl&gt; 7, 7, 7, 6, 6, 6, 6, 7, 7, 6, 6, 6, 6, 6, 6, 5, 5, 6,...</code></pre>
+$ id       &lt;fct&gt; 1_1_1, 1_1_2, 1_1_3, 1_1_4, 1_1_5, 1_1_6, 1_1_7, 1_1_8, 1_...
+$ wardid   &lt;fct&gt; 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12...
+$ nurse    &lt;fct&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,...
+$ ward     &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3...
+$ hospital &lt;fct&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+$ age      &lt;dbl&gt; 36, 45, 32, 57, 46, 60, 23, 32, 60, 45, 57, 47, 32, 42, 42...
+$ gender   &lt;dbl&gt; 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0, 1, 1, 0...
+$ genderF  &lt;fct&gt; Male, Male, Male, Female, Female, Female, Female, Female, ...
+$ experien &lt;dbl&gt; 11, 20, 7, 25, 22, 22, 13, 13, 17, 21, 24, 24, 14, 13, 17,...
+$ wardtype &lt;fct&gt; general care, general care, general care, general care, ge...
+$ hospsize &lt;fct&gt; large, large, large, large, large, large, large, large, la...
+$ expcon   &lt;fct&gt; experiment, experiment, experiment, experiment, experiment...
+$ stress   &lt;dbl&gt; 7, 7, 7, 6, 6, 6, 6, 7, 7, 6, 6, 6, 6, 6, 6, 5, 5, 6, 5, 5...</code></pre>
 </div>
 <div id="centering-variables" class="section level3">
 <h3><span class="header-section-number">3.1.2</span> Centering Variables</h3>
@@ -1955,12 +1967,9 @@ Models:
 nurse_lmer_0_ml: stress ~ 1 + (1 | hospital/ward)
 nurse_lmer_1_ml: stress ~ expcon + age + gender + experien + wardtype + hospsize + 
 nurse_lmer_1_ml:     (1 | hospital/ward)
-                Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
-nurse_lmer_0_ml  4 1950.4 1970.0 -971.18   1942.4                         
-nurse_lmer_1_ml 11 1626.3 1680.3 -802.16   1604.3 338.04      7  &lt; 2.2e-16
-                   
-nurse_lmer_0_ml    
-nurse_lmer_1_ml ***
+                Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)    
+nurse_lmer_0_ml  4 1950.4 1970.0 -971.18   1942.4                             
+nurse_lmer_1_ml 11 1626.3 1680.3 -802.16   1604.3 338.04      7  &lt; 2.2e-16 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>It is clear that the inclusing of these fixed, main effects improves the model’s fit, but it is questionable that the type of ward is significant <em>(Wald test is non-significant)</em>. Rather than test it directly, we will leave it in the model. This is common practice to show that an expected variable is not significant.</p>
@@ -2867,12 +2876,9 @@ nurse_lmer_1d_re: stress ~ expconNG + age + gender + experien + wardtype + hosps
 nurse_lmer_1d_re:     (1 | hospital/ward)
 nurse_lmer_2_re: stress ~ expconNG + age + gender + experien + wardtype + hospsizeNG + 
 nurse_lmer_2_re:     (1 | hospital/ward) + (0 + expconNG | hospital)
-                 Df    AIC    BIC  logLik deviance  Chisq Chi Df
-nurse_lmer_1d_re 10 1659.9 1709.0 -819.94   1639.9              
-nurse_lmer_2_re  11 1633.2 1687.2 -805.59   1611.2 28.708      1
-                 Pr(&gt;Chisq)    
-nurse_lmer_1d_re               
-nurse_lmer_2_re   8.417e-08 ***
+                 Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)    
+nurse_lmer_1d_re 10 1659.9 1709.0 -819.94   1639.9                             
+nurse_lmer_2_re  11 1633.2 1687.2 -805.59   1611.2 28.708      1  8.417e-08 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>The inclusion of a random slope effect for the experimental condition <code>expcon</code> significantly improves the models’s fit, thus is should be retained.</p>
@@ -3143,12 +3149,9 @@ nurse_lmer_2_ml:     (1 | hospital/ward) + (0 + expconNG | hospital)
 nurse_lmer_3_ml: stress ~ expconNG + age + gender + experien + wardtype + hospsizeNG + 
 nurse_lmer_3_ml:     expconNG * hospsizeNG + (1 | hospital/ward) + (0 + expconNG | 
 nurse_lmer_3_ml:     hospital)
-                Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
-nurse_lmer_2_ml 11 1597.5 1651.5 -787.74   1575.5                         
-nurse_lmer_3_ml 12 1576.1 1635.0 -776.03   1552.1 23.413      1  1.307e-06
-                   
-nurse_lmer_2_ml    
-nurse_lmer_3_ml ***
+                Df    AIC    BIC  logLik deviance  Chisq Chi Df Pr(&gt;Chisq)    
+nurse_lmer_2_ml 11 1597.5 1651.5 -787.74   1575.5                             
+nurse_lmer_3_ml 12 1576.1 1635.0 -776.03   1552.1 23.413      1  1.307e-06 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>There is evidence that hospital size moderated the effect of the intervention. We will want to plot the estimated marginal means to interpret the meaning of this interaction.</p>
@@ -3397,20 +3400,13 @@ Var: Residual
 <a class="sourceLine" id="cb149-7" title="7">                                <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Control&quot;</span>, <span class="st">&quot;Intervention&quot;</span>))) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb149-8" title="8"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">hopsize =</span> <span class="kw">factor</span>(hospsizeNG <span class="op">+</span><span class="st"> </span><span class="fl">0.776</span>,</a>
 <a class="sourceLine" id="cb149-9" title="9">                                 <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Small&quot;</span>, <span class="st">&quot;Medium&quot;</span>, <span class="st">&quot;Large&quot;</span>)))</a></code></pre></div>
-<pre><code>  expconNG hospsizeNG      fit        se    lower    upper       expcon
-1   -0.504     -0.776 5.382989 0.1631593 5.062812 5.703166      Control
-2    0.496     -0.776 3.885142 0.1626411 3.565981 4.204302 Intervention
-3   -0.504      0.224 5.341652 0.1112640 5.123312 5.559992      Control
-4    0.496      0.224 4.842621 0.1109159 4.624964 5.060277 Intervention
-5   -0.504      1.224 5.300315 0.2138865 4.880593 5.720037      Control
-6    0.496      1.224 5.800100 0.2131921 5.381741 6.218459 Intervention
-  hopsize
-1   Small
-2   Small
-3  Medium
-4  Medium
-5   Large
-6   Large</code></pre>
+<pre><code>  expconNG hospsizeNG      fit        se    lower    upper       expcon hopsize
+1   -0.504     -0.776 5.382989 0.1631593 5.062812 5.703166      Control   Small
+2    0.496     -0.776 3.885142 0.1626411 3.565981 4.204302 Intervention   Small
+3   -0.504      0.224 5.341652 0.1112640 5.123312 5.559992      Control  Medium
+4    0.496      0.224 4.842621 0.1109159 4.624964 5.060277 Intervention  Medium
+5   -0.504      1.224 5.300315 0.2138865 4.880593 5.720037      Control   Large
+6    0.496      1.224 5.800100 0.2131921 5.381741 6.218459 Intervention   Large</code></pre>
 <div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1">effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;expconNG&quot;</span>, <span class="st">&quot;hospsizeNG&quot;</span>),</a>
 <a class="sourceLine" id="cb151-2" title="2">                <span class="dt">mod =</span> nurse_lmer_<span class="dv">3</span>_re,</a>
 <a class="sourceLine" id="cb151-3" title="3">                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="dt">expconNG   =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.504</span>, <span class="fl">0.496</span>),</a>

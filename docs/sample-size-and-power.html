@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -620,68 +632,143 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
             <section class="normal" id="section-">
 <div id="sample-size-and-power" class="section level1">
 <h1><span class="header-section-number">19</span> Sample Size and Power</h1>
-<div id="publications-and-websites" class="section level2">
-<h2><span class="header-section-number">19.1</span> Publications and Websites</h2>
+<div id="key-publications" class="section level2">
+<h2><span class="header-section-number">19.1</span> Key Publications</h2>
+<p>Start here, its short:</p>
 <ul>
-<li><p><a href="http://www.joophox.net/publist/methodology05.pdf">Sufficient Sample Sizes for Multilevel Modeling, by Mass and Hox</a></p></li>
-<li><p><a href="http://www.bristol.ac.uk/cmm/learning/multilevel-models/samples.html">Uof Bristol: Centre for Multilevel Modeling: Sample sizes for multilevel models</a></p></li>
-<li><p><a href="https://pdfs.semanticscholar.org/a769/1eb67c5806e154da58a74f7b1a1bc9ccb58a.pdf">Power and sample size in multilevel modeling, by Tom Snijders</a></p></li>
-<li><p><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1955447/">A simulation study of sample size for multilevel logistic regression models (2007)</a></p></li>
+<li>Snijders TAB (2005). <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/0470013192.bsa492">Power and Sample Size in Multilevel Linear Models.</a> In: Everitt BS, Howell DC (Hrsg.). <em>Encyclopedia of Statistics in Behavioral Science.</em> Chichester, UK: John Wiley and Sons, Ltd. doi: 10.1002/0470013192.bsa492</li>
+</ul>
+<p>This paper includes some nice power curves for reference:</p>
+<ul>
+<li>Scherbaum, C. A., &amp; Ferreter, J. M. (2009). <a href="https://journals.sagepub.com/doi/pdf/10.1177/1094428107308906">Estimating statistical power and required sample sizes for organizational research using multilevel modeling.</a> <em>Organizational Research Methods</em>, 12(2), 347-367.</li>
+</ul>
+<p>This paper tabulated the effect of number of clusters, size of cluser, and ICC:</p>
+<ul>
+<li>Maas, C. J., &amp; Hox, J. J. (2005). <a href="http://www.joophox.net/publist/methodology05.pdf">Sufficient Sample Sizes for Multilevel Modeling.</a> Methodology, 1(3), 86-92.</li>
+</ul>
+<p>This paper focuses on binary outcomes in hierarchical or clustered strkucture:</p>
+<ul>
+<li>Moineddin R, Matheson FI, Glazier RH. (2007). <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1955447/">A simulation study of sample size for multilevel logistic regression models.</a> <em>BMC medical research methodology</em>, 7, 34. <a href="doi:10.1186/1471-2288-7-34" class="uri">doi:10.1186/1471-2288-7-34</a></li>
+</ul>
+<p>This paper presents a data simulation method for estimating power for commonly used relationships research designs (via MPlus) and includes two worked examples from relationships research.</p>
+<ul>
+<li>Lane, S. P., &amp; Hennes, E. P. (2018). <a href="https://journals.sagepub.com/doi/full/10.1177/0265407517710342">Power struggles: Estimating sample size for multilevel relationships research.</a> <em>Journal of Social and Personal Relationships</em>, 35(1), 7-31.</li>
+</ul>
+<p>This paper is very clean and organized with clear notation, tables, and figures. It investigates the performance of random effect binary outcome multilevel models under varying methods of estimation, level-1 and level-2 sample size, outcome prevalence, variance component sizes, and number of predictors using SAS software</p>
+<ul>
+<li>Schoeneberger, J. A. (2016). <a href="https://www.tandfonline.com/doi/full/10.1080/00220973.2015.1027805">The impact of sample size and other factors when estimating multilevel logistic models.</a> <em>The Journal of Experimental Education</em>, 84(2), 373-397.</li>
+</ul>
+<p>This paper’s focus is three level models:</p>
+<ul>
+<li>Kerkhoff, D., &amp; Nussbeck, F. W. (2019). <a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6536630/">The influence of sample size on parameter estimates in three-level random-effects models.</a> <em>Frontiers in psychology</em>, 10.</li>
 </ul>
 </div>
-<div id="online-glimmpse" class="section level2">
-<h2><span class="header-section-number">19.2</span> Online: GLIMMPSE</h2>
-<p><a href="https://glimmpse.samplesizeshop.org/#/">GLIMMPSE 2.0</a> from the University of Colorado Denver, School of Public Health (NIH)</p>
+<div id="r-packages" class="section level2">
+<h2><span class="header-section-number">19.2</span> R packages</h2>
+<div id="powerlmm" class="section level3">
+<h3><span class="header-section-number">19.2.1</span> powerlmm</h3>
+<p><a href="https://github.com/rpsychologist/powerlmm"><strong><code>powerlmm</code></strong> package</a> described in:</p>
 <ul>
-<li><p><a href="https://samplesizeshop.org/files/2012/08/Easy-Power-and-Sample-Size-for-Most-of-the-Mixed-Models-You-Will-Ever-See.pdf">Sample Size Shop Website</a></p>
-<ul>
-<li><a href="https://samplesizeshop.org/files/2013/09/MixedModelPowerAnalysisByExampleTalk.pdf">Slides</a> two examples start on slide 62</li>
-</ul></li>
+<li>Raudenbush, S. W., and L. Xiao-Feng (2001). <a href="https://cpb-us-w2.wpmucdn.com/voices.uchicago.edu/dist/6/1063/files/2018/11/EffectsStudyDuration2001-R-1oqnhmw.pdf">“Effects of Study Duration, Frequency of Observation, and Sample Size on Power in Studies of Group Differences in Polynomial Change.”</a> <em>Psychological Methods</em> 6 (4): 387–401.</li>
 </ul>
-</div>
-<div id="online-webpower" class="section level2">
-<h2><span class="header-section-number">19.3</span> Online: WebPower</h2>
-<ul>
-<li><p><a href="https://webpower.psychstat.org/wiki/"><code>WebPower</code> Statistical Power Analysis Online</a> or <a href="http://psychstat.org/crt2arm" class="uri">http://psychstat.org/crt2arm</a></p>
-<ul>
-<li><a href="https://webpower.psychstat.org/wiki/_media/manual/multilevel_power_by_yang.pdf">Miao (“Michelle”) Yang, Mar 2015</a></li>
-</ul></li>
-</ul>
-</div>
-<div id="r-package" class="section level2">
-<h2><span class="header-section-number">19.4</span> R package</h2>
-<ul>
-<li><p><a href="https://github.com/rpsychologist/powerlmm"><code>powerlmm</code> package</a> as described in:</p>
-<ul>
-<li>Raudenbush, S. W., and L. Xiao-Feng. 2001. “Effects of Study Duration, Frequency of Observation, and Sample Size on Power in Studies of Group Differences in Polynomial Change.” Psychological Methods 6 (4): 387–401.</li>
-</ul></li>
-</ul>
+<p>Kristoffer Magnusson has posted an examle walk-through called <a href="https://cran.r-project.org/web/packages/powerlmm/vignettes/two-level.html">Power Analysis for Two-level Longitudinal Models with Missing Data</a></p>
+<p>You can also access an interactive <code>shiny</code> interfaces with the following code (once you install the package in R):</p>
 <div class="sourceCode" id="cb942"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb942-1" title="1"><span class="kw">library</span>(powerlmm)</a>
 <a class="sourceLine" id="cb942-2" title="2"><span class="kw">shiny_powerlmm</span>()</a></code></pre></div>
 </div>
-<div id="other-stand-alone-computer-programs" class="section level2">
-<h2><span class="header-section-number">19.5</span> Other Stand-alone Computer Programs</h2>
+<div id="simr" class="section level3">
+<h3><span class="header-section-number">19.2.2</span> simr</h3>
+<p><a href="https://github.com/pitakakariki/simr"><strong><code>simr</code></strong> package</a> computed power analysis for generalised linear mixed models (GLMMs) by Monte Carlo simulation and is designed to work with models fit using the ‘lme4’ package.</p>
+<p>It includes tools for:</p>
 <ul>
-<li><p><a href="www.update-software.com/Acluster"><code>ACluster</code></a> calculates required sample sizes for various types of cluster randomized designs, not only for continuous but also for binary and time-to-event outcomes, as described in:</p>
+<li>running a power analysis for a given model and design; and<br />
+</li>
+<li>calculating power curves to assess trade‐offs between power and sample size</li>
+</ul>
+<p>The paper below presents a tutorial using a simple example of count data with mixed effects (with structure representative of environmental monitoring data) to guide the user along a gentle learning curve, adding only a few commands or options at a time.</p>
 <ul>
-<li>Donner, A., &amp; Klar, N. (2000). Design and Analysis of Cluster Randomization Trials in Health Research. London: Arnold.</li>
-</ul></li>
-<li><p><a href="http://www.ssicentral.com/other/hlmod.htm%20."><code>OD</code> <em>Optimal Design</em></a> calculates power and optimal sample sizes for testing treatment effects and variance components in multisite and cluster randomized trials with balanced two-group designs, and in repeated measurement designs, according to:</p>
+<li>Green, P., &amp; MacLeod, C. J. (2016). <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.12504">SIMR: an R package for power analysis of generalized linear mixed models by simulation.</a> <em>Methods in Ecology and Evolution,</em> 7(4), 493-498.</li>
+</ul>
+</div>
+<div id="sjstatssmpsize_lmm" class="section level3">
+<h3><span class="header-section-number">19.2.3</span> sjstats::smpsize_lmm()</h3>
+<blockquote>
+<p>Note: this is for ‘standard designs’ and is very simple</p>
+</blockquote>
+<p><a href=""><strong><code>sjstats::smpsize_lmm()</code></strong></a> compute an approximated sample size for linear mixed models (two-level-designs), based on power-calculation for standard design and adjusted for design effect for 2-level-designs.</p>
 <ul>
-<li><p>Raudenbush, S.W. (1997). Statistical analysis and optimal design for cluster randomized trials. Psychological Methods, 2: 173–185.</p></li>
-<li><p>Raudenbush, S.W., &amp; Liu, X.-F. (2000). Statistical power and optimal design for multisite randomized trials. Psychological Methods, 5: 199–213.</p></li>
-<li><p>Raudenbush, S.W., &amp; Liu, Xiao-Feng. (2001). Effects of study duration, frequency of observation, and sample size on power in studies of group differences in polynomial change. Psychological Methods, 6: 387–401.</p></li>
-</ul></li>
-<li><p><a href="http://stat.gamma.rug.nl/snijders/multilevel.htm%20."><code>PinT</code> <em>Power in Two-levels</em></a></p>
+<li><p>Cohen J. (1988). Statistical power analysis for the behavioral sciences (2nd ed.). Hillsdale,NJ: Lawrence Erlbaum.</p></li>
+<li><p>Hsieh FY, Lavori PW, Cohen HJ, Feussner JR (2003). <a href="https://journals.sagepub.com/doi/10.1177/0163278703255230">An Overview of Variance Inflation Factors for Sample-Size Calculation.</a> <em>Evaluation and the Health Professions</em> 26: 239-257.</p></li>
+<li><p>Snijders TAB (2005). <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/0470013192.bsa492">Power and Sample Size in Multilevel Linear Models.</a> In: Everitt BS, Howell DC (Hrsg.). <em>Encyclopedia of Statistics in Behavioral Science.</em> Chichester, UK: John Wiley and Sons, Ltd. doi: 10.1002/0470013192.bsa492</p></li>
+</ul>
+</div>
+<div id="mlpowsim" class="section level3">
+<h3><span class="header-section-number">19.2.4</span> MLPowSim</h3>
+<p><a href="http://www.bristol.ac.uk/cmm/software/mlpowsim/"><strong>MLPowSim</strong></a> is a free-download that guides you through questions and then writes R Syntax for you based on your responses.</p>
+</div>
+</div>
+<div id="online-interactive-interfaces" class="section level2">
+<h2><span class="header-section-number">19.3</span> Online Interactive Interfaces</h2>
+<p>No, G*Power won’t help you with this.</p>
+<div id="glimmpse" class="section level3">
+<h3><span class="header-section-number">19.3.1</span> GLIMMPSE</h3>
+<p><a href="https://glimmpse.samplesizeshop.org/#/"><strong>GLIMMPSE 2.0</strong></a> from the University of Colorado Denver, School of Public Health (NIH)</p>
 <ul>
-<li>Snijders, T.A.B. &amp; Bosker, R.J. (1993). Standard errors and sample sizes for two-level research. Journal of Educational Statistics, 18: 237–259.</li>
-</ul></li>
-<li><p><a href="http://tigger.uic.edu/%20hedeker/works.html"><code>RMASS2</code></a> calculates the sample size for a two-group repeated measures design, allowing for attrition, according to:</p>
+<li><p><a href="https://samplesizeshop.org/files/2012/08/Easy-Power-and-Sample-Size-for-Most-of-the-Mixed-Models-You-Will-Ever-See.pdf">Sample Size Shop Website</a></p></li>
+<li><p><a href="https://samplesizeshop.org/files/2013/09/MixedModelPowerAnalysisByExampleTalk.pdf">Slides</a> two examples start on slide 62</p></li>
+</ul>
+</div>
+<div id="webpower" class="section level3">
+<h3><span class="header-section-number">19.3.2</span> WebPower</h3>
+<p><a href="https://webpower.psychstat.org/wiki/"><strong><code>WebPower</code></strong> Statistical Power Analysis Online</a> or <a href="http://psychstat.org/crt2arm" class="uri">http://psychstat.org/crt2arm</a></p>
 <ul>
-<li>Hedeker, D., Gibbons, R.D., &amp; Waternaux, C. (1999). Sample size estimation for longitudinal designs with attrition: comparing time-related contrasts between two groups. Journal of Educational and Behavioral Statistics, 24:70–93.</li>
-</ul></li>
+<li><a href="https://webpower.psychstat.org/wiki/_media/manual/multilevel_power_by_yang.pdf">Miao (“Michelle”) Yang, Mar 2015</a></li>
+</ul>
+</div>
+</div>
+<div id="stand-alone-computer-programs" class="section level2">
+<h2><span class="header-section-number">19.4</span> Stand-alone Computer Programs</h2>
+<div id="optimal-design" class="section level3">
+<h3><span class="header-section-number">19.4.1</span> Optimal Design</h3>
+<blockquote>
+<p>Note: Works on Windows but not Mac OS.</p>
+</blockquote>
+<p><a href="http://www.ssicentral.com/other/hlmod.htm%20."><strong>Optimal Design</strong></a> was created by Steve Raudenbush and colleagues.</p>
+<p>THis program estimates power using the intraclass correlation, effect size, a level, and sample sizes for cluster-randomized, multisite, and repeated measures designs.</p>
+<p>The user can manipulate one factor at a time to examine the impact on power.</p>
+<p>All results are presented graphically as power curves, which is helpful for understanding how power could be affected by particular changes in sample sizes, effect sizes, and intraclass correlations.</p>
+<p>The program is user friendly and comes with extensive documentation.</p>
+<ul>
+<li><p>Raudenbush, S.W. (1997). <a href="https://pdfs.semanticscholar.org/a52e/386ad46433111e2c5c9258fc1a7acd171396.pdf">Statistical analysis and optimal design for cluster randomized trials.</a> <em>Psychological Methods</em>, 2: 173–185.</p></li>
+<li><p>Raudenbush, S.W., &amp; Liu, X.-F. (2000). <a href="https://pdfs.semanticscholar.org/8d07/69bfee93488fa48da450e418959e841ef396.pdf">Statistical power and optimal design for multisite randomized trials.</a> <em>Psychological Methods</em>, 5: 199–213.</p></li>
+<li><p>Raudenbush, S.W., &amp; Liu, Xiao-Feng. (2001). <a href="https://cpb-us-w2.wpmucdn.com/voices.uchicago.edu/dist/6/1063/files/2018/11/EffectsStudyDuration2001-R-1oqnhmw.pdf">Effects of study duration, frequency of observation, and sample size on power in studies of group differences in polynomial change.</a> <em>Psychological Methods</em>, 6: 387–401.</p></li>
+</ul>
+</div>
+<div id="pint" class="section level3">
+<h3><span class="header-section-number">19.4.2</span> PinT</h3>
+<p><a href="http://stat.gamma.rug.nl/snijders/multilevel.htm%20."><strong>PinT</strong>: <em>Power in Two-levels</em></a> was created by Tom Snijders, Roel Bosker, and Henk Guldemond.</p>
+<p>This is the oldest program, but it can be used to estimate the standard errors of simple fixed effects and cross-level interactions. It can provide standard error estimates for a variety of complex models.</p>
+<ul>
+<li><p>The <strong>major difficulty</strong> in using this program is that it requires the user to input the means, variances, and covariances for all explanatory variables and the variance and covariance for the random effects.</p></li>
+<li><p>The <strong>major advantage</strong> is that an extensive user manual is available and the formulas used by the program are presented in Snijders and Bosker (1993). This program is recommended for models that include several Level 1 or Level 2 variables.</p></li>
+<li><p>Snijders, T.A.B. &amp; Bosker, R.J. (1993). <a href="https://journals.sagepub.com/doi/pdf/10.3102/10769986018003237">Standard errors and sample sizes for two-level research.</a> <em>Journal of Educational Statistics</em>, 18: 237–259.</p></li>
+</ul>
+</div>
+<div id="rmass2" class="section level3">
+<h3><span class="header-section-number">19.4.3</span> RMASS2</h3>
+<p><a href="http://tigger.uic.edu/%20hedeker/works.html"><strong>RMASS2</strong></a> calculates the sample size for a two-group repeated measures design, allowing for attrition, according to:</p>
+<ul>
+<li>Hedeker, D., Gibbons, R.D., &amp; Waternaux, C. (1999). <a href="https://journals.sagepub.com/doi/pdf/10.3102/10769986024001070">Sample size estimation for longitudinal designs with attrition: comparing time-related contrasts between two groups.</a> <em>Journal of Educational and Behavioral Statistics</em>, 24:70–93.</li>
+</ul>
+</div>
+<div id="acluster" class="section level3">
+<h3><span class="header-section-number">19.4.4</span> ACluster</h3>
+<p><a href="www.update-software.com/Acluster"><strong>ACluster</strong></a> calculates required sample sizes for various types of cluster randomized designs, not only for continuous but also for binary and time-to-event outcomes, as described in:</p>
+<ul>
+<li>Donner, A., &amp; Klar, N. (2000). <a href="https://www.researchgate.net/profile/Michel_Lavoie/publication/11942928_The_storage_of_household_long_guns_The_situation_in_Quebec/links/54cabb8e0cf2517b756002eb.pdf#page=32">Design and Analysis of Cluster Randomization Trials in Health Research.</a> London: Arnold.</li>
 </ul>
 
+</div>
 </div>
 </div>
             </section>

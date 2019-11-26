@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -2499,14 +2511,10 @@ Models:
 fit_read_0ml: geread ~ 1 + (1 | school)
 fit_read_3ml: geread ~ gevocab * age + (1 | school)
 fit_read_4ml: geread ~ gevocab * age + senroll + (1 | school)
-             Df   AIC   BIC logLik deviance     Chisq Chi Df Pr(&gt;Chisq)
-fit_read_0ml  3 46270 46292 -23132    46264                            
-fit_read_3ml  6 43123 43166 -21555    43111 3153.7701      3     &lt;2e-16
-fit_read_4ml  7 43124 43175 -21555    43110    0.2548      1     0.6137
-                
-fit_read_0ml    
-fit_read_3ml ***
-fit_read_4ml    
+             Df   AIC   BIC logLik deviance     Chisq Chi Df Pr(&gt;Chisq)    
+fit_read_0ml  3 46270 46292 -23132    46264                                
+fit_read_3ml  6 43123 43166 -21555    43111 3153.7701      3     &lt;2e-16 ***
+fit_read_4ml  7 43124 43175 -21555    43110    0.2548      1     0.6137    
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>School enrollment (or size) does not seem be related to reading scores.</p>
@@ -3771,12 +3779,9 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 Models:
 fit_read_9ml_c: geread ~ gevocab_c + age_c + (gevocab_c | school)
 fit_read_10ml_c: geread ~ gevocab_c * age_c + (gevocab_c | school)
-                Df   AIC   BIC logLik deviance  Chisq Chi Df Pr(&gt;Chisq)
-fit_read_9ml_c   7 42989 43040 -21488    42975                         
-fit_read_10ml_c  8 42980 43038 -21482    42964 11.726      1  0.0006162
-                   
-fit_read_9ml_c     
-fit_read_10ml_c ***
+                Df   AIC   BIC logLik deviance  Chisq Chi Df Pr(&gt;Chisq)    
+fit_read_9ml_c   7 42989 43040 -21488    42975                             
+fit_read_10ml_c  8 42980 43038 -21482    42964 11.726      1  0.0006162 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>
@@ -4253,14 +4258,10 @@ fit_read_10ml_s: geread ~ gevocab_c * age_c + (gevocab_c | school)
 fit_read_11ml_s: geread ~ gevocab_c * age_c + gevocab_c * ses_t + (gevocab_c | 
 fit_read_11ml_s:     school)
 fit_read_12ml_s: geread ~ gevocab_c * age_c * ses_t + (gevocab_c | school)
-                Df   AIC   BIC logLik deviance   Chisq Chi Df Pr(&gt;Chisq)
-fit_read_10ml_s  8 42980 43038 -21482    42964                          
-fit_read_11ml_s 10 42929 43001 -21454    42909 54.8974      2    1.2e-12
-fit_read_12ml_s 12 42932 43019 -21454    42908  0.7666      2     0.6816
-                   
-fit_read_10ml_s    
-fit_read_11ml_s ***
-fit_read_12ml_s    
+                Df   AIC   BIC logLik deviance   Chisq Chi Df Pr(&gt;Chisq)    
+fit_read_10ml_s  8 42980 43038 -21482    42964                              
+fit_read_11ml_s 10 42929 43001 -21454    42909 54.8974      2    1.2e-12 ***
+fit_read_12ml_s 12 42932 43019 -21454    42908  0.7666      2     0.6816    
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 <p>There is evidence that SES moderates the main effect of vocabualry, after accounting for the interaction between age and vocabulary.</p>

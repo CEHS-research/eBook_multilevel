@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -639,11 +651,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb568"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb568-1" title="1">tibble<span class="op">::</span><span class="kw">glimpse</span>(data_raw)</a></code></pre></div>
 <pre><code>Observations: 120
 Variables: 5
-$ id       &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5,...
-$ exertype &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
-$ diet     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,...
-$ pulse    &lt;int&gt; 90, 92, 93, 93, 90, 92, 93, 93, 97, 97, 94, 94, 80, 8...
-$ time     &lt;int&gt; 0, 228, 296, 639, 0, 56, 434, 538, 0, 150, 295, 541, ...</code></pre>
+$ id       &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5...
+$ exertype &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+$ diet     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1...
+$ pulse    &lt;int&gt; 90, 92, 93, 93, 90, 92, 93, 93, 97, 97, 94, 94, 80, 82, 83...
+$ time     &lt;int&gt; 0, 228, 296, 639, 0, 56, 434, 538, 0, 150, 295, 541, 0, 12...</code></pre>
 <div class="sourceCode" id="cb570"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb570-1" title="1">data_long &lt;-<span class="st"> </span>data_raw <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb570-2" title="2"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">id =</span> id <span class="op">%&gt;%</span><span class="st"> </span>factor) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb570-3" title="3"><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">exertype =</span> exertype <span class="op">%&gt;%</span><span class="st"> </span></a>
@@ -2028,18 +2040,12 @@ fit_lmer_4ml: pulse ~ diet * exertype + exertype * time_min + exertype * I(time_
 fit_lmer_4ml:     (1 | id)
 fit_lmer_5ml: pulse ~ diet * exertype * time_min + diet * exertype * I(time_min^2) + 
 fit_lmer_5ml:     (1 | id)
-             Df    AIC    BIC  logLik deviance   Chisq Chi Df Pr(&gt;Chisq)
-fit_lmer_1ml  5 927.70 941.64 -458.85   917.70                          
-fit_lmer_2ml  8 884.96 907.26 -434.48   868.96  48.742      3  1.480e-10
-fit_lmer_3ml 10 881.11 908.99 -430.56   861.11   7.847      2    0.01977
-fit_lmer_4ml 14 785.34 824.36 -378.67   757.34 103.776      4  &lt; 2.2e-16
-fit_lmer_5ml 20 769.23 824.98 -364.62   729.23  28.108      6  8.968e-05
-                
-fit_lmer_1ml    
-fit_lmer_2ml ***
-fit_lmer_3ml *  
-fit_lmer_4ml ***
-fit_lmer_5ml ***
+             Df    AIC    BIC  logLik deviance   Chisq Chi Df Pr(&gt;Chisq)    
+fit_lmer_1ml  5 927.70 941.64 -458.85   917.70                              
+fit_lmer_2ml  8 884.96 907.26 -434.48   868.96  48.742      3  1.480e-10 ***
+fit_lmer_3ml 10 881.11 908.99 -430.56   861.11   7.847      2    0.01977 *  
+fit_lmer_4ml 14 785.34 824.36 -378.67   757.34 103.776      4  &lt; 2.2e-16 ***
+fit_lmer_5ml 20 769.23 824.98 -364.62   729.23  28.108      6  8.968e-05 ***
 ---
 Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
 </div>

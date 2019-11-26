@@ -591,11 +591,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="19" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>19</b> Sample Size and Power</a><ul>
-<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#publications-and-websites"><i class="fa fa-check"></i><b>19.1</b> Publications and Websites</a></li>
-<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-glimmpse"><i class="fa fa-check"></i><b>19.2</b> Online: GLIMMPSE</a></li>
-<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-webpower"><i class="fa fa-check"></i><b>19.3</b> Online: WebPower</a></li>
-<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-package"><i class="fa fa-check"></i><b>19.4</b> R package</a></li>
-<li class="chapter" data-level="19.5" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#other-stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.5</b> Other Stand-alone Computer Programs</a></li>
+<li class="chapter" data-level="19.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>19.1</b> Key Publications</a></li>
+<li class="chapter" data-level="19.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>19.2</b> R packages</a><ul>
+<li class="chapter" data-level="19.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>19.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="19.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>19.2.2</b> simr</a></li>
+<li class="chapter" data-level="19.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>19.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="19.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>19.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>19.3</b> Online Interactive Interfaces</a><ul>
+<li class="chapter" data-level="19.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>19.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="19.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>19.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>19.4</b> Stand-alone Computer Programs</a><ul>
+<li class="chapter" data-level="19.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>19.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="19.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>19.4.2</b> PinT</a></li>
+<li class="chapter" data-level="19.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>19.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="19.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>19.4.4</b> ACluster</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -797,38 +809,38 @@ With permission of Blackwell Publishing.</p>
  $ obesity_3 : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 2 2 2 2 2 2 2 2 2 2 ...
  $ num_miss  : Factor w/ 1 level &quot;0&quot;: 1 1 1 1 1 1 1 1 1 1 ...</code></pre>
 <div class="sourceCode" id="cb828"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb828-1" title="1">psych<span class="op">::</span><span class="kw">headTail</span>(data_wide, <span class="dt">top =</span> <span class="dv">10</span>)</a></code></pre></div>
-<pre><code>     id gender age_base age_curr_1 age_curr_2 age_curr_3 obesity_1
-1     1   Male        6          6          8         10       Yes
-2     5   Male        6          6          8         10       Yes
-3    10   Male        8          8         10         12       Yes
-4    16   Male        8          8         10         12       Yes
-5    21   Male        8          8         10         12       Yes
-6    30   Male       10         10         12         14       Yes
-7    44   Male       10         10         12         14       Yes
-8    50   Male       10         10         12         14       Yes
-9    60   Male       12         12         14         16       Yes
-10   61   Male       12         12         14         16       Yes
-11 &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;
-12 3580 Female       14         14         16         18        No
-13 3581 Female       14         14         16         18        No
-14 3582 Female       14         14         16         18        No
-15 3584 Female       14         14         16         18        No
-   obesity_2 obesity_3 num_miss
-1        Yes       Yes        0
-2        Yes       Yes        0
-3        Yes       Yes        0
-4        Yes       Yes        0
-5        Yes       Yes        0
-6        Yes       Yes        0
-7        Yes       Yes        0
-8        Yes       Yes        0
-9        Yes       Yes        0
-10       Yes       Yes        0
-11      &lt;NA&gt;      &lt;NA&gt;     &lt;NA&gt;
-12        No        No        0
-13        No        No        0
-14        No        No        0
-15        No        No        0</code></pre>
+<pre><code>     id gender age_base age_curr_1 age_curr_2 age_curr_3 obesity_1 obesity_2
+1     1   Male        6          6          8         10       Yes       Yes
+2     5   Male        6          6          8         10       Yes       Yes
+3    10   Male        8          8         10         12       Yes       Yes
+4    16   Male        8          8         10         12       Yes       Yes
+5    21   Male        8          8         10         12       Yes       Yes
+6    30   Male       10         10         12         14       Yes       Yes
+7    44   Male       10         10         12         14       Yes       Yes
+8    50   Male       10         10         12         14       Yes       Yes
+9    60   Male       12         12         14         16       Yes       Yes
+10   61   Male       12         12         14         16       Yes       Yes
+11 &lt;NA&gt;   &lt;NA&gt;     &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;       &lt;NA&gt;      &lt;NA&gt;      &lt;NA&gt;
+12 3580 Female       14         14         16         18        No        No
+13 3581 Female       14         14         16         18        No        No
+14 3582 Female       14         14         16         18        No        No
+15 3584 Female       14         14         16         18        No        No
+   obesity_3 num_miss
+1        Yes        0
+2        Yes        0
+3        Yes        0
+4        Yes        0
+5        Yes        0
+6        Yes        0
+7        Yes        0
+8        Yes        0
+9        Yes        0
+10       Yes        0
+11      &lt;NA&gt;     &lt;NA&gt;
+12        No        0
+13        No        0
+14        No        0
+15        No        0</code></pre>
 </div>
 </div>
 <div id="exploratory-data-analysis-10" class="section level2">
