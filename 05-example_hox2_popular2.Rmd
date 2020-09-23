@@ -203,7 +203,9 @@ data_pop %>%
 ```
 
 
+##### Hexagonal Heatmap Plots
 
+Divides the x-y plane into regular hexagons, counts the number of cases in each hexagon, and then (by default) maps the number of cases to the hexagon fill.
 
 The argument could be made that the extroversion score should be treated as an ordinal factor instead of as a truly continuous scale since the only valid values are the whole number 1 through 10 and there is no assurance that these category assignments represent a true ratio measurement scale.  However, we must keep in mind that this was an observational study, ans as such, the number of pupils assignment each level of extroversion is not equal.
 
@@ -718,9 +720,9 @@ $$
 Fit the model to the data.
 
 ```{r}
-pop_lmer_0_re <- lme4::lmer(popular ~ 1 + (1|class),  # include a fixed and random intercept
-                            data = data_pop,
-                            REML = TRUE)             # fit via REML (the default) for ICC calculations
+pop_lmer_0_re <- lmerTest::lmer(popular ~ 1 + (1|class),  # include a fixed and random intercept
+                                data = data_pop,
+                                REML = TRUE)             # fit via REML (the default) for ICC calculations
 
 summary(pop_lmer_0_re)
 ```
@@ -773,7 +775,9 @@ The `VarCorr()` function in the `lme4` package returns the standard deviations, 
 
 
 ```{r}
-lme4::VarCorr(pop_lmer_0_re)   # extract random compondent: varrainces and correlations
+lme4::VarCorr(pop_lmer_0_re) %>%  # extract random compondent: varrainces and correlations 
+  print(comp = c("Variance", "Std.Dev"),
+        digits = 3)
 ```
 
 
@@ -1063,18 +1067,18 @@ In Hox's table 2.1 (page 14) we see that the MLM with predictors ($M_0$) include
 Since we are going to compare models that are nested on random effects *(identical except for inclusing/exclusing of  random components*, we will specify the `REML = TRUE` option.
 
 ```{r}
-pop_lmer_1_re <- lme4::lmer(popular ~ sex + extrav + texp + (sex + extrav|class), 
-                            data  = data_pop,
-                            REML  = TRUE,
-                            control = lmerControl(optimizer ="Nelder_Mead")) #helps converge
+pop_lmer_1_re <- lmerTest::lmer(popular ~ sex + extrav + texp + (sex + extrav|class), 
+                                data  = data_pop,
+                                REML  = TRUE,
+                                control = lmerControl(optimizer ="Nelder_Mead")) #helps converge
 
-pop_lmer_1a_re <- lme4::lmer(popular ~ sex + extrav + texp + (extrav|class), 
-                             data = data_pop,
-                             REML = TRUE)
+pop_lmer_1a_re <- lmerTest::lmer(popular ~ sex + extrav + texp + (extrav|class), 
+                                 data = data_pop,
+                                 REML = TRUE)
 
-pop_lmer_1b_re <- lme4::lmer(popular ~ sex + extrav + texp + (1 |class), 
-                             data = data_pop,
-                             REML = TRUE) 
+pop_lmer_1b_re <- lmerTest::lmer(popular ~ sex + extrav + texp + (1 |class), 
+                                 data = data_pop,
+                                 REML = TRUE) 
 ```
 
 
@@ -1198,21 +1202,21 @@ Now that we wish to compare nested that will differ only in terms of the inclusi
 
 
 ```{r}
-pop_lmer_1a_ml <- lme4::lmer(popular ~ sex + extrav + texp + (extrav|class), # main effects only
-                             data = data_pop,
-                             REML = FALSE)
+pop_lmer_1a_ml <- lmerTest::lmer(popular ~ sex + extrav + texp + (extrav|class), # main effects only
+                                 data = data_pop,
+                                 REML = FALSE)
 
-pop_lmer_2_ml  <- lme4::lmer(popular ~ sex + extrav*texp + (extrav|class), # include cross-level interaction
-                             data = data_pop,
-                             REML = FALSE)
+pop_lmer_2_ml  <- lmerTest::lmer(popular ~ sex + extrav*texp + (extrav|class), # include cross-level interaction
+                                 data = data_pop,
+                                 REML = FALSE)
 
-pop_lmer_3_ml  <- lme4::lmer(popular ~ extrav*texp + sex*texp + sex*extrav +  (extrav|class),  
-                             data = data_pop,
-                             REML = FALSE)
+pop_lmer_3_ml  <- lmerTest::lmer(popular ~ extrav*texp + sex*texp + sex*extrav +  (extrav|class),  
+                                 data = data_pop,
+                                 REML = FALSE)
 
-pop_lmer_4_ml  <- lme4::lmer(popular ~ extrav*texp*sex + (extrav|class),  
-                             data = data_pop,
-                             REML = FALSE)
+pop_lmer_4_ml  <- lmerTest::lmer(popular ~ extrav*texp*sex + (extrav|class),  
+                                 data = data_pop,
+                                 REML = FALSE)
 ```
 
 Create a table to compare the two nested models:
@@ -1315,9 +1319,9 @@ performance::compare_performance(pop_lmer_1a_ml,
 #### Refit with REML
 
 ```{r}
-pop_lmer_2_re  <- lme4::lmer(popular ~ sex + extrav*texp + (extrav|class), 
-                             data = data_pop,
-                             REML = TRUE)       # re-fit the final model via REML
+pop_lmer_2_re  <- lmerTest::lmer(popular ~ sex + extrav*texp + (extrav|class), 
+                                 data = data_pop,
+                                 REML = TRUE)       # re-fit the final model via REML
 ```
 
 #### Parameter Summary Table

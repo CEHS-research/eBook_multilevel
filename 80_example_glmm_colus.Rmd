@@ -59,6 +59,9 @@ library(texreghelpr)
 
 Patient controlled analgesia (PCA) comparing 2 dosing regimes to self-control pain 
 
+
+The dataset has the number of requests per interval in 12 successive four-hourly intervals following abdominal surgery for 65 patients in a clinical trial to compare two groups (bolus/lock-out combinations).
+
 Bolus=  Large dose of medication given (usually intravenously by direct infusion injection or gravity drip) to raise blood-level concentrations to a therapeutic level
 
 A ‘lock-out’ period followed each dose, where subject may not administer more medication.  
@@ -92,7 +95,8 @@ A ‘lock-out’ period followed each dose, where subject may not administer mor
 
 ```{r}
 data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/data/master/MLM/bolus.txt",
-                       header = TRUE)
+  header = TRUE
+)
 
 str(data_raw) # see the structure
 

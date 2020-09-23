@@ -181,26 +181,34 @@ The t-test performed by the `furniture::table1()` function will always assume in
 Fit the model to the data, with both ML and REML.
 
 ```{r}
-nurse_lmer_0_re <- lme4::lmer(stress ~ 1 +              # Fixed Intercept for all nurses
-                                (1|hospital/ward),      # Random Intercepts for wards within hospitals
-                              data = data_nurse,
-                              REML = TRUE)              # fit via REML (the default) for ICC calculations
+nurse_lmer_0_re <- lmerTest::lmer(stress ~ 1 +              # Fixed Intercept for all nurses
+                                    (1|hospital/ward),      # Random Intercepts for wards within hospitals
+                                  data = data_nurse,
+                                  REML = TRUE)              # fit via REML (the default) for ICC calculations
 
-nurse_lmer_0_ml <- lme4::lmer(stress ~ 1 +              # Fixed Intercept for all nurses
-                                (1|hospital/ward),      # Random Intercepts for wards within hospitals 
-                              data = data_nurse,
-                              REML = FALSE)             # fit via ML for comparing FIXED effects inclusion
+nurse_lmer_0_ml <- lmerTest::lmer(stress ~ 1 +              # Fixed Intercept for all nurses
+                                    (1|hospital/ward),      # Random Intercepts for wards within hospitals 
+                                  data = data_nurse,
+                                  REML = FALSE)             # fit via ML for comparing FIXED effects inclusion
 ```
 
 ```{r, include=FALSE}
 texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_0_re))
 ```
 
-```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
+```{r, eval = FALSE}
+texreg::texreg(list(nurse_lmer_0_ml, 
+                    nurse_lmer_0_re),
+               custom.model.names = c("M0: Null, ML", 
+                                      "M0: Null, REML"),
+               caption            = "NULL Model: different estimation methods",
+               caption.above      = TRUE,
+               single.row         = TRUE)
+```
 
+
+
+```{r, echo = FALSE, results='asis'}
 texreg::htmlreg(list(nurse_lmer_0_ml, 
                      nurse_lmer_0_re),
                 custom.model.names = c("M0: Null, ML", 
@@ -209,6 +217,9 @@ texreg::htmlreg(list(nurse_lmer_0_ml,
                 caption.above      = TRUE,
                 single.row         = TRUE)
 ```
+
+
+
 
 <!-- ========================================================= -->
 ## Estimate the ICC
@@ -231,7 +242,7 @@ lme4::VarCorr(nurse_lmer_0_re) %>%
 ```{r}
 vc <- lme4::VarCorr(nurse_lmer_0_re) %>% 
   data.frame() 
-  
+
 pie(x = vc$vcov,
     labels = vc$grp)
 ```
@@ -301,13 +312,23 @@ The proportion of variance in nurse stress level is 0.51 at the ward level and 0
 To test if the three level model is justified statistically, compare the null models with and without the nesting of wards in hospitals.
 
 ```{r}
-nurse_lmer_0_re_2level <- lme4::lmer(stress ~ 1 + (1|wardid),  # each hospital contains several wards
-                              data = data_nurse,
-                              REML = TRUE)              # fit via REML (the default) for ICC calculations
+nurse_lmer_0_re_2level <- lmerTest::lmer(stress ~ 1 + (1|wardid),  # each hospital contains several wards
+                                         data = data_nurse,
+                                         REML = TRUE)              # fit via REML (the default) for ICC calculations
 ```
 
 
-```{r, results='asis'}
+```{r, eval=FALSE}
+texreg::texreg(list(nurse_lmer_0_re_2level, 
+                    nurse_lmer_0_re),
+               custom.model.names = c("2 levels", 
+                                      "3 levels"),
+               caption            = "MLM: Two or Three Levels?",
+               caption.above      = TRUE,
+               single.row         = TRUE)
+```
+
+```{r, echo=FALSE, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
@@ -324,7 +345,8 @@ texreg::htmlreg(list(nurse_lmer_0_re_2level,
 The deviance test or likelihood-ratio test shows that the inclusion of the nesting of wards within hospitals better explains the variance in nurse stress levels.
 
 ```{r}
-anova(nurse_lmer_0_re, nurse_lmer_0_re_2level, refit = FALSE)
+anova(nurse_lmer_0_re, nurse_lmer_0_re_2level, 
+      refit = FALSE)
 ```
 
 
@@ -341,13 +363,13 @@ anova(nurse_lmer_0_re, nurse_lmer_0_re_2level, refit = FALSE)
 > "In this example, the variable `expcon` is of main interest, and the other variables are covariates.  Their funciton is to control for differences between the groups, which can occur even if randomization is used, especially with small samples, and to explain variance in the outcome variable stress.  To the extent that these variables successfully explain the variance, the power of the test for the effect of `expcon` will be increased."
 
 ```{r}
-nurse_lmer_1_ml <- lme4::lmer(stress ~ expcon +              # experimental condition = CATEGORICAL FACTOR
-                                 age + gender + experien +   # level 1 covariates
-                                 wardtype +                  # level 2 covariates
-                                 hospsize +                  # level 3 covariates, hospital size = CATEGORICAL FACTOR 
-                                 (1|hospital/ward),          # Random Intercepts for wards within hospitals
-                              data = data_nurse,
-                              REML = FALSE)                  # fit via ML for nested FIXED effects
+nurse_lmer_1_ml <- lmerTest::lmer(stress ~ expcon +             # experimental condition = CATEGORICAL FACTOR
+                                    age + gender + experien +   # level 1 covariates
+                                    wardtype +                  # level 2 covariates
+                                    hospsize +                  # level 3 covariates, hospital size = CATEGORICAL FACTOR 
+                                    (1|hospital/ward),          # Random Intercepts for wards within hospitals
+                                  data = data_nurse,
+                                  REML = FALSE)                 # fit via ML for nested FIXED effects
 ```
 
 
@@ -356,11 +378,18 @@ nurse_lmer_1_ml <- lme4::lmer(stress ~ expcon +              # experimental cond
 texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_1_ml))
 ```
 
-```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
+```{r, eval = FALSE}
+texreg::texreg(list(nurse_lmer_0_ml, 
+                    nurse_lmer_1_ml),
+               custom.model.names = c("M0: null", 
+                                      "M1: fixed pred"),
+               caption            = "Nested Models: Fixed effects via ML",
+               caption.above      = TRUE,
+               single.row         = TRUE)
+```
 
+
+```{r, echo = FALSE, results='asis'}
 texreg::htmlreg(list(nurse_lmer_0_ml, 
                      nurse_lmer_1_ml),
                 custom.model.names = c("M0: null", 
@@ -394,21 +423,21 @@ Experimental conditon is a BINARY or two-level factor.
 * When the numeric, continuous variable is further grand-mean centered by additionally subtraction the MEAN of the numberic version, the value of the intercept is the only estimate that changes.
 
 ```{r}
-nurse_lmer_1a_ml <- lme4::lmer(stress ~ expconN +            # experimental condition = CONTINUOUS CODED 0/1
-                                 age + gender + experien +   
-                                 wardtype +                  
-                                 hospsize +                 # hospital size = CATEGORICAL FACTOR         
-                                 (1|hospital/ward),          
-                              data = data_nurse,
-                              REML = FALSE)                  
+nurse_lmer_1a_ml <- lmerTest::lmer(stress ~ expconN +            # experimental condition = CONTINUOUS CODED 0/1
+                                     age + gender + experien +   
+                                     wardtype +                  
+                                     hospsize +                 # hospital size = CATEGORICAL FACTOR         
+                                     (1|hospital/ward),          
+                                   data = data_nurse,
+                                   REML = FALSE)                  
 
-nurse_lmer_1b_ml <- lme4::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
-                                 age + gender + experien +   
-                                 wardtype +                  
-                                 hospsize +                  # hospital size = CATEGORICAL FACTOR                 
-                                 (1|hospital/ward),          
-                              data = data_nurse,
-                              REML = FALSE)                  
+nurse_lmer_1b_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
+                                     age + gender + experien +   
+                                     wardtype +                  
+                                     hospsize +                  # hospital size = CATEGORICAL FACTOR                 
+                                     (1|hospital/ward),          
+                                   data = data_nurse,
+                                   REML = FALSE)                  
 ```
 
 
@@ -418,11 +447,19 @@ texreg::screenreg(list(nurse_lmer_1_ml, nurse_lmer_1a_ml, nurse_lmer_1b_ml))
 ```
 
 
-```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
+```{r, eval=FALSE}
+texreg::texreg(list(nurse_lmer_1_ml, 
+                    nurse_lmer_1a_ml, 
+                    nurse_lmer_1b_ml),
+               custom.model.names = c("Factor", 
+                                      "0 vs 1", 
+                                      "Centered"),
+               caption            = "MLM: Model 1 - Expereimental Condiditon Coding (2-levels)",
+               caption.above      = TRUE,
+               single.row         = TRUE)
+```
 
+```{r, echo=TRUE, results='asis'}
 texreg::htmlreg(list(nurse_lmer_1_ml, 
                      nurse_lmer_1a_ml, 
                      nurse_lmer_1b_ml),
@@ -445,21 +482,21 @@ Experimental conditon is a three-level factor.
 * When the numeric, continuous variable is further grand-mean centered by additionally subtraction the MEAN of the numberic version, the value of the intercept is the only estimate that changes.
 
 ```{r}
-nurse_lmer_1c_ml <- lme4::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
-                                 age + gender + experien +   
-                                 wardtype +                  
-                                 hospsizeN +                 # hospital size = CONTINUOUS CODED 0/1          
-                                 (1|hospital/ward),          
-                              data = data_nurse,
-                              REML = FALSE)   
+nurse_lmer_1c_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
+                                     age + gender + experien +   
+                                     wardtype +                  
+                                     hospsizeN +                 # hospital size = CONTINUOUS CODED 0/1          
+                                     (1|hospital/ward),          
+                                   data = data_nurse,
+                                   REML = FALSE)   
 
-nurse_lmer_1d_ml <- lme4::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
-                                 age + gender + experien +   
-                                 wardtype +                  
-                                 hospsizeNG +                # hospital size = CONTINUOUS GRAND-MEAN CENTERED           
-                                 (1|hospital/ward),          
-                              data = data_nurse,
-                              REML = FALSE)
+nurse_lmer_1d_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
+                                     age + gender + experien +   
+                                     wardtype +                  
+                                     hospsizeNG +                # hospital size = CONTINUOUS GRAND-MEAN CENTERED           
+                                     (1|hospital/ward),          
+                                   data = data_nurse,
+                                   REML = FALSE)
 ```
 
 
@@ -467,11 +504,20 @@ nurse_lmer_1d_ml <- lme4::lmer(stress ~ expconNG +           # experimental cond
 texreg::screenreg(list(nurse_lmer_1b_ml, nurse_lmer_1c_ml, nurse_lmer_1d_ml))
 ```
 
-```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
 
+```{r, eval=FALSE}
+texreg::texreg(list(nurse_lmer_1b_ml, 
+                    nurse_lmer_1c_ml, 
+                    nurse_lmer_1d_ml),
+               custom.model.names = c("Factor", 
+                                      "0 vs 1", 
+                                      "Centered"),
+               caption            = "MLM: Model 1 - Hospital Coding (3-levels)",
+               caption.above      = TRUE,
+               single.row         = TRUE)
+```
+
+```{r, echo=FALSE, results='asis'}
 texreg::htmlreg(list(nurse_lmer_1b_ml, 
                      nurse_lmer_1c_ml, 
                      nurse_lmer_1d_ml),
@@ -499,22 +545,22 @@ texreg::htmlreg(list(nurse_lmer_1b_ml,
 
 
 ```{r}
-nurse_lmer_1d_re <- lme4::lmer(stress ~ expconNG +            # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
-                                 age + gender + experien +    # level 1 covariates
-                                 wardtype +                   # level 2 covariate
-                                 hospsizeNG +                 # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED           
-                                 (1|hospital/ward),           # Random Intercepts for wards within hospitals
-                               data = data_nurse, 
-                               REML = TRUE)                   # fit via REML for nested Random Effects
+nurse_lmer_1d_re <- lmerTest::lmer(stress ~ expconNG +            # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
+                                     age + gender + experien +    # level 1 covariates
+                                     wardtype +                   # level 2 covariate
+                                     hospsizeNG +                 # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED           
+                                     (1|hospital/ward),           # Random Intercepts for wards within hospitals
+                                   data = data_nurse, 
+                                   REML = TRUE)                   # fit via REML for nested Random Effects
 
-nurse_lmer_2_re <- lme4::lmer(stress ~ expconNG +             # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
-                                age + gender + experien +     # level 1 covariates
-                                wardtype +                    # level 2 covariate
-                                hospsizeNG +                  # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED           
-                                (1|hospital/ward) +           # Random Intercepts for wards within hospitals
-                                (0 + expconNG|hospital),      # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!)
-                              data = data_nurse,
-                              REML = TRUE)                    # fit via REML for nested Random Effects
+nurse_lmer_2_re <- lmerTest::lmer(stress ~ expconNG +             # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
+                                    age + gender + experien +     # level 1 covariates
+                                    wardtype +                    # level 2 covariate
+                                    hospsizeNG +                  # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED           
+                                    (1|hospital/ward) +           # Random Intercepts for wards within hospitals
+                                    (0 + expconNG|hospital),      # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!)
+                                  data = data_nurse,
+                                  REML = TRUE)                    # fit via REML for nested Random Effects
 ```
 
 
@@ -522,12 +568,18 @@ nurse_lmer_2_re <- lme4::lmer(stress ~ expconNG +             # experimental con
 texreg::screenreg(list(nurse_lmer_1d_re, nurse_lmer_2_re))
 ```
 
+```{r, eval=FALSE}
+texreg::texreg(list(nurse_lmer_1d_re, 
+                    nurse_lmer_2_re),
+               custom.model.names = c("M1: RI", 
+                                      "M2: RIAS"),
+               caption            = "Nested Models: Random Slope via REML",
+               caption.above      = TRUE,
+                single.row         = TRUE)
+```
 
-```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
 
+```{r, echo=FALSE, results='asis'}
 texreg::htmlreg(list(nurse_lmer_1d_re, 
                      nurse_lmer_2_re),
                 custom.model.names = c("M1: RI", 
@@ -560,36 +612,41 @@ The inclusion of a random slope effect for the experimental condition `expcon` s
 ### Fit the Model
 
 ```{r}
-nurse_lmer_2_ml <- lme4::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
-                                age + gender + experien +   # level 1 covariates
-                                wardtype +                  # level 2 covariate
-                                hospsizeNG +                # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED           
-                                (1|hospital/ward) +         # Random Intercepts for wards within hospitals
-                                (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!) 
-                              data = data_nurse,
-                              REML = FALSE)                 # fit via ML for nested FIXED Effects
+nurse_lmer_2_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
+                                    age + gender + experien +   # level 1 covariates
+                                    wardtype +                  # level 2 covariate
+                                    hospsizeNG +                # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED           
+                                    (1|hospital/ward) +         # Random Intercepts for wards within hospitals
+                                    (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!) 
+                                  data = data_nurse,
+                                  REML = FALSE)                 # fit via ML for nested FIXED Effects
 
-nurse_lmer_3_ml <- lme4::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
-                                age + gender + experien +   # level 1 covariates
-                                wardtype +                  # level 2 covariate
-                                hospsizeNG +                # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED   
-                                expconNG*hospsizeNG +       # CROSS-LEVEL interaction
-                                (1|hospital/ward) +         # Random Intercepts for wards within hospitals
-                                (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!) 
-                              data = data_nurse,
-                              REML = FALSE)                 # fit via ML for nested FIXED Effects
+nurse_lmer_3_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
+                                    age + gender + experien +   # level 1 covariates
+                                    wardtype +                  # level 2 covariate
+                                    hospsizeNG +                # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED   
+                                    expconNG*hospsizeNG +       # CROSS-LEVEL interaction
+                                    (1|hospital/ward) +         # Random Intercepts for wards within hospitals
+                                    (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!) 
+                                  data = data_nurse,
+                                  REML = FALSE)                 # fit via ML for nested FIXED Effects
 ```
 
 ```{r, include=FALSE}
 texreg::screenreg(list(nurse_lmer_2_ml, nurse_lmer_3_ml))
 ```
 
+```{r, eval=FALSE}
+texreg::texreg(list(nurse_lmer_2_ml, 
+                     nurse_lmer_3_ml),
+                custom.model.names = c("M2: RAIS", 
+                                       "M3: Xlevel Int"),
+                caption            = "Nested Models: Fixed Cross-Level Interaction via ML",
+                caption.above      = TRUE,
+                single.row         = TRUE)
+```
 
-```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
+```{r, echo=FALSE, results='asis'}
 texreg::htmlreg(list(nurse_lmer_2_ml, 
                      nurse_lmer_3_ml),
                 custom.model.names = c("M2: RAIS", 
@@ -618,15 +675,15 @@ There is evidence that hospital size moderated the effect of the intervention.  
 The final model should be fit via REML.
 
 ```{r}
-nurse_lmer_3_re <- lme4::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
-                                age + gender + experien +   # level 1 covariates
-                                wardtype +                  # level 2 covariate
-                                hospsizeNG +                # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED   
-                                expconNG*hospsizeNG +       # CROSS-LEVEL interaction
-                                (1|hospital/ward) +         # Random Intercepts for wards within hospitals
-                                (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!)  
-                              data = data_nurse,
-                              REML = TRUE)                                       # fit via REML for final model        
+nurse_lmer_3_re <- lmerTest::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
+                                    age + gender + experien +   # level 1 covariates
+                                    wardtype +                  # level 2 covariate
+                                    hospsizeNG +                # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED   
+                                    expconNG*hospsizeNG +       # CROSS-LEVEL interaction
+                                    (1|hospital/ward) +         # Random Intercepts for wards within hospitals
+                                    (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!)  
+                                  data = data_nurse,
+                                  REML = TRUE)                                       # fit via REML for final model        
 ```
 
 
@@ -637,12 +694,16 @@ nurse_lmer_3_re <- lme4::lmer(stress ~ expconNG +           # experimental condi
 texreg::screenreg(list(nurse_lmer_3_re), single.row = TRUE)
 ```
 
+```{r, eval=FALSE}
+texreg::texreg(list(nurse_lmer_3_re),
+               custom.model.names = c("M3: Xlevel Int"),
+               caption            = "Final Model: with REML",
+               caption.above      = TRUE,
+               single.row         = TRUE)
+```
 
-```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
 
+```{r, echo=FALSE, results='asis'}
 texreg::htmlreg(list(nurse_lmer_3_re),
                 custom.model.names = c("M3: Xlevel Int"),
                 caption            = "Final Model: with REML",
@@ -650,26 +711,7 @@ texreg::htmlreg(list(nurse_lmer_3_re),
                 single.row         = TRUE)
 ```
 
-```{block type='rmdimportant', echo=TRUE}
-**ICC for unconditional and conditional model**
 
-Usually, the ICC is calculated for the null model ("unconditional model"). However, according to Raudenbush and Bryk (2002) or Rabe-Hesketh and Skrondal (2012) it is also feasible to compute the ICC for full models with covariates ("conditional models") and compare how much a level-2 variable explains the portion of variation in the grouping structure (random intercept). 
-
-**ICC for random-slope models** 
-
-**Caution!!!** For models with **random slopes and random intercepts**, the ICC would differ at each unit of the predictors. Hence, the ICC for these kind of models cannot be understood simply as proportion of variance *(see Goldstein et al. 2010)*. For convenience reasons, as the 'icc()' function also extracts the different random effects variances, the ICC for random-slope-intercept-models is reported nonetheless, but **it is usually not a  meaningful summary** of the proportion of variances. 
-
-**ICC for models with multiple or nested random effects**
-
-**Caution:** By default, for **three-level-models**, depending on the nested structure of the model, or for models with multiple random effects, 'icc()' only reports the proportion of variance explained for each grouping level. Use 'adjusted = TRUE' to calculate the adjusted and conditional ICC.
-```
-
-
-
-
-```{r}
-sjstats::icc(nurse_lmer_3_re)
-```
 
 ### Visualization: Estimated Marginal Means Plot 
 
@@ -778,7 +820,7 @@ effects::Effect(focal.predictors = c("expconNG", "hospsizeNG"),
   theme(legend.key.width = unit(2, "cm"),
         legend.background = element_rect(color = "black"),
         legend.position = c(1, 0),
-        legend.justification = c(1, 0))
+        legend.justification = c(1.1, -0.1))
 ```
 
 This plot illustrates the estimated marginal means among male (gender's reference category) nurses at the overall mean age (43.01 years), with the mean level experience (17.06 years), since thoes variables were not included as `focal.predictors` in the `effects::Effect()` function.  Different values for thoes predictors would yield the exact sample plot, shifted as a whole either up or down.
@@ -808,15 +850,24 @@ The approach presented by @hox2017 and shown above involved mean-centering categ
 @hox2017 presents a table on page 23 comparing various models.  Note, that table includes models only fit via maximum likelihood, not REML.  Also, the model $M_3$: with cross-level interaction is slightly different for an unknown reason.
 
 ```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_1d_ml, nurse_lmer_2_ml, nurse_lmer_3_ml))
+texreg::screenreg(list(nurse_lmer_0_ml, 
+                       nurse_lmer_1d_ml, 
+                       nurse_lmer_2_ml, 
+                       nurse_lmer_3_ml))
 ```
 
+```{r, eval=FALSE}
+texreg::texreg(list(nurse_lmer_0_ml, 
+                    nurse_lmer_1d_ml, 
+                    nurse_lmer_2_ml, 
+                    nurse_lmer_3_ml),
+               custom.model.names = c("M0", "M1", "M2", "M3"),
+               caption            = "Hox Table 2.5: Models for stress in hospitals and wards",
+               caption.above      = TRUE,
+               single.row         = TRUE)
+```
 
-```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
+```{r, echo=FALSE, results='asis'}
 texreg::htmlreg(list(nurse_lmer_0_ml, 
                      nurse_lmer_1d_ml, 
                      nurse_lmer_2_ml, 

@@ -175,12 +175,26 @@ anova(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml)
 ### Variance Explained by linear TIME at Level ONE
 
 ```{r}
+<<<<<<< HEAD
 lme4::VarCorr(fit_lmer_0_ml)  # baseilne
 ```
 
 ```{r}
 lme4::VarCorr(fit_lmer_1_ml)  # model to compare
+=======
+lme4::VarCorr(fit_lmer_0_ml) %>%  # baseilne
+  print(comp = c("Variance", "Std.Dev"),
+        digits = 3)
 ```
+
+```{r}
+lme4::VarCorr(fit_lmer_0_ml) %>%  # model to compare
+  print(comp = c("Variance", "Std.Dev"),
+        digits = 3)
+>>>>>>> master
+```
+
+
 
 #### Raudenbush and Bryk
 

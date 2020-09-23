@@ -455,9 +455,13 @@ lme4::VarCorr(fit_read_0re) %>%
         digits = 4)
 ```
 
+<<<<<<< HEAD
 ```{r}
 insight::get_variance(fit_read_0re)
 ```
+=======
+
+>>>>>>> master
 
 
 $$
@@ -578,7 +582,11 @@ BL = BAseline: The Null Model (fit via REML)
 ```{r}
 lme4::VarCorr(fit_read_0re) %>% 
   print(comp = c("Variance", "Std.Dev"),
+<<<<<<< HEAD
         digits = 4)
+=======
+        digits = 3)
+>>>>>>> master
 ```
 $$
 \sigma^2_{u0-BL} = 0.392 \\
@@ -591,7 +599,11 @@ MC = Model to Compare: Model with Predictor (fit via REML)
 ```{r}
 lme4::VarCorr(fit_read_1re) %>% 
   print(comp = c("Variance", "Std.Dev"),
+<<<<<<< HEAD
         digits = 4)
+=======
+        digits = 3)
+>>>>>>> master
 ```
 
 $$
@@ -623,10 +635,13 @@ Calculate the value by hand:
 1 - (0.100 + 3.766)/(0.392 + 5.045)
 ```
 
+<<<<<<< HEAD
 Or use the `sjstats` package to help out:
 ```{r}
 # 1 - sum(sjstats::re_var(fit_read_1re)) / sum(sjstats::re_var(fit_read_0re))
 ```
+=======
+>>>>>>> master
 
 This means nearly 30% of the variance in reading scores, above and beyond that accounted for by school membership *(i.e. school makeup or school-to-school variation)*, is attributable to vocabulary scores. 
 
