@@ -725,9 +725,12 @@ lme4::VarCorr(fit_lmer_2a_re)%>%
 ```
 
 
+
+
+
 ```{r, include=FALSE}
-sjstats::re_var(fit_lmer_2a_re)
-sjstats::re_var(fit_lmer_2a_re) %>% names()
+lme4::VarCorr(fit_lmer_2a_re) %>% 
+  data.frame
 ```
 
 
@@ -739,11 +742,20 @@ sjstats::re_var(fit_lmer_2a_re) %>% names()
 
 * $e_{ti}$ the residuals associated with observation at time $t$ on child $i$
 
+```{r, echo=FALSE, results="hide"}
+sigma2_e <- lme4::VarCorr(fit_lmer_2a_re) %>% 
+  data.frame %>% 
+  dplyr::filter(grp == "Residual") %>% 
+  dplyr::select(vcov)
+
+sigma2_e
+```
+
 
 $$
 \sigma^2 = \sigma^2_e 
          = VAR[e_{ti}] 
-         = `r sjstats::re_var(fit_lmer_2a_re)["_sigma_2"] %>% round(3)`
+         = `r round(sigma2_e, 3)`
 $$
 
 
@@ -755,20 +767,38 @@ Random LINEAR effect of age variance
 
 * $u_{1i}$ the DIFFERENCE between child $i$'s specific linear component for age and the fixed linear component for age, given their SICD group
 
+```{r, echo=FALSE, results="hide"}
+sigma2_u1 <- lme4::VarCorr(fit_lmer_2a_re) %>% 
+  data.frame %>% 
+  dplyr::filter(var1 == "age2", is.na(var2)) %>% 
+  dplyr::select(vcov)
+
+sigma2_u1
+```
+
 $$
 \tau_{11} = \sigma^2_{u1} 
           = VAR[u_{1i}] 
-          = `r sjstats::re_var(fit_lmer_2a_re)["childid_tau.00"] %>% round(2)`
+          = `r sigma2_u1 %>% round(2)`
 $$
 
 Random QUADRATIC effect of age variance
 
 * $u_{2i}$ the DIFFERENCE between child $i$'s specific quadratic component for age and the fixed quadratic component for age, given their SICD group
 
+```{r, echo=FALSE, results="hide"}
+sigma2_u2 <- lme4::VarCorr(fit_lmer_2a_re) %>% 
+  data.frame %>% 
+  dplyr::filter(var1 == "I(age2^2)", is.na(var2)) %>% 
+  dplyr::select(vcov)
+
+sigma2_u2
+```
+
 $$
 \tau_{22} = \sigma^2_{u2} 
           = VAR[u_{2i}] 
-          = `r sjstats::re_var(fit_lmer_2a_re)["childid.I(age2^2)_tau.11"] %>% round(2)`
+          = `r sigma2_u2 %>% round(2)`
 $$
 
 
@@ -779,12 +809,20 @@ $$
 
 Random LINEAR  and Quadratic effect of age covariance: 
 
-* correlation = `r sjstats::re_var(fit_lmer_2a_re)["childid_rho.01"] %>% round(2)`
+
+```{r, echo=FALSE, results="hide"}
+sigma2_t12 <- lme4::VarCorr(fit_lmer_2a_re) %>% 
+  data.frame %>% 
+  dplyr::filter(var1 == "age2", var2 == "I(age2^2)") %>% 
+  dplyr::select(vcov)
+
+sigma2_t12
+```
 
 $$
 \tau_{12} = \sigma^2_{u12} 
           = COV[u_{1i}, u_{2i}] 
-          = `r sjstats::re_var(fit_lmer_2a_re)["childid.age2_tau.01"] %>% round(2)`
+          = `r sigma2_t12 %>% round(2)`
 $$
 
 

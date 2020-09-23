@@ -236,11 +236,18 @@ pie(x = vc$vcov,
     labels = vc$grp)
 ```
 
-The `sjstats` package has a few really helpful funcitons:
+The `performance` package has a few really helpful funcitons:
 
 ```{r}
-sjstats::re_var(nurse_lmer_0_re)
+lme4::VarCorr(nurse_lmer_0_re)
 ```
+
+```{r}
+insight::get_variance(nurse_lmer_0_re)
+```
+
+
+
 $$
 \begin{align*}
 \text{hospitals}                                 \rightarrow \; & \sigma^2_{v0} = 0.417^2 = 0.174\\
@@ -276,14 +283,19 @@ $$
 
 
 ```{block type='rmdimportant', echo=TRUE}
-For more than two levels, the 'sjstats::icc()' function computes ICC's by the Davis and Scott method.
+For more than two levels, the 'performance::icc()' function computes ICC's by the Davis and Scott method.
 ```
 
 ```{r}
-sjstats::icc(nurse_lmer_0_re)
+performance::icc(nurse_lmer_0_re)
 ```
 
-The proportion of variange in nurse stress level is 0.51 at the ward level and 0.18 at the hospital level.
+```{r}
+performance::icc(nurse_lmer_0_re, by_group = TRUE)
+```
+
+
+The proportion of variance in nurse stress level is 0.51 at the ward level and 0.18 at the hospital level, for a total of 0.69.
 
 
 To test if the three level model is justified statistically, compare the null models with and without the nesting of wards in hospitals.

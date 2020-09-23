@@ -12,6 +12,15 @@ knitr::opts_chunk$set(comment     = "",
                       fig.height  = 4)        # set default figure height to 3 inches
 ```
 
+Download a new GitHub package
+
+```{r, eval=FALSE}
+install.packages("devtools")
+devtools::install_github("goodekat/redres")
+```
+
+
+
 ```{r, message=FALSE, error=FALSE}
 library(tidyverse)
 library(haven)        # read in SPSS dataset
@@ -25,7 +34,11 @@ library(car)          # Companion to Applied Regression
 library(nlme)         # non-linear mixed-effects models
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(lmerTest)     # Tests on lmer objects
+library(performance)  # icc and r-squared functions **NEWER**
+library(interactions) # interaction plots **NEWER**
+library(glmmTMB)
 library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
+library(redres)       # Diagnosing MLM models
 library(sjstats)      # ICC calculations
 library(optimx)       # Different optimizers to solve mlm's
 ```
@@ -43,7 +56,7 @@ The following example is used through out @hox2017's chapater 2.
 
 > From **Appendix E**:  
 >
-> The popularity data in **popular2.sav** are simulated data for **2000 pupils in 100 schools**. The purpose is to offer a very simple example for multilevel regression analysis.  The main outcome variable is the **pupil popularity**, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil.  Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: **pupil popularity** as rated by their teacher, on a scale from 1-10.  The explanatory variables are **pupil gender** (boy=0, girl=1), **pupil extraversion** (10-point scale) and **teacher experience** in years.  The popularity data have been generated to be a 'nice' well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.
+> The popularity data in **popular2.sav** are simulated data for **2000 pupils in 100 schools**. The purpose is to offer a very simple example for multilevel regression analysis.  The main outcome variable is the **pupil popularity**, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil.  Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: **pupil popularity** as rated by their teacher, on a scale from 1-10.  The explanatory variables are **pupil gender** (boy=0, girl=1), **pupil extroversion** (10-point scale) and **teacher experience** in years.  The popularity data have been generated to be a 'nice' well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.
 
 ![](images/diagram_hox_popular2.png)
 
@@ -128,7 +141,7 @@ Tyson Barrett's  **furniture** package includes the extremely useful function `t
 # View on Screen:  output = ""text", or "markdown", "html"
 
 data_pop %>% 
-  furniture::table1("Pupil's Extraversion (10 pt)"   = extrav, 
+  furniture::table1("Pupil's extroversion (10 pt)"   = extrav, 
                      "Teacher's Experience (years)"  = texp, 
                      "Popularity, Sociometric Score" = popular, 
                      "Popularity, Teacher Evaluated" = popteach,
@@ -148,9 +161,9 @@ data_pop %>%
 
 For a first look, its useful to plot all the data points on a single scatterplot as displayed in Figure \@ref(fig:scatter).  Due to ganularity in the rating scale, many points end up being plotted on top of each other (*overplotted*), so its a good idea to use `geom_count()` rather than `geom_point()` so the size of the dot can convey the number of points at that location [@R-ggplot2].
 
-```{r scatter, fig.cap="Disaggregate: pupil level only with extraversion treated as an continuous measure."}
+```{r scatter, fig.cap="Disaggregate: pupil level only with extroversion treated as an continuous measure."}
 # Disaggregate: pupil (level 1) only, ignore level 2's existance
-# Extraversion treated: continuous measure
+# extroversion treated: continuous measure
 data_pop %>% 
   ggplot() +
   aes(x = extrav,                                # x-axis variable
@@ -158,7 +171,7 @@ data_pop %>%
   geom_count() +                                 # POINTS w/ SIZE = COUNT
   geom_smooth(method = "lm") +                   # linear regression line
   theme_bw() +                                   # white background  
-  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+  labs(x    = "extroversion (10 pt scale)",      # x-axis label
        y    = "Popularity, Sociometric Score",   # y-axis label
        size = "Count") +                         # legend key's title  
   theme(legend.position = c(0.9, 0.2),                          # key at
@@ -172,7 +185,7 @@ data_pop %>%
 
 When the degree of overplotting as high as it is in Figure \@ref(fig:scatter), it can be useful to represent the data with density contours as seen in Figure \@ref(fig:scatter2d).  I've chosen to leave the points displayed in this redition, but color them much lighter so that they are present, but do not detract from the pattern of association.
 
-```{r scatter2d, fig.cap="Disaggregate: pupil level only with extraversion treated as an continuous measure."}
+```{r scatter2d, fig.cap="Disaggregate: pupil level only with extroversion treated as an continuous measure."}
 # visualize all the data - another way
 data_pop %>% 
   ggplot() +
@@ -182,7 +195,7 @@ data_pop %>%
   geom_density2d() +                             # DENSITY CURVES 
   geom_smooth(method = "lm", color = "red") +    # linear regression line
   theme_bw() +                                   # white background  
-  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+  labs(x    = "Extroversion (10 pt scale)",      # x-axis label
        y    = "Popularity, Sociometric Score") + # y-axis label 
   guides(size = FALSE)  +                        # don't include a legend
   scale_x_continuous(breaks = seq(from = 0, to = 10, by = 1)) + # x-ticks
@@ -192,10 +205,10 @@ data_pop %>%
 
 
 
-The argument could be made that the extraversion score should be treated as an ordinal factor instead of as a truely continuous scale since the only valid values are the whole number 1 through 10 and there is no assurance that these category assignments represent a true ratio measurement scale.  However, we must keep in mind that this was an observational study, ans as such, the number of pupils assignment each level of extraversion is not equal.
+The argument could be made that the extroversion score should be treated as an ordinal factor instead of as a truly continuous scale since the only valid values are the whole number 1 through 10 and there is no assurance that these category assignments represent a true ratio measurement scale.  However, we must keep in mind that this was an observational study, ans as such, the number of pupils assignment each level of extroversion is not equal.
 
 ```{r, results='asis'}
-# count the number of pupils in assigned each Extraversion value, 1:10
+# count the number of pupils in assigned each extroversion value, 1:10
 table <- data_pop %>% 
   group_by(extrav) %>% 
   summarise(count = n_distinct(id),
@@ -210,17 +223,17 @@ table %>%
             rownames = FALSE,
             header   = FALSE,
             type     = "html",
-            title    = "Distribution of extraversion in pupils")
+            title    = "Distribution of extroversion in pupils")
 ```
 
 
 ##### Boxplots
 
-Figure \@ref(fig:boxes) displays the same data as Figure \@ref(fig:scatter), but uses boxplots for the distribution of scores at each level of extraversion.  On one extreme, the lowest extraversion score possible was a value of "one", but only `r table[1, "count"] %>% unlist` pupils or `r table[1, "percent"] %>% unlist`% of the 2000 pupils recieved this value.  On the other extreme, the middle value of "five" was applied to `r table[5, "count"] %>% unlist` pupils or a wopping `r table[5, "percent"] %>% unlist`%. The option `varwidth=TRUE` in the `geom_boxplot()` function helps reflect such unbalanced sample sizes by allowing the width of the boxes to be proportional to the square-roots of the number of observations each box represents.
+Figure \@ref(fig:boxes) displays the same data as Figure \@ref(fig:scatter), but uses boxplots for the distribution of scores at each level of extroversion.  On one extreme, the lowest extroversion score possible was a value of "one", but only `r table[1, "count"] %>% unlist` pupils or `r table[1, "percent"] %>% unlist`% of the 2000 pupils recieved this value.  On the other extreme, the middle value of "five" was applied to `r table[5, "count"] %>% unlist` pupils or a wopping `r table[5, "percent"] %>% unlist`%. The option `varwidth=TRUE` in the `geom_boxplot()` function helps reflect such unbalanced sample sizes by allowing the width of the boxes to be proportional to the square-roots of the number of observations each box represents.
 
-```{r boxes, fig.cap="Disaggregate: pupil level only with extraversion treated as an ordinal factor.  The width of the boxes are proportional to the square-roots of the number of observations each box represents."}
+```{r boxes, fig.cap="Disaggregate: pupil level only with extroversion treated as an ordinal factor.  The width of the boxes are proportional to the square-roots of the number of observations each box represents."}
 # Disaggregate: pupil (level 1) only, ignore level 2's existance
-# Extraversion treated: ordinal factor
+# extroversion treated: ordinal factor
 ggplot(data_pop,                        # dataset's name
        aes(x    = factor(extrav),       # x-axis values - make factor!
            y    = popular,              # y-axis values
@@ -229,7 +242,7 @@ ggplot(data_pop,                        # dataset's name
   theme_bw() +                          # white background  
   guides(fill = FALSE)  +               # don't include a legend
   scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2)) +  # y-ticks
-  labs(x = "Extraversion (10 pt scale)",                    # x-axis label
+  labs(x = "extroversion (10 pt scale)",                    # x-axis label
        y = "Popularity, Sociometric Score") +               # y-axis label
   scale_fill_brewer(palette = "Spectral", direction = 1)    # select color
 ```
@@ -242,7 +255,7 @@ ggplot(data_pop,                        # dataset's name
 
 Up to this point, all investigation of this dataset has been only at the pupil level and any nesting or clustering within classes has been ignored.  Plotting is a good was to start to get an idea of the class-to-class variability.  
 
-```{r scatter3x3, fig.cap="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  First nice classes shown."}
+```{r scatter3x3, fig.cap="Illustration of the degree of class level variability in the association between extroversion and popularity. Each panel represents a class and each point a pupil in that class.  First nice classes shown."}
 # compare the first 9 classrooms becuase all of there are too many at once
 data_pop %>% 
   dplyr::filter(class <= 9) %>%                  # select ONLY NINE classes
@@ -251,7 +264,7 @@ data_pop %>%
   geom_count() +                                 # POINTS w/ SIZE = COUNT
   geom_smooth(method = "lm", color = "red") +    # linear regression line
   theme_bw() +                                   # white background  
-  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+  labs(x    = "extroversion (10 pt scale)",      # x-axis label
        y    = "Popularity, Sociometric Score",   # y-axis label
        size = "Count") +                         # legend key's title  
   guides(size = FALSE)  +                        # don't include a legend
@@ -267,7 +280,7 @@ data_pop %>%
 
 
 
-```{r scatter3x3b, fig.cap="Illustration of the degree of class level variability in the association between extraversion and popularity. Each panel represents a class and each point a pupil in that class.  A set of nine classes was chosen to show a sampling of variability.  The facet labels are not shown as the identification number probably would not be advisable for a general publication."}
+```{r scatter3x3b, fig.cap="Illustration of the degree of class level variability in the association between extroversion and popularity. Each panel represents a class and each point a pupil in that class.  A set of nine classes was chosen to show a sampling of variability.  The facet labels are not shown as the identification number probably would not be advisable for a general publication."}
 # select specific classes by number for illustration purposes
 data_pop %>% 
   dplyr::filter(class %in% c(15, 25, 33, 
@@ -278,7 +291,7 @@ data_pop %>%
   geom_count() +                                 # POINTS w/ SIZE = COUNT
   geom_smooth(method = "lm", color = "red") +    # linear regression line
   theme_bw() +                                   # white background  
-  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+  labs(x    = "extroversion (10 pt scale)",      # x-axis label
        y    = "Popularity, Sociometric Score",   # y-axis label
        size = "Count") +                         # legend key's title  
   guides(size = FALSE)  +                        # don't include a legend
@@ -303,7 +316,7 @@ ggplot(data_pop,
               size   = 0.4,
               se     = FALSE) + 
   theme_bw() +                                   # white background  
-  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+  labs(x    = "extroversion (10 pt scale)",      # x-axis label
        y    = "Popularity, Sociometric Score") + # y-axis label
   scale_x_continuous(breaks = seq(from = 0, to = 10, by = 2)) + # x-ticks
   scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2))   # y-ticks
@@ -333,7 +346,7 @@ data_pop %>%
               method = "lm",                     # linear regression line
               se     = FALSE) + 
   theme_bw() +                                   # white background  
-  labs(x    = "Extraversion (10 pt scale)",      # x-axis label
+  labs(x    = "extroversion (10 pt scale)",      # x-axis label
        y    = "Popularity, Sociometric Score") + # y-axis label
   guides(color = FALSE) +                        # don't include a legend
   scale_x_continuous(breaks = seq(from = 0, to = 10, by = 3)) + # x-ticks
@@ -386,6 +399,12 @@ $\hat{\beta_0}$ = `r coef(pop_lm_0) %>% round(2)` is the grand mean
 
 #### Model Fit
 
+
+```{r}
+performance::performance(pop_lm_0)
+```
+
+
 Residual variance:
 ```{r}
 sigma(pop_lm_0)    # standard deviation of the residuals
@@ -431,7 +450,7 @@ var(data_pop$popular)
 > LEVEL 1: Student-specific predictors:    
 >
 > * $X_1 = GEN$, pupils's gender *(girl vs. boy)*
-> * $X_2 = EXT$, pupil's extraversion *(scale: 1-10)*
+> * $X_2 = EXT$, pupil's extroversion *(scale: 1-10)*
 
 ```{block type='genericEq', echo=TRUE}
 **Single-Level Regression Equation** 
@@ -495,6 +514,21 @@ Deviance:
 $R^2$ = `r summary(pop_lm_1)$r.squared %>% round(3)` is the proportion of variance in popularity that is explained by tha pupils gender and extroversion score.
 
 
+
+```{r}
+performance::performance(pop_lm_1)
+```
+
+> Note": `BF` = the Bayes factor 
+
+```{r}
+performance::compare_performance(pop_lm_0, 
+                                 pop_lm_1, 
+                                 rank = TRUE)
+```
+
+
+
 #### Interpretation
 
 On average, girls were rated `r coef(pop_lm_1)[2] %>% round(2)` points more popular than boys with the same extroversion score, $p<.0001$.  One point higher extroversion scores were associated with `r coef(pop_lm_1)[3] %>% round(2)` points higher popularity, within each gender, $p<.0001$.  Together, these two factors account for `r 100 * summary(pop_lm_1)$r.squared %>% round(4)`% of the variance in populartiy.
@@ -505,7 +539,7 @@ On average, girls were rated `r coef(pop_lm_1)[2] %>% round(2)` points more popu
 
 Create a table to compare the two nested models:
 
-```{r lmtable, results='asis'}
+```{r lmtable, echo = FALSE, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
@@ -517,6 +551,21 @@ texreg::htmlreg(list(pop_lm_0,
                 caption            = "Single Level Models",
                 caption.above      = TRUE,
                 single.row         = TRUE)
+```
+
+
+```{r eval=FALSE}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(pop_lm_0, 
+                       pop_lm_1),
+                  custom.model.names = c("Null Model",
+                                         "With Predictors"),
+                  caption            = "Single Level Models",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 ```{block type='rmdlightbulb', echo=TRUE}
@@ -727,9 +776,11 @@ The `VarCorr()` function in the `lme4` package returns the standard deviations, 
 lme4::VarCorr(pop_lmer_0_re)   # extract random compondent: varrainces and correlations
 ```
 
+
 ```{r}
-sjstats::re_var(pop_lmer_0_re)
+insight::get_variance(pop_lmer_0_re)
 ```
+
 
 
 $$
@@ -762,12 +813,18 @@ $$
 
 
 
-#### The `sjstats` package
-
-Calculate the ICC with the `icc()` fucntion in the `sjstats` package:
+#### The `performance` package
 
 ```{r}
-sjstats::icc(pop_lmer_0_re)
+citation("performance")
+```
+
+
+
+Calculate the **ICC** with the `icc()` function in the `performance` package:
+
+```{r}
+performance::icc(pop_lmer_0_re)
 ```
 
 #### Interpretation
@@ -780,6 +837,22 @@ The ICC should be based on a Null (intercept only) model fit via REML (restricte
 ```
 
 
+#### Percent of variance explained
+
+The **marginal $R^2$** considers only the variance of the fixed effects, while the **conditional $R^2$** takes both the fixed *and* random effects into account. The random effect variances are actually the mean random effect variances, thus the $R^2$ value is also appropriate for mixed models with random slopes or nested random effects *(see Johnson 2014*)*.
+
+> Johnson, P. C. D. (2014). Extension of Nakagawa & Schielzeth’s R2 GLMM to random slopes models. Methods in Ecology and Evolution, 5(9), 944–946. doi: 10.1111/2041-210X.12225
+
+```{r}
+performance::r2(pop_lmer_0_re)  # for MLM's it computes Nakagawa's R2
+```
+
+
+
+```{r}
+performance::performance(pop_lmer_0_re)
+```
+
 ### Add Predictors to the Model
 
 @hox2017 labeled this as "$M_1$" in chapter 2 for their Table 2.1 (page 14), but adjusted it for Tables 2.2 (page 15) and 2.3 (page 17).
@@ -788,7 +861,7 @@ The ICC should be based on a Null (intercept only) model fit via REML (restricte
 > LEVEL 1: Student-specific predictors:    
 >
 > * $X_1 = GEN$, pupils's gender *(girl vs. boy)*
-> * $X_2 = EXT$, pupil's extraversion *(scale: 1-10)*
+> * $X_2 = EXT$, pupil's extroversion *(scale: 1-10)*
 
 > LEVEL 2: Class-specific Predictors:
 > 
@@ -895,15 +968,15 @@ Note: Convergence issues MAY signify problems in the model specification.
 #### Fit the Model
   
 ```{r, echo=TRUE}
-pop_lmer_0_ml <- lme4::lmer(popular ~ 1 + (1|class), 
-                            data   = data_pop,
-                            REML   = FALSE)        # refit via ML to compare the model below to 
+pop_lmer_0_ml <- lmerTest::lmer(popular ~ 1 + (1|class), 
+                                data   = data_pop,
+                                REML   = FALSE)        # refit via ML to compare the model below to 
 
 
-pop_lmer_1_ml <- lme4::lmer(popular ~ sex + extrav + texp + (sex + extrav|class), 
-                            data   = data_pop,
-                            REML   = FALSE,
-                            control = lmerControl(optimizer ="Nelder_Mead")) #helps converge
+pop_lmer_1_ml <- lmerTest::lmer(popular ~ sex + extrav + texp + (sex + extrav|class), 
+                                data   = data_pop,
+                                REML   = FALSE,
+                                control = lmerControl(optimizer ="Nelder_Mead")) #helps converge
 
 summary(pop_lmer_1_ml)
 ```
@@ -914,7 +987,7 @@ After accounting for the heiarchical nesting of students in classes, girls were 
 
 Reproduce Table 2.1 on the top of page 14 [@hox2017]
 
-```{r, results='asis'}
+```{r, echo=FALSE, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
@@ -930,7 +1003,21 @@ texreg::htmlreg(list(pop_lm_0,
                 single.row         = TRUE)
 ```
 
+```{r, eval=FALSE}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
 
+texreg::screenreg(list(pop_lm_0, 
+                       pop_lmer_0_ml, 
+                       pop_lmer_1_ml),
+                  custom.model.names = c("Single-level", 
+                                         "M0: int only", 
+                                         "M1: w pred"),
+                  caption            = "Hox Table 2.1 on the top of page 14",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
+```
 
 
 The regression tables from the `texreg` package include estimates of the covariances between random components.
@@ -969,7 +1056,7 @@ $$
 
 ### Testing Random Components
 
-In Hox's table 2.1 (page 14) we see that the MLM with predictors ($M_0$) includes a random compondnt with virtually no variance.  This is likely why the model didn't easily converge (a different optimizer was employed).  It makes sence to remove the random slope component for gender and refit the model.  While we are at it, we will also fit a third model dropping the second random slope component for extraversion.
+In Hox's table 2.1 (page 14) we see that the MLM with predictors ($M_0$) includes a random compondnt with virtually no variance.  This is likely why the model didn't easily converge (a different optimizer was employed).  It makes sence to remove the random slope component for gender and refit the model.  While we are at it, we will also fit a third model dropping the second random slope component for extroversion.
 
 #### Fit Nested Models
 
@@ -996,7 +1083,7 @@ Create a table to compare the three nested models:
 
 The middle column below reproduces Hox's Table 2.2 found on the bottom of page 15 [@hox2017], except the values differ slightly becuase here the model was fit via `REML` where as in the text, Hox used `ML`.
 
-```{r, results='asis'}
+```{r, echo=FALSE, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
@@ -1007,7 +1094,17 @@ texreg::htmlreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
                 caption.above      = TRUE,
                 single.row         = TRUE)
 ```
+```{r, eval = FALSE}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
 
+texreg::screenreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
+                  custom.model.names = c("M1", "M1a", "M1b"),
+                  caption            = "Assessing Significance of Random Slopes",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
+```
 
 #### Compare Fit
 
@@ -1039,7 +1136,9 @@ When using the 'anova()' function to conduct a LRT for RANDOM effects, make sure
 These two models are identical, except for the inclusing/exclusion of the random specification of the level 1 `sex` predictor.  Note, both models were fit with REML.  Although we are dropping only ONE variance component, we are also dropping TWO covariances (`sex` paired with both the random intercept and random slope for `extrav`).  This results in a $\chi^2$ test with THREE degrees of freedom.
 
 ```{r}
-anova(pop_lmer_1_re, pop_lmer_1a_re, refit = FALSE)  # don't let it refit the models via LM
+anova(pop_lmer_1_re, 
+      pop_lmer_1a_re, 
+      refit = FALSE)  # don't let it refit the models via LM
 ```
 
 The NON-significance likelihood ratio test (LRT: $\chi^2(3) = 1.51$, $p = .679$) conveys that the more complex model does NOT fit the data better.  Thus the more SIMPLE model does just as good of a job.  This is evidence for the EXCLUSION of `sex` as a random component.
@@ -1051,7 +1150,9 @@ The NON-significance likelihood ratio test (LRT: $\chi^2(3) = 1.51$, $p = .679$)
 These two models are identical, except for the inclusing/exclusion of the random specification of the level 1 `extrav` predictor.  Note, both models were fit with REML.  Although we are dropping only ONE variance component, we are also dropping ONE covariances (`extrav` paired with the random intercept).  This results in a $\chi^2$ test with TWO degrees of freedom.
 
 ```{r}
-anova(pop_lmer_1a_re, pop_lmer_1b_re, refit = FALSE)  # don't let it refit the models via LM
+anova(pop_lmer_1a_re, 
+      pop_lmer_1b_re, 
+      refit = FALSE)  # don't let it refit the models via LM
 ```
 
 The significance likelihood ratio test (LRT: $\chi^2(2) = 50.26$, $p < .0001$) conveys that the more complex model DOES fit the data better.  Thus the more COMPLEX model does just as good of a job.  This is evidence for the INCLUSION of `extrav` as a random component.
@@ -1089,7 +1190,7 @@ Examples
 #### Fit Nested Models
 
 
-> "Given the significant variance of the regression coefficient of pupil extraversion across the classes, it is attractive to attempt to predict its variation using class-level variables.  We have one class-level variable: teacher experience."
+> "Given the significant variance of the regression coefficient of pupil extroversion across the classes, it is attractive to attempt to predict its variation using class-level variables.  We have one class-level variable: teacher experience."
 >
 > @hox2017, Chapter 2, page 16
 
@@ -1116,12 +1217,8 @@ pop_lmer_4_ml  <- lme4::lmer(popular ~ extrav*texp*sex + (extrav|class),
 
 Create a table to compare the two nested models:
 
-```{r, include=FALSE}
-texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml))
-```
 
-
-```{r, results='asis'}
+```{r, echo=FALSE, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
@@ -1134,16 +1231,24 @@ texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
                 single.row         = TRUE)
 ```
 
+```{r, eval=FALSE, results='asis'}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
 
-Investigate further interactions, not shown in by @hox2017.
-
-```{r, include=FALSE}
-texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml))
+texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
+                  custom.model.names = c("M1a: Main Effects",
+                                         "M2: With Interaction"),
+                  caption            = "Hox Table 2.3 on page 17",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 
+Investigate further interactions, not shown in by @hox2017.
 
-```{r, results='asis'}
+
+```{r, echo=FALSE, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
@@ -1157,12 +1262,25 @@ texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml
                 caption.above      = TRUE,
                 single.row         = TRUE)
 ```
+```{r, eval=FALSE}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
 
+texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
+                  custom.model.names = c("M1a: Main Effects",
+                                         "M2: With Interaction",
+                                         "Add 2-way Inter",
+                                         "Add 3-way Interaction"),
+                  caption            = "Hox Table 2.3 on page 17",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
+```
 
 
 #### Compare Fit
 
-Since these two models only differe by the inclusing/exclusing of a FIXED effect, they both employed `ML` estimation.  Thus we do not need worry about the `anova()` function refitting the models prior to conduction the LRT. 
+Since these two models only differ by the including/exclusing of a FIXED effect, they both employed `ML` estimation.  Thus we do not need worry about the `anova()` function refitting the models prior to conduction the LRT. 
 
 ```{r}
 anova(pop_lmer_1a_ml, pop_lmer_2_ml)
@@ -1184,6 +1302,14 @@ anova(pop_lmer_2_ml, pop_lmer_4_ml)
 
 The significance likelihood ratio test (LRT: $\chi^2(3) = 3.36$, $p=.339$) conveys that the more complex model does NOT fit the data better.  Thus the more SIMPLE model does just as good of a job.  This is evidence for the EXCLUSION of the additional 3-way interactions as a fixed components.
 
+````{r}
+performance::compare_performance(pop_lmer_1a_ml, 
+                                 pop_lmer_2_ml,
+                                 pop_lmer_3_ml,
+                                 pop_lmer_4_ml,
+                                 rank = TRUE)
+```
+
 ### Final Model
 
 #### Refit with REML
@@ -1194,23 +1320,73 @@ pop_lmer_2_re  <- lme4::lmer(popular ~ sex + extrav*texp + (extrav|class),
                              REML = TRUE)       # re-fit the final model via REML
 ```
 
-#### Parameters
-
-```{r, results='asis'}
+#### Parameter Summary Table
+```{r, echo=FALSE, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
 
-texreg::htmlreg(list(pop_lmer_2_ml),
+texreg::htmlreg(list(pop_lmer_2_re),
                 custom.model.names = c("Final Model"),
                 caption            = "MLM for Popularity",
                 caption.above      = TRUE,
                 single.row         = TRUE)
 ```
 
+```{r, eval=FALSE}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(pop_lmer_2_re),
+                  custom.model.names = c("Final Model"),
+                  caption            = "MLM for Popularity",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
+```
 
 
-#### Visualization 
+#### Visualization - `interactions` package
+
+**Predictors:** involved in the interaction ...
+* `extrav` 1 value per student, continuous, score with range 1-10    
+* `texp` 1 value per class, continuous, years with range 2-25
+
+
+Fastest way: all defaults
+
+```{r}
+interactions::interact_plot(pop_lmer_2_re,              # model name
+                            pred = extrav,              # x-axis 'predictor' variable name
+                            modx = texp)                # 'moderator' variable name
+```
+
+Get fancier
+
+```{r}
+interactions::interact_plot(pop_lmer_2_re,                # model name
+                            pred = extrav,                # x-axis 'predictor' variable name
+                            modx = texp,                  # 'moderator' variable name
+                            modx.values = c(5, 15, 25),   # values to pick for a continuous "modx"
+                            interval = TRUE,              # adds CI bands for pop/marginal mean
+                            y.label = "Estimated Marginal Mean\nPupil Popularity, Mean Rating of Classroom Peers",
+                            x.label = "Pupil's Extroversion, as Rated by Teacher",
+                            legend.main = "Teacher's Experience",
+                            modx.labels = c("5 years",
+                                            "15 years",
+                                            "25 years"),
+                            colors = c("black", "black", "black")) +   # default is "Blues" for modx.values
+  theme_bw() +
+  theme(legend.key.width = unit(2, "cm"),
+        legend.background = element_rect(color = "Black"),
+        legend.position = c(1, 0),
+        legend.justification = c(1.1, -0.1)) +
+  scale_x_continuous(breaks = seq(from = 0, to = 10, by = 2)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 1)) 
+```
+
+
+#### Visualization - `effects` & `ggplot2` packages
 
 Get Estimated Marginal Means - default 'nice' predictor values:
 
@@ -1245,7 +1421,7 @@ effects::Effect(focal.predictors = c("sex", "extrav", "texp"),
 
 **Basic, default plot**
 
-Other than selecting three illustrative values for the teacher extraversion rating, most everything is left to default.
+Other than selecting three illustrative values for the teacher extroversion rating, most everything is left to default.
 
 ```{r}
 effects::Effect(focal.predictors = c("sex", "extrav", "texp"),
@@ -1330,7 +1506,7 @@ effects::Effect(focal.predictors = c("extrav", "texp"),  # choose not to investi
   theme(legend.key.width = unit(2, "cm"),
         legend.background = element_rect(color = "Black"),
         legend.position = c(1, 0),
-        legend.justification = c(1, 0)) +
+        legend.justification = c(1.1, -0.1)) +
   scale_linetype_manual(values = c("solid", "dashed", "dotted")) +
   scale_x_continuous(breaks = seq(from = 0, to = 10, by = 2)) +
   scale_y_continuous(breaks = seq(from = 0, to = 10, by = 1))  
@@ -1338,6 +1514,67 @@ effects::Effect(focal.predictors = c("extrav", "texp"),  # choose not to investi
 
 #### Interpretation
 
+Form more infromation, see the [vingette page for the `redre` package](https://goodekat.github.io/redres/articles/redres-vignette.html).
+
 After accounting for class-to-class variation and the effect of gender, a positive association was found between teacher rated extroversion and peer rated popularity.  This relationship was more marked for less experienced teachers.
 
+
+#### Residual Plots
+
+```{r}
+sjPlot::plot_model(pop_lmer_2_re,
+                   type = "diag")
+```
+
+
+
+
+**Standardized residuals vs. fitted values**
+
+You always want to use *studentized, conditional* residuals for MLM!
+
+As you look across the plot, left to right:
+
+* GOOD = no pattern & HOV
+* BAD = any pattern or change in the spread
+
+This plot looks great!
+
+```{r}
+redres::plot_redres(pop_lmer_2_re, type = "std_cond")
+```
+**Standardized residuals vs. a predictor's values**
+
+You are looking for the same things as above.  Note: the vertical stripes are fine, as they just reflect the fact that the `extrav` variable was a whole number value, ranging from one to ten. 
+
+```{r}
+redres::plot_redres(pop_lmer_2_re, type = "std_cond", xvar = "extrav")
+```
+
+
+**Normal Quantile plot of Residuals**
+
+As you look across the plot, along the diagonal:
+
+* GOOD: roughly a straight line 
+* BAD: curvature (S-shaped)
+
+This plot looks great!  The slight flare at the far ends is not too drastic.
+
+```{r}
+redres::plot_resqq(pop_lmer_2_re)
+```
+Our model had both random intercepts and random slopes (RIAS).  The panel on the left is more the random intercepts and the right is of random slopes (for the `extrav` predictor).
+
+You are looking for the same things as above...and these are not too bad!
+
+```{r}
+redres::plot_ranef(pop_lmer_2_re)
+```
+
+To explor more plots, you can use the `shiny` app by running the code below:
+
+```{r, eval=FALSE}
+redres::launch_redres(pop_lmer_2_re)
+```
 

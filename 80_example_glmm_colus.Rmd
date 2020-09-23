@@ -104,7 +104,8 @@ psych::headTail(data_raw)
 ```{r}
 data_long <- data_raw %>% 
   dplyr::mutate(id = factor(id)) %>% 
-  dplyr::mutate(timeF = factor(time))
+  dplyr::mutate(timeF = factor(time)) %>% 
+  dplyr::mutate(group = factor(group))
 
 str(data_long) # see the structure
 

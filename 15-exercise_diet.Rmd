@@ -16,7 +16,7 @@ library(pander)       # nice looking genderal tabulations
 library(furniture)    # nice table1() descriptives
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 library(psych)        # contains some useful functions, like headTail
-library(sjstats)      # ICC calculations
+library(performance) # ICC calculations
 library(sjPlot)       # Visualization for Models
 library(effects)      # Effec displays for Models
 
@@ -149,7 +149,7 @@ texreg::htmlreg(fit_lmer_0re)
 ### ICC
 
 ```{r}
-sjstats::icc(fit_lmer_0re)
+performance::icc(fit_lmer_0re)
 ```
 
 ### Add fixed effects: level specific

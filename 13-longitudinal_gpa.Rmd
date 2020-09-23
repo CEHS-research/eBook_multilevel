@@ -19,7 +19,7 @@ library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 library(psych)        # contains some useful functions, like headTail
 library(sjstats)      # ICC calculations
 library(sjPlot)       # Visualization for Models
-library(effects)      # Effec displays for Models
+library(effects)      # Effect displays for Models
 
 library(lme4)         # non-linear mixed-effects models
 
@@ -119,7 +119,7 @@ fit_lmer_0_re <- lme4::lmer(gpa ~ 1 + (1|student),
 ```
 
 ```{r}
-sjstats::icc(fit_lmer_0_re)
+performance::icc(fit_lmer_0_re)
 ```
 
 
@@ -133,7 +133,7 @@ fit_lmer_1_re <- lme4::lmer(gpa ~ semc + (1|student),
 ```
 
 ```{r}
-sjstats::icc(fit_lmer_1_re)
+performance::icc(fit_lmer_1_re)
 ```
 
 After accounting for the linear change in GPA over semesters, about half of the remaining variance in GPA scores is attributable person-to-person differences.
@@ -175,11 +175,11 @@ anova(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml)
 ### Variance Explained by linear TIME at Level ONE
 
 ```{r}
-sjstats::re_var(fit_lmer_0_ml)  # baseilne
+lme4::VarCorr(fit_lmer_0_ml)  # baseilne
 ```
 
 ```{r}
-sjstats::re_var(fit_lmer_1_ml)  # model to compare
+lme4::VarCorr(fit_lmer_1_ml)  # model to compare
 ```
 
 #### Raudenbush and Bryk

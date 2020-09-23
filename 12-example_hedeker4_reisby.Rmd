@@ -543,7 +543,7 @@ effects::Effect(focal.predictors = "week",
 ### Intra-individual Correlation (ICC)
 
 ```{r}
-sjstats::icc(fit_lmer_week_RI_reml)
+performance::icc(fit_lmer_week_RI_reml)
 ```
 
 **Interpretation**  Nearly HALF of the variance in depression scores not explained by the linear effect of time is attributable to person-to-person differences.  Thus, subjects display considerable heterogeneity in depression levels.
@@ -598,7 +598,7 @@ sigma(fit_lm_week_ml)^2
 
 
 ```{r}
-sjstats::re_var(fit_lmer_week_RI_reml)  # in longitudinal data, a group of observations = a participant or person
+lme4::VarCorr(fit_lmer_week_RI_reml)  # in longitudinal data, a group of observations = a participant or person
 ```
 
 > "One statistician's error term is another's career!"

@@ -328,7 +328,7 @@ summary(fit_read_lm_3)
 
 
 ```{r}
-sjstats::r2(fit_read_lm_3)
+performance::r2(fit_read_lm_3)
 ```
 
 
@@ -456,7 +456,7 @@ lme4::VarCorr(fit_read_0re) %>%
 ```
 
 ```{r}
-sjstats::re_var(fit_read_0re)
+insight::get_variance(fit_read_0re)
 ```
 
 
@@ -485,10 +485,10 @@ Then you can manually caluclate the ICC.
 0.392 / (0.392 + 5.045)
 ```
 
-Or you can use the `icc()` function in the `sjstats` package.
+Or you can use the `icc()` function in the `performance` package.
 
 ```{r}
-sjstats::icc(fit_read_0re)
+performance::icc(fit_read_0re)
 ```
 
 
@@ -576,7 +576,9 @@ Extract the variance-covariance estimates:
 
 BL = BAseline: The Null Model (fit via REML)
 ```{r}
-sjstats::re_var(fit_read_0re)
+lme4::VarCorr(fit_read_0re) %>% 
+  print(comp = c("Variance", "Std.Dev"),
+        digits = 4)
 ```
 $$
 \sigma^2_{u0-BL} = 0.392 \\
@@ -587,7 +589,9 @@ $$
 
 MC = Model to Compare: Model with Predictor (fit via REML)
 ```{r}
-sjstats::re_var(fit_read_1re)
+lme4::VarCorr(fit_read_1re) %>% 
+  print(comp = c("Variance", "Std.Dev"),
+        digits = 4)
 ```
 
 $$
@@ -621,7 +625,7 @@ Calculate the value by hand:
 
 Or use the `sjstats` package to help out:
 ```{r}
-1 - sum(sjstats::re_var(fit_read_1re)) / sum(sjstats::re_var(fit_read_0re))
+# 1 - sum(sjstats::re_var(fit_read_1re)) / sum(sjstats::re_var(fit_read_0re))
 ```
 
 This means nearly 30% of the variance in reading scores, above and beyond that accounted for by school membership *(i.e. school makeup or school-to-school variation)*, is attributable to vocabulary scores. 
@@ -1358,7 +1362,7 @@ From the `sjstats::r2()` documentation, for mixed models:
 * **conditional r-squared** takes both the fixed and random effects into account
 
 ```{r}
-sjstats::r2(fit_read_11re_s)
+performance::r2(fit_read_11re_s)
 ```
 
 
