@@ -73,8 +73,8 @@ btb_long <- btb_wide %>%
   tidyr::pivot_longer(cols = c(bdi.2m, bdi.4m, bdi.6m, bdi.8m),  # all existing variables (not quoted)
                       names_to = "month", 
                       names_pattern = "bdi.(.)m",
-                      names_ptype = list(month = numeric()),
                       values_to = "bdi") %>% 
+  dplyr::mutate(month = as.numeric(month)) %>% 
   dplyr::filter(complete.cases(id, bdi, treatment, month)) %>% 
   dplyr::arrange(id, month) %>% 
   dplyr::select(id, treatment, drug, length, bdi.pre, month, bdi)

@@ -12,8 +12,9 @@ knitr::opts_chunk$set(comment     = "",
                       fig.height  = 4)        # set default figure height to 3 inches
 ```
 
+
 ```{r, message=FALSE, error=FALSE}
-library(tidyverse)
+library(tidyverse)    # basically everything ;)
 library(haven)        # read in SPSS dataset
 library(furniture)    # nice table1() descriptives
 library(stargazer)    # display nice tables: summary & regression
@@ -22,7 +23,8 @@ library(psych)        # contains some useful functions, like headTail
 library(car)          # Companion to Applied Regression
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(lmerTest)     # Tests on lmer objects
-library(sjstats)      # ICC calculations
+library(performance)  # ICC calculations
+library(interactions) # plotting interactions
 library(effects)      # Effects for regression models
 library(optimx)       # Different optimizers to solve mlm's
 ```
@@ -129,11 +131,21 @@ data_nurse %>%
 
 Most posters, journal articles, and reports start with a table of descriptive statistics.  Since it tends to come first, this type of table is often refered to as *Table 1*.  The `stargazer()` function can be used to create such a table, but only for the entire dataset [@R-stargazer].  I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.
 
-```{r, results='asis'}
+
+```{r, eval=FALSE}
 # Knit to Website: type = "html" 
 # Knit to PDF:     type = "latex"
 # View on Screen:  type = "text"
 
+data_nurse %>% 
+  data.frame() %>% 
+  stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
+                       header = FALSE,
+                       type = "text")
+```
+
+
+```{r, echo=FALSE, results='asis'}
 data_nurse %>% 
   data.frame() %>% 
   stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
@@ -146,7 +158,7 @@ data_nurse %>%
 
 Tyson Barrett's  **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics.  Full documentation can be accessed by executing `?furniture::table1`.    
 
-```{r, results='asis'}
+```{r, eval=FALSE}
 # Knit to Website: output = "html" 
 # Knit to PDF:     output = "latex2"
 # View on Screen:  output = ""text", or "markdown", "html"
@@ -156,11 +168,19 @@ data_nurse %>%
                     splitby    = ~ expcon,                                              # var to divide sample by
                     test       = TRUE,                                                  # test groups different?
                     type       = "full",                                                # give the test statistic
-                    output     = "html",                                                # output for html
+                    output     = "text",                                                # output for html
                     caption    = "Compare Intervention groups on five main variables")  # title
 ```
 
-
+```{r, echo=FALSE, results='asis'}
+data_nurse %>% 
+  furniture::table1(age, genderF, experien, wardtype, hospsize, hospsizeN, hospsizeNG,
+                    splitby    = ~ expcon,                                              # var to divide sample by
+                    test       = TRUE,                                                  # test groups different?
+                    type       = "full",                                                # give the test statistic
+                    output     = "html",                                                # output for html
+                    caption    = "Compare Intervention groups on five main variables")  # title
+```
 
 
 ```{block type='rmdlightbulb', echo=TRUE}
@@ -192,18 +212,19 @@ nurse_lmer_0_ml <- lmerTest::lmer(stress ~ 1 +              # Fixed Intercept fo
                                   REML = FALSE)             # fit via ML for comparing FIXED effects inclusion
 ```
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_0_re))
-```
 
 ```{r, eval = FALSE}
-texreg::texreg(list(nurse_lmer_0_ml, 
-                    nurse_lmer_0_re),
-               custom.model.names = c("M0: Null, ML", 
-                                      "M0: Null, REML"),
-               caption            = "NULL Model: different estimation methods",
-               caption.above      = TRUE,
-               single.row         = TRUE)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(nurse_lmer_0_ml, 
+                       nurse_lmer_0_re),
+                  custom.model.names = c("M0: Null, ML", 
+                                         "M0: Null, REML"),
+                  caption            = "NULL Model: different estimation methods",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 
@@ -319,20 +340,20 @@ nurse_lmer_0_re_2level <- lmerTest::lmer(stress ~ 1 + (1|wardid),  # each hospit
 
 
 ```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_0_re_2level, 
-                    nurse_lmer_0_re),
-               custom.model.names = c("2 levels", 
-                                      "3 levels"),
-               caption            = "MLM: Two or Three Levels?",
-               caption.above      = TRUE,
-               single.row         = TRUE)
-```
-
-```{r, echo=FALSE, results='asis'}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
 
+texreg::screenreg(list(nurse_lmer_0_re_2level, 
+                       nurse_lmer_0_re),
+                  custom.model.names = c("2 levels", 
+                                         "3 levels"),
+                  caption            = "MLM: Two or Three Levels?",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
+```
+
+```{r, echo=FALSE, results='asis'}
 texreg::htmlreg(list(nurse_lmer_0_re_2level, 
                      nurse_lmer_0_re),
                 custom.model.names = c("2 levels", 
@@ -374,18 +395,20 @@ nurse_lmer_1_ml <- lmerTest::lmer(stress ~ expcon +             # experimental c
 
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_1_ml))
-```
+
 
 ```{r, eval = FALSE}
-texreg::texreg(list(nurse_lmer_0_ml, 
-                    nurse_lmer_1_ml),
-               custom.model.names = c("M0: null", 
-                                      "M1: fixed pred"),
-               caption            = "Nested Models: Fixed effects via ML",
-               caption.above      = TRUE,
-               single.row         = TRUE)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(nurse_lmer_0_ml, 
+                       nurse_lmer_1_ml),
+                  custom.model.names = c("M0: null", 
+                                         "M1: fixed pred"),
+                  caption            = "Nested Models: Fixed effects via ML",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 
@@ -442,21 +465,23 @@ nurse_lmer_1b_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental 
 
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_1_ml, nurse_lmer_1a_ml, nurse_lmer_1b_ml))
-```
+
 
 
 ```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_1_ml, 
-                    nurse_lmer_1a_ml, 
-                    nurse_lmer_1b_ml),
-               custom.model.names = c("Factor", 
-                                      "0 vs 1", 
-                                      "Centered"),
-               caption            = "MLM: Model 1 - Expereimental Condiditon Coding (2-levels)",
-               caption.above      = TRUE,
-               single.row         = TRUE)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(nurse_lmer_1_ml, 
+                       nurse_lmer_1a_ml, 
+                       nurse_lmer_1b_ml),
+                  custom.model.names = c("Factor", 
+                                         "0 vs 1", 
+                                         "Centered"),
+                  caption            = "MLM: Model 1 - Expereimental Condiditon Coding (2-levels)",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 ```{r, echo=TRUE, results='asis'}
@@ -500,21 +525,23 @@ nurse_lmer_1d_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental 
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_1b_ml, nurse_lmer_1c_ml, nurse_lmer_1d_ml))
-```
+
 
 
 ```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_1b_ml, 
-                    nurse_lmer_1c_ml, 
-                    nurse_lmer_1d_ml),
-               custom.model.names = c("Factor", 
-                                      "0 vs 1", 
-                                      "Centered"),
-               caption            = "MLM: Model 1 - Hospital Coding (3-levels)",
-               caption.above      = TRUE,
-               single.row         = TRUE)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(nurse_lmer_1b_ml, 
+                       nurse_lmer_1c_ml, 
+                       nurse_lmer_1d_ml),
+                  custom.model.names = c("Factor", 
+                                         "0 vs 1", 
+                                         "Centered"),
+                  caption            = "MLM: Model 1 - Hospital Coding (3-levels)",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 ```{r, echo=FALSE, results='asis'}
@@ -564,18 +591,20 @@ nurse_lmer_2_re <- lmerTest::lmer(stress ~ expconNG +             # experimental
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_1d_re, nurse_lmer_2_re))
-```
+
 
 ```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_1d_re, 
-                    nurse_lmer_2_re),
-               custom.model.names = c("M1: RI", 
-                                      "M2: RIAS"),
-               caption            = "Nested Models: Random Slope via REML",
-               caption.above      = TRUE,
-                single.row         = TRUE)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(nurse_lmer_1d_re, 
+                       nurse_lmer_2_re),
+                  custom.model.names = c("M1: RI", 
+                                         "M2: RIAS"),
+                  caption            = "Nested Models: Random Slope via REML",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 
@@ -627,23 +656,25 @@ nurse_lmer_3_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental c
                                     hospsizeNG +                # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED   
                                     expconNG*hospsizeNG +       # CROSS-LEVEL interaction
                                     (1|hospital/ward) +         # Random Intercepts for wards within hospitals
-                                    (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!) 
+                                    (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary within a ward!) 
                                   data = data_nurse,
                                   REML = FALSE)                 # fit via ML for nested FIXED Effects
 ```
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_2_ml, nurse_lmer_3_ml))
-```
+
 
 ```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_2_ml, 
-                     nurse_lmer_3_ml),
-                custom.model.names = c("M2: RAIS", 
-                                       "M3: Xlevel Int"),
-                caption            = "Nested Models: Fixed Cross-Level Interaction via ML",
-                caption.above      = TRUE,
-                single.row         = TRUE)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(nurse_lmer_2_ml, 
+                       nurse_lmer_3_ml),
+                  custom.model.names = c("M2: RAIS", 
+                                         "M3: Xlevel Int"),
+                  caption            = "Nested Models: Fixed Cross-Level Interaction via ML",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 ```{r, echo=FALSE, results='asis'}
@@ -690,16 +721,18 @@ nurse_lmer_3_re <- lmerTest::lmer(stress ~ expconNG +           # experimental c
 
 ### Table of Estimated Parameters
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_3_re), single.row = TRUE)
-```
+
 
 ```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_3_re),
-               custom.model.names = c("M3: Xlevel Int"),
-               caption            = "Final Model: with REML",
-               caption.above      = TRUE,
-               single.row         = TRUE)
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(nurse_lmer_3_re),
+                  custom.model.names = c("M3: Xlevel Int"),
+                  caption            = "Final Model: with REML",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 
@@ -849,22 +882,21 @@ The approach presented by @hox2017 and shown above involved mean-centering categ
 
 @hox2017 presents a table on page 23 comparing various models.  Note, that table includes models only fit via maximum likelihood, not REML.  Also, the model $M_3$: with cross-level interaction is slightly different for an unknown reason.
 
-```{r, include=FALSE}
+
+
+```{r, eval=FALSE}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
 texreg::screenreg(list(nurse_lmer_0_ml, 
                        nurse_lmer_1d_ml, 
                        nurse_lmer_2_ml, 
-                       nurse_lmer_3_ml))
-```
-
-```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_0_ml, 
-                    nurse_lmer_1d_ml, 
-                    nurse_lmer_2_ml, 
-                    nurse_lmer_3_ml),
-               custom.model.names = c("M0", "M1", "M2", "M3"),
-               caption            = "Hox Table 2.5: Models for stress in hospitals and wards",
-               caption.above      = TRUE,
-               single.row         = TRUE)
+                       nurse_lmer_3_ml),
+                  custom.model.names = c("M0", "M1", "M2", "M3"),
+                  caption            = "Hox Table 2.5: Models for stress in hospitals and wards",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
 ```
 
 ```{r, echo=FALSE, results='asis'}

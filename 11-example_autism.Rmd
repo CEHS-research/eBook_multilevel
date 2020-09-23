@@ -12,15 +12,16 @@ knitr::opts_chunk$set(comment     = "",
 
 ```{r, message=FALSE, error=FALSE}
 library(tidyverse)    # all things tidy
-library(pander)       # nice looking genderal tabulations
-library(furniture)    # nice table1() descriptives
+library(pander)       # nice looking general tabulations
+library(furniture)    # nice table1() descriptive
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 library(psych)        # contains some useful functions, like headTail
+library(performance)
 library(sjstats)      # ICC calculations
-library(sjPlot)       # Quick predicitive and diagnostic plots 
+library(sjPlot)       # Quick predictive and diagnostic plots 
 library(effects)      # Estimated Marginal Means
 library(VIM)          # Visualization and Imputation of Missing Values 
-library(naniar)       # Summaries and Visualisations for Missing Data
+library(naniar)       # Summaries and Visualizations for Missing Data
 
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 
@@ -725,18 +726,16 @@ lme4::VarCorr(fit_lmer_2a_re)%>%
 ```
 
 
-<<<<<<< HEAD
-
 
 
 ```{r, include=FALSE}
 lme4::VarCorr(fit_lmer_2a_re) %>% 
-  data.frame
-=======
-```{r}
+  data.frame()
+
 fit_lmer_2a_re_sigmas <- lme4::VarCorr(fit_lmer_2a_re) %>% 
   data.frame()
->>>>>>> master
+
+fit_lmer_2a_re_sigmas
 ```
 
 
@@ -751,7 +750,7 @@ fit_lmer_2a_re_sigmas <- lme4::VarCorr(fit_lmer_2a_re) %>%
 
 * $e_{ti}$ the residuals associated with observation at time $t$ on child $i$
 
-<<<<<<< HEAD
+
 ```{r, echo=FALSE, results="hide"}
 sigma2_e <- lme4::VarCorr(fit_lmer_2a_re) %>% 
   data.frame %>% 
@@ -761,8 +760,8 @@ sigma2_e <- lme4::VarCorr(fit_lmer_2a_re) %>%
 sigma2_e
 ```
 
-=======
-```{r}
+
+```{r, echo=FALSE, results="hide"}
 sigma_e <- fit_lmer_2a_re_sigmas %>% 
   dplyr::filter(grp == "Residual") %>% 
   dplyr::pull(vcov)
@@ -771,16 +770,12 @@ sigma_e
 ```
 
 
->>>>>>> master
+
 
 $$
 \sigma^2 = \sigma^2_e 
          = VAR[e_{ti}] 
-<<<<<<< HEAD
          = `r round(sigma2_e, 3)`
-=======
-         = `r sigma_e %>% round(3)`
->>>>>>> master
 $$
 
 
@@ -792,7 +787,7 @@ Random LINEAR effect of age variance
 
 * $u_{1i}$ the DIFFERENCE between child $i$'s specific linear component for age and the fixed linear component for age, given their SICD group
 
-<<<<<<< HEAD
+
 ```{r, echo=FALSE, results="hide"}
 sigma2_u1 <- lme4::VarCorr(fit_lmer_2a_re) %>% 
   data.frame %>% 
@@ -800,31 +795,28 @@ sigma2_u1 <- lme4::VarCorr(fit_lmer_2a_re) %>%
   dplyr::select(vcov)
 
 sigma2_u1
-=======
-```{r}
+```
+
+```{r, echo=FALSE, results="hide"}
 tau_11 <- fit_lmer_2a_re_sigmas %>% 
   dplyr::filter(grp == "childid", var1 == "age2", is.na(var2)) %>% 
   dplyr::pull(vcov)
 
 tau_11
->>>>>>> master
 ```
 
 $$
 \tau_{11} = \sigma^2_{u1} 
           = VAR[u_{1i}] 
-<<<<<<< HEAD
           = `r sigma2_u1 %>% round(2)`
-=======
           = `r tau_11 %>% round(2)`
->>>>>>> master
 $$
 
 Random QUADRATIC effect of age variance
 
 * $u_{2i}$ the DIFFERENCE between child $i$'s specific quadratic component for age and the fixed quadratic component for age, given their SICD group
 
-<<<<<<< HEAD
+
 ```{r, echo=FALSE, results="hide"}
 sigma2_u2 <- lme4::VarCorr(fit_lmer_2a_re) %>% 
   data.frame %>% 
@@ -832,24 +824,20 @@ sigma2_u2 <- lme4::VarCorr(fit_lmer_2a_re) %>%
   dplyr::select(vcov)
 
 sigma2_u2
-=======
-```{r}
+```
+
+```{r, echo=FALSE, results="hide"}
 tau_22 <- fit_lmer_2a_re_sigmas %>% 
   dplyr::filter(grp == "childid", var1 == "I(age2^2)", is.na(var2)) %>% 
   dplyr::pull(vcov)
 
 tau_22
->>>>>>> master
 ```
 
 $$
 \tau_{22} = \sigma^2_{u2} 
           = VAR[u_{2i}] 
-<<<<<<< HEAD
-          = `r sigma2_u2 %>% round(2)`
-=======
           = `r tau_22 %>% round(2)`
->>>>>>> master
 $$
 
 
@@ -860,7 +848,7 @@ $$
 
 Random LINEAR  and Quadratic effect of age covariance: 
 
-<<<<<<< HEAD
+
 
 ```{r, echo=FALSE, results="hide"}
 sigma2_t12 <- lme4::VarCorr(fit_lmer_2a_re) %>% 
@@ -870,8 +858,9 @@ sigma2_t12 <- lme4::VarCorr(fit_lmer_2a_re) %>%
 
 sigma2_t12
 ```
-=======
-```{r}
+
+
+```{r, echo=FALSE, results="hide"}
 tau_12 <- fit_lmer_2a_re_sigmas %>% 
   dplyr::filter(grp == "childid", var1 == "age2", var2 == "I(age2^2)") %>% 
   dplyr::pull(vcov)
@@ -879,16 +868,12 @@ tau_12 <- fit_lmer_2a_re_sigmas %>%
 tau_12
 ```
 
->>>>>>> master
+
 
 $$
 \tau_{12} = \sigma^2_{u12} 
           = COV[u_{1i}, u_{2i}] 
-<<<<<<< HEAD
-          = `r sigma2_t12 %>% round(2)`
-=======
           = `r tau_12 %>% round(2)`
->>>>>>> master
 $$
 
 

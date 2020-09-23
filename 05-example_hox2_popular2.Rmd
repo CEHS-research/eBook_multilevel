@@ -27,7 +27,6 @@ library(haven)        # read in SPSS dataset
 library(furniture)    # nice table1() descriptives
 library(stargazer)    # display nice tables: summary & regression
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
-library(RColorBrewer) # nice color palettes for plots
 library(gridExtra)    # place ggplots together as one plot
 library(psych)        # contains some useful functions, like headTail
 library(car)          # Companion to Applied Regression
@@ -36,8 +35,7 @@ library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(lmerTest)     # Tests on lmer objects
 library(performance)  # icc and r-squared functions **NEWER**
 library(interactions) # interaction plots **NEWER**
-library(glmmTMB)
-library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
+library(HLMdiag)      # Diagnostic Tools for for MLM
 library(redres)       # Diagnosing MLM models
 library(sjstats)      # ICC calculations
 library(optimx)       # Different optimizers to solve mlm's
@@ -117,10 +115,6 @@ data_pop %>%
 ```
 
 ```{r, results='asis'}
-# Knit to Website: type = "html" 
-# Knit to PDF:     type = "latex"
-# View on Screen:  type = "text"
-
 data_pop %>% 
   dplyr::select(extrav, texp, popular) %>% 
   data.frame() %>% 
@@ -135,7 +129,7 @@ data_pop %>%
 
 Tyson Barrett's  **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics.  Full documentation can be accessed by executing `?furniture::table1`.    
 
-```{r, results='asis'}
+```{r, eval = FALSE}
 # Knit to Website: output = "html" 
 # Knit to PDF:     output = "latex2"
 # View on Screen:  output = ""text", or "markdown", "html"
@@ -147,11 +141,21 @@ data_pop %>%
                      "Popularity, Teacher Evaluated" = popteach,
                      splitby    = ~ sex,                                     # divide sample into columns by...
                      test       = TRUE,                                      # test groups different?
-                     output     = "html",                                    # output for latex
+                     output     = "markdown",                                # output for lon screen/knitting
                      caption    = "Compare genders on four main variables")  # title
 ```
 
-
+```{r, echo=FALSE, results='asis'}
+data_pop %>% 
+  furniture::table1("Pupil's extroversion (10 pt)"   = extrav, 
+                     "Teacher's Experience (years)"  = texp, 
+                     "Popularity, Sociometric Score" = popular, 
+                     "Popularity, Teacher Evaluated" = popteach,
+                     splitby    = ~ sex,                                     # divide sample into columns by...
+                     test       = TRUE,                                      # test groups different?
+                     output     = "html",                                    # output for latex
+                     caption    = "Compare genders on four main variables")  # title
+```
 
 ### Visualizations of Raw Data
 
@@ -214,18 +218,30 @@ The argument could be made that the extroversion score should be treated as an o
 table <- data_pop %>% 
   group_by(extrav) %>% 
   summarise(count = n_distinct(id),
-            percent  = 100 * count / 2000) 
+            percent  = 100 * count / 2000)
+```
 
+
+```{r, eval = FALSE}
 # Knit to Website: type = "html" 
 # Knit to PDF:     type = "latex"
 # View on Screen:  type = "text"
 
 table %>% 
-  stargazer(summary  = FALSE,
-            rownames = FALSE,
-            header   = FALSE,
-            type     = "html",
-            title    = "Distribution of extroversion in pupils")
+  stargazer::stargazer(summary  = FALSE,
+                       rownames = FALSE,
+                       header   = FALSE,
+                       type     = "text",
+                       title    = "Distribution of extroversion in pupils")
+```
+
+```{r, echo = FALSE, results='asis'}
+table %>% 
+  stargazer::stargazer(summary  = FALSE,
+                       rownames = FALSE,
+                       header   = FALSE,
+                       type     = "html",
+                       title    = "Distribution of extroversion in pupils")
 ```
 
 
@@ -309,11 +325,11 @@ data_pop %>%
 
 ```{r classLMs, fig.cap="Spaghetti plot of seperate, independent linear models for each of the 100 classes."}
 # compare all 100 classrooms via linear model for each
-ggplot(data_pop,
-       aes(x     = extrav,                      # x-axis values
-           y     = popular,                     # y-axis values
-           group = class)) +                     # GROUPs for LINES
-  geom_smooth(method = "lm",                     # linear regression line
+data_pop %>% 
+  ggplot(aes(x     = extrav,                      # x-axis values
+             y     = popular,                     # y-axis values
+             group = class)) +                    # GROUPs for LINES
+  geom_smooth(method = "lm",                      # linear regression line
               color  = "gray40",
               size   = 0.4,
               se     = FALSE) + 
@@ -541,21 +557,6 @@ On average, girls were rated `r coef(pop_lm_1)[2] %>% round(2)` points more popu
 
 Create a table to compare the two nested models:
 
-```{r lmtable, echo = FALSE, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lm_0, 
-                     pop_lm_1),
-                custom.model.names = c("Null Model",
-                                       "With Predictors"),
-                caption            = "Single Level Models",
-                caption.above      = TRUE,
-                single.row         = TRUE)
-```
-
-
 ```{r eval=FALSE}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
@@ -569,6 +570,20 @@ texreg::screenreg(list(pop_lm_0,
                   caption.above      = TRUE,
                   single.row         = TRUE)
 ```
+
+```{r lmtable, echo = FALSE, results='asis'}
+texreg::htmlreg(list(pop_lm_0, 
+                     pop_lm_1),
+                custom.model.names = c("Null Model",
+                                       "With Predictors"),
+                caption            = "Single Level Models",
+                caption.above      = TRUE,
+                single.row         = TRUE)
+```
+
+
+
+
 
 ```{block type='rmdlightbulb', echo=TRUE}
 When comparing the fit of two single-level models fit via the `lm()` function, the `anova()` function runs an F-test where the test statistic is the difference in RSS.
@@ -685,6 +700,7 @@ $$
 \tag{Hox 2.8}
 $$
 ```
+
 
 
 
@@ -991,21 +1007,6 @@ After accounting for the heiarchical nesting of students in classes, girls were 
 
 Reproduce Table 2.1 on the top of page 14 [@hox2017]
 
-```{r, echo=FALSE, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lm_0, 
-                     pop_lmer_0_ml, 
-                     pop_lmer_1_ml),
-                custom.model.names = c("Single-level", 
-                                       "M0: int only", 
-                                       "M1: w pred"),
-                caption            = "Hox Table 2.1 on the top of page 14",
-                caption.above      = TRUE,
-                single.row         = TRUE)
-```
 
 ```{r, eval=FALSE}
 # Knit to Website: texreg::htmlreg()
@@ -1022,6 +1023,22 @@ texreg::screenreg(list(pop_lm_0,
                   caption.above      = TRUE,
                   single.row         = TRUE)
 ```
+
+
+```{r, echo=FALSE, results='asis'}
+texreg::htmlreg(list(pop_lm_0, 
+                     pop_lmer_0_ml, 
+                     pop_lmer_1_ml),
+                custom.model.names = c("Single-level", 
+                                       "M0: int only", 
+                                       "M1: w pred"),
+                caption            = "Hox Table 2.1 on the top of page 14",
+                caption.above      = TRUE,
+                single.row         = TRUE)
+```
+
+
+
 
 
 The regression tables from the `texreg` package include estimates of the covariances between random components.
@@ -1086,18 +1103,6 @@ pop_lmer_1b_re <- lmerTest::lmer(popular ~ sex + extrav + texp + (1 |class),
 Create a table to compare the three nested models:
 
 The middle column below reproduces Hox's Table 2.2 found on the bottom of page 15 [@hox2017], except the values differ slightly becuase here the model was fit via `REML` where as in the text, Hox used `ML`.
-
-```{r, echo=FALSE, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
-                custom.model.names = c("M1", "M1a", "M1b"),
-                caption            = "Assessing Significance of Random Slopes",
-                caption.above      = TRUE,
-                single.row         = TRUE)
-```
 ```{r, eval = FALSE}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
@@ -1110,12 +1115,24 @@ texreg::screenreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
                   single.row         = TRUE)
 ```
 
+
+```{r, echo=FALSE, results='asis'}
+texreg::htmlreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
+                custom.model.names = c("M1", "M1a", "M1b"),
+                caption            = "Assessing Significance of Random Slopes",
+                caption.above      = TRUE,
+                single.row         = TRUE)
+```
+
+
+
+
 #### Compare Fit
 
 ```{block type='rmdlightbulb', echo=TRUE}
 **Likelihood Ratio Test (LRT) of Nested MLM Models**
 
-When comparing the fit of two multi-level models fit via the `lme::lmer()` function, the `anova()` function runs an Chi-squared test where the test statistic is the difference in -2LL (deviances).  
+When comparing the fit of two multi-level models fit via the `lmer()` function, the `anova()` function runs an Chi-squared test where the test statistic is the difference in -2LL (deviances).  
 ```
 
 ```{block type='rmdimportant', echo=TRUE}
@@ -1221,21 +1238,7 @@ pop_lmer_4_ml  <- lmerTest::lmer(popular ~ extrav*texp*sex + (extrav|class),
 
 Create a table to compare the two nested models:
 
-
-```{r, echo=FALSE, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
-                custom.model.names = c("M1a: Main Effects",
-                                       "M2: With Interaction"),
-                caption            = "Hox Table 2.3 on page 17",
-                caption.above      = TRUE,
-                single.row         = TRUE)
-```
-
-```{r, eval=FALSE, results='asis'}
+```{r, eval=FALSE}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
 # View on Screen:  texreg::screenreg()
@@ -1248,24 +1251,21 @@ texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
                   single.row         = TRUE)
 ```
 
-
-Investigate further interactions, not shown in by @hox2017.
-
-
 ```{r, echo=FALSE, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
+texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
                 custom.model.names = c("M1a: Main Effects",
-                                       "M2: With Interaction",
-                                       "Add 2-way Inter",
-                                       "Add 3-way Interaction"),
+                                       "M2: With Interaction"),
                 caption            = "Hox Table 2.3 on page 17",
                 caption.above      = TRUE,
                 single.row         = TRUE)
 ```
+
+
+
+
+
+Investigate further interactions, not shown in by @hox2017.
+
 ```{r, eval=FALSE}
 # Knit to Website: texreg::htmlreg()
 # Knit to PDF:     texreg::texreg()
@@ -1280,6 +1280,19 @@ texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_
                   caption.above      = TRUE,
                   single.row         = TRUE)
 ```
+
+
+```{r, echo=FALSE, results='asis'}
+texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
+                custom.model.names = c("M1a: Main Effects",
+                                       "M2: With Interaction",
+                                       "Add 2-way Inter",
+                                       "Add 3-way Interaction"),
+                caption            = "Hox Table 2.3 on page 17",
+                caption.above      = TRUE,
+                single.row         = TRUE)
+```
+
 
 
 #### Compare Fit
@@ -1325,17 +1338,6 @@ pop_lmer_2_re  <- lmerTest::lmer(popular ~ sex + extrav*texp + (extrav|class),
 ```
 
 #### Parameter Summary Table
-```{r, echo=FALSE, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_2_re),
-                custom.model.names = c("Final Model"),
-                caption            = "MLM for Popularity",
-                caption.above      = TRUE,
-                single.row         = TRUE)
-```
 
 ```{r, eval=FALSE}
 # Knit to Website: texreg::htmlreg()
@@ -1348,6 +1350,17 @@ texreg::screenreg(list(pop_lmer_2_re),
                   caption.above      = TRUE,
                   single.row         = TRUE)
 ```
+
+
+```{r, echo=FALSE, results='asis'}
+texreg::htmlreg(list(pop_lmer_2_re),
+                custom.model.names = c("Final Model"),
+                caption            = "MLM for Popularity",
+                caption.above      = TRUE,
+                single.row         = TRUE)
+```
+
+
 
 
 #### Visualization - `interactions` package
@@ -1365,7 +1378,7 @@ interactions::interact_plot(pop_lmer_2_re,              # model name
                             modx = texp)                # 'moderator' variable name
 ```
 
-Get fancier
+For publications, you can get fancier
 
 ```{r}
 interactions::interact_plot(pop_lmer_2_re,                # model name
