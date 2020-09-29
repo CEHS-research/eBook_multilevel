@@ -175,7 +175,7 @@ data_achieve %>%
 
 #### The `furniture` package
 
-Tyson Barrett's  **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics.  Full documentation can be accessed by executing `?furniture::table1`.
+Tyson Barrett's **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics.  Full documentation can be accessed by executing `?furniture::table1`.
 
 ```{r, eval=FALSE}
 # Knit to Website: output = "html" 
@@ -265,7 +265,7 @@ data_achieve %>%
 ```
 
 
-Due to the high number of schools, the figure with all the school's independent linear regression lines resembles a hairball and is hard to deduce much about individual schools.  By using the `facet_grid()` layer, we can seperate the schools out so better see school-to-school variability.  It also allows investigation of  higher level predictors, such as the school's SES (median split with `ntile(var, 2)`) and class size.
+Due to the high number of schools, the figure with all the school's independent linear regression lines resembles a hairball and is hard to deduce much about individual schools.  By using the `facet_grid()` layer, we can separate the schools out so better see school-to-school variability.  It also allows investigation of  higher level predictors, such as the school's SES (median split with `ntile(var, 2)`) and class size.
 
 
 ```{r classRegSep, fig.width=6, fig.height=8, fig.cap="Raw Data: Independent Single-Level Regression within each school, sepearated by school size and school SES"}
@@ -279,14 +279,14 @@ data_achieve %>%
                                     "Enroll: Largest Third"))) %>% 
   ggplot(aes(x       = gevocab,
              y       = geread,
-             group   = school)) +     # sepearates students into schools
+             group   = school)) +     # separates students into schools
   geom_smooth(method = "lm",
               se     = FALSE,         
               size   = 0.3,
               color = "black",
               alpha = .2) +         
   theme_bw() +
-  facet_grid(senroll ~ ses2)     # makes seperate panels (rows ~ columns)
+  facet_grid(senroll ~ ses2)     # makes separate panels (rows ~ columns)
 ```
 
 
@@ -368,17 +368,17 @@ anova(fit_read_lm_3)
 ### Visualize the Interaction
 
 ```{r}
-effects::Effect(focal.predictors = c("gevocab", "age"),     # chooses defaul values for
+effects::Effect(focal.predictors = c("gevocab", "age"),     # chooses default values for
                 mod = fit_read_lm_3)                        # continuous vars
 ```
 
 
 
 ```{r}
-effects::Effect(focal.predictors = c("gevocab", "age"),     # chooses defaul values for
+effects::Effect(focal.predictors = c("gevocab", "age"),     # chooses default values for
                 mod = fit_read_lm_3) %>%                    # continuous vars
   data.frame() %>%  
-  mutate(age = factor(age)) %>%           # must make a factor to seperate lines
+  mutate(age = factor(age)) %>%           # must make a factor to separate lines
   ggplot(aes(x = gevocab,
              y = fit,
              color = age)) +
@@ -677,7 +677,7 @@ Calculate the value by hand:
 ```
 
 
-Or use the `sjstats` package to help out:  (Note it is using a difference method...)
+Or use the `performance` package to help out:  (Note it is using a difference method...)
 
 ```{r}
 performance::r2(fit_read_1re)
