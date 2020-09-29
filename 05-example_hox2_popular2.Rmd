@@ -415,12 +415,31 @@ summary(pop_lm_0)
 
 $\hat{\beta_0}$ = `r coef(pop_lm_0) %>% round(2)` is the grand mean
 
+
+```{r}
+pop_glm_0 <- glm(popular ~ 1,        #  The 1 represents the intercept
+               data = data_pop) 
+
+summary(pop_glm_0)
+```
+
+
 #### Model Fit
 
 
 ```{r}
 performance::performance(pop_lm_0)
 ```
+
+```{r}
+performance::performance(pop_glm_0)
+```
+
+
+```{r}
+performance::compare_performance(pop_lm_0, pop_glm_0)
+```
+
 
 
 Residual variance:
@@ -501,6 +520,13 @@ pop_lm_1 <- lm(popular ~ sex + extrav,    # implies: 1 + sex + extrav
 summary(pop_lm_1)
 ```
 
+```{r}
+pop_glm_1 <- glm(popular ~ sex + extrav,    # implies: 1 + sex + extrav
+               data = data_pop) 
+
+summary(pop_glm_1)
+```
+
 $\hat{\beta_0}$ = `r coef(pop_lm_1)[1] %>% round(2)` is the extrapolated mean for boys with an extroversion score of 0.   
 $\hat{\beta_1}$ = `r coef(pop_lm_1)[2] %>% round(2)` is the mean difference between girls and boys with the same extroversion score.    
 
@@ -544,7 +570,11 @@ performance::compare_performance(pop_lm_0,
                                  pop_lm_1, 
                                  rank = TRUE)
 ```
-
+```{r}
+performance::compare_performance(pop_glm_0, 
+                                 pop_glm_1, 
+                                 rank = TRUE)
+```
 
 
 #### Interpretation
@@ -566,12 +596,28 @@ texreg::screenreg(list(pop_lm_0,
                        pop_lm_1),
                   custom.model.names = c("Null Model",
                                          "With Predictors"),
-                  caption            = "Single Level Models",
+                  caption            = "Single Level Models: OLS with the `lm()` function",
                   caption.above      = TRUE,
                   single.row         = TRUE)
 ```
 
-```{r lmtable, echo = FALSE, results='asis'}
+
+```{r eval=FALSE}
+# Knit to Website: texreg::htmlreg()
+# Knit to PDF:     texreg::texreg()
+# View on Screen:  texreg::screenreg()
+
+texreg::screenreg(list(pop_glm_0, 
+                       pop_glm_1),
+                  custom.model.names = c("Null Model",
+                                         "With Predictors"),
+                  caption            = "Single Level Models: ML with the `glm()` function",
+                  caption.above      = TRUE,
+                  single.row         = TRUE)
+```
+
+
+```{r, echo = FALSE, results='asis'}
 texreg::htmlreg(list(pop_lm_0, 
                      pop_lm_1),
                 custom.model.names = c("Null Model",
@@ -581,7 +627,15 @@ texreg::htmlreg(list(pop_lm_0,
                 single.row         = TRUE)
 ```
 
-
+```{r lmtable, echo = FALSE, results='asis'}
+texreg::htmlreg(list(pop_glm_0, 
+                     pop_glm_1),
+                custom.model.names = c("Null Model",
+                                       "With Predictors"),
+                caption            = "Single Level Models: ML with the `glm()` function",
+                caption.above      = TRUE,
+                single.row         = TRUE)
+```
 
 
 
@@ -591,6 +645,11 @@ When comparing the fit of two single-level models fit via the `lm()` function, t
 
 ```{r}
 anova(pop_lm_0, pop_lm_1)
+```
+
+
+```{r}
+anova(pop_glm_0, pop_glm_1)
 ```
 
 
@@ -1014,9 +1073,11 @@ Reproduce Table 2.1 on the top of page 14 [@hox2017]
 # View on Screen:  texreg::screenreg()
 
 texreg::screenreg(list(pop_lm_0, 
+                       pop_glm_0,
                        pop_lmer_0_ml, 
                        pop_lmer_1_ml),
-                  custom.model.names = c("Single-level", 
+                  custom.model.names = c("Single-level, OLS", 
+                                         "Single-level, ML",
                                          "M0: int only", 
                                          "M1: w pred"),
                   caption            = "Hox Table 2.1 on the top of page 14",
@@ -1027,9 +1088,11 @@ texreg::screenreg(list(pop_lm_0,
 
 ```{r, echo=FALSE, results='asis'}
 texreg::htmlreg(list(pop_lm_0, 
+                     pop_glm_0,
                      pop_lmer_0_ml, 
                      pop_lmer_1_ml),
-                custom.model.names = c("Single-level", 
+                custom.model.names = c("Single-level, OLS", 
+                                       "Single-level, ML",
                                        "M0: int only", 
                                        "M1: w pred"),
                 caption            = "Hox Table 2.1 on the top of page 14",
@@ -1233,7 +1296,9 @@ pop_lmer_3_ml  <- lmerTest::lmer(popular ~ extrav*texp + sex*texp + sex*extrav +
 
 pop_lmer_4_ml  <- lmerTest::lmer(popular ~ extrav*texp*sex + (extrav|class),  
                                  data = data_pop,
-                                 REML = FALSE)
+                                 REML = FALSE,
+                                 control = lmerControl(optimizer ="Nelder_Mead"))
+                                 
 ```
 
 Create a table to compare the two nested models:
@@ -1296,6 +1361,8 @@ texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml
 
 
 #### Compare Fit
+
+
 
 Since these two models only differ by the including/exclusing of a FIXED effect, they both employed `ML` estimation.  Thus we do not need worry about the `anova()` function refitting the models prior to conduction the LRT. 
 
@@ -1363,7 +1430,7 @@ texreg::htmlreg(list(pop_lmer_2_re),
 
 
 
-#### Visualization - `interactions` package
+### Visualization - `interactions` package
 
 **Predictors:** involved in the interaction ...
 * `extrav` 1 value per student, continuous, score with range 1-10    
@@ -1536,7 +1603,7 @@ Form more infromation, see the [vingette page for the `redre` package](https://g
 After accounting for class-to-class variation and the effect of gender, a positive association was found between teacher rated extroversion and peer rated popularity.  This relationship was more marked for less experienced teachers.
 
 
-#### Residual Plots
+### Residual Plots
 
 ```{r}
 sjPlot::plot_model(pop_lmer_2_re,

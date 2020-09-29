@@ -751,6 +751,46 @@ texreg::htmlreg(list(nurse_lmer_3_re),
 
 Although there are many variables in this model, only two are involved in any interaction(s).  For this reason, we will choose to display the estimated marginal means across only experimental condition and hospital size.  For this illustration, all other continuous predictors are taken to be at their mean and categorical predictors at their reference category.
 
+#### Using `interactions::interact_plot()`
+
+All Defaults:
+
+```{r}
+interactions::interact_plot(nurse_lmer_3_re,
+                            pred = "hospsizeNG",
+                            modx = "expconNG",
+                            interval = TRUE)
+```
+
+Adding more options:
+
+```{r}
+interactions::interact_plot(nurse_lmer_3_re,
+                            pred = "hospsizeNG",
+                            modx = "expconNG",
+                            modx.values = c(-0.504, 0.496),
+                            interval = TRUE,
+                            y.label = "Estimated Marginal Mean Norse's Stress Score",
+                            x.label = "Hospital Size",
+                            legend.main = "Condition:",
+                            modx.labels = c("Control", "Intervention"),
+                            colors = c("black", "black")) +
+  theme_bw() +
+  theme(legend.key.width = unit(2, "cm"),
+        legend.background = element_rect(color = "Black"),
+        legend.position = c(1, 0),
+        legend.justification = c(1.1, -0.1)) +
+  scale_x_continuous(breaks = c(-0.776, 0.224, 1.224), labels = c("Small", "Medium", "Large")) +
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 1)) 
+  
+```
+
+
+
+
+#### Using `sjPlot::plot_model()`
+
+All Defaults:
 
 ```{r}
 sjPlot::plot_model(nurse_lmer_3_re, 
@@ -758,6 +798,8 @@ sjPlot::plot_model(nurse_lmer_3_re,
                    terms = c("hospsizeNG", "expconNG"))
 ```
 
+
+Adding more options:
 
 ```{r}
 sjPlot::plot_model(nurse_lmer_3_re, 
@@ -777,7 +819,7 @@ sjPlot::plot_model(nurse_lmer_3_re,
 ```
 
 
-
+#### Using `effects::Effect()` and `ggplot`
 
 
 
