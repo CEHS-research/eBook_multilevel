@@ -1,6 +1,6 @@
 # MLM, 2-levels: Pupil Popularity
 
-![](../images/header_hox_popular2.PNG)
+![](./images/header_hox_popular2.PNG)
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(comment     = "",
@@ -586,6 +586,19 @@ On average, girls were rated `r coef(pop_lm_1)[2] %>% round(2)` points more popu
 #### Compare Nested Models
 
 Create a table to compare the two nested models:
+
+```{r}
+texreg::knitreg(list(pop_glm_0, 
+                     pop_glm_1),
+                custom.model.names = c("Null Model",
+                                       "With Predictors"),
+                caption            = "Single Level Models: ML with the `glm()` function",
+                caption.above      = TRUE,
+                single.row         = TRUE,
+                bold = TRUE,
+                label = "wow")
+```
+
 
 ```{r eval=FALSE}
 # Knit to Website: texreg::htmlreg()
