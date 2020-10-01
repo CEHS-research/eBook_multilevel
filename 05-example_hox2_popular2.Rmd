@@ -587,7 +587,7 @@ On average, girls were rated `r coef(pop_lm_1)[2] %>% round(2)` points more popu
 
 Create a table to compare the two nested models:
 
-```{r}
+```{r, results='asis'}
 texreg::knitreg(list(pop_glm_0, 
                      pop_glm_1),
                 custom.model.names = c("Null Model",
@@ -600,48 +600,10 @@ texreg::knitreg(list(pop_glm_0,
 ```
 
 
-```{r eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(pop_lm_0, 
-                       pop_lm_1),
-                  custom.model.names = c("Null Model",
-                                         "With Predictors"),
-                  caption            = "Single Level Models: OLS with the `lm()` function",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
 
 
-```{r eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(pop_glm_0, 
-                       pop_glm_1),
-                  custom.model.names = c("Null Model",
-                                         "With Predictors"),
-                  caption            = "Single Level Models: ML with the `glm()` function",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-
-```{r, echo = FALSE, results='asis'}
-texreg::htmlreg(list(pop_lm_0, 
-                     pop_lm_1),
-                custom.model.names = c("Null Model",
-                                       "With Predictors"),
-                caption            = "Single Level Models",
-                caption.above      = TRUE,
-                single.row         = TRUE)
-```
-
-```{r lmtable, echo = FALSE, results='asis'}
-texreg::htmlreg(list(pop_glm_0, 
+```{r lmtable, results='asis'}
+texreg::knitreg(list(pop_glm_0, 
                      pop_glm_1),
                 custom.model.names = c("Null Model",
                                        "With Predictors"),
@@ -1080,27 +1042,9 @@ After accounting for the heiarchical nesting of students in classes, girls were 
 Reproduce Table 2.1 on the top of page 14 [@hox2017]
 
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
 
-texreg::screenreg(list(pop_lm_0, 
-                       pop_glm_0,
-                       pop_lmer_0_ml, 
-                       pop_lmer_1_ml),
-                  custom.model.names = c("Single-level, OLS", 
-                                         "Single-level, ML",
-                                         "M0: int only", 
-                                         "M1: w pred"),
-                  caption            = "Hox Table 2.1 on the top of page 14",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(pop_lm_0, 
+```{r, results='asis'}
+texreg::knitreg(list(pop_lm_0, 
                      pop_glm_0,
                      pop_lmer_0_ml, 
                      pop_lmer_1_ml),
@@ -1179,21 +1123,11 @@ pop_lmer_1b_re <- lmerTest::lmer(popular ~ sex + extrav + texp + (1 |class),
 Create a table to compare the three nested models:
 
 The middle column below reproduces Hox's Table 2.2 found on the bottom of page 15 [@hox2017], except the values differ slightly becuase here the model was fit via `REML` where as in the text, Hox used `ML`.
-```{r, eval = FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
-                  custom.model.names = c("M1", "M1a", "M1b"),
-                  caption            = "Assessing Significance of Random Slopes",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
 
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
+
+```{r, results='asis'}
+texreg::knitreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
                 custom.model.names = c("M1", "M1a", "M1b"),
                 caption            = "Assessing Significance of Random Slopes",
                 caption.above      = TRUE,
@@ -1316,21 +1250,10 @@ pop_lmer_4_ml  <- lmerTest::lmer(popular ~ extrav*texp*sex + (extrav|class),
 
 Create a table to compare the two nested models:
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
 
-texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
-                  custom.model.names = c("M1a: Main Effects",
-                                         "M2: With Interaction"),
-                  caption            = "Hox Table 2.3 on page 17",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
+```{r, results='asis'}
+texreg::knitreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
                 custom.model.names = c("M1a: Main Effects",
                                        "M2: With Interaction"),
                 caption            = "Hox Table 2.3 on page 17",
@@ -1344,24 +1267,9 @@ texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
 
 Investigate further interactions, not shown in by @hox2017.
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
 
-texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
-                  custom.model.names = c("M1a: Main Effects",
-                                         "M2: With Interaction",
-                                         "Add 2-way Inter",
-                                         "Add 3-way Interaction"),
-                  caption            = "Hox Table 2.3 on page 17",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
+```{r, results='asis'}
+texreg::knitreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
                 custom.model.names = c("M1a: Main Effects",
                                        "M2: With Interaction",
                                        "Add 2-way Inter",
@@ -1419,21 +1327,9 @@ pop_lmer_2_re  <- lmerTest::lmer(popular ~ sex + extrav*texp + (extrav|class),
 
 #### Parameter Summary Table
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
 
-texreg::screenreg(list(pop_lmer_2_re),
-                  custom.model.names = c("Final Model"),
-                  caption            = "MLM for Popularity",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(pop_lmer_2_re),
+```{r, results='asis'}
+texreg::knitreg(list(pop_lmer_2_re),
                 custom.model.names = c("Final Model"),
                 caption            = "MLM for Popularity",
                 caption.above      = TRUE,
@@ -1443,7 +1339,7 @@ texreg::htmlreg(list(pop_lmer_2_re),
 
 
 
-### Visualization - `interactions` package
+#### Visualization - `interactions` package
 
 **Predictors:** involved in the interaction ...
 * `extrav` 1 value per student, continuous, score with range 1-10    
@@ -1453,9 +1349,10 @@ texreg::htmlreg(list(pop_lmer_2_re),
 Fastest way: all defaults
 
 ```{r}
-interactions::interact_plot(pop_lmer_2_re,              # model name
-                            pred = extrav,              # x-axis 'predictor' variable name
-                            modx = texp)                # 'moderator' variable name
+interactions::interact_plot(pop_lmer_2_re,    # model name
+                            pred = extrav,    # x-axis 'predictor' independent variable name
+                            modx = texp,      # 'moderator' (x) independent variable name
+                            mod2 = sex)       # 2nd moderator independent variable name (optional)
 ```
 
 For publications, you can get fancier

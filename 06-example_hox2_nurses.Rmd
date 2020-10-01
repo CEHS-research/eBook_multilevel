@@ -51,8 +51,13 @@ The following example is used through out @hox2017's chapater 2.
 Here the data is read in and the SPSS variables with labels are converted to $R$ factors. 
 
 ```{r}
-data_raw <- haven::read_sav("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/Nurses/SPSS/Nurses.sav") %>% 
+data_raw <- haven::read_spss("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/Nurses/SPSS/Nurses.sav") %>% 
   haven::as_factor()             # retain the labels from SPSS --> factor
+```
+
+
+```{r, include=FALSE}
+tibble::glimpse(data_raw)
 ```
 
 
@@ -65,7 +70,7 @@ data_nurse <- data_raw %>%
   dplyr::mutate(genderF = factor(gender, 
                                  labels = c("Male", "Female"))) %>% # apply factor labels
   dplyr::mutate(id = paste(hospital, ward, nurse,
-                           sep = "_") %>%                                   # cunique id for each student
+                           sep = "_") %>%                                   # unique id for each nurse
                   factor()) %>%                                             # declare id is a factor
   dplyr::mutate_at(vars(hospital, ward, 
                         wardid, nurse), factor) %>%                         # declare to be factors
@@ -213,24 +218,8 @@ nurse_lmer_0_ml <- lmerTest::lmer(stress ~ 1 +              # Fixed Intercept fo
 ```
 
 
-```{r, eval = FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(nurse_lmer_0_ml, 
-                       nurse_lmer_0_re),
-                  custom.model.names = c("M0: Null, ML", 
-                                         "M0: Null, REML"),
-                  caption            = "NULL Model: different estimation methods",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-
-
-```{r, echo = FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_0_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_0_ml, 
                      nurse_lmer_0_re),
                 custom.model.names = c("M0: Null, ML", 
                                        "M0: Null, REML"),
@@ -300,7 +289,7 @@ $$
 $$
 $$
 \overbrace{\rho_{top}}^{\text{ICC}\atop\text{ at level 3}} = 
-\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance Level 3}}}
+\frac{\overbrace{\sigma^2_{v0}}^{\text{Random Intercept}\atop\text{Variance Level 3}}}
      {\underbrace{\sigma^2_{v0}+\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
 \tag{Hox 2.17}
 $$
@@ -339,22 +328,8 @@ nurse_lmer_0_re_2level <- lmerTest::lmer(stress ~ 1 + (1|wardid),  # each hospit
 ```
 
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(nurse_lmer_0_re_2level, 
-                       nurse_lmer_0_re),
-                  custom.model.names = c("2 levels", 
-                                         "3 levels"),
-                  caption            = "MLM: Two or Three Levels?",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_0_re_2level, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_0_re_2level, 
                      nurse_lmer_0_re),
                 custom.model.names = c("2 levels", 
                                        "3 levels"),
@@ -397,23 +372,8 @@ nurse_lmer_1_ml <- lmerTest::lmer(stress ~ expcon +             # experimental c
 
 
 
-```{r, eval = FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(nurse_lmer_0_ml, 
-                       nurse_lmer_1_ml),
-                  custom.model.names = c("M0: null", 
-                                         "M1: fixed pred"),
-                  caption            = "Nested Models: Fixed effects via ML",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-
-```{r, echo = FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_0_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_0_ml, 
                      nurse_lmer_1_ml),
                 custom.model.names = c("M0: null", 
                                        "M1: fixed pred"),
@@ -468,24 +428,8 @@ nurse_lmer_1b_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental 
 
 
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(nurse_lmer_1_ml, 
-                       nurse_lmer_1a_ml, 
-                       nurse_lmer_1b_ml),
-                  custom.model.names = c("Factor", 
-                                         "0 vs 1", 
-                                         "Centered"),
-                  caption            = "MLM: Model 1 - Expereimental Condiditon Coding (2-levels)",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-```{r, echo=TRUE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_1_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_1_ml, 
                      nurse_lmer_1a_ml, 
                      nurse_lmer_1b_ml),
                 custom.model.names = c("Factor", 
@@ -528,24 +472,8 @@ nurse_lmer_1d_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental 
 
 
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(nurse_lmer_1b_ml, 
-                       nurse_lmer_1c_ml, 
-                       nurse_lmer_1d_ml),
-                  custom.model.names = c("Factor", 
-                                         "0 vs 1", 
-                                         "Centered"),
-                  caption            = "MLM: Model 1 - Hospital Coding (3-levels)",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_1b_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_1b_ml, 
                      nurse_lmer_1c_ml, 
                      nurse_lmer_1d_ml),
                 custom.model.names = c("Factor", 
@@ -593,23 +521,8 @@ nurse_lmer_2_re <- lmerTest::lmer(stress ~ expconNG +             # experimental
 
 
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(nurse_lmer_1d_re, 
-                       nurse_lmer_2_re),
-                  custom.model.names = c("M1: RI", 
-                                         "M2: RIAS"),
-                  caption            = "Nested Models: Random Slope via REML",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_1d_re, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_1d_re, 
                      nurse_lmer_2_re),
                 custom.model.names = c("M1: RI", 
                                        "M2: RIAS"),
@@ -663,22 +576,8 @@ nurse_lmer_3_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental c
 
 
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(nurse_lmer_2_ml, 
-                       nurse_lmer_3_ml),
-                  custom.model.names = c("M2: RAIS", 
-                                         "M3: Xlevel Int"),
-                  caption            = "Nested Models: Fixed Cross-Level Interaction via ML",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_2_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_2_ml, 
                      nurse_lmer_3_ml),
                 custom.model.names = c("M2: RAIS", 
                                        "M3: Xlevel Int"),
@@ -723,21 +622,8 @@ nurse_lmer_3_re <- lmerTest::lmer(stress ~ expconNG +           # experimental c
 
 
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(nurse_lmer_3_re),
-                  custom.model.names = c("M3: Xlevel Int"),
-                  caption            = "Final Model: with REML",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_3_re),
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_3_re),
                 custom.model.names = c("M3: Xlevel Int"),
                 caption            = "Final Model: with REML",
                 caption.above      = TRUE,
@@ -757,8 +643,8 @@ All Defaults:
 
 ```{r}
 interactions::interact_plot(nurse_lmer_3_re,
-                            pred = "hospsizeNG",
-                            modx = "expconNG",
+                            pred = "hospsizeNG",  # main predictor/independent variable, for x-axis
+                            modx = "expconNG",    # moderating independent variable, for different lines
                             interval = TRUE)
 ```
 
@@ -926,23 +812,8 @@ The approach presented by @hox2017 and shown above involved mean-centering categ
 
 
 
-```{r, eval=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(nurse_lmer_0_ml, 
-                       nurse_lmer_1d_ml, 
-                       nurse_lmer_2_ml, 
-                       nurse_lmer_3_ml),
-                  custom.model.names = c("M0", "M1", "M2", "M3"),
-                  caption            = "Hox Table 2.5: Models for stress in hospitals and wards",
-                  caption.above      = TRUE,
-                  single.row         = TRUE)
-```
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_0_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_0_ml, 
                      nurse_lmer_1d_ml, 
                      nurse_lmer_2_ml, 
                      nurse_lmer_3_ml),

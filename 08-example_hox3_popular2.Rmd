@@ -161,17 +161,11 @@ pop_lmer_1_std <- lme4::lmer(popular ~ extravZ + (1|class),
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(pop_lmer_1_raw, pop_lmer_1_cen, pop_lmer_1_std))
-```
+
 
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_1_raw, 
+texreg::knitreg(list(pop_lmer_1_raw, 
                      pop_lmer_1_cen, 
                      pop_lmer_1_std),
                 custom.model.names = c("Raw", 
@@ -522,17 +516,8 @@ pop_lmer_2_std <- lme4::lmer(popular ~ extravZ + (extravZ|class),
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(pop_lmer_2_raw, pop_lmer_2_cen, pop_lmer_2_std))
-```
-
-
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_2_raw, 
+texreg::knitreg(list(pop_lmer_2_raw, 
                      pop_lmer_2_cen, 
                      pop_lmer_2_std),
                 custom.model.names = c("Raw", 
