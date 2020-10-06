@@ -336,9 +336,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4.4" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-standardized-version-1"><i class="fa fa-check"></i><b>7.4.4</b> Comapre the Standardized Version</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>8</b> Variance Explained</a>
+<li class="chapter" data-level="8" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html"><i class="fa fa-check"></i><b>8</b> Effect Size: Variance Explained</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>8.1</b> For Generalized MLMs</a></li>
+<li class="chapter" data-level="8.1" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#mlm-or-lmm"><i class="fa fa-check"></i><b>8.1</b> MLM or LMM</a></li>
+<li class="chapter" data-level="8.2" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#glmm"><i class="fa fa-check"></i><b>8.2</b> GLMM</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sjplot-package.html"><a href="sjplot-package.html"><i class="fa fa-check"></i><b>9</b> sjPlot Package</a>
 <ul>
@@ -1094,7 +1095,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb777-5"><a href="gee-count-outcome-epilepsy.html#cb777-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>subject) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb777-6"><a href="gee-count-outcome-epilepsy.html#cb777-6"></a><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb777-7"><a href="gee-count-outcome-epilepsy.html#cb777-7"></a><span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-610-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-616-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Log Scale</p>
 <div class="sourceCode" id="cb778"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb778-1"><a href="gee-count-outcome-epilepsy.html#cb778-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb778-2"><a href="gee-count-outcome-epilepsy.html#cb778-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">rate_wk =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -1104,7 +1105,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb778-6"><a href="gee-count-outcome-epilepsy.html#cb778-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>subject) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb778-7"><a href="gee-count-outcome-epilepsy.html#cb778-7"></a><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb778-8"><a href="gee-count-outcome-epilepsy.html#cb778-8"></a><span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-611-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-617-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="visualize-1" class="section level3" number="16.3.2">
@@ -1119,7 +1120,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb779-4"><a href="gee-count-outcome-epilepsy.html#cb779-4"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
 <span id="cb779-5"><a href="gee-count-outcome-epilepsy.html#cb779-5"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
 <span id="cb779-6"><a href="gee-count-outcome-epilepsy.html#cb779-6"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-612-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-618-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>To investigate possible outliers, we should transform the outcome with the <code>log</code> function first.</p>
 <blockquote>
 <p>Note: Since some participants reported no seizures during a two week period and the <code>log(0)</code> is <strong>unndefinded</strong>, we must add some amount to the values before transforming. Here we have chosen to add the value of <span class="math inline">\(1\)</span>.</p>
@@ -1131,14 +1132,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb780-5"><a href="gee-count-outcome-epilepsy.html#cb780-5"></a><span class="st">  </span></span>
 <span id="cb780-6"><a href="gee-count-outcome-epilepsy.html#cb780-6"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
 <span id="cb780-7"><a href="gee-count-outcome-epilepsy.html#cb780-7"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-613-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-619-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb781-1"><a href="gee-count-outcome-epilepsy.html#cb781-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb781-2"><a href="gee-count-outcome-epilepsy.html#cb781-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
 <span id="cb781-3"><a href="gee-count-outcome-epilepsy.html#cb781-3"></a>             <span class="dt">y =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))) <span class="op">+</span></span>
 <span id="cb781-4"><a href="gee-count-outcome-epilepsy.html#cb781-4"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> subject)) <span class="op">+</span></span>
 <span id="cb781-5"><a href="gee-count-outcome-epilepsy.html#cb781-5"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
 <span id="cb781-6"><a href="gee-count-outcome-epilepsy.html#cb781-6"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-614-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-620-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb782-1"><a href="gee-count-outcome-epilepsy.html#cb782-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb782-2"><a href="gee-count-outcome-epilepsy.html#cb782-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
 <span id="cb782-3"><a href="gee-count-outcome-epilepsy.html#cb782-3"></a>             <span class="dt">y =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))) <span class="op">+</span></span>
@@ -1152,7 +1153,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb782-11"><a href="gee-count-outcome-epilepsy.html#cb782-11"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
 <span id="cb782-12"><a href="gee-count-outcome-epilepsy.html#cb782-12"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
 <span id="cb782-13"><a href="gee-count-outcome-epilepsy.html#cb782-13"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-615-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-621-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>

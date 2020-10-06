@@ -336,9 +336,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4.4" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-standardized-version-1"><i class="fa fa-check"></i><b>7.4.4</b> Comapre the Standardized Version</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>8</b> Variance Explained</a>
+<li class="chapter" data-level="8" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html"><i class="fa fa-check"></i><b>8</b> Effect Size: Variance Explained</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>8.1</b> For Generalized MLMs</a></li>
+<li class="chapter" data-level="8.1" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#mlm-or-lmm"><i class="fa fa-check"></i><b>8.1</b> MLM or LMM</a></li>
+<li class="chapter" data-level="8.2" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#glmm"><i class="fa fa-check"></i><b>8.2</b> GLMM</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sjplot-package.html"><a href="sjplot-package.html"><i class="fa fa-check"></i><b>9</b> sjPlot Package</a>
 <ul>
@@ -1310,7 +1311,7 @@ time_10
 <span id="cb948-2"><a href="glmm-count-outcome-bolous.html#cb948-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;time_&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb948-3"><a href="glmm-count-outcome-bolous.html#cb948-3"></a><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb948-4"><a href="glmm-count-outcome-bolous.html#cb948-4"></a><span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-719-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-725-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="visualize-6" class="section level3" number="20.3.2">
@@ -1324,7 +1325,7 @@ time_10
 <span id="cb949-5"><a href="glmm-count-outcome-bolous.html#cb949-5"></a>              <span class="dt">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="op">+</span></span>
 <span id="cb949-6"><a href="glmm-count-outcome-bolous.html#cb949-6"></a><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>group) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb949-7"><a href="glmm-count-outcome-bolous.html#cb949-7"></a><span class="st">  </span><span class="kw">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-720-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-726-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb950"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb950-1"><a href="glmm-count-outcome-bolous.html#cb950-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb950-2"><a href="glmm-count-outcome-bolous.html#cb950-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, </span>
 <span id="cb950-3"><a href="glmm-count-outcome-bolous.html#cb950-3"></a>             <span class="dt">y =</span> count)) <span class="op">+</span></span>
@@ -1334,7 +1335,7 @@ time_10
 <span id="cb950-7"><a href="glmm-count-outcome-bolous.html#cb950-7"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
 <span id="cb950-8"><a href="glmm-count-outcome-bolous.html#cb950-8"></a><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>group) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb950-9"><a href="glmm-count-outcome-bolous.html#cb950-9"></a><span class="st">  </span><span class="kw">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-721-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-727-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb951"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb951-1"><a href="glmm-count-outcome-bolous.html#cb951-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb951-2"><a href="glmm-count-outcome-bolous.html#cb951-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, </span>
 <span id="cb951-3"><a href="glmm-count-outcome-bolous.html#cb951-3"></a>             <span class="dt">y =</span> count)) <span class="op">+</span></span>
@@ -1345,7 +1346,7 @@ time_10
 <span id="cb951-8"><a href="glmm-count-outcome-bolous.html#cb951-8"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
 <span id="cb951-9"><a href="glmm-count-outcome-bolous.html#cb951-9"></a><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>group) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb951-10"><a href="glmm-count-outcome-bolous.html#cb951-10"></a><span class="st">  </span><span class="kw">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-722-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-728-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb952"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb952-1"><a href="glmm-count-outcome-bolous.html#cb952-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb952-2"><a href="glmm-count-outcome-bolous.html#cb952-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, </span>
 <span id="cb952-3"><a href="glmm-count-outcome-bolous.html#cb952-3"></a>             <span class="dt">y =</span> count)) <span class="op">+</span></span>
@@ -1358,7 +1359,7 @@ time_10
 <span id="cb952-10"><a href="glmm-count-outcome-bolous.html#cb952-10"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
 <span id="cb952-11"><a href="glmm-count-outcome-bolous.html#cb952-11"></a><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>group) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb952-12"><a href="glmm-count-outcome-bolous.html#cb952-12"></a><span class="st">  </span><span class="kw">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-723-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-729-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb953"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb953-1"><a href="glmm-count-outcome-bolous.html#cb953-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb953-2"><a href="glmm-count-outcome-bolous.html#cb953-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, </span>
 <span id="cb953-3"><a href="glmm-count-outcome-bolous.html#cb953-3"></a>             <span class="dt">y =</span> <span class="kw">log</span>(count <span class="op">+</span><span class="st"> </span><span class="fl">.1</span>))) <span class="op">+</span></span>
@@ -1371,7 +1372,7 @@ time_10
 <span id="cb953-10"><a href="glmm-count-outcome-bolous.html#cb953-10"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
 <span id="cb953-11"><a href="glmm-count-outcome-bolous.html#cb953-11"></a><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>group) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb953-12"><a href="glmm-count-outcome-bolous.html#cb953-12"></a><span class="st">  </span><span class="kw">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-724-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-730-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb954"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb954-1"><a href="glmm-count-outcome-bolous.html#cb954-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb954-2"><a href="glmm-count-outcome-bolous.html#cb954-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> time, </span>
 <span id="cb954-3"><a href="glmm-count-outcome-bolous.html#cb954-3"></a>             <span class="dt">y =</span> count)) <span class="op">+</span></span>
@@ -1391,7 +1392,7 @@ time_10
 <span id="cb954-17"><a href="glmm-count-outcome-bolous.html#cb954-17"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
 <span id="cb954-18"><a href="glmm-count-outcome-bolous.html#cb954-18"></a><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>group) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb954-19"><a href="glmm-count-outcome-bolous.html#cb954-19"></a><span class="st">  </span><span class="kw">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-725-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-731-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="means-over-time-by-group" class="section level4" number="20.3.2.2">
 <h4><span class="header-section-number">20.3.2.2</span> Means over Time, BY Group</h4>
@@ -1408,7 +1409,7 @@ time_10
 <span id="cb955-11"><a href="glmm-count-outcome-bolous.html#cb955-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Four-week Intervals&quot;</span>,</span>
 <span id="cb955-12"><a href="glmm-count-outcome-bolous.html#cb955-12"></a>       <span class="dt">y =</span> <span class="st">&quot;Sample Mean Count&quot;</span>,</span>
 <span id="cb955-13"><a href="glmm-count-outcome-bolous.html#cb955-13"></a>       <span class="dt">color =</span> <span class="st">&quot;Dose&quot;</span>) </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-726-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-732-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb956"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb956-1"><a href="glmm-count-outcome-bolous.html#cb956-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb956-2"><a href="glmm-count-outcome-bolous.html#cb956-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(group, timeF) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb956-3"><a href="glmm-count-outcome-bolous.html#cb956-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">M =</span> <span class="kw">mean</span>(<span class="kw">log</span>(count <span class="op">+</span><span class="st"> </span><span class="fl">.1</span>))) <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -1422,7 +1423,7 @@ time_10
 <span id="cb956-11"><a href="glmm-count-outcome-bolous.html#cb956-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Four-week Intervals&quot;</span>,</span>
 <span id="cb956-12"><a href="glmm-count-outcome-bolous.html#cb956-12"></a>       <span class="dt">y =</span> <span class="st">&quot;Sample Mean Count&quot;</span>,</span>
 <span id="cb956-13"><a href="glmm-count-outcome-bolous.html#cb956-13"></a>       <span class="dt">color =</span> <span class="st">&quot;Dose&quot;</span>) </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-727-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-733-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -2006,7 +2007,7 @@ Number of clusters:   65  Maximum cluster size: 11 </code></pre>
 <span id="cb985-13"><a href="glmm-count-outcome-bolous.html#cb985-13"></a>       <span class="dt">y =</span> <span class="st">&quot;Estimated Populaton Mean Count&quot;</span>,</span>
 <span id="cb985-14"><a href="glmm-count-outcome-bolous.html#cb985-14"></a>       <span class="dt">color =</span> <span class="st">&quot;Dose&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb985-15"><a href="glmm-count-outcome-bolous.html#cb985-15"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">10</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-741-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-747-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -2464,7 +2465,7 @@ Cov: id (Intercept) I(time/4)
 <span id="cb999-15"><a href="glmm-count-outcome-bolous.html#cb999-15"></a>       <span class="dt">color =</span> <span class="st">&quot;Dose&quot;</span>,</span>
 <span id="cb999-16"><a href="glmm-count-outcome-bolous.html#cb999-16"></a>       <span class="dt">fill =</span> <span class="st">&quot;Dose&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
 <span id="cb999-17"><a href="glmm-count-outcome-bolous.html#cb999-17"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">10</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-752-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-758-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb1000"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1000-1"><a href="glmm-count-outcome-bolous.html#cb1000-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb1000-2"><a href="glmm-count-outcome-bolous.html#cb1000-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(mod_glmer_rias,</span>
 <span id="cb1000-3"><a href="glmm-count-outcome-bolous.html#cb1000-3"></a>                              <span class="dt">newdata =</span> .,</span>
@@ -2474,7 +2475,7 @@ Cov: id (Intercept) I(time/4)
 <span id="cb1000-7"><a href="glmm-count-outcome-bolous.html#cb1000-7"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span></span>
 <span id="cb1000-8"><a href="glmm-count-outcome-bolous.html#cb1000-8"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>group) <span class="op">+</span></span>
 <span id="cb1000-9"><a href="glmm-count-outcome-bolous.html#cb1000-9"></a><span class="st">  </span><span class="kw">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-753-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-759-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

@@ -336,9 +336,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4.4" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-standardized-version-1"><i class="fa fa-check"></i><b>7.4.4</b> Comapre the Standardized Version</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>8</b> Variance Explained</a>
+<li class="chapter" data-level="8" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html"><i class="fa fa-check"></i><b>8</b> Effect Size: Variance Explained</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>8.1</b> For Generalized MLMs</a></li>
+<li class="chapter" data-level="8.1" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#mlm-or-lmm"><i class="fa fa-check"></i><b>8.1</b> MLM or LMM</a></li>
+<li class="chapter" data-level="8.2" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#glmm"><i class="fa fa-check"></i><b>8.2</b> GLMM</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sjplot-package.html"><a href="sjplot-package.html"><i class="fa fa-check"></i><b>9</b> sjPlot Package</a>
 <ul>
@@ -1044,7 +1045,7 @@ bdi 8m
 <span id="cb655-10"><a href="gee-continuous-outcome-beat-the-blues.html#cb655-10"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment) <span class="op">+</span></span>
 <span id="cb655-11"><a href="gee-continuous-outcome-beat-the-blues.html#cb655-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;BtheB - Observed Data Across Time with LM Smoother&quot;</span>,</span>
 <span id="cb655-12"><a href="gee-continuous-outcome-beat-the-blues.html#cb655-12"></a>       <span class="dt">subtitle =</span> <span class="st">&quot;Seperate by Treatment&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-528-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-534-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb656"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb656-1"><a href="gee-continuous-outcome-beat-the-blues.html#cb656-1"></a>btb_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb656-2"><a href="gee-continuous-outcome-beat-the-blues.html#cb656-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</span>
 <span id="cb656-3"><a href="gee-continuous-outcome-beat-the-blues.html#cb656-3"></a>             <span class="dt">y =</span> bdi)) <span class="op">+</span></span>
@@ -1057,7 +1058,7 @@ bdi 8m
 <span id="cb656-10"><a href="gee-continuous-outcome-beat-the-blues.html#cb656-10"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
 <span id="cb656-11"><a href="gee-continuous-outcome-beat-the-blues.html#cb656-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;BtheB - Observed Data Across Time with LM Smoother&quot;</span>,</span>
 <span id="cb656-12"><a href="gee-continuous-outcome-beat-the-blues.html#cb656-12"></a>       <span class="dt">subtitle =</span> <span class="st">&quot;Seperate by Treatment &amp; Antidepressant Use&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-529-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-535-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb657"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb657-1"><a href="gee-continuous-outcome-beat-the-blues.html#cb657-1"></a>btb_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb657-2"><a href="gee-continuous-outcome-beat-the-blues.html#cb657-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</span>
 <span id="cb657-3"><a href="gee-continuous-outcome-beat-the-blues.html#cb657-3"></a>             <span class="dt">y =</span> bdi)) <span class="op">+</span></span>
@@ -1074,7 +1075,7 @@ bdi 8m
 <span id="cb657-14"><a href="gee-continuous-outcome-beat-the-blues.html#cb657-14"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
 <span id="cb657-15"><a href="gee-continuous-outcome-beat-the-blues.html#cb657-15"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;BtheB - Observed Data Across Time with LM Smoother&quot;</span>,</span>
 <span id="cb657-16"><a href="gee-continuous-outcome-beat-the-blues.html#cb657-16"></a>       <span class="dt">subtitle =</span> <span class="st">&quot;Seperate by Treatment, Antidepressant Use, &amp; Length of Current Episode&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-530-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-536-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb658"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb658-1"><a href="gee-continuous-outcome-beat-the-blues.html#cb658-1"></a>btb_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb658-2"><a href="gee-continuous-outcome-beat-the-blues.html#cb658-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</span>
 <span id="cb658-3"><a href="gee-continuous-outcome-beat-the-blues.html#cb658-3"></a>             <span class="dt">y =</span> bdi,</span>
@@ -1084,7 +1085,7 @@ bdi 8m
 <span id="cb658-7"><a href="gee-continuous-outcome-beat-the-blues.html#cb658-7"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
 <span id="cb658-8"><a href="gee-continuous-outcome-beat-the-blues.html#cb658-8"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&quot;BtheB - Predictions from TWO Seperate Single Simple Linear Models (lm)&quot;</span>,</span>
 <span id="cb658-9"><a href="gee-continuous-outcome-beat-the-blues.html#cb658-9"></a>       <span class="dt">subtitle =</span> <span class="st">&quot;Assumes Independence of Repeated Measures&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-531-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-537-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="calculate-the-observed-correlation-structure" class="section level3" number="14.1.5">
 <h3><span class="header-section-number">14.1.5</span> Calculate the Observed Correlation Structure</h3>
@@ -1103,7 +1104,7 @@ bdi.8m  0.3835090 0.7038158 0.7220149 0.8107773 1.0000000</code></pre>
 <div id="plot-the-correlation-matrix-to-get-a-better-feel-for-the-pattern" class="section level3" number="14.1.6">
 <h3><span class="header-section-number">14.1.6</span> Plot the correlation matrix to get a better feel for the pattern</h3>
 <div class="sourceCode" id="cb661"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb661-1"><a href="gee-continuous-outcome-beat-the-blues.html#cb661-1"></a>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>(bdi_corr)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-533-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-539-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="multiple-regression-ols" class="section level2" number="14.2">
@@ -1576,7 +1577,7 @@ Num. obs.
 <span id="cb664-19"><a href="gee-continuous-outcome-beat-the-blues.html#cb664-19"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>),</span>
 <span id="cb664-20"><a href="gee-continuous-outcome-beat-the-blues.html#cb664-20"></a>        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="fl">1.1</span>, <span class="fl">1.1</span>),</span>
 <span id="cb664-21"><a href="gee-continuous-outcome-beat-the-blues.html#cb664-21"></a>        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-538-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-544-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="multilevel-models-mlm" class="section level2" number="14.3">
@@ -1984,7 +1985,7 @@ btb_lmer_RIAS   10 1885.2 1921.5 -932.58   1865.2 0.9236  2     0.6301</code></p
 <span id="cb669-15"><a href="gee-continuous-outcome-beat-the-blues.html#cb669-15"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
 <span id="cb669-16"><a href="gee-continuous-outcome-beat-the-blues.html#cb669-16"></a>        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.1</span>, <span class="fl">-0.1</span>),</span>
 <span id="cb669-17"><a href="gee-continuous-outcome-beat-the-blues.html#cb669-17"></a>        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-544-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-550-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="general-estimating-equations-gee" class="section level2" number="14.4">
@@ -2823,7 +2824,7 @@ Models ranked by QIC(x) </code></pre>
 <span id="cb702-38"><a href="gee-continuous-outcome-beat-the-blues.html#cb702-38"></a><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>)) <span class="op">+</span></span>
 <span id="cb702-39"><a href="gee-continuous-outcome-beat-the-blues.html#cb702-39"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></span>
 <span id="cb702-40"><a href="gee-continuous-outcome-beat-the-blues.html#cb702-40"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>covR)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-559-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-565-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb703"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb703-1"><a href="gee-continuous-outcome-beat-the-blues.html#cb703-1"></a><span class="kw">expand.grid</span>(<span class="dt">bdi.pre =</span> <span class="dv">23</span>,</span>
 <span id="cb703-2"><a href="gee-continuous-outcome-beat-the-blues.html#cb703-2"></a>            <span class="dt">length =</span> <span class="st">&quot;&lt;6m&quot;</span>,</span>
 <span id="cb703-3"><a href="gee-continuous-outcome-beat-the-blues.html#cb703-3"></a>            <span class="dt">drug =</span> <span class="st">&quot;No&quot;</span>,</span>
@@ -2870,7 +2871,7 @@ Models ranked by QIC(x) </code></pre>
 <span id="cb703-44"><a href="gee-continuous-outcome-beat-the-blues.html#cb703-44"></a>                                   <span class="st">&quot;blue&quot;</span>,</span>
 <span id="cb703-45"><a href="gee-continuous-outcome-beat-the-blues.html#cb703-45"></a>                                   <span class="st">&quot;darkgreen&quot;</span>)) <span class="op">+</span></span>
 <span id="cb703-46"><a href="gee-continuous-outcome-beat-the-blues.html#cb703-46"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="dv">1</span>, <span class="st">&quot;cm&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-560-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-566-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="investigate-interactions-not-with-time-month" class="section level3" number="14.4.7">
 <h3><span class="header-section-number">14.4.7</span> Investigate interactions NOT with time (<code>month</code>)</h3>
@@ -2970,7 +2971,7 @@ Models ranked by QIC(x) </code></pre>
 <span id="cb708-21"><a href="gee-continuous-outcome-beat-the-blues.html#cb708-21"></a>       <span class="dt">linetype =</span> <span class="st">&quot;Baseline BDI:&quot;</span>) <span class="op">+</span></span>
 <span id="cb708-22"><a href="gee-continuous-outcome-beat-the-blues.html#cb708-22"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></span>
 <span id="cb708-23"><a href="gee-continuous-outcome-beat-the-blues.html#cb708-23"></a><span class="st">  </span><span class="kw">scale_linetype_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>, <span class="st">&quot;dotted&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-568-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-574-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

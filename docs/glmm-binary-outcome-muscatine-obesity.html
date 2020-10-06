@@ -336,9 +336,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4.4" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-standardized-version-1"><i class="fa fa-check"></i><b>7.4.4</b> Comapre the Standardized Version</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>8</b> Variance Explained</a>
+<li class="chapter" data-level="8" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html"><i class="fa fa-check"></i><b>8</b> Effect Size: Variance Explained</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>8.1</b> For Generalized MLMs</a></li>
+<li class="chapter" data-level="8.1" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#mlm-or-lmm"><i class="fa fa-check"></i><b>8.1</b> MLM or LMM</a></li>
+<li class="chapter" data-level="8.2" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#glmm"><i class="fa fa-check"></i><b>8.2</b> GLMM</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sjplot-package.html"><a href="sjplot-package.html"><i class="fa fa-check"></i><b>9</b> sjPlot Package</a>
 <ul>
@@ -1220,7 +1221,7 @@ NA
 <span id="cb892-17"><a href="glmm-binary-outcome-muscatine-obesity.html#cb892-17"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Child&#39;s Age, years&quot;</span>,</span>
 <span id="cb892-18"><a href="glmm-binary-outcome-muscatine-obesity.html#cb892-18"></a>       <span class="dt">y =</span> <span class="st">&quot;Proportion Obese&quot;</span>) <span class="op">+</span></span>
 <span id="cb892-19"><a href="glmm-binary-outcome-muscatine-obesity.html#cb892-19"></a><span class="st">  </span><span class="kw">facet_grid</span>(. <span class="op">~</span><span class="st"> </span>gender)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-688-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-694-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="by-only-gender" class="section level4" number="19.3.2.2">
 <h4><span class="header-section-number">19.3.2.2</span> BY only gender</h4>
@@ -1241,7 +1242,7 @@ NA
 <span id="cb893-15"><a href="glmm-binary-outcome-muscatine-obesity.html#cb893-15"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodger blue&quot;</span>, <span class="st">&quot;hot pink&quot;</span>)) <span class="op">+</span></span>
 <span id="cb893-16"><a href="glmm-binary-outcome-muscatine-obesity.html#cb893-16"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Child&#39;s Age, years&quot;</span>,</span>
 <span id="cb893-17"><a href="glmm-binary-outcome-muscatine-obesity.html#cb893-17"></a>       <span class="dt">y =</span> <span class="st">&quot;Proportion Obese&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-689-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-695-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Smooth out the trends</p>
 <div class="sourceCode" id="cb894"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb894-1"><a href="glmm-binary-outcome-muscatine-obesity.html#cb894-1"></a>data_summary <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb894-2"><a href="glmm-binary-outcome-muscatine-obesity.html#cb894-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age_curr,</span>
@@ -1256,7 +1257,7 @@ NA
 <span id="cb894-11"><a href="glmm-binary-outcome-muscatine-obesity.html#cb894-11"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;dodger blue&quot;</span>, <span class="st">&quot;hot pink&quot;</span>)) <span class="op">+</span></span>
 <span id="cb894-12"><a href="glmm-binary-outcome-muscatine-obesity.html#cb894-12"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Child&#39;s Age, years&quot;</span>,</span>
 <span id="cb894-13"><a href="glmm-binary-outcome-muscatine-obesity.html#cb894-13"></a>       <span class="dt">y =</span> <span class="st">&quot;Proportion Obese&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-690-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-696-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1294,7 +1295,7 @@ NA
 <span id="cb895-26"><a href="glmm-binary-outcome-muscatine-obesity.html#cb895-26"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),</span>
 <span id="cb895-27"><a href="glmm-binary-outcome-muscatine-obesity.html#cb895-27"></a>        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),</span>
 <span id="cb895-28"><a href="glmm-binary-outcome-muscatine-obesity.html#cb895-28"></a>        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-691-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-697-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb896"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb896-1"><a href="glmm-binary-outcome-muscatine-obesity.html#cb896-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb896-2"><a href="glmm-binary-outcome-muscatine-obesity.html#cb896-2"></a><span class="st">  </span><span class="kw">group_by</span>(gender, age_curr) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb896-3"><a href="glmm-binary-outcome-muscatine-obesity.html#cb896-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n       =</span> <span class="kw">n</span>(),</span>
@@ -1326,7 +1327,7 @@ NA
 <span id="cb896-29"><a href="glmm-binary-outcome-muscatine-obesity.html#cb896-29"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
 <span id="cb896-30"><a href="glmm-binary-outcome-muscatine-obesity.html#cb896-30"></a>        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">0.05</span>, <span class="fl">1.05</span>),</span>
 <span id="cb896-31"><a href="glmm-binary-outcome-muscatine-obesity.html#cb896-31"></a>        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-692-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-698-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div id="center-time-at-twelve-years-old" class="section level3" number="19.4.1">
 <h3><span class="header-section-number">19.4.1</span> Center time at twelve years old</h3>
 <div class="sourceCode" id="cb897"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb897-1"><a href="glmm-binary-outcome-muscatine-obesity.html#cb897-1"></a>data_long &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -1412,7 +1413,7 @@ Num. obs.                  1050                    1050
 <span id="cb902-28"><a href="glmm-binary-outcome-muscatine-obesity.html#cb902-28"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">6</span>, <span class="dt">to =</span> <span class="dv">18</span>, <span class="dt">by =</span> <span class="dv">2</span>))</span>
 <span id="cb902-29"><a href="glmm-binary-outcome-muscatine-obesity.html#cb902-29"></a></span>
 <span id="cb902-30"><a href="glmm-binary-outcome-muscatine-obesity.html#cb902-30"></a>plot_pred_glm </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-696-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-702-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="gee-analysis" class="section level2" number="19.6">
@@ -1570,7 +1571,7 @@ Num. obs.     1050                    1050                    1050
 <span id="cb920-26"><a href="glmm-binary-outcome-muscatine-obesity.html#cb920-26"></a>  </span>
 <span id="cb920-27"><a href="glmm-binary-outcome-muscatine-obesity.html#cb920-27"></a>  </span>
 <span id="cb920-28"><a href="glmm-binary-outcome-muscatine-obesity.html#cb920-28"></a>plot_pred_gee</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-702-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-708-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="glmm-analysis" class="section level2" number="19.7">
@@ -1660,7 +1661,7 @@ Var: id (Intercept)          50.01                   49.13
 <span id="cb928-23"><a href="glmm-binary-outcome-muscatine-obesity.html#cb928-23"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">6</span>, <span class="dt">to =</span> <span class="dv">18</span>, <span class="dt">by =</span> <span class="dv">3</span>))</span>
 <span id="cb928-24"><a href="glmm-binary-outcome-muscatine-obesity.html#cb928-24"></a></span>
 <span id="cb928-25"><a href="glmm-binary-outcome-muscatine-obesity.html#cb928-25"></a>plot_pred_glmm </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-707-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-713-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="compare-methods" class="section level2" number="19.8">
 <h2><span class="header-section-number">19.8</span> Compare Methods</h2>
@@ -1695,7 +1696,7 @@ Var: id (Intercept)                                                    49.13
 <div class="sourceCode" id="cb931"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb931-1"><a href="glmm-binary-outcome-muscatine-obesity.html#cb931-1"></a>gridExtra<span class="op">::</span><span class="kw">grid.arrange</span>(plot_pred_glm, </span>
 <span id="cb931-2"><a href="glmm-binary-outcome-muscatine-obesity.html#cb931-2"></a>                        plot_pred_gee, </span>
 <span id="cb931-3"><a href="glmm-binary-outcome-muscatine-obesity.html#cb931-3"></a>                        plot_pred_glmm)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-709-1.png" width="720" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-715-1.png" width="720" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

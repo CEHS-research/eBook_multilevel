@@ -336,9 +336,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4.4" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-standardized-version-1"><i class="fa fa-check"></i><b>7.4.4</b> Comapre the Standardized Version</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>8</b> Variance Explained</a>
+<li class="chapter" data-level="8" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html"><i class="fa fa-check"></i><b>8</b> Effect Size: Variance Explained</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>8.1</b> For Generalized MLMs</a></li>
+<li class="chapter" data-level="8.1" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#mlm-or-lmm"><i class="fa fa-check"></i><b>8.1</b> MLM or LMM</a></li>
+<li class="chapter" data-level="8.2" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#glmm"><i class="fa fa-check"></i><b>8.2</b> GLMM</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sjplot-package.html"><a href="sjplot-package.html"><i class="fa fa-check"></i><b>9</b> sjPlot Package</a>
 <ul>
@@ -984,7 +985,7 @@ occas               no job 1 hour 2 hours 3 hours 4 or more hours &lt;NA&gt;
 <span id="cb576-8"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb576-8"></a>                    <span class="dt">caption =</span> <span class="st">&quot;Hox Table 5.2 (page 77) GPA means at six occations, for male and female students&quot;</span>,</span>
 <span id="cb576-9"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb576-9"></a>                    <span class="dt">caption.above =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-465">Table 12.1: </span>Hox Table 5.2 (page 77) GPA means at six occations, for male and female students</caption>
+<caption><span id="tab:unnamed-chunk-471">Table 12.1: </span>Hox Table 5.2 (page 77) GPA means at six occations, for male and female students</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -2458,8 +2459,8 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <span id="cb612-2"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb612-2"></a>                            <span class="dt">pred =</span> sem,</span>
 <span id="cb612-3"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb612-3"></a>                            <span class="dt">modx =</span> sex,</span>
 <span id="cb612-4"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb612-4"></a>                            <span class="dt">interval =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-492"></span>
-<img src="eBook_multilevel_files/figure-html/unnamed-chunk-492-1.png" alt="Hox Figure 5.4 (page 82) Multilevel model (M6) comapring linear increase in GPA over semester, but student's sex." width="576" />
+<div class="figure" style="text-align: center"><span id="fig:unnamed-chunk-498"></span>
+<img src="eBook_multilevel_files/figure-html/unnamed-chunk-498-1.png" alt="Hox Figure 5.4 (page 82) Multilevel model (M6) comapring linear increase in GPA over semester, but student's sex." width="576" />
 <p class="caption">
 Figure 12.1: Hox Figure 5.4 (page 82) Multilevel model (M6) comapring linear increase in GPA over semester, but student’s sex.
 </p>
@@ -2470,14 +2471,14 @@ Figure 12.1: Hox Figure 5.4 (page 82) Multilevel model (M6) comapring linear inc
 <span id="cb613-4"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb613-4"></a>                            <span class="dt">mod2 =</span> hrs,</span>
 <span id="cb613-5"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb613-5"></a>                            <span class="dt">mod2.values =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>),</span>
 <span id="cb613-6"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb613-6"></a>                            <span class="dt">interval =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-493-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-499-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb614"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb614-1"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb614-1"></a>interactions<span class="op">::</span><span class="kw">interact_plot</span>(<span class="dt">model =</span> fit_lmer_<span class="dv">5</span>_re,</span>
 <span id="cb614-2"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb614-2"></a>                            <span class="dt">pred =</span> sem,</span>
 <span id="cb614-3"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb614-3"></a>                            <span class="dt">modx =</span> sex,</span>
 <span id="cb614-4"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb614-4"></a>                            <span class="dt">mod2 =</span> highgpa,</span>
 <span id="cb614-5"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb614-5"></a>                            <span class="dt">mod2.values =</span> <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>),</span>
 <span id="cb614-6"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cb614-6"></a>                            <span class="dt">interval =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-494-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-500-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="effect-sizes" class="section level3" number="12.2.8">
 <h3><span class="header-section-number">12.2.8</span> Effect Sizes</h3>

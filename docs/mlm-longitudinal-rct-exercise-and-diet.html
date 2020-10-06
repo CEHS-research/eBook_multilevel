@@ -336,9 +336,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="7.4.4" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-standardized-version-1"><i class="fa fa-check"></i><b>7.4.4</b> Comapre the Standardized Version</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="8" data-path="variance-explained.html"><a href="variance-explained.html"><i class="fa fa-check"></i><b>8</b> Variance Explained</a>
+<li class="chapter" data-level="8" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html"><i class="fa fa-check"></i><b>8</b> Effect Size: Variance Explained</a>
 <ul>
-<li class="chapter" data-level="8.1" data-path="variance-explained.html"><a href="variance-explained.html#for-generalized-mlms"><i class="fa fa-check"></i><b>8.1</b> For Generalized MLMs</a></li>
+<li class="chapter" data-level="8.1" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#mlm-or-lmm"><i class="fa fa-check"></i><b>8.1</b> MLM or LMM</a></li>
+<li class="chapter" data-level="8.2" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#glmm"><i class="fa fa-check"></i><b>8.2</b> GLMM</a></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="sjplot-package.html"><a href="sjplot-package.html"><i class="fa fa-check"></i><b>9</b> sjPlot Package</a>
 <ul>
@@ -1035,7 +1036,7 @@ $ time     &lt;int&gt; 0, 228, 296, 639, 0, 56, 434, 538, 0, 150, 295, 541, 0, 1
 <span id="cb631-7"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb631-7"></a>                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-506">Table 13.1: </span>Baseline Descriptives
+<span id="tab:unnamed-chunk-512">Table 13.1: </span>Baseline Descriptives
 </caption>
 <thead>
 <tr>
@@ -1202,7 +1203,7 @@ pulse
 <span id="cb633-5"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb633-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> id)) <span class="op">+</span></span>
 <span id="cb633-6"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb633-6"></a><span class="st">  </span><span class="kw">facet_grid</span>(diet <span class="op">~</span><span class="st"> </span>exertype) <span class="op">+</span></span>
 <span id="cb633-7"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb633-7"></a><span class="st">  </span><span class="kw">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-508-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-514-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="loess---moving-average-smoothers" class="section level4" number="13.2.3.2">
 <h4><span class="header-section-number">13.2.3.2</span> Loess - Moving Average Smoothers</h4>
@@ -1224,7 +1225,7 @@ pulse
 <span id="cb634-16"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb634-16"></a>       <span class="dt">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,</span>
 <span id="cb634-17"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb634-17"></a>       <span class="dt">y =</span> <span class="st">&quot;Pulse (Beats per Minute)&quot;</span>,</span>
 <span id="cb634-18"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb634-18"></a>       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-509-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-515-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -2313,7 +2314,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <div class="sourceCode" id="cb644"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb644-1"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb644-1"></a>sjPlot<span class="op">::</span><span class="kw">plot_model</span>(fit_lmer_5re,</span>
 <span id="cb644-2"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb644-2"></a>                   <span class="dt">type =</span> <span class="st">&quot;pred&quot;</span>,</span>
 <span id="cb644-3"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb644-3"></a>                   <span class="dt">terms =</span> <span class="kw">c</span>(<span class="st">&quot;time_min&quot;</span>, <span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-519-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-525-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb645"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb645-1"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb645-1"></a>effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),</span>
 <span id="cb645-2"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb645-2"></a>                <span class="dt">mod =</span> fit_lmer_5re) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb645-3"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb645-3"></a><span class="st">  </span>data.frame <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -2332,7 +2333,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <span id="cb645-16"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb645-16"></a>       <span class="dt">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="ch">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,</span>
 <span id="cb645-17"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb645-17"></a>       <span class="dt">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,</span>
 <span id="cb645-18"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb645-18"></a>       <span class="dt">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-520-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-526-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb646"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb646-1"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb646-1"></a>effects<span class="op">::</span><span class="kw">Effect</span>(<span class="dt">focal.predictors =</span> <span class="kw">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),</span>
 <span id="cb646-2"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb646-2"></a>                <span class="dt">mod =</span> fit_lmer_5re,</span>
 <span id="cb646-3"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb646-3"></a>                <span class="dt">xlevels =</span> <span class="kw">list</span>(<span class="st">&quot;time_min&quot;</span> =<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, </span>
@@ -2364,7 +2365,7 @@ Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&
 <span id="cb646-29"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb646-29"></a><span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span></span>
 <span id="cb646-30"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb646-30"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray50&quot;</span>, <span class="st">&quot;black&quot;</span>)) <span class="op">+</span></span>
 <span id="cb646-31"><a href="mlm-longitudinal-rct-exercise-and-diet.html#cb646-31"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">14</span>, <span class="dt">by =</span> <span class="dv">5</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-521-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-527-1.png" width="576" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>
