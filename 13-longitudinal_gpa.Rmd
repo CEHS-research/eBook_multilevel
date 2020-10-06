@@ -1,20 +1,10 @@
 # MLM, Longitudinal: Hox ch 5 - student GPA
 
 
-```{r, echo=FALSE}
-library(pander)
-
-panderOptions('digits', 2)
-panderOptions('round', 2)
-panderOptions('keep.trailing.zeros', TRUE)
-panderOptions('keep.line.breaks', TRUE)
-```
-
-
-```{r}
+```{r, error=FALSE, warning=FALSE, message=FALSE, results='hide'}
 library(tidyverse)    # all things tidy
 library(pander)       # nice looking genderal tabulations
-library(furniture)    # nice table1() descriptives
+library(furniture)    # nice Table1() descriptives
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 library(psych)        # contains some useful functions, like headTail
 library(sjstats)      # ICC calculations
@@ -64,14 +54,13 @@ data_long <- data_raw %>%
                                 occas == "year 2 semester 2" ~ 4,
                                 occas == "year 3 semester 1" ~ 5,
                                 occas == "year 3 semester 2" ~ 6)) %>% 
-  dplyr::mutate(semc = sem - 1) %>% 
   dplyr::mutate(job = fct_drop(job)) %>% 
   dplyr::mutate(hrs = case_when(job == "no job" ~ 0,
                                 job == "1 hour" ~ 1,
                                 job == "2 hours" ~ 2,
                                 job == "3 hours" ~ 3,
                                 job == "4 or more hours" ~ 4)) %>%  
-  dplyr::select(student, sex, highgpa, sem, semc, job, hrs, gpa) %>% 
+  dplyr::select(student, sex, highgpa, sem, job, hrs, gpa) %>% 
   dplyr::arrange(student, sem)
 
 psych::headTail(data_long, top = 10)
@@ -80,10 +69,9 @@ psych::headTail(data_long, top = 10)
 
 ```{r}
 data_wide <- data_long %>% 
-  furniture::wide(v.names = c("job", "hrs", "gpa"),
-                  timevar = "sem",
-                  id = "student")
-
+  tidyr::pivot_wider(names_from = sem,
+                     values_from = c(job, hrs, gpa),
+                     names_sep = "_")
 
 psych::headTail(data_wide)
 ```
@@ -91,9 +79,14 @@ psych::headTail(data_wide)
 
 ```{r}
 data_wide %>% 
-  furniture::table1(highgpa, gpa.1, job.1, hrs.1,
-                    splitby = ~ sex,
-                    output = "html",
+  dplyr::group_by(sex) %>% 
+  furniture::table1("High School GPA" = highgpa, 
+                    "Initial College GPA" = gpa_1, 
+                    "Initial Job" = job_1, 
+                    "Initial Hrs" = hrs_1,
+                    output = "markdown",
+                    digits = 3,
+                    total = TRUE,
                     test = TRUE)
 ```
 
@@ -101,9 +94,14 @@ data_wide %>%
 
 ```{r}
 data_wide %>% 
-  furniture::table1(gpa.1, gpa.2, gpa.3, gpa.4, gpa.5, gpa.6,
-                    splitby = ~ sex,
-                    output = "html")
+  dplyr::group_by(sex) %>% 
+  furniture::table1(gpa_1, gpa_2, gpa_3, gpa_4, gpa_5, gpa_6,
+                    output = "markdown",
+                    digits = 3,
+                    total = TRUE,
+                    test = TRUE,
+                    caption = "Hox Table 5.2 (page 77) GPA means at six occations, for male and female students",
+                    caption.above = TRUE)
 ```
 
 ## MLM
@@ -113,9 +111,9 @@ data_wide %>%
 
 
 ```{r}
-fit_lmer_0_re <- lme4::lmer(gpa ~ 1 + (1|student),
-                            data = data_long,
-                            REML = TRUE)
+fit_lmer_0_re <- lmerTest::lmer(gpa ~ 1 + (1|student),
+                                data = data_long,
+                                REML = TRUE)
 ```
 
 ```{r}
@@ -123,49 +121,69 @@ performance::icc(fit_lmer_0_re)
 ```
 
 
-Over a third of the variance in the 6 GPA measures is variance between individuals, and about two-thirds is variance within individuals across time.
+Over a third of the variance in the 6 GPA measures is variance between individuals, and about two-thirds is variance within individuals across time, $\rho = .369$.
 
 
 ```{r}
-fit_lmer_1_re <- lme4::lmer(gpa ~ semc + (1|student),
-                            data = data_long,
-                            REML = TRUE)
+fit_lmer_1_re <- lmerTest::lmer(gpa ~ I(sem - 1) + (1|student),
+                                data = data_long,
+                                REML = TRUE)
 ```
 
 ```{r}
 performance::icc(fit_lmer_1_re)
 ```
 
-After accounting for the linear change in GPA over semesters, about half of the remaining variance in GPA scores is attributable person-to-person differences.
+After accounting for the linear change in GPA over semesters, about half of the remaining variance in GPA scores is attribuTable person-to-person difference.  
+
+> Another way to say it, is about half of the variance in initial GPAs is due to student-to-student differences.
 
 
 ### Fixed Effects
 
 
 ```{r}
-fit_lmer_0_ml <- lme4::lmer(gpa ~ 1 + (1|student),
-                            data = data_long,
-                            REML = FALSE)
+fit_lmer_0_ml <- lmerTest::lmer(gpa ~ 1 + (1|student),
+                                data = data_long,
+                                REML = FALSE)
 
-fit_lmer_1_ml <- lme4::lmer(gpa ~ semc + (1|student),
-                            data = data_long,
-                            REML = FALSE)
-
-
-fit_lmer_2_ml <- lme4::lmer(gpa ~ semc + hrs + (1|student),
-                            data = data_long,
-                            REML = FALSE)
+fit_lmer_1_ml <- lmerTest::lmer(gpa ~ I(sem - 1) + (1|student),
+                                data = data_long,
+                                REML = FALSE)
 
 
-fit_lmer_3_ml <- lme4::lmer(gpa ~ semc + hrs + highgpa + sex + (1|student),
-                            data = data_long,
-                            REML = FALSE)
+fit_lmer_2_ml <- lmerTest::lmer(gpa ~ I(sem - 1) + hrs + (1|student),
+                                data = data_long,
+                                REML = FALSE)
+
+
+fit_lmer_3_ml <- lmerTest::lmer(gpa ~ I(sem - 1) + hrs + highgpa + sex + (1|student),
+                                data = data_long,
+                                REML = FALSE)
 ```
 
 
-```{r}
-screenreg(list(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml),
-          digits = 3)
+```{r, results="asis"}
+texreg::knitreg(list(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml))
+```
+
+```{r, results="asis"}
+texreg::knitreg(list(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml),
+                custom.model.names = c("M1: Null",
+                                       "M2: Occ",
+                                       "M3: Job",
+                                       "M4: GPA, Sex"),
+                custom.coef.map = list("(Intercept)" = "(Intercept)",
+                                       "I(sem - 1)" = "Semester",
+                                       "hrs" = "Hours Working",
+                                       "highgpa" = "High School GPA",
+                                       "sexfemale" = "Female vs. Male"),
+                groups = list("Level 1 Main Effects, Occasion-Specific" = 2:3,
+                              "Level 2 Main Effects,  Person-Specific" = 4:5),
+                custom.note = "%stars. \nNote: Intercept refers to population mean for a Male who is not working during their first semester",
+                caption = "Hox Table 5.3 (page 78) Results of Multilevel Anlaysis of GPA, Fixed Effects",
+                caption.above = TRUE,
+                digits = 3)
 ```
 
 ```{r}
@@ -175,7 +193,7 @@ anova(fit_lmer_0_ml, fit_lmer_1_ml, fit_lmer_2_ml, fit_lmer_3_ml)
 ### Variance Explained by linear TIME at Level ONE
 
 ```{r}
-lme4::VarCorr(fit_lmer_0_ml)  # baseilne
+lme4::VarCorr(fit_lmer_0_ml)  # baseline
 ```
 
 ```{r}
@@ -184,13 +202,13 @@ lme4::VarCorr(fit_lmer_1_ml)  # model to compare
 
 
 ```{r}
-lme4::VarCorr(fit_lmer_0_ml) %>%  # baseilne
+lme4::VarCorr(fit_lmer_0_ml) %>%  # baseline
   print(comp = c("Variance", "Std.Dev"),
         digits = 3)
 ```
 
 ```{r}
-lme4::VarCorr(fit_lmer_0_ml) %>%  # model to compare
+lme4::VarCorr(fit_lmer_1_ml) %>%  # model to compare
   print(comp = c("Variance", "Std.Dev"),
         digits = 3)
 ```
@@ -281,7 +299,7 @@ $B$ is the average size of the Level 2 units.  Technically, you should use the *
 1 - (0.058/6 + 0.063) / (0.098/6 + 0.057)
 ```
 
-Reason: The intercept only model overestimates the variance at the occasion level and underestimates the variance at the subject level (se chapter 4 of @hox2017)
+Reason: The intercept only model overestimates the variance at the occasion level and underestimates the variance at the subject level (see chapter 4 of @hox2017)
 
 
 ### Random Effects
@@ -289,14 +307,17 @@ Reason: The intercept only model overestimates the variance at the occasion leve
 
 
 ```{r}
-fit_lmer_3_re <- lme4::lmer(gpa ~ semc + hrs + highgpa + sex + (1|student),
+fit_lmer_3_re <- lmerTest::lmer(gpa ~ I(sem-1) + hrs + highgpa + sex + 
+                                  (1|student),
                             data = data_long,
                             REML = TRUE)
 
 
-fit_lmer_4_re <- lme4::lmer(gpa ~ semc + hrs + highgpa + sex + (semc|student),
+fit_lmer_4_re <- lmerTest::lmer(gpa ~ I(sem-1) + hrs + highgpa + sex +
+                                  (I(sem-1)|student),
                             data = data_long,
-                            REML = TRUE)
+                            REML = TRUE,
+                            control = lmerControl(optimizer ="Nelder_Mead"))
 ```
 
 
@@ -307,28 +328,54 @@ anova(fit_lmer_3_re, fit_lmer_4_re, refit = FALSE)
 ### Cross-Level Interaction
 
 ```{r}
-fit_lmer_4_ml <- lme4::lmer(gpa ~ semc + hrs + highgpa + sex + (semc|student),
+fit_lmer_4_ml <- lmerTest::lmer(gpa ~ I(sem-1) + hrs + highgpa + sex + 
+                                  (I(sem-1)|student),
                             data = data_long,
                             REML = FALSE)
 
-fit_lmer_4_re <- lme4::lmer(gpa ~ semc + hrs + highgpa + sex + (semc|student),
+fit_lmer_4_re <- lmerTest::lmer(gpa ~ I(sem-1) + hrs + highgpa + sex + 
+                                  (I(sem-1)|student),
                             data = data_long,
-                            REML = TRUE)
+                            REML = TRUE,
+                            control = lmerControl(optimizer ="Nelder_Mead"))
 
-
-
-fit_lmer_5_ml <- lme4::lmer(gpa ~ semc + hrs + highgpa + sex + semc:sex + (semc|student),
+fit_lmer_5_ml <- lmerTest::lmer(gpa ~ I(sem-1) + hrs + highgpa + sex + I(sem-1):sex + 
+                                  (I(sem-1)|student),
                             data = data_long,
                             REML = FALSE)
 
-fit_lmer_5_re <- lme4::lmer(gpa ~ semc + hrs + highgpa + sex + semc:sex + (semc|student),
+fit_lmer_5_re <- lmerTest::lmer(gpa ~ I(sem-1) + hrs + highgpa + sex + I(sem-1):sex + 
+                                  (I(sem-1)|student),
                             data = data_long,
                             REML = FALSE)
 ```
 
 
-```{r}
-texreg::screenreg(list(fit_lmer_4_ml, fit_lmer_5_ml, fit_lmer_5_re))
+```{r, results='asis'}
+texreg::knitreg(list(fit_lmer_4_re, fit_lmer_5_re),
+                single.row = TRUE)
+```
+
+
+
+```{r, results='asis'}
+texreg::knitreg(list(fit_lmer_4_re, fit_lmer_5_re),
+                single.row = TRUE,
+                custom.model.names = c("M5: Occ Rand",
+                                       "M6: Xlevel Int"),
+                custom.coef.map = list("(Intercept)" = "(Intercept)",
+                                       "I(sem - 1)" = "Semester",
+                                       "hrs" = "Hours Working",
+                                       "sexfemale" = "Sex: Female vs. Male",
+                                       "highgpa" = "High School GPA",
+                                       "I(sem - 1):sexfemale" = "Semester X Sex"),
+                groups = list("Level 1 Main Effects, Occasion-Specific" = 2:3,
+                              "Level 2 Main Effects,  Person-Specific" = 4:5,
+                              "Cross Level Interaction" = 6),
+                custom.note = "%stars. \nNote: Intercept refers to population mean for a Male who is not working during their first semester",
+                caption = "Hox Table 5.4 (page 80) Results of Multilevel Anlaysis of GPA, Varying Effects for Occation",
+                caption.above = TRUE,
+                digits = 3)
 ```
 
 
@@ -337,13 +384,80 @@ anova(fit_lmer_4_ml, fit_lmer_5_ml)
 ```
 
 
-```{r}
-sjPlot::plot_model(fit_lmer_5_re,
-                   type = "pred",
-                   terms = c("semc", "sex"))
+### Visualize the Model
+
+
+```{r, fig.cap="Hox Figure 5.4 (page 82) Multilevel model (M6) comapring linear increase in GPA over semester, but student's sex.", warning=FALSE, message=FALSE}
+interactions::interact_plot(model = fit_lmer_5_re,
+                            pred = sem,
+                            modx = sex,
+                            interval = TRUE)
 ```
 
 
+
+```{r, warning=FALSE, message=FALSE}
+interactions::interact_plot(model = fit_lmer_5_re,
+                            pred = sem,
+                            modx = sex,
+                            mod2 = hrs,
+                            mod2.values = c(1, 2, 3),
+                            interval = TRUE)
+```
+
+```{r, warning=FALSE, message=FALSE}
+interactions::interact_plot(model = fit_lmer_5_re,
+                            pred = sem,
+                            modx = sex,
+                            mod2 = highgpa,
+                            mod2.values = c(2, 3, 4),
+                            interval = TRUE)
+```
+
+
+### Effect Sizes
+
+#### Standardized Parameters
+
+```{r}
+effectsize::standardize_parameters(fit_lmer_5_re)
+```
+
+
+#### R-squared type measures
+
+```{r}
+performance::r2(fit_lmer_5_re, by_group = TRUE)
+```
+
+
+### Significance
+
+#### Fixed Effects
+
+> The Likelyhood Ratio Test (Deviance Difference Test) is best for establishing significance of fixed effects.
+
+Wald-tests
+
+```{r}
+summary(fit_lmer_5_re)
+```
+
+F-test with Satterthwaite adjusted degrees of freedom 
+
+```{r}
+anova(fit_lmer_5_re)
+```
+
+
+
+#### Random Effects
+
+Likelyhood Ratio Tests (Deviance Difference Test), by single term deletion
+
+```{r}
+lmerTest::ranova(fit_lmer_5_re)
+```
 
 
 
