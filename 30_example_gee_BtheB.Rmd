@@ -49,6 +49,11 @@ BtheB %>%
 
 ### Tidy up the dataset
 
+**WIDE format**
+* One line per person
+* Good for descriptive tables & correlation matrices
+
+
 ```{r}
 btb_wide <- BtheB %>% 
   dplyr::mutate(id = row_number()) %>%           # create a new variable to ID participants
@@ -57,16 +62,16 @@ btb_wide <- BtheB %>%
                 bdi.pre, bdi.2m, bdi.4m, bdi.6m, bdi.8m)
 ```
 
-
-```{r, results='asis'}
+```{r}
 btb_wide %>% 
-  furniture::table1(bdi.pre, bdi.2m, bdi.4m, bdi.6m, bdi.8m,
-                    splitby = ~ treatment,
-                    test = TRUE,
-                    output = "html")
+  psych::headTail(top = 10, bottom = 10) 
 ```
 
 ### Restructure to long format
+
+**LONG FORMAT**
+* One line per observation
+* Good for plots and modeling
 
 ```{r}
 btb_long <- btb_wide %>% 
@@ -170,7 +175,8 @@ bdi_corr
 ### Plot the correlation matrix to get a better feel for the pattern
 
 ```{r}
-corrplot::corrplot.mixed(bdi_corr)
+bdi_corr %>% 
+  corrplot::corrplot.mixed(upper = "ellipse")
 ```
 
 
@@ -200,18 +206,8 @@ btb_lm_4 <- stats::lm(bdi ~ bdi.pre + length + drug*treatment*month,
 ### Parameter Estimates Table
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4))
-```
-
-```{r, eval=FALSE,}
-texreg::texreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4),
-               label = "lm",
-               caption = "OLS")
-```
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4),
+```{r, results='asis'}
+texreg::knitreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4),
                 label = "lm",
                 caption = "OLS")
 ```
@@ -262,21 +258,10 @@ btb_lmer_RIAS <- lmerTest::lmer(bdi ~ bdi.pre + length + drug + treatment + mont
 
 ### Parameter Estimates Table
 
-```{r, include=FALSE}
-texreg::screenreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
-          custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"))
-```
-
-```{r, eval=FALSE}
-texreg::texreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
-               custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"),
-               label = "mlm",
-               caption = "LM vs. MLM")
-```
 
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
+```{r, results='asis'}
+texreg::knitreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
                 custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"),
                 label = "mlm",
                 caption = "LM vs. MLM")
@@ -291,6 +276,15 @@ anova(btb_lmer_RI,
       btb_lmer_RIAS, 
       refit = FALSE)
 ```
+
+
+```{r}
+performance::compare_performance(btb_lm_1, 
+                                 btb_lmer_RI, 
+                                 btb_lmer_RIAS,
+                                 rank = TRUE)
+```
+
 
 
 ### Plot the model predictions
@@ -322,9 +316,9 @@ effects::Effect(c("treatment", "month", "drug"),
 
 ### Fit the models - Main effects to determine correlation structure
 
-**Use the `gee()` function from the `gee` package for the results to be used in a `texreg()` table.**
+**Use the `gee()` function from the `gee` package for the results to be used in a `texreg::knitreg()` tables.**
 
-The output below each model is the 'starting' model assuming indendence, so they will all be the same here.
+The output below each model is the 'starting' model assuming independence, so they will all be the same here.
 
 ```{r}
 btb_gee_in <- gee::gee(bdi ~ bdi.pre + length + drug + treatment + month, 
@@ -369,35 +363,14 @@ summary(btb_gee_ex)
 summary(btb_gee_un)
 ```
 
+
+
+
 ### Parameter Estimates Table
 
-```{r, include=FALSE}
-texreg::screenreg(list(btb_lm_1, 
-                       btb_lmer_RI, 
-                       btb_gee_in, 
-                       btb_gee_ex, 
-                       btb_gee_un))
-```
 
-
-```{r, eval=FALSE}
-texreg::texreg(list(btb_lm_1, 
-                    btb_lmer_RI, 
-                    btb_gee_in, 
-                    btb_gee_ex, 
-                    btb_gee_un),
-               custom.model.names = c("OLS", 
-                                      "MLM-RI", 
-                                      "GEE-in", 
-                                      "GEE-ex", 
-                                      "GEE-un"),
-               label = "GEEs",
-               caption = "LM, MLM, and GEE")
-```
-
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(btb_lm_1, 
+```{r,  results='asis'}
+texreg::knitreg(list(btb_lm_1, 
                      btb_lmer_RI, 
                      btb_gee_in, 
                      btb_gee_ex, 
@@ -416,7 +389,7 @@ texreg::htmlreg(list(btb_lm_1,
 
 ### Re-Fit Models
 
-**Use the `geeglm()` function from the `geepack` package for the results to be used in a `anova()` table.**
+**Use the `geeglm()` function from the `geepack` package for the results to be used in a `anova()` table and interaction plots.**
 
 This function does NOT produce the same starting model output as `gee::gee()`.
 
@@ -462,6 +435,17 @@ anova(btb_geeglm_in, btb_geeglm_ar)
 anova(btb_geeglm_in, btb_geeglm_un)
 ```
 
+### Can use the Performance (RMSE)
+
+Notice how similar the values are.
+
+```{r}
+performance::compare_performance(btb_geeglm_in,
+                                 btb_geeglm_ex,
+                                 btb_geeglm_ar,
+                                 btb_geeglm_un,
+                                 rank = TRUE)
+```
 
 
 ### Variaous QIC Measures of Fit
@@ -525,9 +509,16 @@ MuMIn::model.sel(btb_geeglm_in,
 
 ### Plot the model predictions
 
+
 ```{r}
-summary(btb_long)
+interactions::interact_plot(model = btb_geeglm_ex,
+                            pred = "month",
+                            modx = "treatment")
 ```
+
+
+
+
 
 
 
@@ -575,6 +566,8 @@ expand.grid(bdi.pre = 23,
   theme(legend.key.width = unit(1, "cm")) +
   facet_wrap(~ covR)
 ```
+
+
 
 
 
@@ -654,30 +647,9 @@ btb_geeglm_ex_3 <- geepack::geeglm(bdi ~  bdi.pre*treatment + length + drug + mo
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(btb_geeglm_ex, 
-                       btb_geeglm_ex_1, 
-                       btb_geeglm_ex_2,
-                       btb_geeglm_ex_3))
-```
 
-
-```{r, eval=FALSE}
-texreg::texreg(list(btb_geeglm_ex, 
-                    btb_geeglm_ex_1, 
-                    btb_geeglm_ex_2,
-                    btb_geeglm_ex_3),
-               custom.model.names = c("None",
-                                      "Length",
-                                      "Antidpressant",
-                                      "Treatment"),
-               label = "GEE_inter1",
-               caption = "GEE (exchangable): Interactions, not with Time")
-```
-
-
-```{r, echo=FALSE, results='asis'}
-texreg::texreg(list(btb_geeglm_ex, 
+```{r,  results='asis'}
+texreg::knitreg(list(btb_geeglm_ex, 
                     btb_geeglm_ex_1, 
                     btb_geeglm_ex_2,
                     btb_geeglm_ex_3),
@@ -724,16 +696,8 @@ btb_geeglm_ex_14 <- geepack::geeglm(bdi ~ length + drug + treatment + bdi.pre*mo
 
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(btb_geeglm_ex, 
-                       btb_geeglm_ex_11, 
-                       btb_geeglm_ex_12,
-                       btb_geeglm_ex_13,
-                       btb_geeglm_ex_14))
-```
-
-```{r, eval=FALSE}
-texreg::texreg(list(btb_geeglm_ex, 
+```{r, results='asis'}
+texreg::knitreg(list(btb_geeglm_ex, 
                        btb_geeglm_ex_11, 
                        btb_geeglm_ex_12,
                        btb_geeglm_ex_13,
@@ -751,29 +715,32 @@ texreg::texreg(list(btb_geeglm_ex,
 
 Now only plot the significant variables for the 'best' model.
 
+
+
 ```{r}
-expand.grid(bdi.pre = c(10, 20, 30),
-            length = "<6m",
-            drug = "No",
-            treatment = "TAU",
-            month = seq(from = 2, to = 8, by = 2)) %>%  
-  dplyr::mutate(fit = predict(btb_geeglm_ex,
-                                 newdata = .,
-                                 type = "response")) %>% 
-  dplyr::mutate(bdi.pre = factor(bdi.pre) %>% fct_rev()) %>% 
-  ggplot(aes(x = month,
-             y = fit,
-             linetype = bdi.pre,
-             color = bdi.pre)) +
-  geom_line(size = 1) +
-  theme_bw() +
-  labs(title    = "BtheB - Predictions from the GEE model (exchangable)",
-       subtitle = "Trajectory for a person with BL depression < 6 months and randomized to TAU",
-       x = "Month",
-       y = "Predicted BDI",
-       color    = "Baseline BDI:",
-       linetype = "Baseline BDI:") +
-  theme(legend.key.width = unit(1.5, "cm")) +
-  scale_linetype_manual(values = c("solid", "longdash", "dotted"))
+interactions::interact_plot(model = btb_geeglm_ex,
+                            pred = "month",
+                            modx = "bdi.pre")
 ```
+
+
+```{r}
+interactions::interact_plot(model = btb_geeglm_ex,
+                            pred = "month",
+                            modx = "bdi.pre",
+                            modx.values = c(10, 20, 30),
+                            at = list(length = "<6m",
+                                      drug = "No",
+                                      treatment = "TAU"),
+                            colors = rep("black", times = 3),
+                            x.label = "Month",
+                            y.label = "Predicted BDI",
+                            legend.main    = "Baseline BDI:") +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(2, "cm")) +
+  labs(title    = "BtheB - Predictions from the GEE model (exchangable)",
+       subtitle = "Trajectory for a person with BL depression < 6 months and randomized to TAU") 
+```
+
 
