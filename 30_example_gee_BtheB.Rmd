@@ -215,6 +215,41 @@ texreg::knitreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4),
 ### Plot the model predictions
 
 ```{r}
+interactions::interact_plot(model = btb_lm_1,
+                            pred = month,
+                            modx = treatment,
+                            main.title = "LM with 95% CI",
+                            interval = TRUE)                 # default = 95% confidence interval
+```
+
+
+```{r}
+interactions::interact_plot(model = btb_lm_1,
+                            pred = month,
+                            modx = treatment,
+                            main.title = "LM with 68% CI (M +/- SEM)",
+                            interval = TRUE,
+                            int.width = 0.68)  # change to 68% CI, which is +/- 1 SEM
+```
+
+```{r}
+interactions::interact_plot(model = btb_lm_1,
+                            pred = month,
+                            modx = treatment,
+                            interval = TRUE,
+                            colors = rep("black", times = 3),
+                            x.label = "Month",
+                            y.label = "Predicted BDI",
+                            legend.main    = "Baseline BDI:") +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(2, "cm")) +
+  labs(title    = "BtheB - Predictions from the LM model (95% CI)",
+       subtitle = "Trajectory for a person with BL depression < 6 months and randomized to TAU") 
+```
+
+
+```{r}
 effects::Effect(focal.predictors = c("treatment", "month"), 
                 mod = btb_lm_1) %>% 
   data.frame %>% 
@@ -222,11 +257,11 @@ effects::Effect(focal.predictors = c("treatment", "month"),
   ggplot(aes(x = month,
              y = fit)) +
   geom_line(aes(color = treatment)) +
-  geom_ribbon(aes(ymin = lower,
+  geom_ribbon(aes(ymin = lower,            # 95% confidence intervals
                   ymax = upper,
                   fill = treatment), 
               alpha = 0.3) +
-  geom_ribbon(aes(ymin = fit - se,
+  geom_ribbon(aes(ymin = fit - se,         # Mean +/- 1 standard error for the mean (SEM)
                   ymax = fit + se,
                   fill = treatment), 
               alpha = 0.3) +
@@ -288,6 +323,21 @@ performance::compare_performance(btb_lm_1,
 
 
 ### Plot the model predictions
+
+```{r}
+interactions::interact_plot(model = btb_lmer_RI,
+                            pred = month,
+                            modx = treatment,
+                            mod2 = drug,
+                            interval = TRUE) +
+  theme_bw() +
+  labs(title = "BtheB - Predictions from a Multilevel Model (lmer)") +
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.background = element_rect(color = "black"))
+```
+
+
 
 ```{r}
 effects::Effect(c("treatment", "month", "drug"), 
@@ -435,17 +485,6 @@ anova(btb_geeglm_in, btb_geeglm_ar)
 anova(btb_geeglm_in, btb_geeglm_un)
 ```
 
-### Can use the Performance (RMSE)
-
-Notice how similar the values are.
-
-```{r}
-performance::compare_performance(btb_geeglm_in,
-                                 btb_geeglm_ex,
-                                 btb_geeglm_ar,
-                                 btb_geeglm_un,
-                                 rank = TRUE)
-```
 
 
 ### Variaous QIC Measures of Fit
@@ -714,7 +753,6 @@ texreg::knitreg(list(btb_geeglm_ex,
 
 
 Now only plot the significant variables for the 'best' model.
-
 
 
 ```{r}
