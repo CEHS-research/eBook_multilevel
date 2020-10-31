@@ -37,19 +37,28 @@ library(HSAUR)        # package with the dataset
 Helper `extract` functions for exponentiating parameters form generalized regression models within a `texreg` table of model parameters.
 
 ```{r, message=FALSE, error=FALSE}
-# install.packages("devtools")
-# library(devtools)
-# install_github("SarBearSchwartz/texreghelpr")
+# remotes::install_github("sarbearschwartz/texreghelpr") # first time
 
 library(texreghelpr)
 ```
 
-## Prepare and get to know the dataset
+## Background
 
 
-> This data set is in the **HSAUR** package. 
+> This dataset was used as an example in Chapter 11 of "A Handbook of Statistical Analysis using R" by Brian S. Everitt and Torsten Hothorn.  The authors include this data set in their **HSAUR** package on `CRAN`. 
 
-In this clinical trial, 59 patients suffering from epilepsy were randomized to groups receiving either the anti-epileptic drug "Progabide"" or a placebo in addition to standard chemotherapy. The numbers of seizures suffered in each of four, two-week periods were recorded for each patient along with a baseline seizure count for the 8 weeks prior to being randomized to treatment and age. The main question of interest is whether taking progabide reduced the number of epileptic seizures compared with placebo.
+
+**The Background**
+
+In this clinical trial, 59 patients suffering from epilepsy were randomized to groups receiving either the anti-epileptic drug "Progabide"" or a placebo in addition to standard chemotherapy. The numbers of seizures suffered in each of four, two-week periods were recorded for each patient along with a baseline seizure count for the 8 weeks prior to being randomized to treatment and age. 
+
+
+**The Research Question**
+
+The main question of interest is whether taking progabide reduced the number of epileptic seizures compared with placebo.
+
+
+**The Data**
 
 * Indicators    
 
@@ -130,9 +139,11 @@ psych::headTail(data_wide)
 
 ```{r}
 data_wide %>% 
+  dplyr::group_by(treatment) %>% 
   furniture::table1(age, base, base_wk,
-                    splitby = ~ treatment,
+                    total = TRUE,
                     test = TRUE,
+                    digits = 2,
                     type = "full",
                     output = "markdown")
 ```
@@ -243,6 +254,10 @@ data_long %>%
 ## Poisson Regression (GLM)
 
 
+> **Note:** THIS IS NEVER APPROPRIATE TO CONDUCT A GLM ON REPEATED MEASURES.  THIS IS DONE FOR ILLUSTRATION PURPOSES ONLY!
+ 
+### Fit the model
+
 ```{r}
 fit_glm <- glm(seizure.rate ~ base + age + treatment + offset(per),
                data = data_long,
@@ -250,6 +265,21 @@ fit_glm <- glm(seizure.rate ~ base + age + treatment + offset(per),
 
 summary(fit_glm)
 ```
+
+
+### Tabulate the Model Parameters
+
+```{r, results='asis'}
+texreg::knitreg(list(fit_glm,
+                     texreghelpr::extract_glm_exp(fit_glm,
+                                                  include.any = FALSE)),
+                custom.model.names = c("b (SE)", "IRR [95 CI]"),
+                caption = "Poisson Generalized Linear Regression (GLM)",
+                single.row = TRUE,
+                digits = 3,
+                ci.test = 1)
+```
+
 
 ## Generalized Estimating Equations (GEE)
 
@@ -293,12 +323,27 @@ fit_gee_exc_s1 <- gee::gee(seizure.rate ~ base + age + treatment + offset(per),
 summary(fit_gee_exc_s1)
 ```
 
+
 * Although the estimated beta parameters are not much different, the naive SE's are some closer to the robust SE's.
+
+#### Interpretation
+
+> For determining significance, no p-values are given, however the p-value will be < .05 when the z-score is > 1.96.
+
+"For this example, the estimates of standard errors under the independence are about half of the corresponding robust estimates, and the the situation improves only a little when an exchangeable structure is fitted.  Using naive standard errors leads, in particular, to a highly significant treatment effect which disappears when the robust estimates are used."
+
+
+
 
 ### Estimate the Additional Scale Parameter
 
+"The problem with the GEE approach here, using either the independence or exchangeable correlation structure lies in constraining the scale parameter to be one.  For these data there is **overdispersion** *(variance is larger than the mean value)* which has to be accommodated by allowing this parameter to be freely estimated.  "
+
+
 * correlation structure: `exchangeable`
 * scale parameter = *freely estimated*
+
+
 
 ```{r}
 fit_gee_exc_sf <- gee::gee(seizure.rate ~ base + age + treatment + offset(per),
@@ -313,7 +358,11 @@ summary(fit_gee_exc_sf)
 
 * The naive SE's are much closer inline with the robust SE's.
 
-* The sclae parameter is estimated to be much larger than $1$.
+* The scale parameter is estimated to be much larger than $1$.
+
+
+"When this is done *(scale parameter is freely estimated)* it gives the last set of results shown above.  THe estimate of $\phi$ is 5.09 and the naive and robust estimates of the standard errors are now very similar.  "
+
 
 
 ### Compare Models
@@ -321,20 +370,10 @@ summary(fit_gee_exc_sf)
 
 #### Raw Estimates (logit scale) 
 
-```{r, include=FALSE}
-texreg::screenreg(list(fit_glm, fit_gee_ind_s1, fit_gee_exc_s1, fit_gee_exc_sf),
-                  digits = 3,
-                  caption = "Estimates on Logit Scale")
-```
-
 
 
 ```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(fit_glm, 
+texreg::knitreg(list(fit_glm, 
                      fit_gee_ind_s1, 
                      fit_gee_exc_s1, 
                      fit_gee_exc_sf),
@@ -351,28 +390,9 @@ texreg::htmlreg(list(fit_glm,
 #### Exponentiate the Estimates (odds ratio scale)
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(extract_glm_exp(fit_glm), 
-                       extract_gee_exp(fit_gee_ind_s1), 
-                       extract_gee_exp(fit_gee_exc_s1), 
-                       extract_gee_exp(fit_gee_exc_sf)),
-                custom.model.names = c("GLM",
-                                       "GEE-Indep(1)",
-                                       "GEE-Exchg(1)",
-                                       "GEE-Exchg(free)"),
-                  digits = 3,
-                  caption = "Estimates on Odds-Ratio Scale",
-                  caption.above = TRUE,
-                  ci.test = 1)
-```
-
 
 ```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(extract_glm_exp(fit_glm), 
+texreg::knitreg(list(extract_glm_exp(fit_glm), 
                      extract_gee_exp(fit_gee_ind_s1), 
                      extract_gee_exp(fit_gee_exc_s1), 
                      extract_gee_exp(fit_gee_exc_sf)),
@@ -386,9 +406,16 @@ texreg::htmlreg(list(extract_glm_exp(fit_glm),
                 ci.test = 1)
 ```
 
-> CONCLUSION:
->
-> There is no evidence that Progabide effects the weekly rate of epileptic seizures differently than placebo.
+## Conculsion
+
+
+**The Research Question**
+
+The main question of interest is whether taking progabide reduced the number of epileptic seizures compared with placebo.
+
+**The Conclusion**
+
+There is no evidence that Progabide effects the weekly rate of epileptic seizures differently than placebo.
 
 
 
