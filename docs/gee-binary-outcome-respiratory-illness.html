@@ -258,6 +258,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.8.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#fit-the-model-8"><i class="fa fa-check"></i><b>5.8.1</b> Fit the model</a></li>
 <li class="chapter" data-level="5.8.2" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#table-of-estimated-parameters"><i class="fa fa-check"></i><b>5.8.2</b> Table of Estimated Parameters</a></li>
 <li class="chapter" data-level="5.8.3" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#visualization-estimated-marginal-means-plot"><i class="fa fa-check"></i><b>5.8.3</b> Visualization: Estimated Marginal Means Plot</a></li>
+<li class="chapter" data-level="5.8.4" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#post-hoc-pairwise-tests"><i class="fa fa-check"></i><b>5.8.4</b> Post Hoc Pairwise Tests</a></li>
+<li class="chapter" data-level="5.8.5" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#effect-sizes"><i class="fa fa-check"></i><b>5.8.5</b> Effect Sizes</a></li>
 </ul></li>
 <li class="chapter" data-level="5.9" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#interpretation-6"><i class="fa fa-check"></i><b>5.9</b> Interpretation</a>
 <ul>
@@ -406,7 +408,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.7.3" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#interpretation-of-random-effects"><i class="fa fa-check"></i><b>10.7.3</b> Interpretation of Random Effects</a></li>
 <li class="chapter" data-level="10.7.4" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#assumption-checking"><i class="fa fa-check"></i><b>10.7.4</b> Assumption Checking</a></li>
 <li class="chapter" data-level="10.7.5" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#plot-of-the-estimated-marginal-means-1"><i class="fa fa-check"></i><b>10.7.5</b> Plot of the Estimated Marginal Means</a></li>
-<li class="chapter" data-level="10.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.-fixed-effects"><i class="fa fa-check"></i><b>10.7.6</b> Blups vs. Fixed Effects</a></li>
+<li class="chapter" data-level="10.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#post-hoc-compairisons"><i class="fa fa-check"></i><b>10.7.6</b> Post Hoc Compairisons</a></li>
+<li class="chapter" data-level="10.7.7" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.-fixed-effects"><i class="fa fa-check"></i><b>10.7.7</b> Blups vs. Fixed Effects</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html"><i class="fa fa-check"></i><b>11</b> MLM, Longitudinal: Hedeker &amp; Gibbons - Depression</a>
@@ -479,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.2.5" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#random-effects-2"><i class="fa fa-check"></i><b>12.2.5</b> Random Effects</a></li>
 <li class="chapter" data-level="12.2.6" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cross-level-interaction"><i class="fa fa-check"></i><b>12.2.6</b> Cross-Level Interaction</a></li>
 <li class="chapter" data-level="12.2.7" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#visualize-the-model-3"><i class="fa fa-check"></i><b>12.2.7</b> Visualize the Model</a></li>
-<li class="chapter" data-level="12.2.8" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#effect-sizes"><i class="fa fa-check"></i><b>12.2.8</b> Effect Sizes</a></li>
+<li class="chapter" data-level="12.2.8" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#effect-sizes-1"><i class="fa fa-check"></i><b>12.2.8</b> Effect Sizes</a></li>
 <li class="chapter" data-level="12.2.9" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#significance"><i class="fa fa-check"></i><b>12.2.9</b> Significance</a></li>
 </ul></li>
 </ul></li>
@@ -792,29 +795,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">15.1</span> Packages</h2>
 <div id="cran-1" class="section level3" number="15.1.1">
 <h3><span class="header-section-number">15.1.1</span> CRAN</h3>
-<div class="sourceCode" id="cb735"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb735-1"><a href="gee-binary-outcome-respiratory-illness.html#cb735-1"></a><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></span>
-<span id="cb735-2"><a href="gee-binary-outcome-respiratory-illness.html#cb735-2"></a><span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span></span>
-<span id="cb735-3"><a href="gee-binary-outcome-respiratory-illness.html#cb735-3"></a><span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></span>
-<span id="cb735-4"><a href="gee-binary-outcome-respiratory-illness.html#cb735-4"></a><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></span>
-<span id="cb735-5"><a href="gee-binary-outcome-respiratory-illness.html#cb735-5"></a><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></span>
-<span id="cb735-6"><a href="gee-binary-outcome-respiratory-illness.html#cb735-6"></a></span>
-<span id="cb735-7"><a href="gee-binary-outcome-respiratory-illness.html#cb735-7"></a><span class="kw">library</span>(interactions)</span>
-<span id="cb735-8"><a href="gee-binary-outcome-respiratory-illness.html#cb735-8"></a><span class="kw">library</span>(performance)</span>
-<span id="cb735-9"><a href="gee-binary-outcome-respiratory-illness.html#cb735-9"></a><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></span>
-<span id="cb735-10"><a href="gee-binary-outcome-respiratory-illness.html#cb735-10"></a></span>
-<span id="cb735-11"><a href="gee-binary-outcome-respiratory-illness.html#cb735-11"></a><span class="kw">library</span>(corrplot)     <span class="co"># Vizualize correlation matrix</span></span>
-<span id="cb735-12"><a href="gee-binary-outcome-respiratory-illness.html#cb735-12"></a><span class="kw">library</span>(gee)          <span class="co"># Genderalized Estimation Equation Solver</span></span>
-<span id="cb735-13"><a href="gee-binary-outcome-respiratory-illness.html#cb735-13"></a><span class="kw">library</span>(geepack)      <span class="co"># Genderalized Estimation Equation Package </span></span>
-<span id="cb735-14"><a href="gee-binary-outcome-respiratory-illness.html#cb735-14"></a><span class="kw">library</span>(MuMIn)        <span class="co"># Multi-Model Inference (caluclate QIC)</span></span>
-<span id="cb735-15"><a href="gee-binary-outcome-respiratory-illness.html#cb735-15"></a></span>
-<span id="cb735-16"><a href="gee-binary-outcome-respiratory-illness.html#cb735-16"></a><span class="kw">library</span>(HSAUR)        <span class="co"># package with the dataset</span></span></code></pre></div>
+<div class="sourceCode" id="cb764"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb764-1"><a href="gee-binary-outcome-respiratory-illness.html#cb764-1"></a><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></span>
+<span id="cb764-2"><a href="gee-binary-outcome-respiratory-illness.html#cb764-2"></a><span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span></span>
+<span id="cb764-3"><a href="gee-binary-outcome-respiratory-illness.html#cb764-3"></a><span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></span>
+<span id="cb764-4"><a href="gee-binary-outcome-respiratory-illness.html#cb764-4"></a><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></span>
+<span id="cb764-5"><a href="gee-binary-outcome-respiratory-illness.html#cb764-5"></a><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></span>
+<span id="cb764-6"><a href="gee-binary-outcome-respiratory-illness.html#cb764-6"></a></span>
+<span id="cb764-7"><a href="gee-binary-outcome-respiratory-illness.html#cb764-7"></a><span class="kw">library</span>(interactions)</span>
+<span id="cb764-8"><a href="gee-binary-outcome-respiratory-illness.html#cb764-8"></a><span class="kw">library</span>(performance)</span>
+<span id="cb764-9"><a href="gee-binary-outcome-respiratory-illness.html#cb764-9"></a><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></span>
+<span id="cb764-10"><a href="gee-binary-outcome-respiratory-illness.html#cb764-10"></a></span>
+<span id="cb764-11"><a href="gee-binary-outcome-respiratory-illness.html#cb764-11"></a><span class="kw">library</span>(corrplot)     <span class="co"># Vizualize correlation matrix</span></span>
+<span id="cb764-12"><a href="gee-binary-outcome-respiratory-illness.html#cb764-12"></a><span class="kw">library</span>(gee)          <span class="co"># Genderalized Estimation Equation Solver</span></span>
+<span id="cb764-13"><a href="gee-binary-outcome-respiratory-illness.html#cb764-13"></a><span class="kw">library</span>(geepack)      <span class="co"># Genderalized Estimation Equation Package </span></span>
+<span id="cb764-14"><a href="gee-binary-outcome-respiratory-illness.html#cb764-14"></a><span class="kw">library</span>(MuMIn)        <span class="co"># Multi-Model Inference (caluclate QIC)</span></span>
+<span id="cb764-15"><a href="gee-binary-outcome-respiratory-illness.html#cb764-15"></a></span>
+<span id="cb764-16"><a href="gee-binary-outcome-respiratory-illness.html#cb764-16"></a><span class="kw">library</span>(HSAUR)        <span class="co"># package with the dataset</span></span></code></pre></div>
 </div>
 <div id="github-1" class="section level3" number="15.1.2">
 <h3><span class="header-section-number">15.1.2</span> GitHub</h3>
 <p>Helper <code>extract</code> functions for exponentiation of parameters form generalized regression models within a <code>texreg</code> table of model parameters.</p>
-<div class="sourceCode" id="cb736"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb736-1"><a href="gee-binary-outcome-respiratory-illness.html#cb736-1"></a><span class="co"># remotes::install_github(&quot;sarbearschwartz/texreghelpr&quot;) # first time</span></span>
-<span id="cb736-2"><a href="gee-binary-outcome-respiratory-illness.html#cb736-2"></a></span>
-<span id="cb736-3"><a href="gee-binary-outcome-respiratory-illness.html#cb736-3"></a><span class="kw">library</span>(texreghelpr)</span></code></pre></div>
+<div class="sourceCode" id="cb765"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb765-1"><a href="gee-binary-outcome-respiratory-illness.html#cb765-1"></a><span class="co"># remotes::install_github(&quot;sarbearschwartz/texreghelpr&quot;) # first time</span></span>
+<span id="cb765-2"><a href="gee-binary-outcome-respiratory-illness.html#cb765-2"></a></span>
+<span id="cb765-3"><a href="gee-binary-outcome-respiratory-illness.html#cb765-3"></a><span class="kw">library</span>(texreghelpr)</span></code></pre></div>
 </div>
 </div>
 <div id="background-8" class="section level2" number="15.2">
@@ -856,9 +859,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <div id="read-in-the-data-1" class="section level3" number="15.2.1">
 <h3><span class="header-section-number">15.2.1</span> Read in the data</h3>
-<div class="sourceCode" id="cb737"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb737-1"><a href="gee-binary-outcome-respiratory-illness.html#cb737-1"></a><span class="kw">data</span>(<span class="st">&quot;respiratory&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;HSAUR&quot;</span>)</span>
-<span id="cb737-2"><a href="gee-binary-outcome-respiratory-illness.html#cb737-2"></a></span>
-<span id="cb737-3"><a href="gee-binary-outcome-respiratory-illness.html#cb737-3"></a><span class="kw">str</span>(respiratory)</span></code></pre></div>
+<div class="sourceCode" id="cb766"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb766-1"><a href="gee-binary-outcome-respiratory-illness.html#cb766-1"></a><span class="kw">data</span>(<span class="st">&quot;respiratory&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;HSAUR&quot;</span>)</span>
+<span id="cb766-2"><a href="gee-binary-outcome-respiratory-illness.html#cb766-2"></a></span>
+<span id="cb766-3"><a href="gee-binary-outcome-respiratory-illness.html#cb766-3"></a><span class="kw">str</span>(respiratory)</span></code></pre></div>
 <pre><code>&#39;data.frame&#39;:   555 obs. of  7 variables:
  $ centre   : Factor w/ 2 levels &quot;1&quot;,&quot;2&quot;: 1 1 1 1 1 1 1 1 1 1 ...
  $ treatment: Factor w/ 2 levels &quot;placebo&quot;,&quot;treatment&quot;: 1 1 1 1 1 1 1 1 1 1 ...
@@ -867,7 +870,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  $ status   : Factor w/ 2 levels &quot;poor&quot;,&quot;good&quot;: 1 1 1 1 1 1 1 1 1 1 ...
  $ month    : Ord.factor w/ 5 levels &quot;0&quot;&lt;&quot;1&quot;&lt;&quot;2&quot;&lt;&quot;3&quot;&lt;..: 1 2 3 4 5 1 2 3 4 5 ...
  $ subject  : Factor w/ 111 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 1 2 2 2 2 2 ...</code></pre>
-<div class="sourceCode" id="cb739"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb739-1"><a href="gee-binary-outcome-respiratory-illness.html#cb739-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(respiratory)</span></code></pre></div>
+<div class="sourceCode" id="cb768"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb768-1"><a href="gee-binary-outcome-respiratory-illness.html#cb768-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(respiratory)</span></code></pre></div>
 <pre><code>    centre treatment    sex age status month subject
 1        1   placebo female  46   poor     0       1
 112      1   placebo female  46   poor     1       1
@@ -884,17 +887,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <blockquote>
 <p>Wide format has one line per participant.</p>
 </blockquote>
-<div class="sourceCode" id="cb741"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb741-1"><a href="gee-binary-outcome-respiratory-illness.html#cb741-1"></a>data_wide &lt;-<span class="st"> </span>respiratory <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb741-2"><a href="gee-binary-outcome-respiratory-illness.html#cb741-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> month,</span>
-<span id="cb741-3"><a href="gee-binary-outcome-respiratory-illness.html#cb741-3"></a>                <span class="dt">value =</span> status,</span>
-<span id="cb741-4"><a href="gee-binary-outcome-respiratory-illness.html#cb741-4"></a>                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb741-5"><a href="gee-binary-outcome-respiratory-illness.html#cb741-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="st">&quot;BL_status&quot;</span> =<span class="st"> &quot;month_0&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb741-6"><a href="gee-binary-outcome-respiratory-illness.html#cb741-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb741-7"><a href="gee-binary-outcome-respiratory-illness.html#cb741-7"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, </span>
-<span id="cb741-8"><a href="gee-binary-outcome-respiratory-illness.html#cb741-8"></a>                sex, age, treatment, </span>
-<span id="cb741-9"><a href="gee-binary-outcome-respiratory-illness.html#cb741-9"></a>                BL_status, <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>))  </span>
-<span id="cb741-10"><a href="gee-binary-outcome-respiratory-illness.html#cb741-10"></a></span>
-<span id="cb741-11"><a href="gee-binary-outcome-respiratory-illness.html#cb741-11"></a>tibble<span class="op">::</span><span class="kw">glimpse</span>(data_wide)</span></code></pre></div>
+<div class="sourceCode" id="cb770"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb770-1"><a href="gee-binary-outcome-respiratory-illness.html#cb770-1"></a>data_wide &lt;-<span class="st"> </span>respiratory <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb770-2"><a href="gee-binary-outcome-respiratory-illness.html#cb770-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> month,</span>
+<span id="cb770-3"><a href="gee-binary-outcome-respiratory-illness.html#cb770-3"></a>                <span class="dt">value =</span> status,</span>
+<span id="cb770-4"><a href="gee-binary-outcome-respiratory-illness.html#cb770-4"></a>                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb770-5"><a href="gee-binary-outcome-respiratory-illness.html#cb770-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="st">&quot;BL_status&quot;</span> =<span class="st"> &quot;month_0&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb770-6"><a href="gee-binary-outcome-respiratory-illness.html#cb770-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb770-7"><a href="gee-binary-outcome-respiratory-illness.html#cb770-7"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, </span>
+<span id="cb770-8"><a href="gee-binary-outcome-respiratory-illness.html#cb770-8"></a>                sex, age, treatment, </span>
+<span id="cb770-9"><a href="gee-binary-outcome-respiratory-illness.html#cb770-9"></a>                BL_status, <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>))  </span>
+<span id="cb770-10"><a href="gee-binary-outcome-respiratory-illness.html#cb770-10"></a></span>
+<span id="cb770-11"><a href="gee-binary-outcome-respiratory-illness.html#cb770-11"></a>tibble<span class="op">::</span><span class="kw">glimpse</span>(data_wide)</span></code></pre></div>
 <pre><code>Rows: 111
 Columns: 10
 $ subject   &lt;fct&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17...
@@ -907,7 +910,7 @@ $ month_1   &lt;fct&gt; poor, poor, good, good, good, poor, good, poor, good, po
 $ month_2   &lt;fct&gt; poor, poor, good, good, good, poor, poor, poor, good, goo...
 $ month_3   &lt;fct&gt; poor, poor, good, good, good, poor, good, poor, good, goo...
 $ month_4   &lt;fct&gt; poor, poor, good, poor, good, poor, good, poor, good, poo...</code></pre>
-<div class="sourceCode" id="cb743"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb743-1"><a href="gee-binary-outcome-respiratory-illness.html#cb743-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</span></code></pre></div>
+<div class="sourceCode" id="cb772"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb772-1"><a href="gee-binary-outcome-respiratory-illness.html#cb772-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</span></code></pre></div>
 <pre><code>    subject centre    sex age treatment BL_status month_1 month_2 month_3
 1         1      1 female  46   placebo      poor    poor    poor    poor
 2         2      1 female  28   placebo      poor    poor    poor    poor
@@ -934,18 +937,18 @@ $ month_4   &lt;fct&gt; poor, poor, good, poor, good, poor, good, poor, good, po
 <blockquote>
 <p>Long format has one line per observation.</p>
 </blockquote>
-<div class="sourceCode" id="cb745"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb745-1"><a href="gee-binary-outcome-respiratory-illness.html#cb745-1"></a>data_long &lt;-<span class="st"> </span>data_wide<span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb745-2"><a href="gee-binary-outcome-respiratory-illness.html#cb745-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(<span class="dt">key =</span> month,</span>
-<span id="cb745-3"><a href="gee-binary-outcome-respiratory-illness.html#cb745-3"></a>                <span class="dt">value =</span> status,</span>
-<span id="cb745-4"><a href="gee-binary-outcome-respiratory-illness.html#cb745-4"></a>                <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb745-5"><a href="gee-binary-outcome-respiratory-illness.html#cb745-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">str_sub</span>(month, <span class="dt">start =</span> <span class="dv">-1</span>) <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb745-6"><a href="gee-binary-outcome-respiratory-illness.html#cb745-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">status =</span> <span class="kw">case_when</span>(status <span class="op">==</span><span class="st"> &quot;poor&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,</span>
-<span id="cb745-7"><a href="gee-binary-outcome-respiratory-illness.html#cb745-7"></a>                                   status <span class="op">==</span><span class="st"> &quot;good&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb745-8"><a href="gee-binary-outcome-respiratory-illness.html#cb745-8"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject, month) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb745-9"><a href="gee-binary-outcome-respiratory-illness.html#cb745-9"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, sex, age, treatment, BL_status, month, status) </span>
-<span id="cb745-10"><a href="gee-binary-outcome-respiratory-illness.html#cb745-10"></a></span>
-<span id="cb745-11"><a href="gee-binary-outcome-respiratory-illness.html#cb745-11"></a></span>
-<span id="cb745-12"><a href="gee-binary-outcome-respiratory-illness.html#cb745-12"></a>tibble<span class="op">::</span><span class="kw">glimpse</span>(data_long)</span></code></pre></div>
+<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb774-1"><a href="gee-binary-outcome-respiratory-illness.html#cb774-1"></a>data_long &lt;-<span class="st"> </span>data_wide<span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb774-2"><a href="gee-binary-outcome-respiratory-illness.html#cb774-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">gather</span>(<span class="dt">key =</span> month,</span>
+<span id="cb774-3"><a href="gee-binary-outcome-respiratory-illness.html#cb774-3"></a>                <span class="dt">value =</span> status,</span>
+<span id="cb774-4"><a href="gee-binary-outcome-respiratory-illness.html#cb774-4"></a>                <span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb774-5"><a href="gee-binary-outcome-respiratory-illness.html#cb774-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">month =</span> <span class="kw">str_sub</span>(month, <span class="dt">start =</span> <span class="dv">-1</span>) <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb774-6"><a href="gee-binary-outcome-respiratory-illness.html#cb774-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">status =</span> <span class="kw">case_when</span>(status <span class="op">==</span><span class="st"> &quot;poor&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">0</span>,</span>
+<span id="cb774-7"><a href="gee-binary-outcome-respiratory-illness.html#cb774-7"></a>                                   status <span class="op">==</span><span class="st"> &quot;good&quot;</span> <span class="op">~</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb774-8"><a href="gee-binary-outcome-respiratory-illness.html#cb774-8"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject, month) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb774-9"><a href="gee-binary-outcome-respiratory-illness.html#cb774-9"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, centre, sex, age, treatment, BL_status, month, status) </span>
+<span id="cb774-10"><a href="gee-binary-outcome-respiratory-illness.html#cb774-10"></a></span>
+<span id="cb774-11"><a href="gee-binary-outcome-respiratory-illness.html#cb774-11"></a></span>
+<span id="cb774-12"><a href="gee-binary-outcome-respiratory-illness.html#cb774-12"></a>tibble<span class="op">::</span><span class="kw">glimpse</span>(data_long)</span></code></pre></div>
 <pre><code>Rows: 444
 Columns: 8
 $ subject   &lt;fct&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, ...
@@ -956,7 +959,7 @@ $ treatment &lt;fct&gt; placebo, placebo, placebo, placebo, placebo, placebo, pl
 $ BL_status &lt;fct&gt; poor, poor, poor, poor, poor, poor, poor, poor, good, goo...
 $ month     &lt;dbl&gt; 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, ...
 $ status    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, ...</code></pre>
-<div class="sourceCode" id="cb747"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb747-1"><a href="gee-binary-outcome-respiratory-illness.html#cb747-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(data_long)</span></code></pre></div>
+<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb776-1"><a href="gee-binary-outcome-respiratory-illness.html#cb776-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(data_long)</span></code></pre></div>
 <pre><code>    subject centre    sex age treatment BL_status month status
 1         1      1 female  46   placebo      poor     1      0
 2         1      1 female  46   placebo      poor     2      0
@@ -979,8 +982,8 @@ $ status    &lt;dbl&gt; 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1,
 <blockquote>
 <p>Notice: the mean age is 33</p>
 </blockquote>
-<div class="sourceCode" id="cb749"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb749-1"><a href="gee-binary-outcome-respiratory-illness.html#cb749-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb749-2"><a href="gee-binary-outcome-respiratory-illness.html#cb749-2"></a><span class="st">  </span>psych<span class="op">::</span><span class="kw">describe</span>(<span class="dt">skew =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb778"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb778-1"><a href="gee-binary-outcome-respiratory-illness.html#cb778-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb778-2"><a href="gee-binary-outcome-respiratory-illness.html#cb778-2"></a><span class="st">  </span>psych<span class="op">::</span><span class="kw">describe</span>(<span class="dt">skew =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <pre><code>           vars   n  mean    sd min max range   se
 subject*      1 111 56.00 32.19   1 111   110 3.06
 centre*       2 111  1.50  0.50   1   2     1 0.05
@@ -992,19 +995,19 @@ month_1*      7 111  1.59  0.49   1   2     1 0.05
 month_2*      8 111  1.54  0.50   1   2     1 0.05
 month_3*      9 111  1.59  0.49   1   2     1 0.05
 month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
-<div class="sourceCode" id="cb751"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb751-1"><a href="gee-binary-outcome-respiratory-illness.html#cb751-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb751-2"><a href="gee-binary-outcome-respiratory-illness.html#cb751-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb751-3"><a href="gee-binary-outcome-respiratory-illness.html#cb751-3"></a><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(<span class="st">&quot;Center&quot;</span> =<span class="st"> </span>centre, </span>
-<span id="cb751-4"><a href="gee-binary-outcome-respiratory-illness.html#cb751-4"></a>                    <span class="st">&quot;Sex&quot;</span> =<span class="st"> </span>sex, </span>
-<span id="cb751-5"><a href="gee-binary-outcome-respiratory-illness.html#cb751-5"></a>                    <span class="st">&quot;Age&quot;</span> =<span class="st"> </span>age, </span>
-<span id="cb751-6"><a href="gee-binary-outcome-respiratory-illness.html#cb751-6"></a>                    <span class="st">&quot;Baseline Status&quot;</span> =<span class="st"> </span>BL_status, </span>
-<span id="cb751-7"><a href="gee-binary-outcome-respiratory-illness.html#cb751-7"></a>                    <span class="dt">caption =</span> <span class="st">&quot;Participant Demographics&quot;</span>,</span>
-<span id="cb751-8"><a href="gee-binary-outcome-respiratory-illness.html#cb751-8"></a>                    <span class="dt">output =</span> <span class="st">&quot;markdown&quot;</span>,</span>
-<span id="cb751-9"><a href="gee-binary-outcome-respiratory-illness.html#cb751-9"></a>                    <span class="dt">na.rm =</span> <span class="ot">FALSE</span>,</span>
-<span id="cb751-10"><a href="gee-binary-outcome-respiratory-illness.html#cb751-10"></a>                    <span class="dt">total =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb751-11"><a href="gee-binary-outcome-respiratory-illness.html#cb751-11"></a>                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb780-1"><a href="gee-binary-outcome-respiratory-illness.html#cb780-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb780-2"><a href="gee-binary-outcome-respiratory-illness.html#cb780-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb780-3"><a href="gee-binary-outcome-respiratory-illness.html#cb780-3"></a><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(<span class="st">&quot;Center&quot;</span> =<span class="st"> </span>centre, </span>
+<span id="cb780-4"><a href="gee-binary-outcome-respiratory-illness.html#cb780-4"></a>                    <span class="st">&quot;Sex&quot;</span> =<span class="st"> </span>sex, </span>
+<span id="cb780-5"><a href="gee-binary-outcome-respiratory-illness.html#cb780-5"></a>                    <span class="st">&quot;Age&quot;</span> =<span class="st"> </span>age, </span>
+<span id="cb780-6"><a href="gee-binary-outcome-respiratory-illness.html#cb780-6"></a>                    <span class="st">&quot;Baseline Status&quot;</span> =<span class="st"> </span>BL_status, </span>
+<span id="cb780-7"><a href="gee-binary-outcome-respiratory-illness.html#cb780-7"></a>                    <span class="dt">caption =</span> <span class="st">&quot;Participant Demographics&quot;</span>,</span>
+<span id="cb780-8"><a href="gee-binary-outcome-respiratory-illness.html#cb780-8"></a>                    <span class="dt">output =</span> <span class="st">&quot;markdown&quot;</span>,</span>
+<span id="cb780-9"><a href="gee-binary-outcome-respiratory-illness.html#cb780-9"></a>                    <span class="dt">na.rm =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb780-10"><a href="gee-binary-outcome-respiratory-illness.html#cb780-10"></a>                    <span class="dt">total =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb780-11"><a href="gee-binary-outcome-respiratory-illness.html#cb780-11"></a>                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-587">Table 15.1: </span>Participant Demographics</caption>
+<caption><span id="tab:unnamed-chunk-602">Table 15.1: </span>Participant Demographics</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -1125,19 +1128,19 @@ month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
 </div>
 <div id="status-over-time" class="section level4" number="15.3.1.2">
 <h4><span class="header-section-number">15.3.1.2</span> Status Over Time</h4>
-<div class="sourceCode" id="cb752"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb752-1"><a href="gee-binary-outcome-respiratory-illness.html#cb752-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb752-2"><a href="gee-binary-outcome-respiratory-illness.html#cb752-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb752-3"><a href="gee-binary-outcome-respiratory-illness.html#cb752-3"></a><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(<span class="st">&quot;Month One&quot;</span> =<span class="st"> </span>month_<span class="dv">1</span>, </span>
-<span id="cb752-4"><a href="gee-binary-outcome-respiratory-illness.html#cb752-4"></a>                    <span class="st">&quot;Month Two&quot;</span> =<span class="st"> </span>month_<span class="dv">2</span>, </span>
-<span id="cb752-5"><a href="gee-binary-outcome-respiratory-illness.html#cb752-5"></a>                    <span class="st">&quot;Month Three&quot;</span> =<span class="st"> </span>month_<span class="dv">3</span>, </span>
-<span id="cb752-6"><a href="gee-binary-outcome-respiratory-illness.html#cb752-6"></a>                    <span class="st">&quot;Month Four&quot;</span> =<span class="st"> </span>month_<span class="dv">4</span>, </span>
-<span id="cb752-7"><a href="gee-binary-outcome-respiratory-illness.html#cb752-7"></a>                    <span class="dt">caption =</span> <span class="st">&quot;Respiratory Status Over Time&quot;</span>,</span>
-<span id="cb752-8"><a href="gee-binary-outcome-respiratory-illness.html#cb752-8"></a>                    <span class="dt">output =</span> <span class="st">&quot;markdown&quot;</span>,</span>
-<span id="cb752-9"><a href="gee-binary-outcome-respiratory-illness.html#cb752-9"></a>                    <span class="dt">na.rm =</span> <span class="ot">FALSE</span>,</span>
-<span id="cb752-10"><a href="gee-binary-outcome-respiratory-illness.html#cb752-10"></a>                    <span class="dt">total =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb752-11"><a href="gee-binary-outcome-respiratory-illness.html#cb752-11"></a>                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb781"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb781-1"><a href="gee-binary-outcome-respiratory-illness.html#cb781-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb781-2"><a href="gee-binary-outcome-respiratory-illness.html#cb781-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb781-3"><a href="gee-binary-outcome-respiratory-illness.html#cb781-3"></a><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(<span class="st">&quot;Month One&quot;</span> =<span class="st"> </span>month_<span class="dv">1</span>, </span>
+<span id="cb781-4"><a href="gee-binary-outcome-respiratory-illness.html#cb781-4"></a>                    <span class="st">&quot;Month Two&quot;</span> =<span class="st"> </span>month_<span class="dv">2</span>, </span>
+<span id="cb781-5"><a href="gee-binary-outcome-respiratory-illness.html#cb781-5"></a>                    <span class="st">&quot;Month Three&quot;</span> =<span class="st"> </span>month_<span class="dv">3</span>, </span>
+<span id="cb781-6"><a href="gee-binary-outcome-respiratory-illness.html#cb781-6"></a>                    <span class="st">&quot;Month Four&quot;</span> =<span class="st"> </span>month_<span class="dv">4</span>, </span>
+<span id="cb781-7"><a href="gee-binary-outcome-respiratory-illness.html#cb781-7"></a>                    <span class="dt">caption =</span> <span class="st">&quot;Respiratory Status Over Time&quot;</span>,</span>
+<span id="cb781-8"><a href="gee-binary-outcome-respiratory-illness.html#cb781-8"></a>                    <span class="dt">output =</span> <span class="st">&quot;markdown&quot;</span>,</span>
+<span id="cb781-9"><a href="gee-binary-outcome-respiratory-illness.html#cb781-9"></a>                    <span class="dt">na.rm =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb781-10"><a href="gee-binary-outcome-respiratory-illness.html#cb781-10"></a>                    <span class="dt">total =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb781-11"><a href="gee-binary-outcome-respiratory-illness.html#cb781-11"></a>                    <span class="dt">test =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-588">Table 15.2: </span>Respiratory Status Over Time</caption>
+<caption><span id="tab:unnamed-chunk-603">Table 15.2: </span>Respiratory Status Over Time</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -1270,20 +1273,20 @@ month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
 </tbody>
 </table>
 <p>Correlation between repeated observations:</p>
-<div class="sourceCode" id="cb753"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb753-1"><a href="gee-binary-outcome-respiratory-illness.html#cb753-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb753-2"><a href="gee-binary-outcome-respiratory-illness.html#cb753-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb753-3"><a href="gee-binary-outcome-respiratory-illness.html#cb753-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_all</span>(<span class="cf">function</span>(x) x <span class="op">==</span><span class="st"> &quot;good&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb753-4"><a href="gee-binary-outcome-respiratory-illness.html#cb753-4"></a><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb753-5"><a href="gee-binary-outcome-respiratory-illness.html#cb753-5"></a><span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-589-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb754"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb754-1"><a href="gee-binary-outcome-respiratory-illness.html#cb754-1"></a>data_month_trt_prop &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb754-2"><a href="gee-binary-outcome-respiratory-illness.html#cb754-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment, month) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb754-3"><a href="gee-binary-outcome-respiratory-illness.html#cb754-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(),</span>
-<span id="cb754-4"><a href="gee-binary-outcome-respiratory-illness.html#cb754-4"></a>                   <span class="dt">prop_good =</span> <span class="kw">mean</span>(status),</span>
-<span id="cb754-5"><a href="gee-binary-outcome-respiratory-illness.html#cb754-5"></a>                   <span class="dt">prop_sd =</span> <span class="kw">sd</span>(status),</span>
-<span id="cb754-6"><a href="gee-binary-outcome-respiratory-illness.html#cb754-6"></a>                   <span class="dt">prop_se =</span> prop_sd<span class="op">/</span><span class="kw">sqrt</span>(n))</span>
-<span id="cb754-7"><a href="gee-binary-outcome-respiratory-illness.html#cb754-7"></a></span>
-<span id="cb754-8"><a href="gee-binary-outcome-respiratory-illness.html#cb754-8"></a>data_month_trt_prop</span></code></pre></div>
+<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb782-1"><a href="gee-binary-outcome-respiratory-illness.html#cb782-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb782-2"><a href="gee-binary-outcome-respiratory-illness.html#cb782-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="kw">starts_with</span>(<span class="st">&quot;month&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb782-3"><a href="gee-binary-outcome-respiratory-illness.html#cb782-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate_all</span>(<span class="cf">function</span>(x) x <span class="op">==</span><span class="st"> &quot;good&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb782-4"><a href="gee-binary-outcome-respiratory-illness.html#cb782-4"></a><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb782-5"><a href="gee-binary-outcome-respiratory-illness.html#cb782-5"></a><span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>()</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-604-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb783"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb783-1"><a href="gee-binary-outcome-respiratory-illness.html#cb783-1"></a>data_month_trt_prop &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb783-2"><a href="gee-binary-outcome-respiratory-illness.html#cb783-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment, month) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb783-3"><a href="gee-binary-outcome-respiratory-illness.html#cb783-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(),</span>
+<span id="cb783-4"><a href="gee-binary-outcome-respiratory-illness.html#cb783-4"></a>                   <span class="dt">prop_good =</span> <span class="kw">mean</span>(status),</span>
+<span id="cb783-5"><a href="gee-binary-outcome-respiratory-illness.html#cb783-5"></a>                   <span class="dt">prop_sd =</span> <span class="kw">sd</span>(status),</span>
+<span id="cb783-6"><a href="gee-binary-outcome-respiratory-illness.html#cb783-6"></a>                   <span class="dt">prop_se =</span> prop_sd<span class="op">/</span><span class="kw">sqrt</span>(n))</span>
+<span id="cb783-7"><a href="gee-binary-outcome-respiratory-illness.html#cb783-7"></a></span>
+<span id="cb783-8"><a href="gee-binary-outcome-respiratory-illness.html#cb783-8"></a>data_month_trt_prop</span></code></pre></div>
 <pre><code># A tibble: 8 x 6
 # Groups:   treatment [2]
   treatment month     n prop_good prop_sd prop_se
@@ -1302,52 +1305,52 @@ month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
 <h3><span class="header-section-number">15.3.2</span> Visualization</h3>
 <div id="age" class="section level4" number="15.3.2.1">
 <h4><span class="header-section-number">15.3.2.1</span> Age</h4>
-<div class="sourceCode" id="cb756"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb756-1"><a href="gee-binary-outcome-respiratory-illness.html#cb756-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb756-2"><a href="gee-binary-outcome-respiratory-illness.html#cb756-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(age)) <span class="op">+</span></span>
-<span id="cb756-3"><a href="gee-binary-outcome-respiratory-illness.html#cb756-3"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">5</span>,</span>
-<span id="cb756-4"><a href="gee-binary-outcome-respiratory-illness.html#cb756-4"></a>                 <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,</span>
-<span id="cb756-5"><a href="gee-binary-outcome-respiratory-illness.html#cb756-5"></a>                 <span class="dt">alpha =</span> <span class="fl">.3</span>) <span class="op">+</span></span>
-<span id="cb756-6"><a href="gee-binary-outcome-respiratory-illness.html#cb756-6"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">35</span>, <span class="dv">45</span>),</span>
-<span id="cb756-7"><a href="gee-binary-outcome-respiratory-illness.html#cb756-7"></a>             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
-<span id="cb756-8"><a href="gee-binary-outcome-respiratory-illness.html#cb756-8"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb756-9"><a href="gee-binary-outcome-respiratory-illness.html#cb756-9"></a><span class="st">  </span><span class="kw">facet_grid</span>(treatment <span class="op">~</span><span class="st"> </span>.)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-591-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb785"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb785-1"><a href="gee-binary-outcome-respiratory-illness.html#cb785-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb785-2"><a href="gee-binary-outcome-respiratory-illness.html#cb785-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(age)) <span class="op">+</span></span>
+<span id="cb785-3"><a href="gee-binary-outcome-respiratory-illness.html#cb785-3"></a><span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">5</span>,</span>
+<span id="cb785-4"><a href="gee-binary-outcome-respiratory-illness.html#cb785-4"></a>                 <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>,</span>
+<span id="cb785-5"><a href="gee-binary-outcome-respiratory-illness.html#cb785-5"></a>                 <span class="dt">alpha =</span> <span class="fl">.3</span>) <span class="op">+</span></span>
+<span id="cb785-6"><a href="gee-binary-outcome-respiratory-illness.html#cb785-6"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">35</span>, <span class="dv">45</span>),</span>
+<span id="cb785-7"><a href="gee-binary-outcome-respiratory-illness.html#cb785-7"></a>             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span></span>
+<span id="cb785-8"><a href="gee-binary-outcome-respiratory-illness.html#cb785-8"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb785-9"><a href="gee-binary-outcome-respiratory-illness.html#cb785-9"></a><span class="st">  </span><span class="kw">facet_grid</span>(treatment <span class="op">~</span><span class="st"> </span>.)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-606-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="status-by-age" class="section level4" number="15.3.2.2">
 <h4><span class="header-section-number">15.3.2.2</span> Status by Age</h4>
-<div class="sourceCode" id="cb757"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb757-1"><a href="gee-binary-outcome-respiratory-illness.html#cb757-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb757-2"><a href="gee-binary-outcome-respiratory-illness.html#cb757-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">n_good =</span> furniture<span class="op">::</span><span class="kw">rowsums</span>(month_<span class="dv">1</span> <span class="op">==</span><span class="st"> &quot;good&quot;</span>, </span>
-<span id="cb757-3"><a href="gee-binary-outcome-respiratory-illness.html#cb757-3"></a>                                            month_<span class="dv">2</span> <span class="op">==</span><span class="st"> &quot;good&quot;</span>,</span>
-<span id="cb757-4"><a href="gee-binary-outcome-respiratory-illness.html#cb757-4"></a>                                            month_<span class="dv">3</span> <span class="op">==</span><span class="st"> &quot;good&quot;</span>,</span>
-<span id="cb757-5"><a href="gee-binary-outcome-respiratory-illness.html#cb757-5"></a>                                            month_<span class="dv">4</span> <span class="op">==</span><span class="st"> &quot;good&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb757-6"><a href="gee-binary-outcome-respiratory-illness.html#cb757-6"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</span>
-<span id="cb757-7"><a href="gee-binary-outcome-respiratory-illness.html#cb757-7"></a>             <span class="dt">y =</span> n_good)) <span class="op">+</span></span>
-<span id="cb757-8"><a href="gee-binary-outcome-respiratory-illness.html#cb757-8"></a><span class="st">  </span><span class="kw">geom_count</span>() <span class="op">+</span></span>
-<span id="cb757-9"><a href="gee-binary-outcome-respiratory-illness.html#cb757-9"></a><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></span>
-<span id="cb757-10"><a href="gee-binary-outcome-respiratory-illness.html#cb757-10"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb757-11"><a href="gee-binary-outcome-respiratory-illness.html#cb757-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age in Years&quot;</span>,</span>
-<span id="cb757-12"><a href="gee-binary-outcome-respiratory-illness.html#cb757-12"></a>       <span class="dt">y =</span> <span class="st">&quot;Number of Visits out of Four, with &#39;Good&#39; Respiration&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-592-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb786-1"><a href="gee-binary-outcome-respiratory-illness.html#cb786-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb786-2"><a href="gee-binary-outcome-respiratory-illness.html#cb786-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">n_good =</span> furniture<span class="op">::</span><span class="kw">rowsums</span>(month_<span class="dv">1</span> <span class="op">==</span><span class="st"> &quot;good&quot;</span>, </span>
+<span id="cb786-3"><a href="gee-binary-outcome-respiratory-illness.html#cb786-3"></a>                                            month_<span class="dv">2</span> <span class="op">==</span><span class="st"> &quot;good&quot;</span>,</span>
+<span id="cb786-4"><a href="gee-binary-outcome-respiratory-illness.html#cb786-4"></a>                                            month_<span class="dv">3</span> <span class="op">==</span><span class="st"> &quot;good&quot;</span>,</span>
+<span id="cb786-5"><a href="gee-binary-outcome-respiratory-illness.html#cb786-5"></a>                                            month_<span class="dv">4</span> <span class="op">==</span><span class="st"> &quot;good&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb786-6"><a href="gee-binary-outcome-respiratory-illness.html#cb786-6"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</span>
+<span id="cb786-7"><a href="gee-binary-outcome-respiratory-illness.html#cb786-7"></a>             <span class="dt">y =</span> n_good)) <span class="op">+</span></span>
+<span id="cb786-8"><a href="gee-binary-outcome-respiratory-illness.html#cb786-8"></a><span class="st">  </span><span class="kw">geom_count</span>() <span class="op">+</span></span>
+<span id="cb786-9"><a href="gee-binary-outcome-respiratory-illness.html#cb786-9"></a><span class="st">  </span><span class="kw">geom_smooth</span>() <span class="op">+</span></span>
+<span id="cb786-10"><a href="gee-binary-outcome-respiratory-illness.html#cb786-10"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb786-11"><a href="gee-binary-outcome-respiratory-illness.html#cb786-11"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age in Years&quot;</span>,</span>
+<span id="cb786-12"><a href="gee-binary-outcome-respiratory-illness.html#cb786-12"></a>       <span class="dt">y =</span> <span class="st">&quot;Number of Visits out of Four, with &#39;Good&#39; Respiration&quot;</span>)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-607-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="status-over-time-1" class="section level4" number="15.3.2.3">
 <h4><span class="header-section-number">15.3.2.3</span> Status Over Time</h4>
 <p>It apears that status is fairly constant over time.</p>
-<div class="sourceCode" id="cb758"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb758-1"><a href="gee-binary-outcome-respiratory-illness.html#cb758-1"></a>data_month_trt_prop <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb758-2"><a href="gee-binary-outcome-respiratory-illness.html#cb758-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</span>
-<span id="cb758-3"><a href="gee-binary-outcome-respiratory-illness.html#cb758-3"></a>             <span class="dt">y =</span> prop_good,</span>
-<span id="cb758-4"><a href="gee-binary-outcome-respiratory-illness.html#cb758-4"></a>             <span class="dt">group =</span> treatment,</span>
-<span id="cb758-5"><a href="gee-binary-outcome-respiratory-illness.html#cb758-5"></a>             <span class="dt">color =</span> treatment)) <span class="op">+</span></span>
-<span id="cb758-6"><a href="gee-binary-outcome-respiratory-illness.html#cb758-6"></a><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> prop_good <span class="op">-</span><span class="st"> </span>prop_se,</span>
-<span id="cb758-7"><a href="gee-binary-outcome-respiratory-illness.html#cb758-7"></a>                    <span class="dt">ymax =</span> prop_good <span class="op">+</span><span class="st"> </span>prop_se),</span>
-<span id="cb758-8"><a href="gee-binary-outcome-respiratory-illness.html#cb758-8"></a>                <span class="dt">width =</span> <span class="fl">.25</span>) <span class="op">+</span></span>
-<span id="cb758-9"><a href="gee-binary-outcome-respiratory-illness.html#cb758-9"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb758-10"><a href="gee-binary-outcome-respiratory-illness.html#cb758-10"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
-<span id="cb758-11"><a href="gee-binary-outcome-respiratory-illness.html#cb758-11"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb758-12"><a href="gee-binary-outcome-respiratory-illness.html#cb758-12"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Time, months&quot;</span>,</span>
-<span id="cb758-13"><a href="gee-binary-outcome-respiratory-illness.html#cb758-13"></a>       <span class="dt">y =</span> <span class="st">&quot;Proportion of Participants</span><span class="ch">\n</span><span class="st">with &#39;Good&#39; Respiratory Status&quot;</span>) <span class="op">+</span></span>
-<span id="cb758-14"><a href="gee-binary-outcome-respiratory-illness.html#cb758-14"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
-<span id="cb758-15"><a href="gee-binary-outcome-respiratory-illness.html#cb758-15"></a>        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-593-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb787"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb787-1"><a href="gee-binary-outcome-respiratory-illness.html#cb787-1"></a>data_month_trt_prop <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb787-2"><a href="gee-binary-outcome-respiratory-illness.html#cb787-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> month,</span>
+<span id="cb787-3"><a href="gee-binary-outcome-respiratory-illness.html#cb787-3"></a>             <span class="dt">y =</span> prop_good,</span>
+<span id="cb787-4"><a href="gee-binary-outcome-respiratory-illness.html#cb787-4"></a>             <span class="dt">group =</span> treatment,</span>
+<span id="cb787-5"><a href="gee-binary-outcome-respiratory-illness.html#cb787-5"></a>             <span class="dt">color =</span> treatment)) <span class="op">+</span></span>
+<span id="cb787-6"><a href="gee-binary-outcome-respiratory-illness.html#cb787-6"></a><span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> prop_good <span class="op">-</span><span class="st"> </span>prop_se,</span>
+<span id="cb787-7"><a href="gee-binary-outcome-respiratory-illness.html#cb787-7"></a>                    <span class="dt">ymax =</span> prop_good <span class="op">+</span><span class="st"> </span>prop_se),</span>
+<span id="cb787-8"><a href="gee-binary-outcome-respiratory-illness.html#cb787-8"></a>                <span class="dt">width =</span> <span class="fl">.25</span>) <span class="op">+</span></span>
+<span id="cb787-9"><a href="gee-binary-outcome-respiratory-illness.html#cb787-9"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb787-10"><a href="gee-binary-outcome-respiratory-illness.html#cb787-10"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb787-11"><a href="gee-binary-outcome-respiratory-illness.html#cb787-11"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb787-12"><a href="gee-binary-outcome-respiratory-illness.html#cb787-12"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Time, months&quot;</span>,</span>
+<span id="cb787-13"><a href="gee-binary-outcome-respiratory-illness.html#cb787-13"></a>       <span class="dt">y =</span> <span class="st">&quot;Proportion of Participants</span><span class="ch">\n</span><span class="st">with &#39;Good&#39; Respiratory Status&quot;</span>) <span class="op">+</span></span>
+<span id="cb787-14"><a href="gee-binary-outcome-respiratory-illness.html#cb787-14"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
+<span id="cb787-15"><a href="gee-binary-outcome-respiratory-illness.html#cb787-15"></a>        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>))</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-608-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="rmdimportant">
 <p>
 It is NOT the purpose of this analysis to investigate change over time!
@@ -1370,12 +1373,12 @@ Instead, the four observations on each subject are treated as correlated <em>(at
 <p>Since participants in the middle ages seem to do worse than either extreme, the potential quadratic effect of age will be included. Age is also being grand-mean centered to make the intercept more meaningful.</p>
 <div id="fit-the-model-17" class="section level3" number="15.4.1">
 <h3><span class="header-section-number">15.4.1</span> Fit the Model</h3>
-<div class="sourceCode" id="cb759"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb759-1"><a href="gee-binary-outcome-respiratory-illness.html#cb759-1"></a>resp_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></span>
-<span id="cb759-2"><a href="gee-binary-outcome-respiratory-illness.html#cb759-2"></a><span class="st">                  </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</span>
-<span id="cb759-3"><a href="gee-binary-outcome-respiratory-illness.html#cb759-3"></a>                <span class="dt">data =</span> data_long,</span>
-<span id="cb759-4"><a href="gee-binary-outcome-respiratory-illness.html#cb759-4"></a>                <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))</span>
-<span id="cb759-5"><a href="gee-binary-outcome-respiratory-illness.html#cb759-5"></a></span>
-<span id="cb759-6"><a href="gee-binary-outcome-respiratory-illness.html#cb759-6"></a><span class="kw">summary</span>(resp_glm)</span></code></pre></div>
+<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb788-1"><a href="gee-binary-outcome-respiratory-illness.html#cb788-1"></a>resp_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></span>
+<span id="cb788-2"><a href="gee-binary-outcome-respiratory-illness.html#cb788-2"></a><span class="st">                  </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</span>
+<span id="cb788-3"><a href="gee-binary-outcome-respiratory-illness.html#cb788-3"></a>                <span class="dt">data =</span> data_long,</span>
+<span id="cb788-4"><a href="gee-binary-outcome-respiratory-illness.html#cb788-4"></a>                <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))</span>
+<span id="cb788-5"><a href="gee-binary-outcome-respiratory-illness.html#cb788-5"></a></span>
+<span id="cb788-6"><a href="gee-binary-outcome-respiratory-illness.html#cb788-6"></a><span class="kw">summary</span>(resp_glm)</span></code></pre></div>
 <pre><code>
 Call:
 glm(formula = status ~ centre + treatment + sex + BL_status + 
@@ -1408,14 +1411,14 @@ Number of Fisher Scoring iterations: 4</code></pre>
 </div>
 <div id="tabulate-the-model-parameters" class="section level3" number="15.4.2">
 <h3><span class="header-section-number">15.4.2</span> Tabulate the Model Parameters</h3>
-<div class="sourceCode" id="cb761"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb761-1"><a href="gee-binary-outcome-respiratory-illness.html#cb761-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(resp_glm,</span>
-<span id="cb761-2"><a href="gee-binary-outcome-respiratory-illness.html#cb761-2"></a>                     texreghelpr<span class="op">::</span><span class="kw">extract_glm_exp</span>(resp_glm,</span>
-<span id="cb761-3"><a href="gee-binary-outcome-respiratory-illness.html#cb761-3"></a>                                                  <span class="dt">include.any =</span> <span class="ot">FALSE</span>)),</span>
-<span id="cb761-4"><a href="gee-binary-outcome-respiratory-illness.html#cb761-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;b (SE)&quot;</span>, <span class="st">&quot;OR [95 CI]&quot;</span>),</span>
-<span id="cb761-5"><a href="gee-binary-outcome-respiratory-illness.html#cb761-5"></a>                <span class="dt">caption =</span> <span class="st">&quot;Logistic Generalized Linear Regression (GLM)&quot;</span>,</span>
-<span id="cb761-6"><a href="gee-binary-outcome-respiratory-illness.html#cb761-6"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb761-7"><a href="gee-binary-outcome-respiratory-illness.html#cb761-7"></a>                <span class="dt">digits =</span> <span class="dv">3</span>,</span>
-<span id="cb761-8"><a href="gee-binary-outcome-respiratory-illness.html#cb761-8"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb790-1"><a href="gee-binary-outcome-respiratory-illness.html#cb790-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(resp_glm,</span>
+<span id="cb790-2"><a href="gee-binary-outcome-respiratory-illness.html#cb790-2"></a>                     texreghelpr<span class="op">::</span><span class="kw">extract_glm_exp</span>(resp_glm,</span>
+<span id="cb790-3"><a href="gee-binary-outcome-respiratory-illness.html#cb790-3"></a>                                                  <span class="dt">include.any =</span> <span class="ot">FALSE</span>)),</span>
+<span id="cb790-4"><a href="gee-binary-outcome-respiratory-illness.html#cb790-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;b (SE)&quot;</span>, <span class="st">&quot;OR [95 CI]&quot;</span>),</span>
+<span id="cb790-5"><a href="gee-binary-outcome-respiratory-illness.html#cb790-5"></a>                <span class="dt">caption =</span> <span class="st">&quot;Logistic Generalized Linear Regression (GLM)&quot;</span>,</span>
+<span id="cb790-6"><a href="gee-binary-outcome-respiratory-illness.html#cb790-6"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb790-7"><a href="gee-binary-outcome-respiratory-illness.html#cb790-7"></a>                <span class="dt">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb790-8"><a href="gee-binary-outcome-respiratory-illness.html#cb790-8"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>)</span></code></pre></div>
 <table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
 <caption>
 Logistic Generalized Linear Regression (GLM)
@@ -1583,19 +1586,19 @@ Num. obs.
 <div id="indepdendence" class="section level3" number="15.5.1">
 <h3><span class="header-section-number">15.5.1</span> Indepdendence</h3>
 <p>Using an <code>"independence"</code> correlation structure is equivalent to using a GLM analysis <em>(logistic regression in this case)</em> and is never appropriate for repeated measures data. It is only being done here for comparison purposes.</p>
-<div class="sourceCode" id="cb762"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb762-1"><a href="gee-binary-outcome-respiratory-illness.html#cb762-1"></a>resp_gee_in &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></span>
-<span id="cb762-2"><a href="gee-binary-outcome-respiratory-illness.html#cb762-2"></a><span class="st">                          </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</span>
-<span id="cb762-3"><a href="gee-binary-outcome-respiratory-illness.html#cb762-3"></a>                        <span class="dt">data =</span> data_long,</span>
-<span id="cb762-4"><a href="gee-binary-outcome-respiratory-illness.html#cb762-4"></a>                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</span>
-<span id="cb762-5"><a href="gee-binary-outcome-respiratory-illness.html#cb762-5"></a>                        <span class="dt">id =</span> subject,</span>
-<span id="cb762-6"><a href="gee-binary-outcome-respiratory-illness.html#cb762-6"></a>                        <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>,</span>
-<span id="cb762-7"><a href="gee-binary-outcome-respiratory-illness.html#cb762-7"></a>                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb762-8"><a href="gee-binary-outcome-respiratory-illness.html#cb762-8"></a>                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb791"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb791-1"><a href="gee-binary-outcome-respiratory-illness.html#cb791-1"></a>resp_gee_in &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></span>
+<span id="cb791-2"><a href="gee-binary-outcome-respiratory-illness.html#cb791-2"></a><span class="st">                          </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</span>
+<span id="cb791-3"><a href="gee-binary-outcome-respiratory-illness.html#cb791-3"></a>                        <span class="dt">data =</span> data_long,</span>
+<span id="cb791-4"><a href="gee-binary-outcome-respiratory-illness.html#cb791-4"></a>                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</span>
+<span id="cb791-5"><a href="gee-binary-outcome-respiratory-illness.html#cb791-5"></a>                        <span class="dt">id =</span> subject,</span>
+<span id="cb791-6"><a href="gee-binary-outcome-respiratory-illness.html#cb791-6"></a>                        <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>,</span>
+<span id="cb791-7"><a href="gee-binary-outcome-respiratory-illness.html#cb791-7"></a>                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb791-8"><a href="gee-binary-outcome-respiratory-illness.html#cb791-8"></a>                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>       (Intercept)            centre2 treatmenttreatment            sexmale 
       -1.968572485        0.534793799        1.356181372        0.426343291 
      BL_statusgood        I(age - 33)    I((age - 33)^2) 
        1.919340141       -0.036853528        0.002516859 </code></pre>
-<div class="sourceCode" id="cb764"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb764-1"><a href="gee-binary-outcome-respiratory-illness.html#cb764-1"></a><span class="kw">summary</span>(resp_gee_in)</span></code></pre></div>
+<div class="sourceCode" id="cb793"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb793-1"><a href="gee-binary-outcome-respiratory-illness.html#cb793-1"></a><span class="kw">summary</span>(resp_gee_in)</span></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
  gee S-function, version 4.13 modified 98/01/27 (1998) 
@@ -1640,19 +1643,19 @@ Working Correlation
 </div>
 <div id="exchangeable" class="section level3" number="15.5.2">
 <h3><span class="header-section-number">15.5.2</span> Exchangeable</h3>
-<div class="sourceCode" id="cb766"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb766-1"><a href="gee-binary-outcome-respiratory-illness.html#cb766-1"></a>resp_gee_ex &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></span>
-<span id="cb766-2"><a href="gee-binary-outcome-respiratory-illness.html#cb766-2"></a><span class="st">                          </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</span>
-<span id="cb766-3"><a href="gee-binary-outcome-respiratory-illness.html#cb766-3"></a>                        <span class="dt">data =</span> data_long,</span>
-<span id="cb766-4"><a href="gee-binary-outcome-respiratory-illness.html#cb766-4"></a>                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</span>
-<span id="cb766-5"><a href="gee-binary-outcome-respiratory-illness.html#cb766-5"></a>                        <span class="dt">id =</span> subject,</span>
-<span id="cb766-6"><a href="gee-binary-outcome-respiratory-illness.html#cb766-6"></a>                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</span>
-<span id="cb766-7"><a href="gee-binary-outcome-respiratory-illness.html#cb766-7"></a>                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb766-8"><a href="gee-binary-outcome-respiratory-illness.html#cb766-8"></a>                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb795"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb795-1"><a href="gee-binary-outcome-respiratory-illness.html#cb795-1"></a>resp_gee_ex &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></span>
+<span id="cb795-2"><a href="gee-binary-outcome-respiratory-illness.html#cb795-2"></a><span class="st">                          </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</span>
+<span id="cb795-3"><a href="gee-binary-outcome-respiratory-illness.html#cb795-3"></a>                        <span class="dt">data =</span> data_long,</span>
+<span id="cb795-4"><a href="gee-binary-outcome-respiratory-illness.html#cb795-4"></a>                        <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</span>
+<span id="cb795-5"><a href="gee-binary-outcome-respiratory-illness.html#cb795-5"></a>                        <span class="dt">id =</span> subject,</span>
+<span id="cb795-6"><a href="gee-binary-outcome-respiratory-illness.html#cb795-6"></a>                        <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</span>
+<span id="cb795-7"><a href="gee-binary-outcome-respiratory-illness.html#cb795-7"></a>                        <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb795-8"><a href="gee-binary-outcome-respiratory-illness.html#cb795-8"></a>                        <span class="dt">scale.value =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>       (Intercept)            centre2 treatmenttreatment            sexmale 
       -1.968572485        0.534793799        1.356181372        0.426343291 
      BL_statusgood        I(age - 33)    I((age - 33)^2) 
        1.919340141       -0.036853528        0.002516859 </code></pre>
-<div class="sourceCode" id="cb768"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb768-1"><a href="gee-binary-outcome-respiratory-illness.html#cb768-1"></a><span class="kw">summary</span>(resp_gee_ex)</span></code></pre></div>
+<div class="sourceCode" id="cb797"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb797-1"><a href="gee-binary-outcome-respiratory-illness.html#cb797-1"></a><span class="kw">summary</span>(resp_gee_ex)</span></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
  gee S-function, version 4.13 modified 98/01/27 (1998) 
@@ -1699,15 +1702,15 @@ Working Correlation
 <p>The GEE models display the robust (sandwich) standard errors.</p>
 <div id="raw-estimates-logit-scale" class="section level4" number="15.5.3.1">
 <h4><span class="header-section-number">15.5.3.1</span> Raw Estimates (Logit Scale)</h4>
-<div class="sourceCode" id="cb770"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb770-1"><a href="gee-binary-outcome-respiratory-illness.html#cb770-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(resp_glm, </span>
-<span id="cb770-2"><a href="gee-binary-outcome-respiratory-illness.html#cb770-2"></a>                     resp_gee_in, </span>
-<span id="cb770-3"><a href="gee-binary-outcome-respiratory-illness.html#cb770-3"></a>                     resp_gee_ex),</span>
-<span id="cb770-4"><a href="gee-binary-outcome-respiratory-illness.html#cb770-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, </span>
-<span id="cb770-5"><a href="gee-binary-outcome-respiratory-illness.html#cb770-5"></a>                                       <span class="st">&quot;GEE-INDEP&quot;</span>, </span>
-<span id="cb770-6"><a href="gee-binary-outcome-respiratory-illness.html#cb770-6"></a>                                       <span class="st">&quot;GEE-EXCH&quot;</span>),</span>
-<span id="cb770-7"><a href="gee-binary-outcome-respiratory-illness.html#cb770-7"></a>                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Logit Scale&quot;</span>,</span>
-<span id="cb770-8"><a href="gee-binary-outcome-respiratory-illness.html#cb770-8"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb770-9"><a href="gee-binary-outcome-respiratory-illness.html#cb770-9"></a>                <span class="dt">digits =</span> <span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb799"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb799-1"><a href="gee-binary-outcome-respiratory-illness.html#cb799-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(resp_glm, </span>
+<span id="cb799-2"><a href="gee-binary-outcome-respiratory-illness.html#cb799-2"></a>                     resp_gee_in, </span>
+<span id="cb799-3"><a href="gee-binary-outcome-respiratory-illness.html#cb799-3"></a>                     resp_gee_ex),</span>
+<span id="cb799-4"><a href="gee-binary-outcome-respiratory-illness.html#cb799-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, </span>
+<span id="cb799-5"><a href="gee-binary-outcome-respiratory-illness.html#cb799-5"></a>                                       <span class="st">&quot;GEE-INDEP&quot;</span>, </span>
+<span id="cb799-6"><a href="gee-binary-outcome-respiratory-illness.html#cb799-6"></a>                                       <span class="st">&quot;GEE-EXCH&quot;</span>),</span>
+<span id="cb799-7"><a href="gee-binary-outcome-respiratory-illness.html#cb799-7"></a>                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Logit Scale&quot;</span>,</span>
+<span id="cb799-8"><a href="gee-binary-outcome-respiratory-illness.html#cb799-8"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb799-9"><a href="gee-binary-outcome-respiratory-illness.html#cb799-9"></a>                <span class="dt">digits =</span> <span class="dv">4</span>)</span></code></pre></div>
 <table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
 <caption>
 Estimates on Logit Scale
@@ -1924,16 +1927,16 @@ Scale
 </div>
 <div id="exponentiate-the-estimates-odds-ratio-scale" class="section level4" number="15.5.3.2">
 <h4><span class="header-section-number">15.5.3.2</span> Exponentiate the Estimates (odds ratio scale)</h4>
-<div class="sourceCode" id="cb771"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb771-1"><a href="gee-binary-outcome-respiratory-illness.html#cb771-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(resp_glm), </span>
-<span id="cb771-2"><a href="gee-binary-outcome-respiratory-illness.html#cb771-2"></a>                     <span class="kw">extract_gee_exp</span>(resp_gee_in), </span>
-<span id="cb771-3"><a href="gee-binary-outcome-respiratory-illness.html#cb771-3"></a>                     <span class="kw">extract_gee_exp</span>(resp_gee_ex)),</span>
-<span id="cb771-4"><a href="gee-binary-outcome-respiratory-illness.html#cb771-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, </span>
-<span id="cb771-5"><a href="gee-binary-outcome-respiratory-illness.html#cb771-5"></a>                                       <span class="st">&quot;GEE-INDEP&quot;</span>, </span>
-<span id="cb771-6"><a href="gee-binary-outcome-respiratory-illness.html#cb771-6"></a>                                       <span class="st">&quot;GEE-EXCH&quot;</span>),</span>
-<span id="cb771-7"><a href="gee-binary-outcome-respiratory-illness.html#cb771-7"></a>                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Odds-Ratio Scale&quot;</span>,</span>
-<span id="cb771-8"><a href="gee-binary-outcome-respiratory-illness.html#cb771-8"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb771-9"><a href="gee-binary-outcome-respiratory-illness.html#cb771-9"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>,</span>
-<span id="cb771-10"><a href="gee-binary-outcome-respiratory-illness.html#cb771-10"></a>                <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb800-1"><a href="gee-binary-outcome-respiratory-illness.html#cb800-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(resp_glm), </span>
+<span id="cb800-2"><a href="gee-binary-outcome-respiratory-illness.html#cb800-2"></a>                     <span class="kw">extract_gee_exp</span>(resp_gee_in), </span>
+<span id="cb800-3"><a href="gee-binary-outcome-respiratory-illness.html#cb800-3"></a>                     <span class="kw">extract_gee_exp</span>(resp_gee_ex)),</span>
+<span id="cb800-4"><a href="gee-binary-outcome-respiratory-illness.html#cb800-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>, </span>
+<span id="cb800-5"><a href="gee-binary-outcome-respiratory-illness.html#cb800-5"></a>                                       <span class="st">&quot;GEE-INDEP&quot;</span>, </span>
+<span id="cb800-6"><a href="gee-binary-outcome-respiratory-illness.html#cb800-6"></a>                                       <span class="st">&quot;GEE-EXCH&quot;</span>),</span>
+<span id="cb800-7"><a href="gee-binary-outcome-respiratory-illness.html#cb800-7"></a>                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Odds-Ratio Scale&quot;</span>,</span>
+<span id="cb800-8"><a href="gee-binary-outcome-respiratory-illness.html#cb800-8"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb800-9"><a href="gee-binary-outcome-respiratory-illness.html#cb800-9"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>,</span>
+<span id="cb800-10"><a href="gee-binary-outcome-respiratory-illness.html#cb800-10"></a>                <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
 <table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
 <caption>
 Estimates on Odds-Ratio Scale
@@ -2079,23 +2082,23 @@ Dispersion
 </div>
 <div id="manual-extraction" class="section level4" number="15.5.3.3">
 <h4><span class="header-section-number">15.5.3.3</span> Manual Extraction</h4>
-<div class="sourceCode" id="cb772"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb772-1"><a href="gee-binary-outcome-respiratory-illness.html#cb772-1"></a>resp_gee_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb801"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb801-1"><a href="gee-binary-outcome-respiratory-illness.html#cb801-1"></a>resp_gee_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</span></code></pre></div>
 <pre><code>       (Intercept)            centre2 treatmenttreatment            sexmale 
          0.1396561          1.7070962          3.8813436          1.5316465 
      BL_statusgood        I(age - 33)    I((age - 33)^2) 
          6.8164591          0.9638173          1.0025200 </code></pre>
-<div class="sourceCode" id="cb774"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb774-1"><a href="gee-binary-outcome-respiratory-illness.html#cb774-1"></a>trt_EST &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Estimate&quot;</span>] </span>
-<span id="cb774-2"><a href="gee-binary-outcome-respiratory-illness.html#cb774-2"></a>trt_EST</span></code></pre></div>
+<div class="sourceCode" id="cb803"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb803-1"><a href="gee-binary-outcome-respiratory-illness.html#cb803-1"></a>trt_EST &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Estimate&quot;</span>] </span>
+<span id="cb803-2"><a href="gee-binary-outcome-respiratory-illness.html#cb803-2"></a>trt_EST</span></code></pre></div>
 <pre><code>[1] 1.356181</code></pre>
-<div class="sourceCode" id="cb776"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb776-1"><a href="gee-binary-outcome-respiratory-illness.html#cb776-1"></a><span class="kw">exp</span>(trt_EST)</span></code></pre></div>
+<div class="sourceCode" id="cb805"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb805-1"><a href="gee-binary-outcome-respiratory-illness.html#cb805-1"></a><span class="kw">exp</span>(trt_EST)</span></code></pre></div>
 <pre><code>[1] 3.881344</code></pre>
-<div class="sourceCode" id="cb778"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb778-1"><a href="gee-binary-outcome-respiratory-illness.html#cb778-1"></a>Trt_SE &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Robust S.E.&quot;</span>] </span>
-<span id="cb778-2"><a href="gee-binary-outcome-respiratory-illness.html#cb778-2"></a>Trt_SE</span></code></pre></div>
+<div class="sourceCode" id="cb807"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb807-1"><a href="gee-binary-outcome-respiratory-illness.html#cb807-1"></a>Trt_SE &lt;-<span class="st"> </span><span class="kw">summary</span>(resp_gee_ex)<span class="op">$</span>coeff[<span class="st">&quot;treatmenttreatment&quot;</span>, <span class="st">&quot;Robust S.E.&quot;</span>] </span>
+<span id="cb807-2"><a href="gee-binary-outcome-respiratory-illness.html#cb807-2"></a>Trt_SE</span></code></pre></div>
 <pre><code>[1] 0.3777999</code></pre>
-<div class="sourceCode" id="cb780"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb780-1"><a href="gee-binary-outcome-respiratory-illness.html#cb780-1"></a>trt_95ci &lt;-<span class="st"> </span>trt_EST <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="op">+</span><span class="dv">1</span>)<span class="op">*</span><span class="fl">1.96</span><span class="op">*</span>Trt_SE</span>
-<span id="cb780-2"><a href="gee-binary-outcome-respiratory-illness.html#cb780-2"></a>trt_95ci</span></code></pre></div>
+<div class="sourceCode" id="cb809"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb809-1"><a href="gee-binary-outcome-respiratory-illness.html#cb809-1"></a>trt_95ci &lt;-<span class="st"> </span>trt_EST <span class="op">+</span><span class="st"> </span><span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>, <span class="op">+</span><span class="dv">1</span>)<span class="op">*</span><span class="fl">1.96</span><span class="op">*</span>Trt_SE</span>
+<span id="cb809-2"><a href="gee-binary-outcome-respiratory-illness.html#cb809-2"></a>trt_95ci</span></code></pre></div>
 <pre><code>[1] 0.6156936 2.0966692</code></pre>
-<div class="sourceCode" id="cb782"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb782-1"><a href="gee-binary-outcome-respiratory-illness.html#cb782-1"></a><span class="kw">exp</span>(trt_95ci)</span></code></pre></div>
+<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb811-1"><a href="gee-binary-outcome-respiratory-illness.html#cb811-1"></a><span class="kw">exp</span>(trt_95ci)</span></code></pre></div>
 <pre><code>[1] 1.850940 8.139015</code></pre>
 </div>
 </div>
@@ -2103,22 +2106,22 @@ Dispersion
 <h3><span class="header-section-number">15.5.4</span> Final Model</h3>
 <div id="estimates-on-both-the-logit-and-odds-ratio-scales" class="section level4" number="15.5.4.1">
 <h4><span class="header-section-number">15.5.4.1</span> Estimates on both the logit and odds-ratio scales</h4>
-<div class="sourceCode" id="cb784"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb784-1"><a href="gee-binary-outcome-respiratory-illness.html#cb784-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(resp_gee_ex, </span>
-<span id="cb784-2"><a href="gee-binary-outcome-respiratory-illness.html#cb784-2"></a>                     texreghelpr<span class="op">::</span><span class="kw">extract_gee_exp</span>(resp_gee_ex,</span>
-<span id="cb784-3"><a href="gee-binary-outcome-respiratory-illness.html#cb784-3"></a>                                                  <span class="dt">include.any =</span> <span class="ot">FALSE</span>)),</span>
-<span id="cb784-4"><a href="gee-binary-outcome-respiratory-illness.html#cb784-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;b (SE)&quot;</span>, </span>
-<span id="cb784-5"><a href="gee-binary-outcome-respiratory-illness.html#cb784-5"></a>                                       <span class="st">&quot;OR [95 CI]&quot;</span>),</span>
-<span id="cb784-6"><a href="gee-binary-outcome-respiratory-illness.html#cb784-6"></a>                <span class="dt">custom.coef.map =</span> <span class="kw">list</span>(<span class="st">&quot;(Intercept)&quot;</span> =<span class="st"> &quot;(Intercept)&quot;</span>,</span>
-<span id="cb784-7"><a href="gee-binary-outcome-respiratory-illness.html#cb784-7"></a>                                       <span class="dt">centre2 =</span> <span class="st">&quot;Center 2 vs. 1&quot;</span>,</span>
-<span id="cb784-8"><a href="gee-binary-outcome-respiratory-illness.html#cb784-8"></a>                                       <span class="dt">sexmale =</span> <span class="st">&quot;Male vs. Female&quot;</span>,</span>
-<span id="cb784-9"><a href="gee-binary-outcome-respiratory-illness.html#cb784-9"></a>                                       <span class="dt">BL_statusgood =</span> <span class="st">&quot;BL Good vs. Poor&quot;</span>,</span>
-<span id="cb784-10"><a href="gee-binary-outcome-respiratory-illness.html#cb784-10"></a>                                       <span class="st">&quot;I(age - 33)&quot;</span> =<span class="st"> &quot;Age (Yrs post 33)&quot;</span>,</span>
-<span id="cb784-11"><a href="gee-binary-outcome-respiratory-illness.html#cb784-11"></a>                                       <span class="st">&quot;I((age - 33)^2)&quot;</span> =<span class="st"> &quot;Age-Squared&quot;</span>,</span>
-<span id="cb784-12"><a href="gee-binary-outcome-respiratory-illness.html#cb784-12"></a>                                       <span class="dt">treatmenttreatment =</span> <span class="st">&quot;Treatment&quot;</span>), </span>
-<span id="cb784-13"><a href="gee-binary-outcome-respiratory-illness.html#cb784-13"></a>                <span class="dt">caption =</span> <span class="st">&quot;GEE: Final Model (exchangable)&quot;</span>,</span>
-<span id="cb784-14"><a href="gee-binary-outcome-respiratory-illness.html#cb784-14"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>,</span>
-<span id="cb784-15"><a href="gee-binary-outcome-respiratory-illness.html#cb784-15"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb784-16"><a href="gee-binary-outcome-respiratory-illness.html#cb784-16"></a>                <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb813-1"><a href="gee-binary-outcome-respiratory-illness.html#cb813-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(resp_gee_ex, </span>
+<span id="cb813-2"><a href="gee-binary-outcome-respiratory-illness.html#cb813-2"></a>                     texreghelpr<span class="op">::</span><span class="kw">extract_gee_exp</span>(resp_gee_ex,</span>
+<span id="cb813-3"><a href="gee-binary-outcome-respiratory-illness.html#cb813-3"></a>                                                  <span class="dt">include.any =</span> <span class="ot">FALSE</span>)),</span>
+<span id="cb813-4"><a href="gee-binary-outcome-respiratory-illness.html#cb813-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;b (SE)&quot;</span>, </span>
+<span id="cb813-5"><a href="gee-binary-outcome-respiratory-illness.html#cb813-5"></a>                                       <span class="st">&quot;OR [95 CI]&quot;</span>),</span>
+<span id="cb813-6"><a href="gee-binary-outcome-respiratory-illness.html#cb813-6"></a>                <span class="dt">custom.coef.map =</span> <span class="kw">list</span>(<span class="st">&quot;(Intercept)&quot;</span> =<span class="st"> &quot;(Intercept)&quot;</span>,</span>
+<span id="cb813-7"><a href="gee-binary-outcome-respiratory-illness.html#cb813-7"></a>                                       <span class="dt">centre2 =</span> <span class="st">&quot;Center 2 vs. 1&quot;</span>,</span>
+<span id="cb813-8"><a href="gee-binary-outcome-respiratory-illness.html#cb813-8"></a>                                       <span class="dt">sexmale =</span> <span class="st">&quot;Male vs. Female&quot;</span>,</span>
+<span id="cb813-9"><a href="gee-binary-outcome-respiratory-illness.html#cb813-9"></a>                                       <span class="dt">BL_statusgood =</span> <span class="st">&quot;BL Good vs. Poor&quot;</span>,</span>
+<span id="cb813-10"><a href="gee-binary-outcome-respiratory-illness.html#cb813-10"></a>                                       <span class="st">&quot;I(age - 33)&quot;</span> =<span class="st"> &quot;Age (Yrs post 33)&quot;</span>,</span>
+<span id="cb813-11"><a href="gee-binary-outcome-respiratory-illness.html#cb813-11"></a>                                       <span class="st">&quot;I((age - 33)^2)&quot;</span> =<span class="st"> &quot;Age-Squared&quot;</span>,</span>
+<span id="cb813-12"><a href="gee-binary-outcome-respiratory-illness.html#cb813-12"></a>                                       <span class="dt">treatmenttreatment =</span> <span class="st">&quot;Treatment&quot;</span>), </span>
+<span id="cb813-13"><a href="gee-binary-outcome-respiratory-illness.html#cb813-13"></a>                <span class="dt">caption =</span> <span class="st">&quot;GEE: Final Model (exchangable)&quot;</span>,</span>
+<span id="cb813-14"><a href="gee-binary-outcome-respiratory-illness.html#cb813-14"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>,</span>
+<span id="cb813-15"><a href="gee-binary-outcome-respiratory-illness.html#cb813-15"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb813-16"><a href="gee-binary-outcome-respiratory-illness.html#cb813-16"></a>                <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
 <table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
 <caption>
 GEE: Final Model (exchangable)
@@ -2276,51 +2279,51 @@ Dispersion
 <div id="refit-with-the-geepack-package" class="section level4" number="15.5.5.1">
 <h4><span class="header-section-number">15.5.5.1</span> Refit with the <code>geepack</code> package</h4>
 <p>This package lets you plot, but not put the results in a table.</p>
-<div class="sourceCode" id="cb785"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb785-1"><a href="gee-binary-outcome-respiratory-illness.html#cb785-1"></a>resp_geeglm_ex &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></span>
-<span id="cb785-2"><a href="gee-binary-outcome-respiratory-illness.html#cb785-2"></a><span class="st">                                    </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</span>
-<span id="cb785-3"><a href="gee-binary-outcome-respiratory-illness.html#cb785-3"></a>                                  <span class="dt">data =</span> data_long,</span>
-<span id="cb785-4"><a href="gee-binary-outcome-respiratory-illness.html#cb785-4"></a>                                  <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</span>
-<span id="cb785-5"><a href="gee-binary-outcome-respiratory-illness.html#cb785-5"></a>                                  <span class="dt">id =</span> subject,</span>
-<span id="cb785-6"><a href="gee-binary-outcome-respiratory-illness.html#cb785-6"></a>                                  <span class="dt">waves =</span> month,</span>
-<span id="cb785-7"><a href="gee-binary-outcome-respiratory-illness.html#cb785-7"></a>                                  <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb814"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb814-1"><a href="gee-binary-outcome-respiratory-illness.html#cb814-1"></a>resp_geeglm_ex &lt;-<span class="st"> </span>geepack<span class="op">::</span><span class="kw">geeglm</span>(status <span class="op">~</span><span class="st"> </span>centre <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span>sex <span class="op">+</span><span class="st"> </span>BL_status <span class="op">+</span><span class="st"> </span></span>
+<span id="cb814-2"><a href="gee-binary-outcome-respiratory-illness.html#cb814-2"></a><span class="st">                                    </span><span class="kw">I</span>(age<span class="dv">-33</span>) <span class="op">+</span><span class="st"> </span><span class="kw">I</span>((age<span class="dv">-33</span>)<span class="op">^</span><span class="dv">2</span>),</span>
+<span id="cb814-3"><a href="gee-binary-outcome-respiratory-illness.html#cb814-3"></a>                                  <span class="dt">data =</span> data_long,</span>
+<span id="cb814-4"><a href="gee-binary-outcome-respiratory-illness.html#cb814-4"></a>                                  <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>),</span>
+<span id="cb814-5"><a href="gee-binary-outcome-respiratory-illness.html#cb814-5"></a>                                  <span class="dt">id =</span> subject,</span>
+<span id="cb814-6"><a href="gee-binary-outcome-respiratory-illness.html#cb814-6"></a>                                  <span class="dt">waves =</span> month,</span>
+<span id="cb814-7"><a href="gee-binary-outcome-respiratory-illness.html#cb814-7"></a>                                  <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>)</span></code></pre></div>
 </div>
 <div id="make-predictions" class="section level4" number="15.5.5.2">
 <h4><span class="header-section-number">15.5.5.2</span> Make predictions</h4>
 <p>What is the change a 40 year old man in poor condition at center 1 change of being rated as being in “Good” respiratory condition?</p>
-<div class="sourceCode" id="cb786"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb786-1"><a href="gee-binary-outcome-respiratory-illness.html#cb786-1"></a><span class="kw">data.frame</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,</span>
-<span id="cb786-2"><a href="gee-binary-outcome-respiratory-illness.html#cb786-2"></a>           <span class="dt">treatment =</span> <span class="st">&quot;placebo&quot;</span>,</span>
-<span id="cb786-3"><a href="gee-binary-outcome-respiratory-illness.html#cb786-3"></a>           <span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,</span>
-<span id="cb786-4"><a href="gee-binary-outcome-respiratory-illness.html#cb786-4"></a>           <span class="dt">age =</span> <span class="dv">40</span>,</span>
-<span id="cb786-5"><a href="gee-binary-outcome-respiratory-illness.html#cb786-5"></a>           <span class="dt">BL_status =</span> <span class="st">&quot;poor&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb786-6"><a href="gee-binary-outcome-respiratory-illness.html#cb786-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</span>
-<span id="cb786-7"><a href="gee-binary-outcome-respiratory-illness.html#cb786-7"></a>                              <span class="dt">newdata =</span> .,       </span>
-<span id="cb786-8"><a href="gee-binary-outcome-respiratory-illness.html#cb786-8"></a>                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) </span></code></pre></div>
+<div class="sourceCode" id="cb815"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb815-1"><a href="gee-binary-outcome-respiratory-illness.html#cb815-1"></a><span class="kw">data.frame</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb815-2"><a href="gee-binary-outcome-respiratory-illness.html#cb815-2"></a>           <span class="dt">treatment =</span> <span class="st">&quot;placebo&quot;</span>,</span>
+<span id="cb815-3"><a href="gee-binary-outcome-respiratory-illness.html#cb815-3"></a>           <span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,</span>
+<span id="cb815-4"><a href="gee-binary-outcome-respiratory-illness.html#cb815-4"></a>           <span class="dt">age =</span> <span class="dv">40</span>,</span>
+<span id="cb815-5"><a href="gee-binary-outcome-respiratory-illness.html#cb815-5"></a>           <span class="dt">BL_status =</span> <span class="st">&quot;poor&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb815-6"><a href="gee-binary-outcome-respiratory-illness.html#cb815-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</span>
+<span id="cb815-7"><a href="gee-binary-outcome-respiratory-illness.html#cb815-7"></a>                              <span class="dt">newdata =</span> .,       </span>
+<span id="cb815-8"><a href="gee-binary-outcome-respiratory-illness.html#cb815-8"></a>                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) </span></code></pre></div>
 <pre><code>  centre treatment  sex age BL_status       fit
 1      1   placebo male  40      poor 0.1575093</code></pre>
 <p>A 40 year old man in poor condition at center 1 has a 15.8% change of being rated as being in “Good” respiratory condition if he was randomized to placebo.</p>
-<div class="sourceCode" id="cb788"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb788-1"><a href="gee-binary-outcome-respiratory-illness.html#cb788-1"></a><span class="kw">data.frame</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,</span>
-<span id="cb788-2"><a href="gee-binary-outcome-respiratory-illness.html#cb788-2"></a>           <span class="dt">treatment =</span> <span class="st">&quot;treatment&quot;</span>,</span>
-<span id="cb788-3"><a href="gee-binary-outcome-respiratory-illness.html#cb788-3"></a>           <span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,</span>
-<span id="cb788-4"><a href="gee-binary-outcome-respiratory-illness.html#cb788-4"></a>           <span class="dt">age =</span> <span class="dv">40</span>,</span>
-<span id="cb788-5"><a href="gee-binary-outcome-respiratory-illness.html#cb788-5"></a>           <span class="dt">BL_status =</span> <span class="st">&quot;poor&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb788-6"><a href="gee-binary-outcome-respiratory-illness.html#cb788-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</span>
-<span id="cb788-7"><a href="gee-binary-outcome-respiratory-illness.html#cb788-7"></a>                              <span class="dt">newdata =</span> .,       </span>
-<span id="cb788-8"><a href="gee-binary-outcome-respiratory-illness.html#cb788-8"></a>                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) </span></code></pre></div>
+<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb817-1"><a href="gee-binary-outcome-respiratory-illness.html#cb817-1"></a><span class="kw">data.frame</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb817-2"><a href="gee-binary-outcome-respiratory-illness.html#cb817-2"></a>           <span class="dt">treatment =</span> <span class="st">&quot;treatment&quot;</span>,</span>
+<span id="cb817-3"><a href="gee-binary-outcome-respiratory-illness.html#cb817-3"></a>           <span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,</span>
+<span id="cb817-4"><a href="gee-binary-outcome-respiratory-illness.html#cb817-4"></a>           <span class="dt">age =</span> <span class="dv">40</span>,</span>
+<span id="cb817-5"><a href="gee-binary-outcome-respiratory-illness.html#cb817-5"></a>           <span class="dt">BL_status =</span> <span class="st">&quot;poor&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb817-6"><a href="gee-binary-outcome-respiratory-illness.html#cb817-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</span>
+<span id="cb817-7"><a href="gee-binary-outcome-respiratory-illness.html#cb817-7"></a>                              <span class="dt">newdata =</span> .,       </span>
+<span id="cb817-8"><a href="gee-binary-outcome-respiratory-illness.html#cb817-8"></a>                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) </span></code></pre></div>
 <pre><code>  centre treatment  sex age BL_status      fit
 1      1 treatment male  40      poor 0.420506</code></pre>
 <p>A 40 year old man in poor condition at center 1 has a 42.1% change of being rated as being in “Good” respiratory condition if he was randomized to placebo.</p>
 <p>The odds ratio for treatment is:</p>
-<div class="sourceCode" id="cb790"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb790-1"><a href="gee-binary-outcome-respiratory-illness.html#cb790-1"></a>(.<span class="dv">421</span><span class="op">/</span>(<span class="dv">1</span> <span class="fl">-.421</span>) )<span class="op">/</span>( <span class="fl">.158</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="fl">.158</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb819"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb819-1"><a href="gee-binary-outcome-respiratory-illness.html#cb819-1"></a>(.<span class="dv">421</span><span class="op">/</span>(<span class="dv">1</span> <span class="fl">-.421</span>) )<span class="op">/</span>( <span class="fl">.158</span><span class="op">/</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="fl">.158</span>))</span></code></pre></div>
 <pre><code>[1] 3.874882</code></pre>
 </div>
 <div id="expand-grid" class="section level4" number="15.5.5.3">
 <h4><span class="header-section-number">15.5.5.3</span> Expand Grid</h4>
 <p>Makes a dataset with all combinations</p>
-<div class="sourceCode" id="cb792"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb792-1"><a href="gee-binary-outcome-respiratory-illness.html#cb792-1"></a><span class="kw">expand.grid</span>(<span class="dt">centre    =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>centre),</span>
-<span id="cb792-2"><a href="gee-binary-outcome-respiratory-illness.html#cb792-2"></a>            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</span>
-<span id="cb792-3"><a href="gee-binary-outcome-respiratory-illness.html#cb792-3"></a>            <span class="dt">sex       =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>sex),</span>
-<span id="cb792-4"><a href="gee-binary-outcome-respiratory-illness.html#cb792-4"></a>            <span class="dt">age       =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">35</span>, <span class="dv">50</span>),    <span class="co"># full range of age</span></span>
-<span id="cb792-5"><a href="gee-binary-outcome-respiratory-illness.html#cb792-5"></a>            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status))</span></code></pre></div>
+<div class="sourceCode" id="cb821"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb821-1"><a href="gee-binary-outcome-respiratory-illness.html#cb821-1"></a><span class="kw">expand.grid</span>(<span class="dt">centre    =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>centre),</span>
+<span id="cb821-2"><a href="gee-binary-outcome-respiratory-illness.html#cb821-2"></a>            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</span>
+<span id="cb821-3"><a href="gee-binary-outcome-respiratory-illness.html#cb821-3"></a>            <span class="dt">sex       =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>sex),</span>
+<span id="cb821-4"><a href="gee-binary-outcome-respiratory-illness.html#cb821-4"></a>            <span class="dt">age       =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">35</span>, <span class="dv">50</span>),    <span class="co"># full range of age</span></span>
+<span id="cb821-5"><a href="gee-binary-outcome-respiratory-illness.html#cb821-5"></a>            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status))</span></code></pre></div>
 <pre><code>   centre treatment    sex age BL_status
 1       1   placebo female  20      poor
 2       2   placebo female  20      poor
@@ -2373,14 +2376,14 @@ Dispersion
 </div>
 <div id="lots-of-combinations" class="section level4" number="15.5.5.4">
 <h4><span class="header-section-number">15.5.5.4</span> Lots of Combinations</h4>
-<div class="sourceCode" id="cb794"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb794-1"><a href="gee-binary-outcome-respiratory-illness.html#cb794-1"></a><span class="kw">expand.grid</span>(<span class="dt">centre    =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>centre),</span>
-<span id="cb794-2"><a href="gee-binary-outcome-respiratory-illness.html#cb794-2"></a>            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</span>
-<span id="cb794-3"><a href="gee-binary-outcome-respiratory-illness.html#cb794-3"></a>            <span class="dt">sex       =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>sex),</span>
-<span id="cb794-4"><a href="gee-binary-outcome-respiratory-illness.html#cb794-4"></a>            <span class="dt">age       =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">35</span>, <span class="dv">50</span>),                     <span class="co"># choose some</span></span>
-<span id="cb794-5"><a href="gee-binary-outcome-respiratory-illness.html#cb794-5"></a>            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb794-6"><a href="gee-binary-outcome-respiratory-illness.html#cb794-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</span>
-<span id="cb794-7"><a href="gee-binary-outcome-respiratory-illness.html#cb794-7"></a>                              <span class="dt">newdata =</span> .,        <span class="co"># make predictions for all combinations</span></span>
-<span id="cb794-8"><a href="gee-binary-outcome-respiratory-illness.html#cb794-8"></a>                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) </span></code></pre></div>
+<div class="sourceCode" id="cb823"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb823-1"><a href="gee-binary-outcome-respiratory-illness.html#cb823-1"></a><span class="kw">expand.grid</span>(<span class="dt">centre    =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>centre),</span>
+<span id="cb823-2"><a href="gee-binary-outcome-respiratory-illness.html#cb823-2"></a>            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</span>
+<span id="cb823-3"><a href="gee-binary-outcome-respiratory-illness.html#cb823-3"></a>            <span class="dt">sex       =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>sex),</span>
+<span id="cb823-4"><a href="gee-binary-outcome-respiratory-illness.html#cb823-4"></a>            <span class="dt">age       =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">35</span>, <span class="dv">50</span>),                     <span class="co"># choose some</span></span>
+<span id="cb823-5"><a href="gee-binary-outcome-respiratory-illness.html#cb823-5"></a>            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb823-6"><a href="gee-binary-outcome-respiratory-illness.html#cb823-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</span>
+<span id="cb823-7"><a href="gee-binary-outcome-respiratory-illness.html#cb823-7"></a>                              <span class="dt">newdata =</span> .,        <span class="co"># make predictions for all combinations</span></span>
+<span id="cb823-8"><a href="gee-binary-outcome-respiratory-illness.html#cb823-8"></a>                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) </span></code></pre></div>
 <pre><code>   centre treatment    sex age BL_status       fit
 1       1   placebo female  20      poor 0.2565215
 2       2   placebo female  20      poor 0.3706723
@@ -2434,7 +2437,7 @@ Dispersion
 </div>
 <div id="marginal-plot-to-visualize-the-model" class="section level3" number="15.5.6">
 <h3><span class="header-section-number">15.5.6</span> Marginal Plot to Visualize the Model</h3>
-<div class="sourceCode" id="cb796"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb796-1"><a href="gee-binary-outcome-respiratory-illness.html#cb796-1"></a>resp_geeglm_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb825"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb825-1"><a href="gee-binary-outcome-respiratory-illness.html#cb825-1"></a>resp_geeglm_ex <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">coef</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">exp</span>()</span></code></pre></div>
 <pre><code>       (Intercept)            centre2 treatmenttreatment            sexmale 
          0.1396561          1.7070962          3.8813436          1.5316465 
      BL_statusgood        I(age - 33)    I((age - 33)^2) 
@@ -2448,72 +2451,72 @@ Dispersion
 <li><code>mod2</code> side-by-side panels <em>(may be categorical or continuous)</em></li>
 </ul>
 <p>All other variables must be held constant.</p>
-<div class="sourceCode" id="cb798"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb798-1"><a href="gee-binary-outcome-respiratory-illness.html#cb798-1"></a>interactions<span class="op">::</span><span class="kw">interact_plot</span>(<span class="dt">model =</span> resp_geeglm_ex,   <span class="co"># model name</span></span>
-<span id="cb798-2"><a href="gee-binary-outcome-respiratory-illness.html#cb798-2"></a>                            <span class="dt">pred =</span> age,               <span class="co"># x-axis</span></span>
-<span id="cb798-3"><a href="gee-binary-outcome-respiratory-illness.html#cb798-3"></a>                            <span class="dt">modx =</span> treatment,         <span class="co"># lines</span></span>
-<span id="cb798-4"><a href="gee-binary-outcome-respiratory-illness.html#cb798-4"></a>                            <span class="dt">mod2 =</span> sex,               <span class="co"># panels</span></span>
-<span id="cb798-5"><a href="gee-binary-outcome-respiratory-illness.html#cb798-5"></a>                            <span class="dt">at =</span> <span class="kw">list</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,</span>
-<span id="cb798-6"><a href="gee-binary-outcome-respiratory-illness.html#cb798-6"></a>                                      <span class="dt">BL_status =</span> <span class="st">&quot;good&quot;</span>),  <span class="co"># hold constant</span></span>
-<span id="cb798-7"><a href="gee-binary-outcome-respiratory-illness.html#cb798-7"></a>                            <span class="dt">type =</span> <span class="st">&quot;mean_subject&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-613-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb827"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb827-1"><a href="gee-binary-outcome-respiratory-illness.html#cb827-1"></a>interactions<span class="op">::</span><span class="kw">interact_plot</span>(<span class="dt">model =</span> resp_geeglm_ex,   <span class="co"># model name</span></span>
+<span id="cb827-2"><a href="gee-binary-outcome-respiratory-illness.html#cb827-2"></a>                            <span class="dt">pred =</span> age,               <span class="co"># x-axis</span></span>
+<span id="cb827-3"><a href="gee-binary-outcome-respiratory-illness.html#cb827-3"></a>                            <span class="dt">modx =</span> treatment,         <span class="co"># lines</span></span>
+<span id="cb827-4"><a href="gee-binary-outcome-respiratory-illness.html#cb827-4"></a>                            <span class="dt">mod2 =</span> sex,               <span class="co"># panels</span></span>
+<span id="cb827-5"><a href="gee-binary-outcome-respiratory-illness.html#cb827-5"></a>                            <span class="dt">at =</span> <span class="kw">list</span>(<span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>,</span>
+<span id="cb827-6"><a href="gee-binary-outcome-respiratory-illness.html#cb827-6"></a>                                      <span class="dt">BL_status =</span> <span class="st">&quot;good&quot;</span>),  <span class="co"># hold constant</span></span>
+<span id="cb827-7"><a href="gee-binary-outcome-respiratory-illness.html#cb827-7"></a>                            <span class="dt">type =</span> <span class="st">&quot;mean_subject&quot;</span>)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-628-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="full-version" class="section level4" number="15.5.6.2">
 <h4><span class="header-section-number">15.5.6.2</span> Full Version</h4>
 <p>In order to include all <strong>FIVE</strong> variables, we must do it the LONG way…</p>
-<div class="sourceCode" id="cb799"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb799-1"><a href="gee-binary-outcome-respiratory-illness.html#cb799-1"></a><span class="kw">expand.grid</span>(<span class="dt">centre    =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>centre),</span>
-<span id="cb799-2"><a href="gee-binary-outcome-respiratory-illness.html#cb799-2"></a>            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</span>
-<span id="cb799-3"><a href="gee-binary-outcome-respiratory-illness.html#cb799-3"></a>            <span class="dt">sex       =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>sex),</span>
-<span id="cb799-4"><a href="gee-binary-outcome-respiratory-illness.html#cb799-4"></a>            <span class="dt">age       =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),    <span class="co"># full range of age</span></span>
-<span id="cb799-5"><a href="gee-binary-outcome-respiratory-illness.html#cb799-5"></a>            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb799-6"><a href="gee-binary-outcome-respiratory-illness.html#cb799-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</span>
-<span id="cb799-7"><a href="gee-binary-outcome-respiratory-illness.html#cb799-7"></a>                              <span class="dt">newdata =</span> .,                 <span class="co"># make predictions for all combinations</span></span>
-<span id="cb799-8"><a href="gee-binary-outcome-respiratory-illness.html#cb799-8"></a>                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st">      </span><span class="co"># ensure the predictions are probabilities</span></span>
-<span id="cb799-9"><a href="gee-binary-outcome-respiratory-illness.html#cb799-9"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</span>
-<span id="cb799-10"><a href="gee-binary-outcome-respiratory-illness.html#cb799-10"></a>             <span class="dt">y =</span> fit,</span>
-<span id="cb799-11"><a href="gee-binary-outcome-respiratory-illness.html#cb799-11"></a>             <span class="dt">color =</span> <span class="kw">fct_rev</span>(sex),</span>
-<span id="cb799-12"><a href="gee-binary-outcome-respiratory-illness.html#cb799-12"></a>             <span class="dt">linetype =</span> <span class="kw">fct_rev</span>(treatment))) <span class="op">+</span></span>
-<span id="cb799-13"><a href="gee-binary-outcome-respiratory-illness.html#cb799-13"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
-<span id="cb799-14"><a href="gee-binary-outcome-respiratory-illness.html#cb799-14"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb799-15"><a href="gee-binary-outcome-respiratory-illness.html#cb799-15"></a><span class="st">  </span><span class="kw">facet_grid</span>(centre <span class="op">~</span><span class="st"> </span>BL_status, <span class="dt">labeller =</span> label_both) <span class="op">+</span></span>
-<span id="cb799-16"><a href="gee-binary-outcome-respiratory-illness.html#cb799-16"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,</span>
-<span id="cb799-17"><a href="gee-binary-outcome-respiratory-illness.html#cb799-17"></a>       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</span>
-<span id="cb799-18"><a href="gee-binary-outcome-respiratory-illness.html#cb799-18"></a>       <span class="dt">color =</span> <span class="st">&quot;Sex:&quot;</span>,</span>
-<span id="cb799-19"><a href="gee-binary-outcome-respiratory-illness.html#cb799-19"></a>       <span class="dt">linetype =</span> <span class="st">&quot;Assignment:&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-614-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb828"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb828-1"><a href="gee-binary-outcome-respiratory-illness.html#cb828-1"></a><span class="kw">expand.grid</span>(<span class="dt">centre    =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>centre),</span>
+<span id="cb828-2"><a href="gee-binary-outcome-respiratory-illness.html#cb828-2"></a>            <span class="dt">treatment =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>treatment),</span>
+<span id="cb828-3"><a href="gee-binary-outcome-respiratory-illness.html#cb828-3"></a>            <span class="dt">sex       =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>sex),</span>
+<span id="cb828-4"><a href="gee-binary-outcome-respiratory-illness.html#cb828-4"></a>            <span class="dt">age       =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">11</span>, <span class="dt">to =</span> <span class="dv">68</span>, <span class="dt">by =</span> <span class="dv">1</span>),    <span class="co"># full range of age</span></span>
+<span id="cb828-5"><a href="gee-binary-outcome-respiratory-illness.html#cb828-5"></a>            <span class="dt">BL_status =</span> <span class="kw">levels</span>(data_long<span class="op">$</span>BL_status)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb828-6"><a href="gee-binary-outcome-respiratory-illness.html#cb828-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">fit =</span> <span class="kw">predict</span>(resp_geeglm_ex,</span>
+<span id="cb828-7"><a href="gee-binary-outcome-respiratory-illness.html#cb828-7"></a>                              <span class="dt">newdata =</span> .,                 <span class="co"># make predictions for all combinations</span></span>
+<span id="cb828-8"><a href="gee-binary-outcome-respiratory-illness.html#cb828-8"></a>                              <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)) <span class="op">%&gt;%</span><span class="st">      </span><span class="co"># ensure the predictions are probabilities</span></span>
+<span id="cb828-9"><a href="gee-binary-outcome-respiratory-illness.html#cb828-9"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> age,</span>
+<span id="cb828-10"><a href="gee-binary-outcome-respiratory-illness.html#cb828-10"></a>             <span class="dt">y =</span> fit,</span>
+<span id="cb828-11"><a href="gee-binary-outcome-respiratory-illness.html#cb828-11"></a>             <span class="dt">color =</span> <span class="kw">fct_rev</span>(sex),</span>
+<span id="cb828-12"><a href="gee-binary-outcome-respiratory-illness.html#cb828-12"></a>             <span class="dt">linetype =</span> <span class="kw">fct_rev</span>(treatment))) <span class="op">+</span></span>
+<span id="cb828-13"><a href="gee-binary-outcome-respiratory-illness.html#cb828-13"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb828-14"><a href="gee-binary-outcome-respiratory-illness.html#cb828-14"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb828-15"><a href="gee-binary-outcome-respiratory-illness.html#cb828-15"></a><span class="st">  </span><span class="kw">facet_grid</span>(centre <span class="op">~</span><span class="st"> </span>BL_status, <span class="dt">labeller =</span> label_both) <span class="op">+</span></span>
+<span id="cb828-16"><a href="gee-binary-outcome-respiratory-illness.html#cb828-16"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Age, years&quot;</span>,</span>
+<span id="cb828-17"><a href="gee-binary-outcome-respiratory-illness.html#cb828-17"></a>       <span class="dt">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</span>
+<span id="cb828-18"><a href="gee-binary-outcome-respiratory-illness.html#cb828-18"></a>       <span class="dt">color =</span> <span class="st">&quot;Sex:&quot;</span>,</span>
+<span id="cb828-19"><a href="gee-binary-outcome-respiratory-illness.html#cb828-19"></a>       <span class="dt">linetype =</span> <span class="st">&quot;Assignment:&quot;</span>)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-629-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="females-in-center-1" class="section level4" number="15.5.6.3">
 <h4><span class="header-section-number">15.5.6.3</span> Females in Center 1</h4>
 <p>This example uses default settings.</p>
-<div class="sourceCode" id="cb800"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb800-1"><a href="gee-binary-outcome-respiratory-illness.html#cb800-1"></a>interactions<span class="op">::</span><span class="kw">interact_plot</span>(<span class="dt">model =</span> resp_geeglm_ex,</span>
-<span id="cb800-2"><a href="gee-binary-outcome-respiratory-illness.html#cb800-2"></a>                            <span class="dt">pred =</span> age,</span>
-<span id="cb800-3"><a href="gee-binary-outcome-respiratory-illness.html#cb800-3"></a>                            <span class="dt">modx =</span> treatment,</span>
-<span id="cb800-4"><a href="gee-binary-outcome-respiratory-illness.html#cb800-4"></a>                            <span class="dt">mod2 =</span> BL_status,</span>
-<span id="cb800-5"><a href="gee-binary-outcome-respiratory-illness.html#cb800-5"></a>                            <span class="dt">at =</span> <span class="kw">list</span>(<span class="dt">sex =</span> <span class="st">&quot;female&quot;</span>,</span>
-<span id="cb800-6"><a href="gee-binary-outcome-respiratory-illness.html#cb800-6"></a>                                      <span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>)) </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-615-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb829"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb829-1"><a href="gee-binary-outcome-respiratory-illness.html#cb829-1"></a>interactions<span class="op">::</span><span class="kw">interact_plot</span>(<span class="dt">model =</span> resp_geeglm_ex,</span>
+<span id="cb829-2"><a href="gee-binary-outcome-respiratory-illness.html#cb829-2"></a>                            <span class="dt">pred =</span> age,</span>
+<span id="cb829-3"><a href="gee-binary-outcome-respiratory-illness.html#cb829-3"></a>                            <span class="dt">modx =</span> treatment,</span>
+<span id="cb829-4"><a href="gee-binary-outcome-respiratory-illness.html#cb829-4"></a>                            <span class="dt">mod2 =</span> BL_status,</span>
+<span id="cb829-5"><a href="gee-binary-outcome-respiratory-illness.html#cb829-5"></a>                            <span class="dt">at =</span> <span class="kw">list</span>(<span class="dt">sex =</span> <span class="st">&quot;female&quot;</span>,</span>
+<span id="cb829-6"><a href="gee-binary-outcome-respiratory-illness.html#cb829-6"></a>                                      <span class="dt">centre =</span> <span class="st">&quot;1&quot;</span>)) </span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-630-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="males-in-center-2" class="section level4" number="15.5.6.4">
 <h4><span class="header-section-number">15.5.6.4</span> Males in Center 2</h4>
 <p>This example is more preped for publication.</p>
-<div class="sourceCode" id="cb801"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb801-1"><a href="gee-binary-outcome-respiratory-illness.html#cb801-1"></a>interactions<span class="op">::</span><span class="kw">interact_plot</span>(<span class="dt">model =</span> resp_geeglm_ex,</span>
-<span id="cb801-2"><a href="gee-binary-outcome-respiratory-illness.html#cb801-2"></a>                            <span class="dt">pred =</span> age,</span>
-<span id="cb801-3"><a href="gee-binary-outcome-respiratory-illness.html#cb801-3"></a>                            <span class="dt">modx =</span> treatment,</span>
-<span id="cb801-4"><a href="gee-binary-outcome-respiratory-illness.html#cb801-4"></a>                            <span class="dt">mod2 =</span> BL_status,</span>
-<span id="cb801-5"><a href="gee-binary-outcome-respiratory-illness.html#cb801-5"></a>                            <span class="dt">at =</span> <span class="kw">list</span>(<span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,</span>
-<span id="cb801-6"><a href="gee-binary-outcome-respiratory-illness.html#cb801-6"></a>                                      <span class="dt">centre =</span> <span class="st">&quot;2&quot;</span>),</span>
-<span id="cb801-7"><a href="gee-binary-outcome-respiratory-illness.html#cb801-7"></a>                            <span class="dt">x.label =</span> <span class="st">&quot;Age in Years&quot;</span>,</span>
-<span id="cb801-8"><a href="gee-binary-outcome-respiratory-illness.html#cb801-8"></a>                            <span class="dt">y.label =</span> <span class="st">&quot;Predicted Probability of &#39;Good&#39; Respiratory Status&quot;</span>,</span>
-<span id="cb801-9"><a href="gee-binary-outcome-respiratory-illness.html#cb801-9"></a>                            <span class="dt">legend.main =</span> <span class="st">&quot;Intervention: &quot;</span>,</span>
-<span id="cb801-10"><a href="gee-binary-outcome-respiratory-illness.html#cb801-10"></a>                            <span class="dt">mod2.labels =</span> <span class="kw">c</span>(<span class="st">&quot;Poor at Baseline&quot;</span>,</span>
-<span id="cb801-11"><a href="gee-binary-outcome-respiratory-illness.html#cb801-11"></a>                                            <span class="st">&quot;Good at Baseline&quot;</span>),</span>
-<span id="cb801-12"><a href="gee-binary-outcome-respiratory-illness.html#cb801-12"></a>                            <span class="dt">colors =</span> <span class="kw">rep</span>(<span class="st">&quot;black&quot;</span>, <span class="dt">times =</span> <span class="dv">2</span>)) <span class="op">+</span></span>
-<span id="cb801-13"><a href="gee-binary-outcome-respiratory-illness.html#cb801-13"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb801-14"><a href="gee-binary-outcome-respiratory-illness.html#cb801-14"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),</span>
-<span id="cb801-15"><a href="gee-binary-outcome-respiratory-illness.html#cb801-15"></a>        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="fl">1.1</span>, <span class="fl">-0.1</span>),</span>
-<span id="cb801-16"><a href="gee-binary-outcome-respiratory-illness.html#cb801-16"></a>        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),</span>
-<span id="cb801-17"><a href="gee-binary-outcome-respiratory-illness.html#cb801-17"></a>        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></span>
-<span id="cb801-18"><a href="gee-binary-outcome-respiratory-illness.html#cb801-18"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">caption =</span> <span class="st">&quot;Note: Probibilities shown are specific to males at center 2&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-616-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb830"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb830-1"><a href="gee-binary-outcome-respiratory-illness.html#cb830-1"></a>interactions<span class="op">::</span><span class="kw">interact_plot</span>(<span class="dt">model =</span> resp_geeglm_ex,</span>
+<span id="cb830-2"><a href="gee-binary-outcome-respiratory-illness.html#cb830-2"></a>                            <span class="dt">pred =</span> age,</span>
+<span id="cb830-3"><a href="gee-binary-outcome-respiratory-illness.html#cb830-3"></a>                            <span class="dt">modx =</span> treatment,</span>
+<span id="cb830-4"><a href="gee-binary-outcome-respiratory-illness.html#cb830-4"></a>                            <span class="dt">mod2 =</span> BL_status,</span>
+<span id="cb830-5"><a href="gee-binary-outcome-respiratory-illness.html#cb830-5"></a>                            <span class="dt">at =</span> <span class="kw">list</span>(<span class="dt">sex =</span> <span class="st">&quot;male&quot;</span>,</span>
+<span id="cb830-6"><a href="gee-binary-outcome-respiratory-illness.html#cb830-6"></a>                                      <span class="dt">centre =</span> <span class="st">&quot;2&quot;</span>),</span>
+<span id="cb830-7"><a href="gee-binary-outcome-respiratory-illness.html#cb830-7"></a>                            <span class="dt">x.label =</span> <span class="st">&quot;Age in Years&quot;</span>,</span>
+<span id="cb830-8"><a href="gee-binary-outcome-respiratory-illness.html#cb830-8"></a>                            <span class="dt">y.label =</span> <span class="st">&quot;Predicted Probability of &#39;Good&#39; Respiratory Status&quot;</span>,</span>
+<span id="cb830-9"><a href="gee-binary-outcome-respiratory-illness.html#cb830-9"></a>                            <span class="dt">legend.main =</span> <span class="st">&quot;Intervention: &quot;</span>,</span>
+<span id="cb830-10"><a href="gee-binary-outcome-respiratory-illness.html#cb830-10"></a>                            <span class="dt">mod2.labels =</span> <span class="kw">c</span>(<span class="st">&quot;Poor at Baseline&quot;</span>,</span>
+<span id="cb830-11"><a href="gee-binary-outcome-respiratory-illness.html#cb830-11"></a>                                            <span class="st">&quot;Good at Baseline&quot;</span>),</span>
+<span id="cb830-12"><a href="gee-binary-outcome-respiratory-illness.html#cb830-12"></a>                            <span class="dt">colors =</span> <span class="kw">rep</span>(<span class="st">&quot;black&quot;</span>, <span class="dt">times =</span> <span class="dv">2</span>)) <span class="op">+</span></span>
+<span id="cb830-13"><a href="gee-binary-outcome-respiratory-illness.html#cb830-13"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb830-14"><a href="gee-binary-outcome-respiratory-illness.html#cb830-14"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),</span>
+<span id="cb830-15"><a href="gee-binary-outcome-respiratory-illness.html#cb830-15"></a>        <span class="dt">legend.justification =</span> <span class="kw">c</span>(<span class="fl">1.1</span>, <span class="fl">-0.1</span>),</span>
+<span id="cb830-16"><a href="gee-binary-outcome-respiratory-illness.html#cb830-16"></a>        <span class="dt">legend.background =</span> <span class="kw">element_rect</span>(<span class="dt">color =</span> <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb830-17"><a href="gee-binary-outcome-respiratory-illness.html#cb830-17"></a>        <span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span></span>
+<span id="cb830-18"><a href="gee-binary-outcome-respiratory-illness.html#cb830-18"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">caption =</span> <span class="st">&quot;Note: Probibilities shown are specific to males at center 2&quot;</span>)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-631-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>

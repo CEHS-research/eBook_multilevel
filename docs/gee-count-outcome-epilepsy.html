@@ -258,6 +258,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5.8.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#fit-the-model-8"><i class="fa fa-check"></i><b>5.8.1</b> Fit the model</a></li>
 <li class="chapter" data-level="5.8.2" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#table-of-estimated-parameters"><i class="fa fa-check"></i><b>5.8.2</b> Table of Estimated Parameters</a></li>
 <li class="chapter" data-level="5.8.3" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#visualization-estimated-marginal-means-plot"><i class="fa fa-check"></i><b>5.8.3</b> Visualization: Estimated Marginal Means Plot</a></li>
+<li class="chapter" data-level="5.8.4" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#post-hoc-pairwise-tests"><i class="fa fa-check"></i><b>5.8.4</b> Post Hoc Pairwise Tests</a></li>
+<li class="chapter" data-level="5.8.5" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#effect-sizes"><i class="fa fa-check"></i><b>5.8.5</b> Effect Sizes</a></li>
 </ul></li>
 <li class="chapter" data-level="5.9" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#interpretation-6"><i class="fa fa-check"></i><b>5.9</b> Interpretation</a>
 <ul>
@@ -406,7 +408,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10.7.3" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#interpretation-of-random-effects"><i class="fa fa-check"></i><b>10.7.3</b> Interpretation of Random Effects</a></li>
 <li class="chapter" data-level="10.7.4" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#assumption-checking"><i class="fa fa-check"></i><b>10.7.4</b> Assumption Checking</a></li>
 <li class="chapter" data-level="10.7.5" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#plot-of-the-estimated-marginal-means-1"><i class="fa fa-check"></i><b>10.7.5</b> Plot of the Estimated Marginal Means</a></li>
-<li class="chapter" data-level="10.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.-fixed-effects"><i class="fa fa-check"></i><b>10.7.6</b> Blups vs. Fixed Effects</a></li>
+<li class="chapter" data-level="10.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#post-hoc-compairisons"><i class="fa fa-check"></i><b>10.7.6</b> Post Hoc Compairisons</a></li>
+<li class="chapter" data-level="10.7.7" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.-fixed-effects"><i class="fa fa-check"></i><b>10.7.7</b> Blups vs. Fixed Effects</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="mlm-longitudinal-hedeker-gibbons-depression.html"><a href="mlm-longitudinal-hedeker-gibbons-depression.html"><i class="fa fa-check"></i><b>11</b> MLM, Longitudinal: Hedeker &amp; Gibbons - Depression</a>
@@ -479,7 +482,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="12.2.5" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#random-effects-2"><i class="fa fa-check"></i><b>12.2.5</b> Random Effects</a></li>
 <li class="chapter" data-level="12.2.6" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#cross-level-interaction"><i class="fa fa-check"></i><b>12.2.6</b> Cross-Level Interaction</a></li>
 <li class="chapter" data-level="12.2.7" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#visualize-the-model-3"><i class="fa fa-check"></i><b>12.2.7</b> Visualize the Model</a></li>
-<li class="chapter" data-level="12.2.8" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#effect-sizes"><i class="fa fa-check"></i><b>12.2.8</b> Effect Sizes</a></li>
+<li class="chapter" data-level="12.2.8" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#effect-sizes-1"><i class="fa fa-check"></i><b>12.2.8</b> Effect Sizes</a></li>
 <li class="chapter" data-level="12.2.9" data-path="mlm-longitudinal-hox-ch-5-student-gpa.html"><a href="mlm-longitudinal-hox-ch-5-student-gpa.html#significance"><i class="fa fa-check"></i><b>12.2.9</b> Significance</a></li>
 </ul></li>
 </ul></li>
@@ -792,27 +795,27 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h2><span class="header-section-number">16.1</span> Packages</h2>
 <div id="cran-2" class="section level3" number="16.1.1">
 <h3><span class="header-section-number">16.1.1</span> CRAN</h3>
-<div class="sourceCode" id="cb802"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb802-1"><a href="gee-count-outcome-epilepsy.html#cb802-1"></a><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></span>
-<span id="cb802-2"><a href="gee-count-outcome-epilepsy.html#cb802-2"></a><span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span></span>
-<span id="cb802-3"><a href="gee-count-outcome-epilepsy.html#cb802-3"></a><span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></span>
-<span id="cb802-4"><a href="gee-count-outcome-epilepsy.html#cb802-4"></a><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></span>
-<span id="cb802-5"><a href="gee-count-outcome-epilepsy.html#cb802-5"></a><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></span>
-<span id="cb802-6"><a href="gee-count-outcome-epilepsy.html#cb802-6"></a></span>
-<span id="cb802-7"><a href="gee-count-outcome-epilepsy.html#cb802-7"></a><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></span>
-<span id="cb802-8"><a href="gee-count-outcome-epilepsy.html#cb802-8"></a></span>
-<span id="cb802-9"><a href="gee-count-outcome-epilepsy.html#cb802-9"></a><span class="kw">library</span>(corrplot)     <span class="co"># Vizualize correlation matrix</span></span>
-<span id="cb802-10"><a href="gee-count-outcome-epilepsy.html#cb802-10"></a><span class="kw">library</span>(gee)          <span class="co"># Genderalized Estimation Equation Solver</span></span>
-<span id="cb802-11"><a href="gee-count-outcome-epilepsy.html#cb802-11"></a><span class="kw">library</span>(geepack)      <span class="co"># Genderalized Estimation Equation Package </span></span>
-<span id="cb802-12"><a href="gee-count-outcome-epilepsy.html#cb802-12"></a><span class="kw">library</span>(MuMIn)        <span class="co"># Multi-Model Inference (caluclate QIC)</span></span>
-<span id="cb802-13"><a href="gee-count-outcome-epilepsy.html#cb802-13"></a></span>
-<span id="cb802-14"><a href="gee-count-outcome-epilepsy.html#cb802-14"></a><span class="kw">library</span>(HSAUR)        <span class="co"># package with the dataset</span></span></code></pre></div>
+<div class="sourceCode" id="cb831"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb831-1"><a href="gee-count-outcome-epilepsy.html#cb831-1"></a><span class="kw">library</span>(tidyverse)    <span class="co"># all things tidy</span></span>
+<span id="cb831-2"><a href="gee-count-outcome-epilepsy.html#cb831-2"></a><span class="kw">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span></span>
+<span id="cb831-3"><a href="gee-count-outcome-epilepsy.html#cb831-3"></a><span class="kw">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></span>
+<span id="cb831-4"><a href="gee-count-outcome-epilepsy.html#cb831-4"></a><span class="kw">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></span>
+<span id="cb831-5"><a href="gee-count-outcome-epilepsy.html#cb831-5"></a><span class="kw">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></span>
+<span id="cb831-6"><a href="gee-count-outcome-epilepsy.html#cb831-6"></a></span>
+<span id="cb831-7"><a href="gee-count-outcome-epilepsy.html#cb831-7"></a><span class="kw">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></span>
+<span id="cb831-8"><a href="gee-count-outcome-epilepsy.html#cb831-8"></a></span>
+<span id="cb831-9"><a href="gee-count-outcome-epilepsy.html#cb831-9"></a><span class="kw">library</span>(corrplot)     <span class="co"># Vizualize correlation matrix</span></span>
+<span id="cb831-10"><a href="gee-count-outcome-epilepsy.html#cb831-10"></a><span class="kw">library</span>(gee)          <span class="co"># Genderalized Estimation Equation Solver</span></span>
+<span id="cb831-11"><a href="gee-count-outcome-epilepsy.html#cb831-11"></a><span class="kw">library</span>(geepack)      <span class="co"># Genderalized Estimation Equation Package </span></span>
+<span id="cb831-12"><a href="gee-count-outcome-epilepsy.html#cb831-12"></a><span class="kw">library</span>(MuMIn)        <span class="co"># Multi-Model Inference (caluclate QIC)</span></span>
+<span id="cb831-13"><a href="gee-count-outcome-epilepsy.html#cb831-13"></a></span>
+<span id="cb831-14"><a href="gee-count-outcome-epilepsy.html#cb831-14"></a><span class="kw">library</span>(HSAUR)        <span class="co"># package with the dataset</span></span></code></pre></div>
 </div>
 <div id="github-2" class="section level3" number="16.1.2">
 <h3><span class="header-section-number">16.1.2</span> GitHub</h3>
 <p>Helper <code>extract</code> functions for exponentiating parameters form generalized regression models within a <code>texreg</code> table of model parameters.</p>
-<div class="sourceCode" id="cb803"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb803-1"><a href="gee-count-outcome-epilepsy.html#cb803-1"></a><span class="co"># remotes::install_github(&quot;sarbearschwartz/texreghelpr&quot;) # first time</span></span>
-<span id="cb803-2"><a href="gee-count-outcome-epilepsy.html#cb803-2"></a></span>
-<span id="cb803-3"><a href="gee-count-outcome-epilepsy.html#cb803-3"></a><span class="kw">library</span>(texreghelpr)</span></code></pre></div>
+<div class="sourceCode" id="cb832"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb832-1"><a href="gee-count-outcome-epilepsy.html#cb832-1"></a><span class="co"># remotes::install_github(&quot;sarbearschwartz/texreghelpr&quot;) # first time</span></span>
+<span id="cb832-2"><a href="gee-count-outcome-epilepsy.html#cb832-2"></a></span>
+<span id="cb832-3"><a href="gee-count-outcome-epilepsy.html#cb832-3"></a><span class="kw">library</span>(texreghelpr)</span></code></pre></div>
 </div>
 </div>
 <div id="background-9" class="section level2" number="16.2">
@@ -847,7 +850,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul>
 <div id="read-in-the-data-2" class="section level3" number="16.2.1">
 <h3><span class="header-section-number">16.2.1</span> Read in the data</h3>
-<div class="sourceCode" id="cb804"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb804-1"><a href="gee-count-outcome-epilepsy.html#cb804-1"></a><span class="kw">data</span>(<span class="st">&quot;epilepsy&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;HSAUR&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb833"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb833-1"><a href="gee-count-outcome-epilepsy.html#cb833-1"></a><span class="kw">data</span>(<span class="st">&quot;epilepsy&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;HSAUR&quot;</span>)</span></code></pre></div>
 <p>Problem: The outcome (<code>seizure.rate</code>) were counts over a TWO-week period and we would like to interpret the results in terms of effects on the WEEKLY rate.</p>
 <ul>
 <li>If we divide the values by TWO to get weekly rates, the outcome might be a decimal number</li>
@@ -862,13 +865,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="long-format-4" class="section level3" number="16.2.2">
 <h3><span class="header-section-number">16.2.2</span> Long Format</h3>
-<div class="sourceCode" id="cb805"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb805-1"><a href="gee-count-outcome-epilepsy.html#cb805-1"></a>data_long &lt;-<span class="st"> </span>epilepsy <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb805-2"><a href="gee-count-outcome-epilepsy.html#cb805-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, age, treatment, base, </span>
-<span id="cb805-3"><a href="gee-count-outcome-epilepsy.html#cb805-3"></a>                period, seizure.rate) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb805-4"><a href="gee-count-outcome-epilepsy.html#cb805-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">per =</span> <span class="kw">log</span>(<span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st">                  </span><span class="co"># new variable to use with the offset</span></span>
-<span id="cb805-5"><a href="gee-count-outcome-epilepsy.html#cb805-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">base_wk =</span> base<span class="op">/</span><span class="dv">8</span>)</span>
-<span id="cb805-6"><a href="gee-count-outcome-epilepsy.html#cb805-6"></a>  </span>
-<span id="cb805-7"><a href="gee-count-outcome-epilepsy.html#cb805-7"></a><span class="kw">str</span>(data_long)</span></code></pre></div>
+<div class="sourceCode" id="cb834"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb834-1"><a href="gee-count-outcome-epilepsy.html#cb834-1"></a>data_long &lt;-<span class="st"> </span>epilepsy <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb834-2"><a href="gee-count-outcome-epilepsy.html#cb834-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, age, treatment, base, </span>
+<span id="cb834-3"><a href="gee-count-outcome-epilepsy.html#cb834-3"></a>                period, seizure.rate) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb834-4"><a href="gee-count-outcome-epilepsy.html#cb834-4"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">per =</span> <span class="kw">log</span>(<span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st">                  </span><span class="co"># new variable to use with the offset</span></span>
+<span id="cb834-5"><a href="gee-count-outcome-epilepsy.html#cb834-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">base_wk =</span> base<span class="op">/</span><span class="dv">8</span>)</span>
+<span id="cb834-6"><a href="gee-count-outcome-epilepsy.html#cb834-6"></a>  </span>
+<span id="cb834-7"><a href="gee-count-outcome-epilepsy.html#cb834-7"></a><span class="kw">str</span>(data_long)</span></code></pre></div>
 <pre><code>&#39;data.frame&#39;:   236 obs. of  8 variables:
  $ subject     : Factor w/ 59 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 1 1 1 2 2 2 2 3 3 ...
  $ age         : int  31 31 31 31 30 30 30 30 25 25 ...
@@ -878,7 +881,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  $ seizure.rate: int  5 3 3 3 3 5 3 3 2 4 ...
  $ per         : num  0.693 0.693 0.693 0.693 0.693 ...
  $ base_wk     : num  1.38 1.38 1.38 1.38 1.38 ...</code></pre>
-<div class="sourceCode" id="cb807"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb807-1"><a href="gee-count-outcome-epilepsy.html#cb807-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(data_long, <span class="dt">top =</span> <span class="dv">10</span>, <span class="dt">bottom =</span> <span class="dv">6</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb836"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb836-1"><a href="gee-count-outcome-epilepsy.html#cb836-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(data_long, <span class="dt">top =</span> <span class="dv">10</span>, <span class="dt">bottom =</span> <span class="dv">6</span>)</span></code></pre></div>
 <pre><code>    subject age treatment base period seizure.rate  per base_wk
 1         1  31   placebo   11      1            5 0.69    1.38
 2         1  31   placebo   11      2            3 0.69    1.38
@@ -900,13 +903,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="wide-format-4" class="section level3" number="16.2.3">
 <h3><span class="header-section-number">16.2.3</span> Wide Format</h3>
-<div class="sourceCode" id="cb809"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb809-1"><a href="gee-count-outcome-epilepsy.html#cb809-1"></a>data_wide &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb809-2"><a href="gee-count-outcome-epilepsy.html#cb809-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> period,</span>
-<span id="cb809-3"><a href="gee-count-outcome-epilepsy.html#cb809-3"></a>                <span class="dt">value =</span> seizure.rate,</span>
-<span id="cb809-4"><a href="gee-count-outcome-epilepsy.html#cb809-4"></a>                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb809-5"><a href="gee-count-outcome-epilepsy.html#cb809-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject)</span>
-<span id="cb809-6"><a href="gee-count-outcome-epilepsy.html#cb809-6"></a></span>
-<span id="cb809-7"><a href="gee-count-outcome-epilepsy.html#cb809-7"></a><span class="kw">str</span>(data_wide)</span></code></pre></div>
+<div class="sourceCode" id="cb838"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb838-1"><a href="gee-count-outcome-epilepsy.html#cb838-1"></a>data_wide &lt;-<span class="st"> </span>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb838-2"><a href="gee-count-outcome-epilepsy.html#cb838-2"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> period,</span>
+<span id="cb838-3"><a href="gee-count-outcome-epilepsy.html#cb838-3"></a>                <span class="dt">value =</span> seizure.rate,</span>
+<span id="cb838-4"><a href="gee-count-outcome-epilepsy.html#cb838-4"></a>                <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb838-5"><a href="gee-count-outcome-epilepsy.html#cb838-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">arrange</span>(subject)</span>
+<span id="cb838-6"><a href="gee-count-outcome-epilepsy.html#cb838-6"></a></span>
+<span id="cb838-7"><a href="gee-count-outcome-epilepsy.html#cb838-7"></a><span class="kw">str</span>(data_wide)</span></code></pre></div>
 <pre><code>&#39;data.frame&#39;:   59 obs. of  10 variables:
  $ subject  : Factor w/ 59 levels &quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
  $ age      : int  31 30 25 36 22 29 31 42 37 28 ...
@@ -918,7 +921,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  $ period_2 : int  3 5 4 4 18 2 4 20 6 13 ...
  $ period_3 : int  3 3 0 1 9 8 0 23 6 6 ...
  $ period_4 : int  3 3 5 4 21 7 2 12 5 0 ...</code></pre>
-<div class="sourceCode" id="cb811"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb811-1"><a href="gee-count-outcome-epilepsy.html#cb811-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</span></code></pre></div>
+<div class="sourceCode" id="cb840"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb840-1"><a href="gee-count-outcome-epilepsy.html#cb840-1"></a>psych<span class="op">::</span><span class="kw">headTail</span>(data_wide)</span></code></pre></div>
 <pre><code>    subject age treatment base  per base_wk period_1 period_2 period_3 period_4
 1         1  31   placebo   11 0.69    1.38        5        3        3        3
 2         2  30   placebo   11 0.69    1.38        3        5        3        3
@@ -937,14 +940,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">16.3.1</span> Summarize</h3>
 <div id="demographics-and-baseline" class="section level4" number="16.3.1.1">
 <h4><span class="header-section-number">16.3.1.1</span> Demographics and Baseline</h4>
-<div class="sourceCode" id="cb813"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb813-1"><a href="gee-count-outcome-epilepsy.html#cb813-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb813-2"><a href="gee-count-outcome-epilepsy.html#cb813-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb813-3"><a href="gee-count-outcome-epilepsy.html#cb813-3"></a><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age, base, base_wk,</span>
-<span id="cb813-4"><a href="gee-count-outcome-epilepsy.html#cb813-4"></a>                    <span class="dt">total =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb813-5"><a href="gee-count-outcome-epilepsy.html#cb813-5"></a>                    <span class="dt">test =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb813-6"><a href="gee-count-outcome-epilepsy.html#cb813-6"></a>                    <span class="dt">digits =</span> <span class="dv">2</span>,</span>
-<span id="cb813-7"><a href="gee-count-outcome-epilepsy.html#cb813-7"></a>                    <span class="dt">type =</span> <span class="st">&quot;full&quot;</span>,</span>
-<span id="cb813-8"><a href="gee-count-outcome-epilepsy.html#cb813-8"></a>                    <span class="dt">output =</span> <span class="st">&quot;markdown&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb842"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb842-1"><a href="gee-count-outcome-epilepsy.html#cb842-1"></a>data_wide <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb842-2"><a href="gee-count-outcome-epilepsy.html#cb842-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb842-3"><a href="gee-count-outcome-epilepsy.html#cb842-3"></a><span class="st">  </span>furniture<span class="op">::</span><span class="kw">table1</span>(age, base, base_wk,</span>
+<span id="cb842-4"><a href="gee-count-outcome-epilepsy.html#cb842-4"></a>                    <span class="dt">total =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb842-5"><a href="gee-count-outcome-epilepsy.html#cb842-5"></a>                    <span class="dt">test =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb842-6"><a href="gee-count-outcome-epilepsy.html#cb842-6"></a>                    <span class="dt">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb842-7"><a href="gee-count-outcome-epilepsy.html#cb842-7"></a>                    <span class="dt">type =</span> <span class="st">&quot;full&quot;</span>,</span>
+<span id="cb842-8"><a href="gee-count-outcome-epilepsy.html#cb842-8"></a>                    <span class="dt">output =</span> <span class="st">&quot;markdown&quot;</span>)</span></code></pre></div>
 <table>
 <thead>
 <tr class="header">
@@ -1022,13 +1025,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Note: The Poisson distribution specifies that the <strong>MEAN = VARIANCE</strong></p>
 </blockquote>
 <p>In this dataset, the variance is much larger than the mean, at all time points for both groups. This is evidence of <strong>overdispersion</strong> and suggest the scale parameter should be <strong>greater than one</strong>.</p>
-<div class="sourceCode" id="cb814"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb814-1"><a href="gee-count-outcome-epilepsy.html#cb814-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb814-2"><a href="gee-count-outcome-epilepsy.html#cb814-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment, period) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb814-3"><a href="gee-count-outcome-epilepsy.html#cb814-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">N =</span> <span class="kw">n</span>(),</span>
-<span id="cb814-4"><a href="gee-count-outcome-epilepsy.html#cb814-4"></a>                   <span class="dt">M =</span> <span class="kw">mean</span>(seizure.rate),</span>
-<span id="cb814-5"><a href="gee-count-outcome-epilepsy.html#cb814-5"></a>                   <span class="dt">VAR =</span> <span class="kw">var</span>(seizure.rate),</span>
-<span id="cb814-6"><a href="gee-count-outcome-epilepsy.html#cb814-6"></a>                   <span class="dt">SD =</span> <span class="kw">sd</span>(seizure.rate)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb814-7"><a href="gee-count-outcome-epilepsy.html#cb814-7"></a><span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb843"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb843-1"><a href="gee-count-outcome-epilepsy.html#cb843-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb843-2"><a href="gee-count-outcome-epilepsy.html#cb843-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">group_by</span>(treatment, period) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb843-3"><a href="gee-count-outcome-epilepsy.html#cb843-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">summarise</span>(<span class="dt">N =</span> <span class="kw">n</span>(),</span>
+<span id="cb843-4"><a href="gee-count-outcome-epilepsy.html#cb843-4"></a>                   <span class="dt">M =</span> <span class="kw">mean</span>(seizure.rate),</span>
+<span id="cb843-5"><a href="gee-count-outcome-epilepsy.html#cb843-5"></a>                   <span class="dt">VAR =</span> <span class="kw">var</span>(seizure.rate),</span>
+<span id="cb843-6"><a href="gee-count-outcome-epilepsy.html#cb843-6"></a>                   <span class="dt">SD =</span> <span class="kw">sd</span>(seizure.rate)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb843-7"><a href="gee-count-outcome-epilepsy.html#cb843-7"></a><span class="st">  </span>pander<span class="op">::</span><span class="kw">pander</span>()</span></code></pre></div>
 <table style="width:62%;">
 <colgroup>
 <col width="16%" />
@@ -1119,24 +1122,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="correlation-across-time" class="section level4" number="16.3.1.3">
 <h4><span class="header-section-number">16.3.1.3</span> Correlation Across Time</h4>
 <p>Raw Scale</p>
-<div class="sourceCode" id="cb815"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb815-1"><a href="gee-count-outcome-epilepsy.html#cb815-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb815-2"><a href="gee-count-outcome-epilepsy.html#cb815-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, period, seizure.rate ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb815-3"><a href="gee-count-outcome-epilepsy.html#cb815-3"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> period,</span>
-<span id="cb815-4"><a href="gee-count-outcome-epilepsy.html#cb815-4"></a>                <span class="dt">value =</span> seizure.rate ) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb815-5"><a href="gee-count-outcome-epilepsy.html#cb815-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>subject) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb815-6"><a href="gee-count-outcome-epilepsy.html#cb815-6"></a><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb815-7"><a href="gee-count-outcome-epilepsy.html#cb815-7"></a><span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-625-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb844"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb844-1"><a href="gee-count-outcome-epilepsy.html#cb844-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb844-2"><a href="gee-count-outcome-epilepsy.html#cb844-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, period, seizure.rate ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb844-3"><a href="gee-count-outcome-epilepsy.html#cb844-3"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> period,</span>
+<span id="cb844-4"><a href="gee-count-outcome-epilepsy.html#cb844-4"></a>                <span class="dt">value =</span> seizure.rate ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb844-5"><a href="gee-count-outcome-epilepsy.html#cb844-5"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>subject) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb844-6"><a href="gee-count-outcome-epilepsy.html#cb844-6"></a><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb844-7"><a href="gee-count-outcome-epilepsy.html#cb844-7"></a><span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>()</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-640-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Log Scale</p>
-<div class="sourceCode" id="cb816"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb816-1"><a href="gee-count-outcome-epilepsy.html#cb816-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb816-2"><a href="gee-count-outcome-epilepsy.html#cb816-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">rate_wk =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb816-3"><a href="gee-count-outcome-epilepsy.html#cb816-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, period, rate_wk) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb816-4"><a href="gee-count-outcome-epilepsy.html#cb816-4"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> period,</span>
-<span id="cb816-5"><a href="gee-count-outcome-epilepsy.html#cb816-5"></a>                <span class="dt">value =</span> rate_wk) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb816-6"><a href="gee-count-outcome-epilepsy.html#cb816-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>subject) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb816-7"><a href="gee-count-outcome-epilepsy.html#cb816-7"></a><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb816-8"><a href="gee-count-outcome-epilepsy.html#cb816-8"></a><span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-626-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb845"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb845-1"><a href="gee-count-outcome-epilepsy.html#cb845-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb845-2"><a href="gee-count-outcome-epilepsy.html#cb845-2"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">mutate</span>(<span class="dt">rate_wk =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb845-3"><a href="gee-count-outcome-epilepsy.html#cb845-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(subject, period, rate_wk) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb845-4"><a href="gee-count-outcome-epilepsy.html#cb845-4"></a><span class="st">  </span>tidyr<span class="op">::</span><span class="kw">spread</span>(<span class="dt">key =</span> period,</span>
+<span id="cb845-5"><a href="gee-count-outcome-epilepsy.html#cb845-5"></a>                <span class="dt">value =</span> rate_wk) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb845-6"><a href="gee-count-outcome-epilepsy.html#cb845-6"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">select</span>(<span class="op">-</span>subject) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb845-7"><a href="gee-count-outcome-epilepsy.html#cb845-7"></a><span class="st">  </span><span class="kw">cor</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb845-8"><a href="gee-count-outcome-epilepsy.html#cb845-8"></a><span class="st">  </span>corrplot<span class="op">::</span><span class="kw">corrplot.mixed</span>()</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-641-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="visualize-1" class="section level3" number="16.3.2">
@@ -1145,46 +1148,46 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h4><span class="header-section-number">16.3.2.1</span> Oucome on the Raw Scale</h4>
 <p>There appear to be quite a few extreme values or outliers, particularly for the Progabide group during period one.</p>
 <p>Since the outcome is truely a <strong>COUNT</strong>, we will model it with a <strong>Poisson</strong> distribution combined with a <strong>LOG</strong> link.</p>
-<div class="sourceCode" id="cb817"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb817-1"><a href="gee-count-outcome-epilepsy.html#cb817-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb817-2"><a href="gee-count-outcome-epilepsy.html#cb817-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
-<span id="cb817-3"><a href="gee-count-outcome-epilepsy.html#cb817-3"></a>             <span class="dt">y =</span> seizure.rate)) <span class="op">+</span></span>
-<span id="cb817-4"><a href="gee-count-outcome-epilepsy.html#cb817-4"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
-<span id="cb817-5"><a href="gee-count-outcome-epilepsy.html#cb817-5"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb817-6"><a href="gee-count-outcome-epilepsy.html#cb817-6"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-627-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb846"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb846-1"><a href="gee-count-outcome-epilepsy.html#cb846-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb846-2"><a href="gee-count-outcome-epilepsy.html#cb846-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
+<span id="cb846-3"><a href="gee-count-outcome-epilepsy.html#cb846-3"></a>             <span class="dt">y =</span> seizure.rate)) <span class="op">+</span></span>
+<span id="cb846-4"><a href="gee-count-outcome-epilepsy.html#cb846-4"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
+<span id="cb846-5"><a href="gee-count-outcome-epilepsy.html#cb846-5"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb846-6"><a href="gee-count-outcome-epilepsy.html#cb846-6"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-642-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>To investigate possible outliers, we should transform the outcome with the <code>log</code> function first.</p>
 <blockquote>
 <p>Note: Since some participants reported no seizures during a two week period and the <code>log(0)</code> is <strong>unndefinded</strong>, we must add some amount to the values before transforming. Here we have chosen to add the value of <span class="math inline">\(1\)</span>.</p>
 </blockquote>
-<div class="sourceCode" id="cb818"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb818-1"><a href="gee-count-outcome-epilepsy.html#cb818-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb818-2"><a href="gee-count-outcome-epilepsy.html#cb818-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
-<span id="cb818-3"><a href="gee-count-outcome-epilepsy.html#cb818-3"></a>             <span class="dt">y =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))) <span class="op">+</span></span>
-<span id="cb818-4"><a href="gee-count-outcome-epilepsy.html#cb818-4"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
-<span id="cb818-5"><a href="gee-count-outcome-epilepsy.html#cb818-5"></a><span class="st">  </span></span>
-<span id="cb818-6"><a href="gee-count-outcome-epilepsy.html#cb818-6"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb818-7"><a href="gee-count-outcome-epilepsy.html#cb818-7"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-628-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb819"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb819-1"><a href="gee-count-outcome-epilepsy.html#cb819-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb819-2"><a href="gee-count-outcome-epilepsy.html#cb819-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
-<span id="cb819-3"><a href="gee-count-outcome-epilepsy.html#cb819-3"></a>             <span class="dt">y =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))) <span class="op">+</span></span>
-<span id="cb819-4"><a href="gee-count-outcome-epilepsy.html#cb819-4"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> subject)) <span class="op">+</span></span>
-<span id="cb819-5"><a href="gee-count-outcome-epilepsy.html#cb819-5"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb819-6"><a href="gee-count-outcome-epilepsy.html#cb819-6"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-629-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb820"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb820-1"><a href="gee-count-outcome-epilepsy.html#cb820-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb820-2"><a href="gee-count-outcome-epilepsy.html#cb820-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
-<span id="cb820-3"><a href="gee-count-outcome-epilepsy.html#cb820-3"></a>             <span class="dt">y =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))) <span class="op">+</span></span>
-<span id="cb820-4"><a href="gee-count-outcome-epilepsy.html#cb820-4"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">group =</span> subject),</span>
-<span id="cb820-5"><a href="gee-count-outcome-epilepsy.html#cb820-5"></a>              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
-<span id="cb820-6"><a href="gee-count-outcome-epilepsy.html#cb820-6"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
-<span id="cb820-7"><a href="gee-count-outcome-epilepsy.html#cb820-7"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">group =</span> <span class="dv">1</span>),</span>
-<span id="cb820-8"><a href="gee-count-outcome-epilepsy.html#cb820-8"></a>              <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>,</span>
-<span id="cb820-9"><a href="gee-count-outcome-epilepsy.html#cb820-9"></a>              <span class="dt">size =</span> <span class="fl">1.5</span>,</span>
-<span id="cb820-10"><a href="gee-count-outcome-epilepsy.html#cb820-10"></a>              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
-<span id="cb820-11"><a href="gee-count-outcome-epilepsy.html#cb820-11"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
-<span id="cb820-12"><a href="gee-count-outcome-epilepsy.html#cb820-12"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
-<span id="cb820-13"><a href="gee-count-outcome-epilepsy.html#cb820-13"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-630-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb847"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb847-1"><a href="gee-count-outcome-epilepsy.html#cb847-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb847-2"><a href="gee-count-outcome-epilepsy.html#cb847-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
+<span id="cb847-3"><a href="gee-count-outcome-epilepsy.html#cb847-3"></a>             <span class="dt">y =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))) <span class="op">+</span></span>
+<span id="cb847-4"><a href="gee-count-outcome-epilepsy.html#cb847-4"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
+<span id="cb847-5"><a href="gee-count-outcome-epilepsy.html#cb847-5"></a><span class="st">  </span></span>
+<span id="cb847-6"><a href="gee-count-outcome-epilepsy.html#cb847-6"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb847-7"><a href="gee-count-outcome-epilepsy.html#cb847-7"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-643-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb848"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb848-1"><a href="gee-count-outcome-epilepsy.html#cb848-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb848-2"><a href="gee-count-outcome-epilepsy.html#cb848-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
+<span id="cb848-3"><a href="gee-count-outcome-epilepsy.html#cb848-3"></a>             <span class="dt">y =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))) <span class="op">+</span></span>
+<span id="cb848-4"><a href="gee-count-outcome-epilepsy.html#cb848-4"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">group =</span> subject)) <span class="op">+</span></span>
+<span id="cb848-5"><a href="gee-count-outcome-epilepsy.html#cb848-5"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb848-6"><a href="gee-count-outcome-epilepsy.html#cb848-6"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-644-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb849-1"><a href="gee-count-outcome-epilepsy.html#cb849-1"></a>data_long <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb849-2"><a href="gee-count-outcome-epilepsy.html#cb849-2"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> period,</span>
+<span id="cb849-3"><a href="gee-count-outcome-epilepsy.html#cb849-3"></a>             <span class="dt">y =</span> <span class="kw">log</span>(seizure.rate <span class="op">+</span><span class="st"> </span><span class="dv">1</span>))) <span class="op">+</span></span>
+<span id="cb849-4"><a href="gee-count-outcome-epilepsy.html#cb849-4"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">group =</span> subject),</span>
+<span id="cb849-5"><a href="gee-count-outcome-epilepsy.html#cb849-5"></a>              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb849-6"><a href="gee-count-outcome-epilepsy.html#cb849-6"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb849-7"><a href="gee-count-outcome-epilepsy.html#cb849-7"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="kw">aes</span>(<span class="dt">group =</span> <span class="dv">1</span>),</span>
+<span id="cb849-8"><a href="gee-count-outcome-epilepsy.html#cb849-8"></a>              <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>,</span>
+<span id="cb849-9"><a href="gee-count-outcome-epilepsy.html#cb849-9"></a>              <span class="dt">size =</span> <span class="fl">1.5</span>,</span>
+<span id="cb849-10"><a href="gee-count-outcome-epilepsy.html#cb849-10"></a>              <span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>,</span>
+<span id="cb849-11"><a href="gee-count-outcome-epilepsy.html#cb849-11"></a>              <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb849-12"><a href="gee-count-outcome-epilepsy.html#cb849-12"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb849-13"><a href="gee-count-outcome-epilepsy.html#cb849-13"></a><span class="st">  </span><span class="kw">facet_grid</span>(.<span class="op">~</span><span class="st"> </span>treatment)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-645-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1195,11 +1198,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </blockquote>
 <div id="fit-the-model-18" class="section level3" number="16.4.1">
 <h3><span class="header-section-number">16.4.1</span> Fit the model</h3>
-<div class="sourceCode" id="cb821"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb821-1"><a href="gee-count-outcome-epilepsy.html#cb821-1"></a>fit_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(seizure.rate <span class="op">~</span><span class="st"> </span>base <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(per),</span>
-<span id="cb821-2"><a href="gee-count-outcome-epilepsy.html#cb821-2"></a>               <span class="dt">data =</span> data_long,</span>
-<span id="cb821-3"><a href="gee-count-outcome-epilepsy.html#cb821-3"></a>               <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>))</span>
-<span id="cb821-4"><a href="gee-count-outcome-epilepsy.html#cb821-4"></a></span>
-<span id="cb821-5"><a href="gee-count-outcome-epilepsy.html#cb821-5"></a><span class="kw">summary</span>(fit_glm)</span></code></pre></div>
+<div class="sourceCode" id="cb850"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb850-1"><a href="gee-count-outcome-epilepsy.html#cb850-1"></a>fit_glm &lt;-<span class="st"> </span><span class="kw">glm</span>(seizure.rate <span class="op">~</span><span class="st"> </span>base <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(per),</span>
+<span id="cb850-2"><a href="gee-count-outcome-epilepsy.html#cb850-2"></a>               <span class="dt">data =</span> data_long,</span>
+<span id="cb850-3"><a href="gee-count-outcome-epilepsy.html#cb850-3"></a>               <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>))</span>
+<span id="cb850-4"><a href="gee-count-outcome-epilepsy.html#cb850-4"></a></span>
+<span id="cb850-5"><a href="gee-count-outcome-epilepsy.html#cb850-5"></a><span class="kw">summary</span>(fit_glm)</span></code></pre></div>
 <pre><code>
 Call:
 glm(formula = seizure.rate ~ base + age + treatment + offset(per), 
@@ -1228,14 +1231,14 @@ Number of Fisher Scoring iterations: 5</code></pre>
 </div>
 <div id="tabulate-the-model-parameters-1" class="section level3" number="16.4.2">
 <h3><span class="header-section-number">16.4.2</span> Tabulate the Model Parameters</h3>
-<div class="sourceCode" id="cb823"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb823-1"><a href="gee-count-outcome-epilepsy.html#cb823-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(fit_glm,</span>
-<span id="cb823-2"><a href="gee-count-outcome-epilepsy.html#cb823-2"></a>                     texreghelpr<span class="op">::</span><span class="kw">extract_glm_exp</span>(fit_glm,</span>
-<span id="cb823-3"><a href="gee-count-outcome-epilepsy.html#cb823-3"></a>                                                  <span class="dt">include.any =</span> <span class="ot">FALSE</span>)),</span>
-<span id="cb823-4"><a href="gee-count-outcome-epilepsy.html#cb823-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;b (SE)&quot;</span>, <span class="st">&quot;IRR [95 CI]&quot;</span>),</span>
-<span id="cb823-5"><a href="gee-count-outcome-epilepsy.html#cb823-5"></a>                <span class="dt">caption =</span> <span class="st">&quot;Poisson Generalized Linear Regression (GLM)&quot;</span>,</span>
-<span id="cb823-6"><a href="gee-count-outcome-epilepsy.html#cb823-6"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb823-7"><a href="gee-count-outcome-epilepsy.html#cb823-7"></a>                <span class="dt">digits =</span> <span class="dv">3</span>,</span>
-<span id="cb823-8"><a href="gee-count-outcome-epilepsy.html#cb823-8"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb852"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb852-1"><a href="gee-count-outcome-epilepsy.html#cb852-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(fit_glm,</span>
+<span id="cb852-2"><a href="gee-count-outcome-epilepsy.html#cb852-2"></a>                     texreghelpr<span class="op">::</span><span class="kw">extract_glm_exp</span>(fit_glm,</span>
+<span id="cb852-3"><a href="gee-count-outcome-epilepsy.html#cb852-3"></a>                                                  <span class="dt">include.any =</span> <span class="ot">FALSE</span>)),</span>
+<span id="cb852-4"><a href="gee-count-outcome-epilepsy.html#cb852-4"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;b (SE)&quot;</span>, <span class="st">&quot;IRR [95 CI]&quot;</span>),</span>
+<span id="cb852-5"><a href="gee-count-outcome-epilepsy.html#cb852-5"></a>                <span class="dt">caption =</span> <span class="st">&quot;Poisson Generalized Linear Regression (GLM)&quot;</span>,</span>
+<span id="cb852-6"><a href="gee-count-outcome-epilepsy.html#cb852-6"></a>                <span class="dt">single.row =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb852-7"><a href="gee-count-outcome-epilepsy.html#cb852-7"></a>                <span class="dt">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb852-8"><a href="gee-count-outcome-epilepsy.html#cb852-8"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>)</span></code></pre></div>
 <table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
 <caption>
 Poisson Generalized Linear Regression (GLM)
@@ -1372,16 +1375,16 @@ Num. obs.
 <li>correlation structure: <code>independence</code></li>
 <li>scale parameter = <span class="math inline">\(1\)</span></li>
 </ul>
-<div class="sourceCode" id="cb824"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb824-1"><a href="gee-count-outcome-epilepsy.html#cb824-1"></a>fit_gee_ind_s1 &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(seizure.rate <span class="op">~</span><span class="st"> </span>base <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(per),</span>
-<span id="cb824-2"><a href="gee-count-outcome-epilepsy.html#cb824-2"></a>                           <span class="dt">data =</span> data_long,</span>
-<span id="cb824-3"><a href="gee-count-outcome-epilepsy.html#cb824-3"></a>                           <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>),</span>
-<span id="cb824-4"><a href="gee-count-outcome-epilepsy.html#cb824-4"></a>                           <span class="dt">id =</span> subject,</span>
-<span id="cb824-5"><a href="gee-count-outcome-epilepsy.html#cb824-5"></a>                           <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>,</span>
-<span id="cb824-6"><a href="gee-count-outcome-epilepsy.html#cb824-6"></a>                           <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb824-7"><a href="gee-count-outcome-epilepsy.html#cb824-7"></a>                           <span class="dt">scale.value =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb853"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb853-1"><a href="gee-count-outcome-epilepsy.html#cb853-1"></a>fit_gee_ind_s1 &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(seizure.rate <span class="op">~</span><span class="st"> </span>base <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(per),</span>
+<span id="cb853-2"><a href="gee-count-outcome-epilepsy.html#cb853-2"></a>                           <span class="dt">data =</span> data_long,</span>
+<span id="cb853-3"><a href="gee-count-outcome-epilepsy.html#cb853-3"></a>                           <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>),</span>
+<span id="cb853-4"><a href="gee-count-outcome-epilepsy.html#cb853-4"></a>                           <span class="dt">id =</span> subject,</span>
+<span id="cb853-5"><a href="gee-count-outcome-epilepsy.html#cb853-5"></a>                           <span class="dt">corstr =</span> <span class="st">&quot;independence&quot;</span>,</span>
+<span id="cb853-6"><a href="gee-count-outcome-epilepsy.html#cb853-6"></a>                           <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb853-7"><a href="gee-count-outcome-epilepsy.html#cb853-7"></a>                           <span class="dt">scale.value =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>       (Intercept)               base                age treatmentProgabide 
        -0.13061561         0.02265174         0.02274013        -0.15270095 </code></pre>
-<div class="sourceCode" id="cb826"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb826-1"><a href="gee-count-outcome-epilepsy.html#cb826-1"></a><span class="kw">summary</span>(fit_gee_ind_s1)</span></code></pre></div>
+<div class="sourceCode" id="cb855"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb855-1"><a href="gee-count-outcome-epilepsy.html#cb855-1"></a><span class="kw">summary</span>(fit_gee_ind_s1)</span></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
  gee S-function, version 4.13 modified 98/01/27 (1998) 
@@ -1428,16 +1431,16 @@ Working Correlation
 <li>correlation structure: <code>exchangeable</code></li>
 <li>scale parameter = <span class="math inline">\(1\)</span></li>
 </ul>
-<div class="sourceCode" id="cb828"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb828-1"><a href="gee-count-outcome-epilepsy.html#cb828-1"></a>fit_gee_exc_s1 &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(seizure.rate <span class="op">~</span><span class="st"> </span>base <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(per),</span>
-<span id="cb828-2"><a href="gee-count-outcome-epilepsy.html#cb828-2"></a>                           <span class="dt">data =</span> data_long,</span>
-<span id="cb828-3"><a href="gee-count-outcome-epilepsy.html#cb828-3"></a>                           <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>),</span>
-<span id="cb828-4"><a href="gee-count-outcome-epilepsy.html#cb828-4"></a>                           <span class="dt">id =</span> subject,</span>
-<span id="cb828-5"><a href="gee-count-outcome-epilepsy.html#cb828-5"></a>                           <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</span>
-<span id="cb828-6"><a href="gee-count-outcome-epilepsy.html#cb828-6"></a>                           <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb828-7"><a href="gee-count-outcome-epilepsy.html#cb828-7"></a>                           <span class="dt">scale.value =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb857"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb857-1"><a href="gee-count-outcome-epilepsy.html#cb857-1"></a>fit_gee_exc_s1 &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(seizure.rate <span class="op">~</span><span class="st"> </span>base <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(per),</span>
+<span id="cb857-2"><a href="gee-count-outcome-epilepsy.html#cb857-2"></a>                           <span class="dt">data =</span> data_long,</span>
+<span id="cb857-3"><a href="gee-count-outcome-epilepsy.html#cb857-3"></a>                           <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>),</span>
+<span id="cb857-4"><a href="gee-count-outcome-epilepsy.html#cb857-4"></a>                           <span class="dt">id =</span> subject,</span>
+<span id="cb857-5"><a href="gee-count-outcome-epilepsy.html#cb857-5"></a>                           <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</span>
+<span id="cb857-6"><a href="gee-count-outcome-epilepsy.html#cb857-6"></a>                           <span class="dt">scale.fix =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb857-7"><a href="gee-count-outcome-epilepsy.html#cb857-7"></a>                           <span class="dt">scale.value =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>       (Intercept)               base                age treatmentProgabide 
        -0.13061561         0.02265174         0.02274013        -0.15270095 </code></pre>
-<div class="sourceCode" id="cb830"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb830-1"><a href="gee-count-outcome-epilepsy.html#cb830-1"></a><span class="kw">summary</span>(fit_gee_exc_s1)</span></code></pre></div>
+<div class="sourceCode" id="cb859"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb859-1"><a href="gee-count-outcome-epilepsy.html#cb859-1"></a><span class="kw">summary</span>(fit_gee_exc_s1)</span></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
  gee S-function, version 4.13 modified 98/01/27 (1998) 
@@ -1491,15 +1494,15 @@ Working Correlation
 <li>correlation structure: <code>exchangeable</code></li>
 <li>scale parameter = <em>freely estimated</em></li>
 </ul>
-<div class="sourceCode" id="cb832"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb832-1"><a href="gee-count-outcome-epilepsy.html#cb832-1"></a>fit_gee_exc_sf &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(seizure.rate <span class="op">~</span><span class="st"> </span>base <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(per),</span>
-<span id="cb832-2"><a href="gee-count-outcome-epilepsy.html#cb832-2"></a>                           <span class="dt">data =</span> data_long,</span>
-<span id="cb832-3"><a href="gee-count-outcome-epilepsy.html#cb832-3"></a>                           <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>),</span>
-<span id="cb832-4"><a href="gee-count-outcome-epilepsy.html#cb832-4"></a>                           <span class="dt">id =</span> subject,</span>
-<span id="cb832-5"><a href="gee-count-outcome-epilepsy.html#cb832-5"></a>                           <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</span>
-<span id="cb832-6"><a href="gee-count-outcome-epilepsy.html#cb832-6"></a>                           <span class="dt">scale.fix =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb861"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb861-1"><a href="gee-count-outcome-epilepsy.html#cb861-1"></a>fit_gee_exc_sf &lt;-<span class="st"> </span>gee<span class="op">::</span><span class="kw">gee</span>(seizure.rate <span class="op">~</span><span class="st"> </span>base <span class="op">+</span><span class="st"> </span>age <span class="op">+</span><span class="st"> </span>treatment <span class="op">+</span><span class="st"> </span><span class="kw">offset</span>(per),</span>
+<span id="cb861-2"><a href="gee-count-outcome-epilepsy.html#cb861-2"></a>                           <span class="dt">data =</span> data_long,</span>
+<span id="cb861-3"><a href="gee-count-outcome-epilepsy.html#cb861-3"></a>                           <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>),</span>
+<span id="cb861-4"><a href="gee-count-outcome-epilepsy.html#cb861-4"></a>                           <span class="dt">id =</span> subject,</span>
+<span id="cb861-5"><a href="gee-count-outcome-epilepsy.html#cb861-5"></a>                           <span class="dt">corstr =</span> <span class="st">&quot;exchangeable&quot;</span>,</span>
+<span id="cb861-6"><a href="gee-count-outcome-epilepsy.html#cb861-6"></a>                           <span class="dt">scale.fix =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 <pre><code>       (Intercept)               base                age treatmentProgabide 
        -0.13061561         0.02265174         0.02274013        -0.15270095 </code></pre>
-<div class="sourceCode" id="cb834"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb834-1"><a href="gee-count-outcome-epilepsy.html#cb834-1"></a><span class="kw">summary</span>(fit_gee_exc_sf)</span></code></pre></div>
+<div class="sourceCode" id="cb863"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb863-1"><a href="gee-count-outcome-epilepsy.html#cb863-1"></a><span class="kw">summary</span>(fit_gee_exc_sf)</span></code></pre></div>
 <pre><code>
  GEE:  GENERALIZED LINEAR MODELS FOR DEPENDENT DATA
  gee S-function, version 4.13 modified 98/01/27 (1998) 
@@ -1545,16 +1548,16 @@ Working Correlation
 <h3><span class="header-section-number">16.5.4</span> Compare Models</h3>
 <div id="raw-estimates-logit-scale-1" class="section level4" number="16.5.4.1">
 <h4><span class="header-section-number">16.5.4.1</span> Raw Estimates (logit scale)</h4>
-<div class="sourceCode" id="cb836"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb836-1"><a href="gee-count-outcome-epilepsy.html#cb836-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(fit_glm, </span>
-<span id="cb836-2"><a href="gee-count-outcome-epilepsy.html#cb836-2"></a>                     fit_gee_ind_s1, </span>
-<span id="cb836-3"><a href="gee-count-outcome-epilepsy.html#cb836-3"></a>                     fit_gee_exc_s1, </span>
-<span id="cb836-4"><a href="gee-count-outcome-epilepsy.html#cb836-4"></a>                     fit_gee_exc_sf),</span>
-<span id="cb836-5"><a href="gee-count-outcome-epilepsy.html#cb836-5"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>,</span>
-<span id="cb836-6"><a href="gee-count-outcome-epilepsy.html#cb836-6"></a>                                       <span class="st">&quot;GEE-Indep(1)&quot;</span>,</span>
-<span id="cb836-7"><a href="gee-count-outcome-epilepsy.html#cb836-7"></a>                                       <span class="st">&quot;GEE-Exchg(1)&quot;</span>,</span>
-<span id="cb836-8"><a href="gee-count-outcome-epilepsy.html#cb836-8"></a>                                       <span class="st">&quot;GEE-Exchg(free)&quot;</span>),</span>
-<span id="cb836-9"><a href="gee-count-outcome-epilepsy.html#cb836-9"></a>                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Logit Scale&quot;</span>,</span>
-<span id="cb836-10"><a href="gee-count-outcome-epilepsy.html#cb836-10"></a>                <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb865"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb865-1"><a href="gee-count-outcome-epilepsy.html#cb865-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(fit_glm, </span>
+<span id="cb865-2"><a href="gee-count-outcome-epilepsy.html#cb865-2"></a>                     fit_gee_ind_s1, </span>
+<span id="cb865-3"><a href="gee-count-outcome-epilepsy.html#cb865-3"></a>                     fit_gee_exc_s1, </span>
+<span id="cb865-4"><a href="gee-count-outcome-epilepsy.html#cb865-4"></a>                     fit_gee_exc_sf),</span>
+<span id="cb865-5"><a href="gee-count-outcome-epilepsy.html#cb865-5"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>,</span>
+<span id="cb865-6"><a href="gee-count-outcome-epilepsy.html#cb865-6"></a>                                       <span class="st">&quot;GEE-Indep(1)&quot;</span>,</span>
+<span id="cb865-7"><a href="gee-count-outcome-epilepsy.html#cb865-7"></a>                                       <span class="st">&quot;GEE-Exchg(1)&quot;</span>,</span>
+<span id="cb865-8"><a href="gee-count-outcome-epilepsy.html#cb865-8"></a>                                       <span class="st">&quot;GEE-Exchg(free)&quot;</span>),</span>
+<span id="cb865-9"><a href="gee-count-outcome-epilepsy.html#cb865-9"></a>                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Logit Scale&quot;</span>,</span>
+<span id="cb865-10"><a href="gee-count-outcome-epilepsy.html#cb865-10"></a>                <span class="dt">digits =</span> <span class="dv">3</span>)</span></code></pre></div>
 <table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
 <caption>
 Estimates on Logit Scale
@@ -1829,18 +1832,18 @@ Scale
 </div>
 <div id="exponentiate-the-estimates-odds-ratio-scale-1" class="section level4" number="16.5.4.2">
 <h4><span class="header-section-number">16.5.4.2</span> Exponentiate the Estimates (odds ratio scale)</h4>
-<div class="sourceCode" id="cb837"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb837-1"><a href="gee-count-outcome-epilepsy.html#cb837-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(fit_glm), </span>
-<span id="cb837-2"><a href="gee-count-outcome-epilepsy.html#cb837-2"></a>                     <span class="kw">extract_gee_exp</span>(fit_gee_ind_s1), </span>
-<span id="cb837-3"><a href="gee-count-outcome-epilepsy.html#cb837-3"></a>                     <span class="kw">extract_gee_exp</span>(fit_gee_exc_s1), </span>
-<span id="cb837-4"><a href="gee-count-outcome-epilepsy.html#cb837-4"></a>                     <span class="kw">extract_gee_exp</span>(fit_gee_exc_sf)),</span>
-<span id="cb837-5"><a href="gee-count-outcome-epilepsy.html#cb837-5"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>,</span>
-<span id="cb837-6"><a href="gee-count-outcome-epilepsy.html#cb837-6"></a>                                       <span class="st">&quot;GEE-Indep(1)&quot;</span>,</span>
-<span id="cb837-7"><a href="gee-count-outcome-epilepsy.html#cb837-7"></a>                                       <span class="st">&quot;GEE-Exchg(1)&quot;</span>,</span>
-<span id="cb837-8"><a href="gee-count-outcome-epilepsy.html#cb837-8"></a>                                       <span class="st">&quot;GEE-Exchg(free)&quot;</span>),</span>
-<span id="cb837-9"><a href="gee-count-outcome-epilepsy.html#cb837-9"></a>                <span class="dt">digits =</span> <span class="dv">3</span>,</span>
-<span id="cb837-10"><a href="gee-count-outcome-epilepsy.html#cb837-10"></a>                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Odds-Ratio Scale&quot;</span>,</span>
-<span id="cb837-11"><a href="gee-count-outcome-epilepsy.html#cb837-11"></a>                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb837-12"><a href="gee-count-outcome-epilepsy.html#cb837-12"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb866"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb866-1"><a href="gee-count-outcome-epilepsy.html#cb866-1"></a>texreg<span class="op">::</span><span class="kw">knitreg</span>(<span class="kw">list</span>(<span class="kw">extract_glm_exp</span>(fit_glm), </span>
+<span id="cb866-2"><a href="gee-count-outcome-epilepsy.html#cb866-2"></a>                     <span class="kw">extract_gee_exp</span>(fit_gee_ind_s1), </span>
+<span id="cb866-3"><a href="gee-count-outcome-epilepsy.html#cb866-3"></a>                     <span class="kw">extract_gee_exp</span>(fit_gee_exc_s1), </span>
+<span id="cb866-4"><a href="gee-count-outcome-epilepsy.html#cb866-4"></a>                     <span class="kw">extract_gee_exp</span>(fit_gee_exc_sf)),</span>
+<span id="cb866-5"><a href="gee-count-outcome-epilepsy.html#cb866-5"></a>                <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;GLM&quot;</span>,</span>
+<span id="cb866-6"><a href="gee-count-outcome-epilepsy.html#cb866-6"></a>                                       <span class="st">&quot;GEE-Indep(1)&quot;</span>,</span>
+<span id="cb866-7"><a href="gee-count-outcome-epilepsy.html#cb866-7"></a>                                       <span class="st">&quot;GEE-Exchg(1)&quot;</span>,</span>
+<span id="cb866-8"><a href="gee-count-outcome-epilepsy.html#cb866-8"></a>                                       <span class="st">&quot;GEE-Exchg(free)&quot;</span>),</span>
+<span id="cb866-9"><a href="gee-count-outcome-epilepsy.html#cb866-9"></a>                <span class="dt">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb866-10"><a href="gee-count-outcome-epilepsy.html#cb866-10"></a>                <span class="dt">caption =</span> <span class="st">&quot;Estimates on Odds-Ratio Scale&quot;</span>,</span>
+<span id="cb866-11"><a href="gee-count-outcome-epilepsy.html#cb866-11"></a>                <span class="dt">caption.above =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb866-12"><a href="gee-count-outcome-epilepsy.html#cb866-12"></a>                <span class="dt">ci.test =</span> <span class="dv">1</span>)</span></code></pre></div>
 <table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;color: #000000;border-top: 2px solid #000000;">
 <caption>
 Estimates on Odds-Ratio Scale
@@ -2033,6 +2036,7 @@ Dispersion
 <div id="conculsion" class="section level2" number="16.6">
 <h2><span class="header-section-number">16.6</span> Conculsion</h2>
 <p><strong>The Research Question</strong></p>
+<p>The main question of interest is whether taking progabide reduced the number of epileptic seizures compared with placebo.</p>
 <p><strong>The Conclusion</strong></p>
 <p>There is no evidence that Progabide effects the weekly rate of epileptic seizures differently than placebo.</p>
 

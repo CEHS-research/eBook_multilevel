@@ -898,6 +898,11 @@ interactions::interact_plot(model = fit_lmer_2a_re, # model name
 
 
 
+
+
+
+
+
 #### More Customized - Color
 
 This version would look better on a poster or in a slide presentation.
@@ -971,6 +976,49 @@ effects::Effect(focal.predictors = c("age","sicdegp"),
        fill     = "Initial Communication (SICD)",
        color    = "Initial Communication (SICD)")
 ```
+
+
+### Post Hoc Compairisons
+
+```{r}
+fit_lmer_2a_re %>% 
+  emmeans::emmeans(~ sicdegp,
+                   at = list(age = 13))
+```
+
+```{r}
+fit_lmer_2a_re %>% 
+  emmeans::emmeans(~ sicdegp,
+                   at = list(age = 13)) %>% 
+  pairs()
+```
+
+
+
+```{r}
+totalSD <- VarCorr(fit_lmer_2a_re) %>% 
+  data.frame() %>% 
+  dplyr::summarise(tot_var = sum(vcov)) %>% 
+  dplyr::pull(tot_var) %>% 
+  sqrt()
+  
+totalSD
+```
+
+```{r}
+fit_lmer_2a_re %>% 
+  emmeans::emmeans(~ sicdegp,
+                   at = list(age = 13)) %>% 
+  emmeans::eff_size(sigma = totalSD,        # which SD to divide by???
+                    edf = 50)               # df  
+```
+
+
+
+
+
+
+
 
 ### Blups vs. Fixed Effects
 
