@@ -11,19 +11,21 @@ panderOptions('keep.line.breaks', TRUE)
 
 ```{r, warning=FALSE, error=FALSE, message=FALSE, results='hide'}
 library(tidyverse)    # all things tidy
-library(pander)       # nice looking genderal tabulations
-library(furniture)    # nice table1() descriptives
+
+library(pander)       # nice looking general tabulations
+library(furniture)    # nice table1() descriptions
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
-library(psych)        # contains some useful functions, like headTail
-library(sjstats)      # ICC calculationsv
+
+library(psych)        # contains some useful functions, like headTail()
+library(sjstats)      # ICC calculations
 library(effects)      # Estimated Marginal Means
 library(VIM)          # Visualization and Imputation of Missing Values 
-library(naniar)       # Summaries and Visualisations for Missing Data
-library(corrplot)     # Vizualize correlation matrix
+library(naniar)       # Summaries and Visualizations for Missing Data
+library(corrplot)     # Visualize correlation matrix
 
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
+library(lmerTest)
 library(optimx)
-library(haven)        # read in SPSS dataset
 ```
 
 ## Background
@@ -50,11 +52,23 @@ Independent or predictor variables:
 -   DMI (desipramine) drug-plasma levels (µg/l)
 
     -   metabolite of imipramine
+    
+    
+Link Broken: http://www.uic.edu/~hedeker/riesby.sav     
 
 ```{r}
-data_raw <- haven::read_spss("http://www.uic.edu/~hedeker/riesby.sav") %>%  # read from the webpage 
-  dplyr::select(-intrcpt, -endweek)                                         # de-select or delete some variables 
+data_raw <- read.table("data/riesby.dat.txt") %>% 
+  dplyr::rename(id    = "V1",
+                hamd  = "V2",
+                endog = "V5",
+                week  = "V4") %>%
+  dplyr::select(-V3, -V6)
+
+data_raw
 ```
+
+
+
 
 ```{r}
 data_raw %>% 
@@ -65,6 +79,7 @@ data_raw %>%
 
 ```{r}
 data_long <- data_raw %>%                                        # save the dataset as a new name
+  dplyr::mutate(hamd = as.numeric(hamd)) %>% 
   dplyr::filter(!is.na(hamd)) %>%                                # remove NA or missing scores
   dplyr::mutate(id = factor(id)) %>%                             # declare grouping var a factor
   dplyr::mutate(endog = endog %>% 

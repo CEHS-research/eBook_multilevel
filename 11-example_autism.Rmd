@@ -800,11 +800,11 @@ ggResidpanel::resid_panel(fit_lmer_2a_re)  # default = pearson residuals
 #### Manually with `HLMdiag` and `ggplot2`
 
 ```{r}
-data_long %>% 
-  dplyr::mutate(resid = HLMdiag::HLMresid(fit_lmer_2a_re, 
-                  level = 1,
-                  standardized = TRUE)) %>% 
-  ggplot(aes(x = resid)) +
+fit_lmer_2a_re %>% 
+  HLMdiag::hlm_augment(level = 1,
+                       include.ls = FALSE,
+                       standardized = TRUE) %>%  
+  ggplot(aes(x = .resid)) +
   geom_histogram(bins = 40,
                  color = "gray20",
                  alpha = .2) +
@@ -827,13 +827,12 @@ fit_lmer_2a_re %>%
 
 
 ```{r}
-data_long %>% 
-  dplyr::mutate(fit = predict(fit_lmer_2a_re)) %>% 
-  dplyr::mutate(resid = HLMdiag::HLMresid(fit_lmer_2a_re, 
-                  level = 1,
-                  standardized = TRUE)) %>% 
-  ggplot(aes(x = fit,
-             y = resid)) +
+fit_lmer_2a_re %>% 
+  HLMdiag::hlm_augment(level = 1,
+                       include.ls = FALSE,
+                       standardized = TRUE) %>% 
+  ggplot(aes(x = .fitted,
+             y = .resid)) +
   geom_hline(yintercept = 0, color = "red") +
   geom_point() +
   geom_smooth() +
@@ -842,11 +841,11 @@ data_long %>%
 ```
 
 ```{r}
-data_long %>% 
-  dplyr::mutate(resid = HLMdiag::HLMresid(fit_lmer_2a_re, 
-                  level = 1,
-                  standardized = TRUE)) %>% 
-  ggplot(aes(sample = resid)) +
+fit_lmer_2a_re %>% 
+  HLMdiag::hlm_augment(level = 1,
+                       include.ls = FALSE,
+                       standardized = TRUE) %>% 
+  ggplot(aes(sample = .resid)) +
   geom_qq()+
   stat_qq_line() +
   theme_bw()
@@ -982,16 +981,11 @@ effects::Effect(focal.predictors = c("age","sicdegp"),
 
 ```{r}
 fit_lmer_2a_re %>% 
-  emmeans::emmeans(~ sicdegp,
+  emmeans::emmeans(pairwise ~ sicdegp,
                    at = list(age = 13))
 ```
 
-```{r}
-fit_lmer_2a_re %>% 
-  emmeans::emmeans(~ sicdegp,
-                   at = list(age = 13)) %>% 
-  pairs()
-```
+
 
 
 
