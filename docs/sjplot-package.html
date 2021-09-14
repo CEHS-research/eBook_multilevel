@@ -822,47 +822,47 @@ div.csl-indent {
 <a href="http://www.danielluedecke.de/">Daniel Lüdecke</a> is German researcher that has put together several GREAT packages, including <code>sjPlot</code> which we will detail here. Documentation can be found at: <a href="http://www.strengejacke.de/sjPlot/index.html" class="uri">http://www.strengejacke.de/sjPlot/index.html</a>
 </p>
 </div>
-<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="sjplot-package.html#cb411-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)    <span class="co"># all things tidy</span></span>
-<span id="cb411-2"><a href="sjplot-package.html#cb411-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></span>
-<span id="cb411-3"><a href="sjplot-package.html#cb411-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb411-4"><a href="sjplot-package.html#cb411-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed modelsts models</span></span>
-<span id="cb411-5"><a href="sjplot-package.html#cb411-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb411-6"><a href="sjplot-package.html#cb411-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)        <span class="co"># read in SPSS dataset</span></span>
-<span id="cb411-7"><a href="sjplot-package.html#cb411-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb411-8"><a href="sjplot-package.html#cb411-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span></span></code></pre></div>
+<div class="sourceCode" id="cb410"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb410-1"><a href="sjplot-package.html#cb410-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)    <span class="co"># all things tidy</span></span>
+<span id="cb410-2"><a href="sjplot-package.html#cb410-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></span>
+<span id="cb410-3"><a href="sjplot-package.html#cb410-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb410-4"><a href="sjplot-package.html#cb410-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed modelsts models</span></span>
+<span id="cb410-5"><a href="sjplot-package.html#cb410-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb410-6"><a href="sjplot-package.html#cb410-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)        <span class="co"># read in SPSS dataset</span></span>
+<span id="cb410-7"><a href="sjplot-package.html#cb410-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb410-8"><a href="sjplot-package.html#cb410-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjPlot)       <span class="co"># Quick predicitive and diagnostic plots </span></span></code></pre></div>
 <p>Read the SPSS data in with the <code>haven</code> package and prepare it (see previous chapter).</p>
-<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb412-1"><a href="sjplot-package.html#cb412-1" aria-hidden="true" tabindex="-1"></a>data_raw <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sav</span>(<span class="st">&quot;http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0&quot;</span>)</span>
-<span id="cb412-2"><a href="sjplot-package.html#cb412-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb412-3"><a href="sjplot-package.html#cb412-3" aria-hidden="true" tabindex="-1"></a>data_achieve_center_scale <span class="ot">&lt;-</span> data_raw <span class="sc">%&gt;%</span> </span>
-<span id="cb412-4"><a href="sjplot-package.html#cb412-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate_at</span>(<span class="fu">vars</span>(id, region, corp, school, class), factor) <span class="sc">%&gt;%</span> </span>
-<span id="cb412-5"><a href="sjplot-package.html#cb412-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">gender =</span> gender <span class="sc">%&gt;%</span> </span>
-<span id="cb412-6"><a href="sjplot-package.html#cb412-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb412-7"><a href="sjplot-package.html#cb412-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">classize =</span> classize <span class="sc">%&gt;%</span> </span>
-<span id="cb412-8"><a href="sjplot-package.html#cb412-8" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;12-17&quot;</span>, <span class="st">&quot;18-21&quot;</span>, </span>
-<span id="cb412-9"><a href="sjplot-package.html#cb412-9" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;22-26&quot;</span>, <span class="st">&quot;&gt;26&quot;</span>))) <span class="sc">%&gt;%</span> </span>
-<span id="cb412-10"><a href="sjplot-package.html#cb412-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(id, region, corp, school, class,           <span class="co"># Identifiers</span></span>
-<span id="cb412-11"><a href="sjplot-package.html#cb412-11" aria-hidden="true" tabindex="-1"></a>                gender, age, geread, gevocab,              <span class="co"># Pupil-level vars</span></span>
-<span id="cb412-12"><a href="sjplot-package.html#cb412-12" aria-hidden="true" tabindex="-1"></a>                classize,                                  <span class="co"># Class-Level vars</span></span>
-<span id="cb412-13"><a href="sjplot-package.html#cb412-13" aria-hidden="true" tabindex="-1"></a>                senroll, ses) <span class="sc">%&gt;%</span>                          <span class="co"># School-level vars</span></span>
-<span id="cb412-14"><a href="sjplot-package.html#cb412-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">gevocab_c =</span> gevocab <span class="sc">-</span> <span class="fl">4.4938</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb412-15"><a href="sjplot-package.html#cb412-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">age_c     =</span> age     <span class="sc">-</span> <span class="fl">107.5290</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb412-16"><a href="sjplot-package.html#cb412-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">senroll_c =</span> senroll <span class="sc">-</span> <span class="fl">533.4148</span>) <span class="sc">%&gt;%</span>  </span>
-<span id="cb412-17"><a href="sjplot-package.html#cb412-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">senroll_ch =</span> senroll_c <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span>        <span class="co"># centered AND divided by one hundred</span></span>
-<span id="cb412-18"><a href="sjplot-package.html#cb412-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">ses_t      =</span> ses <span class="sc">/</span> <span class="dv">10</span>)                   <span class="co"># JUST divide by ten</span></span></code></pre></div>
+<div class="sourceCode" id="cb411"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb411-1"><a href="sjplot-package.html#cb411-1" aria-hidden="true" tabindex="-1"></a>data_raw <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sav</span>(<span class="st">&quot;http://www.mlminr.com/data-sets/Achieve.sav?attredirects=0&quot;</span>)</span>
+<span id="cb411-2"><a href="sjplot-package.html#cb411-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb411-3"><a href="sjplot-package.html#cb411-3" aria-hidden="true" tabindex="-1"></a>data_achieve_center_scale <span class="ot">&lt;-</span> data_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb411-4"><a href="sjplot-package.html#cb411-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate_at</span>(<span class="fu">vars</span>(id, region, corp, school, class), factor) <span class="sc">%&gt;%</span> </span>
+<span id="cb411-5"><a href="sjplot-package.html#cb411-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">gender =</span> gender <span class="sc">%&gt;%</span> </span>
+<span id="cb411-6"><a href="sjplot-package.html#cb411-6" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Female&quot;</span>, <span class="st">&quot;Male&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb411-7"><a href="sjplot-package.html#cb411-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">classize =</span> classize <span class="sc">%&gt;%</span> </span>
+<span id="cb411-8"><a href="sjplot-package.html#cb411-8" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;12-17&quot;</span>, <span class="st">&quot;18-21&quot;</span>, </span>
+<span id="cb411-9"><a href="sjplot-package.html#cb411-9" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;22-26&quot;</span>, <span class="st">&quot;&gt;26&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb411-10"><a href="sjplot-package.html#cb411-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(id, region, corp, school, class,           <span class="co"># Identifiers</span></span>
+<span id="cb411-11"><a href="sjplot-package.html#cb411-11" aria-hidden="true" tabindex="-1"></a>                gender, age, geread, gevocab,              <span class="co"># Pupil-level vars</span></span>
+<span id="cb411-12"><a href="sjplot-package.html#cb411-12" aria-hidden="true" tabindex="-1"></a>                classize,                                  <span class="co"># Class-Level vars</span></span>
+<span id="cb411-13"><a href="sjplot-package.html#cb411-13" aria-hidden="true" tabindex="-1"></a>                senroll, ses) <span class="sc">%&gt;%</span>                          <span class="co"># School-level vars</span></span>
+<span id="cb411-14"><a href="sjplot-package.html#cb411-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">gevocab_c =</span> gevocab <span class="sc">-</span> <span class="fl">4.4938</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb411-15"><a href="sjplot-package.html#cb411-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">age_c     =</span> age     <span class="sc">-</span> <span class="fl">107.5290</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb411-16"><a href="sjplot-package.html#cb411-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">senroll_c =</span> senroll <span class="sc">-</span> <span class="fl">533.4148</span>) <span class="sc">%&gt;%</span>  </span>
+<span id="cb411-17"><a href="sjplot-package.html#cb411-17" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">senroll_ch =</span> senroll_c <span class="sc">/</span> <span class="dv">100</span>) <span class="sc">%&gt;%</span>        <span class="co"># centered AND divided by one hundred</span></span>
+<span id="cb411-18"><a href="sjplot-package.html#cb411-18" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">ses_t      =</span> ses <span class="sc">/</span> <span class="dv">10</span>)                   <span class="co"># JUST divide by ten</span></span></code></pre></div>
 <p>Fit the final model (see previous chapter)</p>
-<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="sjplot-package.html#cb413-1" aria-hidden="true" tabindex="-1"></a>fit_read_11re_s <span class="ot">&lt;-</span> lme4<span class="sc">::</span><span class="fu">lmer</span>(geread <span class="sc">~</span> gevocab_c<span class="sc">*</span>age_c <span class="sc">+</span> gevocab_c<span class="sc">*</span>ses_t <span class="sc">+</span>   <span class="co"># 2 2-way interactions</span></span>
-<span id="cb413-2"><a href="sjplot-package.html#cb413-2" aria-hidden="true" tabindex="-1"></a>                                      (gevocab_c <span class="sc">|</span> school),  </span>
-<span id="cb413-3"><a href="sjplot-package.html#cb413-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data   =</span> data_achieve_center_scale,</span>
-<span id="cb413-4"><a href="sjplot-package.html#cb413-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">REML   =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb414-1"><a href="sjplot-package.html#cb414-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to Website: texreg::htmlreg()</span></span>
-<span id="cb414-2"><a href="sjplot-package.html#cb414-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to PDF:     texreg::texreg()</span></span>
-<span id="cb414-3"><a href="sjplot-package.html#cb414-3" aria-hidden="true" tabindex="-1"></a><span class="co"># View on Screen:  texreg::screenreg()</span></span>
-<span id="cb414-4"><a href="sjplot-package.html#cb414-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb414-5"><a href="sjplot-package.html#cb414-5" aria-hidden="true" tabindex="-1"></a>texreg<span class="sc">::</span><span class="fu">htmlreg</span>(<span class="fu">list</span>(fit_read_11re_s),</span>
-<span id="cb414-6"><a href="sjplot-package.html#cb414-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">custom.model.names =</span> <span class="fu">c</span>(<span class="st">&quot;Final&quot;</span>), </span>
-<span id="cb414-7"><a href="sjplot-package.html#cb414-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,</span>
-<span id="cb414-8"><a href="sjplot-package.html#cb414-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">caption.above      =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb414-9"><a href="sjplot-package.html#cb414-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">single.row         =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb412"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb412-1"><a href="sjplot-package.html#cb412-1" aria-hidden="true" tabindex="-1"></a>fit_read_11re_s <span class="ot">&lt;-</span> lme4<span class="sc">::</span><span class="fu">lmer</span>(geread <span class="sc">~</span> gevocab_c<span class="sc">*</span>age_c <span class="sc">+</span> gevocab_c<span class="sc">*</span>ses_t <span class="sc">+</span>   <span class="co"># 2 2-way interactions</span></span>
+<span id="cb412-2"><a href="sjplot-package.html#cb412-2" aria-hidden="true" tabindex="-1"></a>                                      (gevocab_c <span class="sc">|</span> school),  </span>
+<span id="cb412-3"><a href="sjplot-package.html#cb412-3" aria-hidden="true" tabindex="-1"></a>                             <span class="at">data   =</span> data_achieve_center_scale,</span>
+<span id="cb412-4"><a href="sjplot-package.html#cb412-4" aria-hidden="true" tabindex="-1"></a>                             <span class="at">REML   =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb413"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb413-1"><a href="sjplot-package.html#cb413-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to Website: texreg::htmlreg()</span></span>
+<span id="cb413-2"><a href="sjplot-package.html#cb413-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to PDF:     texreg::texreg()</span></span>
+<span id="cb413-3"><a href="sjplot-package.html#cb413-3" aria-hidden="true" tabindex="-1"></a><span class="co"># View on Screen:  texreg::screenreg()</span></span>
+<span id="cb413-4"><a href="sjplot-package.html#cb413-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb413-5"><a href="sjplot-package.html#cb413-5" aria-hidden="true" tabindex="-1"></a>texreg<span class="sc">::</span><span class="fu">htmlreg</span>(<span class="fu">list</span>(fit_read_11re_s),</span>
+<span id="cb413-6"><a href="sjplot-package.html#cb413-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">custom.model.names =</span> <span class="fu">c</span>(<span class="st">&quot;Final&quot;</span>), </span>
+<span id="cb413-7"><a href="sjplot-package.html#cb413-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">caption            =</span> <span class="st">&quot;MLM: Final Model&quot;</span>,</span>
+<span id="cb413-8"><a href="sjplot-package.html#cb413-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">caption.above      =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb413-9"><a href="sjplot-package.html#cb413-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">single.row         =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;color: #000000;border-top: 2px solid #000000;">
 <caption>
 MLM: Final Model
@@ -1015,15 +1015,15 @@ Var: Residual
 <p>Another example for the iris-dataset: <code>terms = "Species"</code> would not work, instead you would write <code>terms = "Species [versicolor, virginica]"</code> to remove these two levels, or <code>terms = "Speciesversicolor"</code> if you just want to remove the level versicolor from the plot.</p>
 <div id="fixed-effects" class="section level3" number="9.1.1">
 <h3><span class="header-section-number">9.1.1</span> Fixed Effects</h3>
-<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb415-1"><a href="sjplot-package.html#cb415-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb415-2"><a href="sjplot-package.html#cb415-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;est&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb414"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb414-1"><a href="sjplot-package.html#cb414-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb414-2"><a href="sjplot-package.html#cb414-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;est&quot;</span>)</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-337-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb416-1"><a href="sjplot-package.html#cb416-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb416-2"><a href="sjplot-package.html#cb416-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;est&quot;</span>,</span>
-<span id="cb416-3"><a href="sjplot-package.html#cb416-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">show.values =</span> <span class="cn">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></span></code></pre></div>
+<div class="sourceCode" id="cb415"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb415-1"><a href="sjplot-package.html#cb415-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb415-2"><a href="sjplot-package.html#cb415-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;est&quot;</span>,</span>
+<span id="cb415-3"><a href="sjplot-package.html#cb415-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">show.values =</span> <span class="cn">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-338-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb417-1"><a href="sjplot-package.html#cb417-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb417-2"><a href="sjplot-package.html#cb417-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;std&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb416"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb416-1"><a href="sjplot-package.html#cb416-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb416-2"><a href="sjplot-package.html#cb416-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;std&quot;</span>)</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-339-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Determines in which way estimates are sorted in the plot with the option: <code>sort.est =</code></p>
 <ul>
@@ -1035,29 +1035,29 @@ Var: Residual
 </li>
 <li>If <code>type = "re"</code>, specify a predictor’s / coefficient’s name to sort estimates according to this random effect.</li>
 </ul>
+<div class="sourceCode" id="cb417"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb417-1"><a href="sjplot-package.html#cb417-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb417-2"><a href="sjplot-package.html#cb417-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;std&quot;</span>,</span>
+<span id="cb417-3"><a href="sjplot-package.html#cb417-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sort.est =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-340-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb418"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb418-1"><a href="sjplot-package.html#cb418-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
 <span id="cb418-2"><a href="sjplot-package.html#cb418-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;std&quot;</span>,</span>
-<span id="cb418-3"><a href="sjplot-package.html#cb418-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sort.est =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-340-1.png" width="576" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb419-1"><a href="sjplot-package.html#cb419-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb419-2"><a href="sjplot-package.html#cb419-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;std&quot;</span>,</span>
-<span id="cb419-3"><a href="sjplot-package.html#cb419-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sort.est =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb419-4"><a href="sjplot-package.html#cb419-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">show.values =</span> <span class="cn">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></span></code></pre></div>
+<span id="cb418-3"><a href="sjplot-package.html#cb418-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sort.est =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb418-4"><a href="sjplot-package.html#cb418-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">show.values =</span> <span class="cn">TRUE</span>)  <span class="co"># Logical, whether values should be plotted or not.</span></span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-341-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Plots standardized beta values, however, standardization follows <span class="citation"><a href="references.html#ref-gelman2008" role="doc-biblioref">Gelman</a> (<a href="references.html#ref-gelman2008" role="doc-biblioref">2008</a>)</span> suggestion, rescaling the estimates by dividing them by two standard deviations instead of just one. Resulting coefficients are then directly comparable for untransformed <strong>binary predictors</strong>.</p>
-<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb420-1"><a href="sjplot-package.html#cb420-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb420-2"><a href="sjplot-package.html#cb420-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;std2&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb419"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb419-1"><a href="sjplot-package.html#cb419-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb419-2"><a href="sjplot-package.html#cb419-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;std2&quot;</span>)</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-342-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="random-effects" class="section level3" number="9.1.2">
 <h3><span class="header-section-number">9.1.2</span> Random Effects</h3>
-<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="sjplot-package.html#cb421-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb421-2"><a href="sjplot-package.html#cb421-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;re&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb420"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb420-1"><a href="sjplot-package.html#cb420-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb420-2"><a href="sjplot-package.html#cb420-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;re&quot;</span>)</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-343-1.png" width="288" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb422"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb422-1"><a href="sjplot-package.html#cb422-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb422-2"><a href="sjplot-package.html#cb422-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;re&quot;</span>,</span>
-<span id="cb422-3"><a href="sjplot-package.html#cb422-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">grid =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb422-4"><a href="sjplot-package.html#cb422-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sort.est =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb421"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb421-1"><a href="sjplot-package.html#cb421-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb421-2"><a href="sjplot-package.html#cb421-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;re&quot;</span>,</span>
+<span id="cb421-3"><a href="sjplot-package.html#cb421-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">grid =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb421-4"><a href="sjplot-package.html#cb421-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">sort.est =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <pre><code>[[1]]</code></pre>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-344-1.png" width="288" style="display: block; margin: auto;" /></p>
 <pre><code>
@@ -1076,24 +1076,24 @@ Var: Residual
 <div id="predicted-values" class="section level3" number="9.2.1">
 <h3><span class="header-section-number">9.2.1</span> Predicted Values</h3>
 <p>Based on (i.e. is a wrapper for): <code>ggeffects::ggpredict()</code></p>
-<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="sjplot-package.html#cb425-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb425-2"><a href="sjplot-package.html#cb425-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;pred&quot;</span>,</span>
-<span id="cb425-3"><a href="sjplot-package.html#cb425-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb424"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb424-1"><a href="sjplot-package.html#cb424-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb424-2"><a href="sjplot-package.html#cb424-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;pred&quot;</span>,</span>
+<span id="cb424-3"><a href="sjplot-package.html#cb424-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-345-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>pred.type =</code> option only applies for Marginal Effects plots with <strong>mixed effects models</strong>. Indicates whether predicted values should be <strong>conditioned on random effects</strong> (<code>pred.type = "re"</code>) or fixed effects only (<code>pred.type = "fe"</code>, the default). For details, see documentation of the type-argument in <code>ggpredict()</code> function.</p>
-<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="sjplot-package.html#cb426-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb426-2"><a href="sjplot-package.html#cb426-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;pred&quot;</span>,</span>
-<span id="cb426-3"><a href="sjplot-package.html#cb426-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pred.type =</span> <span class="st">&quot;re&quot;</span>,</span>
-<span id="cb426-4"><a href="sjplot-package.html#cb426-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb425"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb425-1"><a href="sjplot-package.html#cb425-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb425-2"><a href="sjplot-package.html#cb425-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;pred&quot;</span>,</span>
+<span id="cb425-3"><a href="sjplot-package.html#cb425-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">pred.type =</span> <span class="st">&quot;re&quot;</span>,</span>
+<span id="cb425-4"><a href="sjplot-package.html#cb425-4" aria-hidden="true" tabindex="-1"></a>                   <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-346-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="effect-plots" class="section level3" number="9.2.2">
 <h3><span class="header-section-number">9.2.2</span> Effect Plots</h3>
 <p>Based on (i.e. is a wrapper for): <code>ggeffects::ggeffect()</code></p>
 <p>Similar to <code>type = "pred"</code>, however, discrete predictors are held constant at their proportions (not reference level). See the <code>ggeffect</code> package documentation for details.</p>
-<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="sjplot-package.html#cb427-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb427-2"><a href="sjplot-package.html#cb427-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;eff&quot;</span>,</span>
-<span id="cb427-3"><a href="sjplot-package.html#cb427-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb426"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb426-1"><a href="sjplot-package.html#cb426-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb426-2"><a href="sjplot-package.html#cb426-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;eff&quot;</span>,</span>
+<span id="cb426-3"><a href="sjplot-package.html#cb426-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">&quot;gevocab_c&quot;</span>, <span class="st">&quot;ses_t&quot;</span>, <span class="st">&quot;age_c&quot;</span>))</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-347-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="interaction-plots" class="section level3" number="9.2.3">
@@ -1106,8 +1106,8 @@ Var: Residual
 <li><strong>second</strong> (and possibly third) variable in an interaction is used as grouping factor(s) (moderating variable).</li>
 </ul>
 <p>Use <code>type = "pred"</code> or <code>type = "eff"</code> and specify a certain order in the terms-argument to indicate which variable(s) should be used as moderator.</p>
-<div class="sourceCode" id="cb428"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb428-1"><a href="sjplot-package.html#cb428-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb428-2"><a href="sjplot-package.html#cb428-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;int&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb427"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb427-1"><a href="sjplot-package.html#cb427-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb427-2"><a href="sjplot-package.html#cb427-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;int&quot;</span>)</span></code></pre></div>
 <pre><code>[[1]]</code></pre>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-348-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
@@ -1121,9 +1121,9 @@ Var: Residual
 <li><p><code>quart</code> calculates and uses the quartiles (lower, median and upper) of the moderator value.</p></li>
 <li><p><code>all</code> uses all values of the moderator variable.</p></li>
 </ul>
-<div class="sourceCode" id="cb431"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb431-1"><a href="sjplot-package.html#cb431-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb431-2"><a href="sjplot-package.html#cb431-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;int&quot;</span>,</span>
-<span id="cb431-3"><a href="sjplot-package.html#cb431-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mdrt.values =</span> <span class="st">&quot;meansd&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb430"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb430-1"><a href="sjplot-package.html#cb430-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb430-2"><a href="sjplot-package.html#cb430-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;int&quot;</span>,</span>
+<span id="cb430-3"><a href="sjplot-package.html#cb430-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">mdrt.values =</span> <span class="st">&quot;meansd&quot;</span>)</span></code></pre></div>
 <pre><code>[[1]]</code></pre>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-349-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
@@ -1137,22 +1137,22 @@ Var: Residual
 <div id="slope-of-coefficentes" class="section level3" number="9.3.1">
 <h3><span class="header-section-number">9.3.1</span> Slope of Coefficentes</h3>
 <p>Slope of coefficients for each single predictor, against the response (linear relationship between each model term and response).</p>
-<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="sjplot-package.html#cb434-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb434-2"><a href="sjplot-package.html#cb434-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;slope&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb433"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb433-1"><a href="sjplot-package.html#cb433-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb433-2"><a href="sjplot-package.html#cb433-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;slope&quot;</span>)</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-350-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="residuals" class="section level3" number="9.3.2">
 <h3><span class="header-section-number">9.3.2</span> Residuals</h3>
 <p>Slope of coefficients for each single predictor, against the residuals (linear relationship between each model term and residuals).</p>
-<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="sjplot-package.html#cb435-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb435-2"><a href="sjplot-package.html#cb435-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;resid&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb434"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb434-1"><a href="sjplot-package.html#cb434-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb434-2"><a href="sjplot-package.html#cb434-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;resid&quot;</span>)</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-351-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="diagnostics" class="section level3" number="9.3.3">
 <h3><span class="header-section-number">9.3.3</span> Diagnostics</h3>
 <p>Check model assumptions.</p>
-<div class="sourceCode" id="cb436"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb436-1"><a href="sjplot-package.html#cb436-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
-<span id="cb436-2"><a href="sjplot-package.html#cb436-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;diag&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb435"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb435-1"><a href="sjplot-package.html#cb435-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_read_11re_s,</span>
+<span id="cb435-2"><a href="sjplot-package.html#cb435-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;diag&quot;</span>)</span></code></pre></div>
 <pre><code>[[1]]</code></pre>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-352-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
