@@ -28,21 +28,26 @@ Load/activate these packages
 ```{r, message=FALSE, error=FALSE}
 library(tidyverse)
 library(haven)        # read in SPSS dataset
+
 library(furniture)    # nice table1() descriptives
 library(stargazer)    # display nice tables: summary & regression
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
+
 library(gridExtra)    # place ggplots together as one plot
 library(psych)        # contains some useful functions, like headTail
 library(car)          # Companion to Applied Regression
+
 library(nlme)         # non-linear mixed-effects models
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(lmerTest)     # Tests on lmer objects
+library(optimx)       # Different optimizers to solve mlm's
+
 library(performance)  # icc and r-squared functions **NEWER**
 library(interactions) # interaction plots **NEWER**
+
 library(HLMdiag)      # Diagnostic Tools for for MLM
 library(redres)       # Diagnosing MLM models
 library(sjstats)      # ICC calculations
-library(optimx)       # Different optimizers to solve mlm's
 ```
 
 ## Background
@@ -53,13 +58,28 @@ The text **"Multilevel Analysis: Techniques and Applications, Third Edition"** [
 
 The following example is used through out [@hox2017]'s chapater 2.
 
-> From **Appendix E**:
->
-> The popularity data in **popular2.sav** are simulated data for **2000 pupils in 100 schools**. The purpose is to offer a very simple example for multilevel regression analysis. The main outcome variable is the **pupil popularity**, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil. Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: **pupil popularity** as rated by their teacher, on a scale from 1-10. The explanatory variables are **pupil gender** (boy=0, girl=1), **pupil extroversion** (10-point scale) and **teacher experience** in years. The popularity data have been generated to be a 'nice' well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.
-
-```{r}
+```{r, echo=FALSE}
 knitr::include_graphics("images/diagram_hox_popular2.png")
 ```
+
+> From **Appendix E**:
+>
+> The popularity data in **popular2.sav** are *simulated* data for **2000 pupils** (`pupil`) in **100 schools** (`class`).  The purpose is to offer a very simple example for multilevel regression analysis. 
+>
+> The main **OUTCOME or DEPENDENT VARIABLE (DV)** is the **pupil popularity**, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil (`pupular`). Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong.  There is a second outcome variable, pupil popularity as rated by their teacher (`popteach`), on a scale from 1-10. 
+>
+> The **PREDICTORS or INDEPENDENT VARIABLES (IVs)** are:
+>
+> 1. **pupil gender** (`sex`) only two levels: boy = 0, girl = 1
+>
+> 2. **pupil extroversion** (`extrav`) 10-point scale *(whole number)* as rated by the teacher, higher values correspond to more extroverted 
+>
+> 3. **teacher experience** (`texp`) in years, reported as a whole number
+>
+> The popularity data have been generated to be a 'nice' well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.
+
+
+*Note: We will ignore the centered and standardized variables, which start with a capital Z or C.*
 
 ```{r}
 data_raw <- haven::read_sav("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav") %>% 
@@ -70,7 +90,7 @@ tibble::glimpse(data_raw)
 
 ### Unique Identifiers
 
-We will restrict ourselves to a few of the variables and create a distinct identifier variable for each student.
+We will restrict ourselves to a few of the variables and create a unique identifier variable for each student.
 
 ```{r}
 data_pop <- data_raw %>%   
@@ -100,9 +120,11 @@ Visual inspection reveals that most of the variables are measurements at level 1
 
 #### The `stargazer` package
 
-Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as *Table 1*. The `stargazer()` function can be used to create such a table, but only for the entire dataset [@R-stargazer]. I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.
+Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as *Table 1*. 
 
-```{r, include=FALSE}
+The `stargazer()` function can be used to create such a table, but only for the entire dataset [@R-stargazer]. I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.  It is nice that this table includes the minimum and maximum, as well as the quartiles.
+
+```{r, eval=FALSE}
 # Knit to Website: type = "html" 
 # Knit to PDF:     type = "latex"
 # View on Screen:  type = "text"
@@ -115,7 +137,7 @@ data_pop %>%
                        type = "text")
 ```
 
-```{r, results='asis'}
+```{r, echo=FALSE, results='asis'}
 data_pop %>% 
   dplyr::select(extrav, texp, popular) %>% 
   data.frame() %>% 
@@ -123,6 +145,8 @@ data_pop %>%
                        header = FALSE,
                        type = "html")
 ```
+
+
 
 #### The `furniture` package
 
@@ -135,13 +159,15 @@ Tyson Barrett's **furniture** package includes the extremely useful function `ta
 
 data_pop %>% 
   furniture::table1("Pupil's extroversion (10 pt)"   = extrav, 
-                     "Teacher's Experience (years)"  = texp, 
-                     "Popularity, Sociometric Score" = popular, 
-                     "Popularity, Teacher Evaluated" = popteach,
-                     splitby    = ~ sex,        # divide sample into columns by...
-                     test       = TRUE,         # test groups different?
-                     output     = "markdown",   # output for on screen/knitting
-                     caption    = "Compare genders on four main variables")  # title
+                    "Teacher's Experience (years)"  = texp, 
+                    "Popularity, Sociometric Score" = popular, 
+                    "Popularity, Teacher Evaluated" = popteach,
+                    splitby    = ~ sex,        # divide sample into columns by...
+                    total      = TRUE,         # include a total column
+                    test       = TRUE,         # test groups different?
+                    digits     = 2,            # 2 decimal places
+                    output     = "markdown",   # output for on screen/knitting
+                    caption    = "Compare genders on four main variables")  # title
 ```
 
 ```{r, echo=FALSE, results='asis'}
@@ -150,9 +176,11 @@ data_pop %>%
                      "Teacher's Experience (years)"  = texp, 
                      "Popularity, Sociometric Score" = popular, 
                      "Popularity, Teacher Evaluated" = popteach,
-                     splitby    = ~ sex,                                     # divide sample into columns by...
-                     test       = TRUE,                                      # test groups different?
-                     output     = "html",                                    # output for latex
+                     splitby    = ~ sex,        # divide sample into columns by...
+                     total      = TRUE,         # include a total column
+                     test       = TRUE,         # test groups different?
+                    digits     = 2,            # 2 decimal places
+                     output     = "html",       # output for latex
                      caption    = "Compare genders on four main variables")  # title
 ```
 
@@ -188,7 +216,6 @@ data_pop %>%
 When the degree of overplotting as high as it is in Figure \@ref(fig:scatter), it can be useful to represent the data with density contours as seen in Figure \@ref(fig:scatter2d). I've chosen to leave the points displayed in this redition, but color them much lighter so that they are present, but do not detract from the pattern of association.
 
 ```{r scatter2d, fig.cap="Disaggregate: pupil level only with extroversion treated as an continuous measure."}
-# visualize all the data - another way
 data_pop %>% 
   ggplot() +
   aes(x = extrav,                                # x-axis variable
@@ -204,9 +231,7 @@ data_pop %>%
   scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2))   # y-ticks
 ```
 
-##### Hexagonal Heatmap Plots
-
-Divides the x-y plane into regular hexagons, counts the number of cases in each hexagon, and then (by default) maps the number of cases to the hexagon fill.
+##### Histograms, stacked
 
 The argument could be made that the extroversion score should be treated as an ordinal factor instead of as a truly continuous scale since the only valid values are the whole number 1 through 10 and there is no assurance that these category assignments represent a true ratio measurement scale. However, we must keep in mind that this was an observational study, ans as such, the number of pupils assignment each level of extroversion is not equal.
 
@@ -239,6 +264,19 @@ table %>%
                        type     = "html",
                        title    = "Distribution of extroversion in pupils")
 ```
+
+
+```{r histostack, fig.cap="Disaggregate: pupil level only with extroversion treated as an continuous measure.", fig.height=8, fig.width=6}
+data_pop %>% 
+  ggplot(aes(popular)) +                     # y-axis variable
+  geom_histogram() +
+  theme_bw() +                                   # white background  
+  labs(#y    = "Extroversion (10 pt scale)",      # x-axis label
+       x    = "Popularity, Sociometric Score") + # y-axis label 
+  guides(size = FALSE)  +                        # don't include a legend
+  facet_grid(extrav~.)
+```
+
 
 ##### Boxplots
 
@@ -732,11 +770,11 @@ This often leads to refitting identical models via BOTH estimation methods.
 
 #### Interpretation
 
-The grand average popularity of all students is `r pop_lmer_0_re %>% fixef() %>% round(4)` and the class averages tend to vary by about 0.8333 points above or below that.
+The grand average popularity of all students is `r pop_lmer_0_re %>% fixef() %>% round(4)` and the class averages tend to vary by about `r insight::get_variance(pop_lmer_0_re)$var.random %>% sqrt() %>% round(4)` points above or below that.
 
 ### Intraclass Correlation (ICC)
 
-Although the Null model above does not explain any variance in the dependent variable *(popularity)*, since there are no independent variables, it does decompose (i.e. divide up) the variance into two pieces. We can compute the amount of total variance in popularity that is attribute to the clustering of students in classes verses the residual variance.
+Although the Null model above does not explain any variance in the dependent variable *(popularity)*, since there are no independent variables, it does **decompose (i.e. divide up) the variance in the dependent variable into two pieces**. We can compute the amount of total variance in popularity that is attribute to the clustering of students *(i.e. class-to-class variance or between-class variance)* in classes verses the residual variance *(i.e. student-to-student variance or within-class variance)*.
 
 ```{block type='genericEq', echo=TRUE}
 **Intraclass Correlation (ICC) Formula**
@@ -763,9 +801,12 @@ lme4::VarCorr(pop_lmer_0_re) %>%  # extract random compondent: varrainces and co
 insight::get_variance(pop_lmer_0_re)
 ```
 
+
+Again, this partitions the amount of total variance in popularity that is attribute to the clustering of students *(i.e. class-to-class variance or between-class variance)* in classes verses the residual variance *(i.e. student-to-student variance or within-class variance)*.
+
 $$
 \begin{align*}
-\text{classes}      \rightarrow \; & \sigma^2_{u0} = 0.83792^2 = 0.702\\
+\text{between classes}      \rightarrow \; & \sigma^2_{u0} = 0.83792^2 = 0.702\\
 \text{pupils within classes}      \rightarrow \; & \sigma^2_{e}  = 1.10535^2 = 1.222\\
 \end{align*}
 $$
@@ -1394,11 +1435,12 @@ effects::Effect(focal.predictors = c("extrav", "texp"),  # choose not to investi
 
 #### Interpretation
 
-Form more infromation, see the [vingette page for the `redre` package](https://goodekat.github.io/redres/articles/redres-vignette.html).
-
 After accounting for class-to-class variation and the effect of gender, a positive association was found between teacher rated extroversion and peer rated popularity. This relationship was more marked for less experienced teachers.
 
 ### Residual Plots
+
+
+Form more infromation, see the [vingette page for the `redre` package](https://goodekat.github.io/redres/articles/redres-vignette.html).
 
 ```{r}
 sjPlot::plot_model(pop_lmer_2_re,
@@ -1417,7 +1459,8 @@ As you look across the plot, left to right:
 This plot looks great!
 
 ```{r}
-redres::plot_redres(pop_lmer_2_re, type = "std_cond")
+redres::plot_redres(pop_lmer_2_re, 
+                    type = "std_cond")
 ```
 
 **Standardized residuals vs. a predictor's values**
@@ -1425,7 +1468,9 @@ redres::plot_redres(pop_lmer_2_re, type = "std_cond")
 You are looking for the same things as above. Note: the vertical stripes are fine, as they just reflect the fact that the `extrav` variable was a whole number value, ranging from one to ten.
 
 ```{r}
-redres::plot_redres(pop_lmer_2_re, type = "std_cond", xvar = "extrav")
+redres::plot_redres(pop_lmer_2_re, 
+                    type = "std_cond", 
+                    xvar = "extrav")
 ```
 
 **Normal Quantile plot of Residuals**

@@ -816,7 +816,7 @@ div.csl-indent {
             <section class="normal" id="section-">
 <div id="mlm-3-levels-nurses-stress-intervention" class="section level1" number="5">
 <h1><span class="header-section-number">5</span> MLM, 3 levels: Nurse’s Stress Intervention</h1>
-<p><img src="images/header_hox_nurses.PNG" /></p>
+<p><img src="images/header_hox_nurses.png" width="1102" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="mlm-3-levels-nurses-stress-intervention.html#cb143-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)    <span class="co"># basically everything ;)</span></span>
 <span id="cb143-2"><a href="mlm-3-levels-nurses-stress-intervention.html#cb143-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)        <span class="co"># read in SPSS dataset</span></span>
 <span id="cb143-3"><a href="mlm-3-levels-nurses-stress-intervention.html#cb143-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></span>
@@ -844,7 +844,7 @@ The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edit
 <p>From <strong>Appendix E</strong>:</p>
 <p>The <strong>nurses.sav</strong> file contains three-level simulated data from a hypothetical study on stress in hospitals. The data are from nurses working in wards nested within hospitals. It is a cluster-randomized experiment. In each of <strong>25</strong> hospitals, <strong>four wards</strong> are selected and randomly assigned to an experimental and a control condition. In the experimental condition, a training program is offered to all nurses to cope with job-related stress. After the program is completed, a sample of about 10 nurses from each ward is given a test that measures job-related stress. Additional variables <em>(covariates)</em> are: nurse age (years), nurse experience (years), nurse gender (0=male, 1 = female), type of ward (0=general care, 1=special care), and hospital size (0=small, 1 = medium, 2=large). The data have been generated to illustrate three-level analysis with a random slope for the effect of the intervention.</p>
 </blockquote>
-<p><img src="images/diagram_hox_nurses.PNG" /></p>
+<p><img src="images/diagram_hox_nurses.png" width="808" style="display: block; margin: auto;" /></p>
 <p>Here the data is read in and the SPSS variables with labels are converted to <span class="math inline">\(R\)</span> factors.</p>
 <div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="mlm-3-levels-nurses-stress-intervention.html#cb144-1" aria-hidden="true" tabindex="-1"></a>data_raw <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_spss</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/Nurses/SPSS/Nurses.sav&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb144-2"><a href="mlm-3-levels-nurses-stress-intervention.html#cb144-2" aria-hidden="true" tabindex="-1"></a>  haven<span class="sc">::</span><span class="fu">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span></span></code></pre></div>
@@ -1210,7 +1210,7 @@ hospsizeNG
 <span id="cb155-11"><a href="mlm-3-levels-nurses-stress-intervention.html#cb155-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">caption    =</span> <span class="st">&quot;Compare Intervention groups on five main variables&quot;</span>)  <span class="co"># title</span></span></code></pre></div>
 <table>
 <caption>
-<span id="tab:unnamed-chunk-145">Table 5.1: </span>Compare Intervention groups on five main variables
+<span id="tab:unnamed-chunk-147">Table 5.1: </span>Compare Intervention groups on five main variables
 </caption>
 <thead>
 <tr>
@@ -1708,7 +1708,7 @@ Var: Residual
 <span id="cb162-3"><a href="mlm-3-levels-nurses-stress-intervention.html#cb162-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb162-4"><a href="mlm-3-levels-nurses-stress-intervention.html#cb162-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pie</span>(<span class="at">x =</span> vc<span class="sc">$</span>vcov,</span>
 <span id="cb162-5"><a href="mlm-3-levels-nurses-stress-intervention.html#cb162-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> vc<span class="sc">$</span>grp)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-151-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-153-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>The <code>performance</code> package has a few really helpful funcitons:</p>
 <div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="mlm-3-levels-nurses-stress-intervention.html#cb163-1" aria-hidden="true" tabindex="-1"></a>lme4<span class="sc">::</span><span class="fu">VarCorr</span>(nurse_lmer_0_re)</span></code></pre></div>
 <pre><code> Groups        Name        Std.Dev.
@@ -3665,7 +3665,7 @@ After accounting for the a nurses’ age, gender, and experience, as well as the
 <span id="cb201-2"><a href="mlm-3-levels-nurses-stress-intervention.html#cb201-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">pred =</span> hospsize,          <span class="co"># main predictor/independent variable, for x-axis</span></span>
 <span id="cb201-3"><a href="mlm-3-levels-nurses-stress-intervention.html#cb201-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">modx =</span> expcon,            <span class="co"># moderating independent variable, for different lines</span></span>
 <span id="cb201-4"><a href="mlm-3-levels-nurses-stress-intervention.html#cb201-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">interval =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-179-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-181-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Look: We can make NASTY dynamite plots! DO NOT EVER USE THESE!</p>
 <p>From the help menu: “Many applied researchers advise <strong>against</strong> this type of plot because it does not represent the distribution of the observed data or the uncertainty of the predictions very well.”</p>
 <div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="mlm-3-levels-nurses-stress-intervention.html#cb202-1" aria-hidden="true" tabindex="-1"></a>interactions<span class="sc">::</span><span class="fu">cat_plot</span>(<span class="at">model =</span> nurse_lmer_final,</span>
@@ -3673,7 +3673,7 @@ After accounting for the a nurses’ age, gender, and experience, as well as the
 <span id="cb202-3"><a href="mlm-3-levels-nurses-stress-intervention.html#cb202-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">modx =</span> expcon,            <span class="co"># moderating independent variable, for different lines</span></span>
 <span id="cb202-4"><a href="mlm-3-levels-nurses-stress-intervention.html#cb202-4" aria-hidden="true" tabindex="-1"></a>                       <span class="at">interval =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb202-5"><a href="mlm-3-levels-nurses-stress-intervention.html#cb202-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">geom =</span> <span class="st">&quot;bar&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-180-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-182-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="post-hoc-pairwise-tests" class="section level3" number="5.8.4">
@@ -3805,7 +3805,7 @@ After accounting for the a nurses’ age, gender, and experience, as well as the
 <span id="cb215-18"><a href="mlm-3-levels-nurses-stress-intervention.html#cb215-18" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>),</span>
 <span id="cb215-19"><a href="mlm-3-levels-nurses-stress-intervention.html#cb215-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="fl">1.1</span>, <span class="sc">-</span><span class="fl">0.1</span>)) <span class="sc">+</span></span>
 <span id="cb215-20"><a href="mlm-3-levels-nurses-stress-intervention.html#cb215-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">1</span>)) </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-187-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-189-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="using-sjplotplot_model" class="section level4" number="5.8.5.2">
 <h4><span class="header-section-number">5.8.5.2</span> Using <code>sjPlot::plot_model()</code></h4>
@@ -3813,7 +3813,7 @@ After accounting for the a nurses’ age, gender, and experience, as well as the
 <div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb216-1"><a href="mlm-3-levels-nurses-stress-intervention.html#cb216-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(nurse_lmer_final, </span>
 <span id="cb216-2"><a href="mlm-3-levels-nurses-stress-intervention.html#cb216-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;pred&quot;</span>, </span>
 <span id="cb216-3"><a href="mlm-3-levels-nurses-stress-intervention.html#cb216-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">&quot;hospsize&quot;</span>, <span class="st">&quot;expcon&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-188-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-190-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Adding more options:</p>
 <div class="sourceCode" id="cb217"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb217-1"><a href="mlm-3-levels-nurses-stress-intervention.html#cb217-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(nurse_lmer_final, </span>
 <span id="cb217-2"><a href="mlm-3-levels-nurses-stress-intervention.html#cb217-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;pred&quot;</span>, </span>
@@ -3825,7 +3825,7 @@ After accounting for the a nurses’ age, gender, and experience, as well as the
 <span id="cb217-8"><a href="mlm-3-levels-nurses-stress-intervention.html#cb217-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="sc">\n</span><span class="st">Norse&#39;s Stress Score&quot;</span>,</span>
 <span id="cb217-9"><a href="mlm-3-levels-nurses-stress-intervention.html#cb217-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Condition&quot;</span>) <span class="sc">+</span></span>
 <span id="cb217-10"><a href="mlm-3-levels-nurses-stress-intervention.html#cb217-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-189-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-191-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="using-effectseffect-and-ggplot" class="section level4" number="5.8.5.3">
 <h4><span class="header-section-number">5.8.5.3</span> Using <code>effects::Effect()</code> and <code>ggplot</code></h4>
@@ -3894,7 +3894,7 @@ After accounting for the a nurses’ age, gender, and experience, as well as the
 <span id="cb222-29"><a href="mlm-3-levels-nurses-stress-intervention.html#cb222-29" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>),</span>
 <span id="cb222-30"><a href="mlm-3-levels-nurses-stress-intervention.html#cb222-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
 <span id="cb222-31"><a href="mlm-3-levels-nurses-stress-intervention.html#cb222-31" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>, <span class="sc">-</span><span class="fl">0.1</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-192-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-194-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>This plot illustrates the estimated marginal means among male (gender’s reference category) nurses at the overall mean age (43.01 years), with the mean level experience (17.06 years), since thoes variables were not included as <code>focal.predictors</code> in the <code>effects::Effect()</code> function. Different values for those predictors would yield the exact sample plot, shifted as a whole either up or down.</p>
 </div>
 </div>

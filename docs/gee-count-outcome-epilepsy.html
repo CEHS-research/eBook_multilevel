@@ -1155,7 +1155,7 @@ div.csl-indent {
 <span id="cb844-5"><a href="gee-count-outcome-epilepsy.html#cb844-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>subject) <span class="sc">%&gt;%</span> </span>
 <span id="cb844-6"><a href="gee-count-outcome-epilepsy.html#cb844-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb844-7"><a href="gee-count-outcome-epilepsy.html#cb844-7" aria-hidden="true" tabindex="-1"></a>  corrplot<span class="sc">::</span><span class="fu">corrplot.mixed</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-641-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-643-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>Log Scale</p>
 <div class="sourceCode" id="cb845"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb845-1"><a href="gee-count-outcome-epilepsy.html#cb845-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
 <span id="cb845-2"><a href="gee-count-outcome-epilepsy.html#cb845-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">rate_wk =</span> <span class="fu">log</span>(seizure.rate <span class="sc">+</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span> </span>
@@ -1165,7 +1165,7 @@ div.csl-indent {
 <span id="cb845-6"><a href="gee-count-outcome-epilepsy.html#cb845-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="sc">-</span>subject) <span class="sc">%&gt;%</span> </span>
 <span id="cb845-7"><a href="gee-count-outcome-epilepsy.html#cb845-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb845-8"><a href="gee-count-outcome-epilepsy.html#cb845-8" aria-hidden="true" tabindex="-1"></a>  corrplot<span class="sc">::</span><span class="fu">corrplot.mixed</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-642-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-644-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="visualize-1" class="section level3" number="16.3.2">
@@ -1180,7 +1180,7 @@ div.csl-indent {
 <span id="cb846-4"><a href="gee-count-outcome-epilepsy.html#cb846-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
 <span id="cb846-5"><a href="gee-count-outcome-epilepsy.html#cb846-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb846-6"><a href="gee-count-outcome-epilepsy.html#cb846-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(.<span class="sc">~</span> treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-643-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-645-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p>To investigate possible outliers, we should transform the outcome with the <code>log</code> function first.</p>
 <blockquote>
 <p>Note: Since some participants reported no seizures during a two week period and the <code>log(0)</code> is <strong>unndefinded</strong>, we must add some amount to the values before transforming. Here we have chosen to add the value of <span class="math inline">\(1\)</span>.</p>
@@ -1192,14 +1192,14 @@ div.csl-indent {
 <span id="cb847-5"><a href="gee-count-outcome-epilepsy.html#cb847-5" aria-hidden="true" tabindex="-1"></a>  </span>
 <span id="cb847-6"><a href="gee-count-outcome-epilepsy.html#cb847-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb847-7"><a href="gee-count-outcome-epilepsy.html#cb847-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(.<span class="sc">~</span> treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-644-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-646-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb848"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb848-1"><a href="gee-count-outcome-epilepsy.html#cb848-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
 <span id="cb848-2"><a href="gee-count-outcome-epilepsy.html#cb848-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> period,</span>
 <span id="cb848-3"><a href="gee-count-outcome-epilepsy.html#cb848-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="fu">log</span>(seizure.rate <span class="sc">+</span> <span class="dv">1</span>))) <span class="sc">+</span></span>
 <span id="cb848-4"><a href="gee-count-outcome-epilepsy.html#cb848-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> subject)) <span class="sc">+</span></span>
 <span id="cb848-5"><a href="gee-count-outcome-epilepsy.html#cb848-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb848-6"><a href="gee-count-outcome-epilepsy.html#cb848-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(.<span class="sc">~</span> treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-645-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-647-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb849"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb849-1"><a href="gee-count-outcome-epilepsy.html#cb849-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
 <span id="cb849-2"><a href="gee-count-outcome-epilepsy.html#cb849-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> period,</span>
 <span id="cb849-3"><a href="gee-count-outcome-epilepsy.html#cb849-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="fu">log</span>(seizure.rate <span class="sc">+</span> <span class="dv">1</span>))) <span class="sc">+</span></span>
@@ -1213,7 +1213,7 @@ div.csl-indent {
 <span id="cb849-11"><a href="gee-count-outcome-epilepsy.html#cb849-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
 <span id="cb849-12"><a href="gee-count-outcome-epilepsy.html#cb849-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb849-13"><a href="gee-count-outcome-epilepsy.html#cb849-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(.<span class="sc">~</span> treatment)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-646-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-648-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>

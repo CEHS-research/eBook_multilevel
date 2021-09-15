@@ -1311,24 +1311,24 @@ $ vsae_13  &lt;int&gt; 27, 14, 24, NA, 45, NA, 68, 39, NA, NA, 68, 44, 24, 67, N
 <div class="sourceCode" id="cb455"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb455-1"><a href="mlm-longitudinal-autism.html#cb455-1" aria-hidden="true" tabindex="-1"></a>data_wide <span class="sc">%&gt;%</span> </span>
 <span id="cb455-2"><a href="mlm-longitudinal-autism.html#cb455-2" aria-hidden="true" tabindex="-1"></a>  VIM<span class="sc">::</span><span class="fu">aggr</span>(<span class="at">numbers =</span> <span class="cn">TRUE</span>,   <span class="co"># shows the number to the far right</span></span>
 <span id="cb455-3"><a href="mlm-longitudinal-autism.html#cb455-3" aria-hidden="true" tabindex="-1"></a>            <span class="at">prop    =</span> <span class="cn">FALSE</span>)  <span class="co"># shows counts instead of proportions</span></span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-364-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-366-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="naniar-package" class="section level4" number="10.2.3.2">
 <h4><span class="header-section-number">10.2.3.2</span> <code>naniar</code> package</h4>
 <div class="sourceCode" id="cb456"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb456-1"><a href="mlm-longitudinal-autism.html#cb456-1" aria-hidden="true" tabindex="-1"></a>data_wide <span class="sc">%&gt;%</span> </span>
 <span id="cb456-2"><a href="mlm-longitudinal-autism.html#cb456-2" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">vis_miss</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-365-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-367-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb457"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb457-1"><a href="mlm-longitudinal-autism.html#cb457-1" aria-hidden="true" tabindex="-1"></a>data_wide <span class="sc">%&gt;%</span> </span>
 <span id="cb457-2"><a href="mlm-longitudinal-autism.html#cb457-2" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">gg_miss_var</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-366-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-368-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb458"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb458-1"><a href="mlm-longitudinal-autism.html#cb458-1" aria-hidden="true" tabindex="-1"></a>data_wide <span class="sc">%&gt;%</span> </span>
 <span id="cb458-2"><a href="mlm-longitudinal-autism.html#cb458-2" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">gg_miss_var</span>(<span class="at">show_pct =</span> <span class="cn">TRUE</span>,     <span class="co"># x-axis is PERCENT, not count</span></span>
 <span id="cb458-3"><a href="mlm-longitudinal-autism.html#cb458-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">facet =</span> sicdegp) <span class="sc">+</span>   <span class="co"># create seperate panels</span></span>
 <span id="cb458-4"><a href="mlm-longitudinal-autism.html#cb458-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()                               <span class="co"># add ggplot layers as normal</span></span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-367-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-369-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb459"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb459-1"><a href="mlm-longitudinal-autism.html#cb459-1" aria-hidden="true" tabindex="-1"></a>data_wide <span class="sc">%&gt;%</span> </span>
 <span id="cb459-2"><a href="mlm-longitudinal-autism.html#cb459-2" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">gg_miss_upset</span>() </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-368-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-370-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb460"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb460-1"><a href="mlm-longitudinal-autism.html#cb460-1" aria-hidden="true" tabindex="-1"></a>data_wide <span class="sc">%&gt;%</span> </span>
 <span id="cb460-2"><a href="mlm-longitudinal-autism.html#cb460-2" aria-hidden="true" tabindex="-1"></a>  naniar<span class="sc">::</span><span class="fu">gg_miss_upset</span>(<span class="at">sets =</span> <span class="fu">c</span>(<span class="st">&quot;vsae_13_NA&quot;</span>,</span>
 <span id="cb460-3"><a href="mlm-longitudinal-autism.html#cb460-3" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;vsae_9_NA&quot;</span>,</span>
@@ -1336,7 +1336,7 @@ $ vsae_13  &lt;int&gt; 27, 14, 24, NA, 45, NA, 68, 39, NA, NA, 68, 44, 24, 67, N
 <span id="cb460-5"><a href="mlm-longitudinal-autism.html#cb460-5" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;vsae_3_NA&quot;</span>,</span>
 <span id="cb460-6"><a href="mlm-longitudinal-autism.html#cb460-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&quot;vsae_2_NA&quot;</span>),</span>
 <span id="cb460-7"><a href="mlm-longitudinal-autism.html#cb460-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">keep.order =</span> <span class="cn">TRUE</span>) </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-369-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-371-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="means-across-time" class="section level3" number="10.2.4">
@@ -1672,7 +1672,7 @@ $ vsae_13  &lt;int&gt; 27, 14, 24, NA, 45, NA, 68, 39, NA, NA, 68, 44, 24, 67, N
 <span id="cb467-26"><a href="mlm-longitudinal-autism.html#cb467-26" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;Linear&quot;</span>    <span class="ot">=</span> <span class="st">&quot;red&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb467-27"><a href="mlm-longitudinal-autism.html#cb467-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
 <span id="cb467-28"><a href="mlm-longitudinal-autism.html#cb467-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-374-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-376-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="equally-spaced" class="section level4" number="10.2.5.2">
 <h4><span class="header-section-number">10.2.5.2</span> Equally Spaced</h4>
@@ -1703,7 +1703,7 @@ $ vsae_13  &lt;int&gt; 27, 14, 24, NA, 45, NA, 68, 39, NA, NA, 68, 44, 24, 67, N
 <span id="cb468-25"><a href="mlm-longitudinal-autism.html#cb468-25" aria-hidden="true" tabindex="-1"></a>                                <span class="st">&quot;Linear&quot;</span>    <span class="ot">=</span> <span class="st">&quot;red&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb468-26"><a href="mlm-longitudinal-autism.html#cb468-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
 <span id="cb468-27"><a href="mlm-longitudinal-autism.html#cb468-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-375-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-377-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="side-by-side-boxplots" class="section level3" number="10.2.6">
@@ -1719,7 +1719,7 @@ $ vsae_13  &lt;int&gt; 27, 14, 24, NA, 45, NA, 68, 39, NA, NA, 68, 44, 24, 67, N
 <span id="cb469-9"><a href="mlm-longitudinal-autism.html#cb469-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>) <span class="sc">+</span></span>
 <span id="cb469-10"><a href="mlm-longitudinal-autism.html#cb469-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Initial Language Development</span><span class="sc">\n</span><span class="st">Sequenced Inventory of Communication Development (SICD) at Age 2&quot;</span>,</span>
 <span id="cb469-11"><a href="mlm-longitudinal-autism.html#cb469-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Parent-Reported Measure of Socialization</span><span class="sc">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-376-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-378-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="means-plots" class="section level3" number="10.2.7">
 <h3><span class="header-section-number">10.2.7</span> Means Plots</h3>
@@ -1735,7 +1735,7 @@ $ vsae_13  &lt;int&gt; 27, 14, 24, NA, 45, NA, 68, 39, NA, NA, 68, 44, 24, 67, N
 <span id="cb470-7"><a href="mlm-longitudinal-autism.html#cb470-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="sc">+</span>          <span class="co"># ...and connect with lines</span></span>
 <span id="cb470-8"><a href="mlm-longitudinal-autism.html#cb470-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb470-9"><a href="mlm-longitudinal-autism.html#cb470-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>)) </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-377-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-379-1.png" width="768" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb471"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb471-1"><a href="mlm-longitudinal-autism.html#cb471-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
 <span id="cb471-2"><a href="mlm-longitudinal-autism.html#cb471-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> obs,</span>
 <span id="cb471-3"><a href="mlm-longitudinal-autism.html#cb471-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> vsae,</span>
@@ -1744,7 +1744,7 @@ $ vsae_13  &lt;int&gt; 27, 14, 24, NA, 45, NA, 68, 39, NA, NA, 68, 44, 24, 67, N
 <span id="cb471-6"><a href="mlm-longitudinal-autism.html#cb471-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_summary</span>(<span class="at">fun =</span> <span class="st">&quot;mean&quot;</span>,           <span class="co"># plot the means</span></span>
 <span id="cb471-7"><a href="mlm-longitudinal-autism.html#cb471-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">geom =</span> <span class="st">&quot;line&quot;</span>) <span class="sc">+</span>          <span class="co"># ...and connect with lines</span></span>
 <span id="cb471-8"><a href="mlm-longitudinal-autism.html#cb471-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-378-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-380-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="manually-summarized" class="section level4" number="10.2.7.2">
 <h4><span class="header-section-number">10.2.7.2</span> Manually Summarized</h4>
@@ -1769,7 +1769,7 @@ $ vsae_13  &lt;int&gt; 27, 14, 24, NA, 45, NA, 68, 39, NA, NA, 68, 44, 24, 67, N
 <span id="cb472-19"><a href="mlm-longitudinal-autism.html#cb472-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">linetype =</span> <span class="st">&quot;Sequenced Inventory of Communication Development:&quot;</span>) <span class="sc">+</span></span>
 <span id="cb472-20"><a href="mlm-longitudinal-autism.html#cb472-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
 <span id="cb472-21"><a href="mlm-longitudinal-autism.html#cb472-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-379-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-381-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -2015,8 +2015,8 @@ Var: Residual
 <span id="cb475-3"><a href="mlm-longitudinal-autism.html#cb475-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">modx =</span> sicdegp,        <span class="co"># seperate lines</span></span>
 <span id="cb475-4"><a href="mlm-longitudinal-autism.html#cb475-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">interval =</span> <span class="cn">TRUE</span>) <span class="sc">+</span>     <span class="co"># shaded bands</span></span>
 <span id="cb475-5"><a href="mlm-longitudinal-autism.html#cb475-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-382"></span>
-<img src="eBook_multilevel_files/figure-html/unnamed-chunk-382-1.png" alt="Model 1: Loaded Means Structure" width="576" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-384"></span>
+<img src="eBook_multilevel_files/figure-html/unnamed-chunk-384-1.png" alt="Model 1: Loaded Means Structure" width="576" />
 <p class="caption">
 Figure 10.1: Model 1: Loaded Means Structure
 </p>
@@ -2424,7 +2424,7 @@ e_{ti}  \sim  N(0, \sigma^2)
 <div id="the-ggresidpanel-package" class="section level4" number="10.7.4.1">
 <h4><span class="header-section-number">10.7.4.1</span> The <code>ggResidpanel</code> package</h4>
 <div class="sourceCode" id="cb488"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb488-1"><a href="mlm-longitudinal-autism.html#cb488-1" aria-hidden="true" tabindex="-1"></a>ggResidpanel<span class="sc">::</span><span class="fu">resid_panel</span>(fit_lmer_2a_re)  <span class="co"># default = pearson residuals</span></span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-400-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-402-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="manually-with-hlmdiag-and-ggplot2" class="section level4" number="10.7.4.2">
 <h4><span class="header-section-number">10.7.4.2</span> Manually with <code>HLMdiag</code> and <code>ggplot2</code></h4>
@@ -2438,7 +2438,7 @@ e_{ti}  \sim  N(0, \sigma^2)
 <span id="cb489-8"><a href="mlm-longitudinal-autism.html#cb489-8" aria-hidden="true" tabindex="-1"></a>                 <span class="at">alpha =</span> .<span class="dv">2</span>) <span class="sc">+</span></span>
 <span id="cb489-9"><a href="mlm-longitudinal-autism.html#cb489-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb489-10"><a href="mlm-longitudinal-autism.html#cb489-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">main =</span> <span class="st">&quot;Histogram&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-401-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-403-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb490"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb490-1"><a href="mlm-longitudinal-autism.html#cb490-1" aria-hidden="true" tabindex="-1"></a>fit_lmer_2a_re <span class="sc">%&gt;%</span> </span>
 <span id="cb490-2"><a href="mlm-longitudinal-autism.html#cb490-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ranef</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb490-3"><a href="mlm-longitudinal-autism.html#cb490-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span> </span>
@@ -2448,7 +2448,7 @@ e_{ti}  \sim  N(0, \sigma^2)
 <span id="cb490-7"><a href="mlm-longitudinal-autism.html#cb490-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> term, <span class="at">scale =</span> <span class="st">&quot;free_y&quot;</span>)<span class="sc">+</span></span>
 <span id="cb490-8"><a href="mlm-longitudinal-autism.html#cb490-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb490-9"><a href="mlm-longitudinal-autism.html#cb490-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">main =</span> <span class="st">&quot;Random Slopes&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-402-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-404-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb491"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb491-1"><a href="mlm-longitudinal-autism.html#cb491-1" aria-hidden="true" tabindex="-1"></a>fit_lmer_2a_re <span class="sc">%&gt;%</span> </span>
 <span id="cb491-2"><a href="mlm-longitudinal-autism.html#cb491-2" aria-hidden="true" tabindex="-1"></a>  HLMdiag<span class="sc">::</span><span class="fu">hlm_augment</span>(<span class="at">level =</span> <span class="dv">1</span>,</span>
 <span id="cb491-3"><a href="mlm-longitudinal-autism.html#cb491-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">include.ls =</span> <span class="cn">FALSE</span>,</span>
@@ -2460,7 +2460,7 @@ e_{ti}  \sim  N(0, \sigma^2)
 <span id="cb491-9"><a href="mlm-longitudinal-autism.html#cb491-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>() <span class="sc">+</span></span>
 <span id="cb491-10"><a href="mlm-longitudinal-autism.html#cb491-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb491-11"><a href="mlm-longitudinal-autism.html#cb491-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">main =</span> <span class="st">&quot;Residual Plot&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-403-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-405-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb492"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb492-1"><a href="mlm-longitudinal-autism.html#cb492-1" aria-hidden="true" tabindex="-1"></a>fit_lmer_2a_re <span class="sc">%&gt;%</span> </span>
 <span id="cb492-2"><a href="mlm-longitudinal-autism.html#cb492-2" aria-hidden="true" tabindex="-1"></a>  HLMdiag<span class="sc">::</span><span class="fu">hlm_augment</span>(<span class="at">level =</span> <span class="dv">1</span>,</span>
 <span id="cb492-3"><a href="mlm-longitudinal-autism.html#cb492-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">include.ls =</span> <span class="cn">FALSE</span>,</span>
@@ -2469,25 +2469,25 @@ e_{ti}  \sim  N(0, \sigma^2)
 <span id="cb492-6"><a href="mlm-longitudinal-autism.html#cb492-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_qq</span>()<span class="sc">+</span></span>
 <span id="cb492-7"><a href="mlm-longitudinal-autism.html#cb492-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stat_qq_line</span>() <span class="sc">+</span></span>
 <span id="cb492-8"><a href="mlm-longitudinal-autism.html#cb492-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-404-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-406-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="the-sjplot-package" class="section level4" number="10.7.4.3">
 <h4><span class="header-section-number">10.7.4.3</span> The <code>sjPlot</code> package</h4>
 <div class="sourceCode" id="cb493"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb493-1"><a href="mlm-longitudinal-autism.html#cb493-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_lmer_2a_re, </span>
 <span id="cb493-2"><a href="mlm-longitudinal-autism.html#cb493-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;diag&quot;</span>)</span></code></pre></div>
 <pre><code>[[1]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-405-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-407-1.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[2]]
 [[2]]$childid</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-405-2.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-407-2.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 
 [[3]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-405-3.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-407-3.png" width="576" style="display: block; margin: auto;" /></p>
 <pre><code>
 [[4]]</code></pre>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-405-4.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-407-4.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="plot-of-the-estimated-marginal-means-1" class="section level3" number="10.7.5">
@@ -2500,8 +2500,8 @@ e_{ti}  \sim  N(0, \sigma^2)
 <span id="cb498-3"><a href="mlm-longitudinal-autism.html#cb498-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">modx =</span> sicdegp,        <span class="co"># seperate lines</span></span>
 <span id="cb498-4"><a href="mlm-longitudinal-autism.html#cb498-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">interval =</span> <span class="cn">TRUE</span>) <span class="sc">+</span>     <span class="co"># shaded bands</span></span>
 <span id="cb498-5"><a href="mlm-longitudinal-autism.html#cb498-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">13</span>))</span></code></pre></div>
-<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-406"></span>
-<img src="eBook_multilevel_files/figure-html/unnamed-chunk-406-1.png" alt="Final Model (2a)" width="576" />
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:unnamed-chunk-408"></span>
+<img src="eBook_multilevel_files/figure-html/unnamed-chunk-408-1.png" alt="Final Model (2a)" width="576" />
 <p class="caption">
 Figure 10.2: Final Model (2a)
 </p>
@@ -2522,7 +2522,7 @@ Figure 10.2: Final Model (2a)
 <span id="cb499-14"><a href="mlm-longitudinal-autism.html#cb499-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>, <span class="fl">1.1</span>),</span>
 <span id="cb499-15"><a href="mlm-longitudinal-autism.html#cb499-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>),</span>
 <span id="cb499-16"><a href="mlm-longitudinal-autism.html#cb499-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-407-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-409-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="more-customized---color" class="section level4" number="10.7.5.2">
 <h4><span class="header-section-number">10.7.5.2</span> More Customized - Color</h4>
@@ -2557,7 +2557,7 @@ Figure 10.2: Final Model (2a)
 <span id="cb500-28"><a href="mlm-longitudinal-autism.html#cb500-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">linetype =</span> <span class="st">&quot;Initial Communication (SICD)&quot;</span>,</span>
 <span id="cb500-29"><a href="mlm-longitudinal-autism.html#cb500-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill     =</span> <span class="st">&quot;Initial Communication (SICD)&quot;</span>,</span>
 <span id="cb500-30"><a href="mlm-longitudinal-autism.html#cb500-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">color    =</span> <span class="st">&quot;Initial Communication (SICD)&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-408-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-410-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="more-customized---black-and-white" class="section level4" number="10.7.5.3">
 <h4><span class="header-section-number">10.7.5.3</span> More Customized - Black and White</h4>
@@ -2592,7 +2592,7 @@ Figure 10.2: Final Model (2a)
 <span id="cb501-28"><a href="mlm-longitudinal-autism.html#cb501-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">linetype =</span> <span class="st">&quot;Initial Communication (SICD)&quot;</span>,</span>
 <span id="cb501-29"><a href="mlm-longitudinal-autism.html#cb501-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill     =</span> <span class="st">&quot;Initial Communication (SICD)&quot;</span>,</span>
 <span id="cb501-30"><a href="mlm-longitudinal-autism.html#cb501-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">color    =</span> <span class="st">&quot;Initial Communication (SICD)&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-409-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-411-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="post-hoc-compairisons" class="section level3" number="10.7.6">
@@ -2674,7 +2674,7 @@ Confidence level used: 0.95 </code></pre>
 <span id="cb508-28"><a href="mlm-longitudinal-autism.html#cb508-28" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="sc">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>) <span class="sc">+</span></span>
 <span id="cb508-29"><a href="mlm-longitudinal-autism.html#cb508-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
 <span id="cb508-30"><a href="mlm-longitudinal-autism.html#cb508-30" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-413-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-415-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb509"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb509-1"><a href="mlm-longitudinal-autism.html#cb509-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
 <span id="cb509-2"><a href="mlm-longitudinal-autism.html#cb509-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">pred_fixed =</span> <span class="fu">predict</span>(fit_lmer_2a_re, <span class="at">re.form =</span> <span class="cn">NA</span>)) <span class="sc">%&gt;%</span> </span>
 <span id="cb509-3"><a href="mlm-longitudinal-autism.html#cb509-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">pred_wrand =</span> <span class="fu">predict</span>(fit_lmer_2a_re)) <span class="sc">%&gt;%</span> </span>
@@ -2705,7 +2705,7 @@ Confidence level used: 0.95 </code></pre>
 <span id="cb509-28"><a href="mlm-longitudinal-autism.html#cb509-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Age, in years&quot;</span>,</span>
 <span id="cb509-29"><a href="mlm-longitudinal-autism.html#cb509-29" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="sc">\n</span><span class="st">Vineland Socialization Age Equivalent&quot;</span>,</span>
 <span id="cb509-30"><a href="mlm-longitudinal-autism.html#cb509-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Communication:&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-414-1.png" width="768" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-416-1.png" width="768" style="display: block; margin: auto;" /></p>
 
 </div>
 </div>

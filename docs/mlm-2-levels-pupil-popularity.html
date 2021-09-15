@@ -823,21 +823,26 @@ div.csl-indent {
 <p>Load/activate these packages</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="mlm-2-levels-pupil-popularity.html#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb4-2"><a href="mlm-2-levels-pupil-popularity.html#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)        <span class="co"># read in SPSS dataset</span></span>
-<span id="cb4-3"><a href="mlm-2-levels-pupil-popularity.html#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></span>
-<span id="cb4-4"><a href="mlm-2-levels-pupil-popularity.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span></span>
-<span id="cb4-5"><a href="mlm-2-levels-pupil-popularity.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></span>
-<span id="cb4-6"><a href="mlm-2-levels-pupil-popularity.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)    <span class="co"># place ggplots together as one plot</span></span>
-<span id="cb4-7"><a href="mlm-2-levels-pupil-popularity.html#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></span>
-<span id="cb4-8"><a href="mlm-2-levels-pupil-popularity.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)          <span class="co"># Companion to Applied Regression</span></span>
-<span id="cb4-9"><a href="mlm-2-levels-pupil-popularity.html#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)         <span class="co"># non-linear mixed-effects models</span></span>
-<span id="cb4-10"><a href="mlm-2-levels-pupil-popularity.html#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></span>
-<span id="cb4-11"><a href="mlm-2-levels-pupil-popularity.html#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest)     <span class="co"># Tests on lmer objects</span></span>
-<span id="cb4-12"><a href="mlm-2-levels-pupil-popularity.html#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance)  <span class="co"># icc and r-squared functions **NEWER**</span></span>
-<span id="cb4-13"><a href="mlm-2-levels-pupil-popularity.html#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(interactions) <span class="co"># interaction plots **NEWER**</span></span>
-<span id="cb4-14"><a href="mlm-2-levels-pupil-popularity.html#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for MLM</span></span>
-<span id="cb4-15"><a href="mlm-2-levels-pupil-popularity.html#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(redres)       <span class="co"># Diagnosing MLM models</span></span>
-<span id="cb4-16"><a href="mlm-2-levels-pupil-popularity.html#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjstats)      <span class="co"># ICC calculations</span></span>
-<span id="cb4-17"><a href="mlm-2-levels-pupil-popularity.html#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(optimx)       <span class="co"># Different optimizers to solve mlm&#39;s</span></span></code></pre></div>
+<span id="cb4-3"><a href="mlm-2-levels-pupil-popularity.html#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="mlm-2-levels-pupil-popularity.html#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></span>
+<span id="cb4-5"><a href="mlm-2-levels-pupil-popularity.html#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stargazer)    <span class="co"># display nice tables: summary &amp; regression</span></span>
+<span id="cb4-6"><a href="mlm-2-levels-pupil-popularity.html#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></span>
+<span id="cb4-7"><a href="mlm-2-levels-pupil-popularity.html#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="mlm-2-levels-pupil-popularity.html#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)    <span class="co"># place ggplots together as one plot</span></span>
+<span id="cb4-9"><a href="mlm-2-levels-pupil-popularity.html#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></span>
+<span id="cb4-10"><a href="mlm-2-levels-pupil-popularity.html#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)          <span class="co"># Companion to Applied Regression</span></span>
+<span id="cb4-11"><a href="mlm-2-levels-pupil-popularity.html#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="mlm-2-levels-pupil-popularity.html#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nlme)         <span class="co"># non-linear mixed-effects models</span></span>
+<span id="cb4-13"><a href="mlm-2-levels-pupil-popularity.html#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)         <span class="co"># Linear, generalized linear, &amp; nonlinear mixed models</span></span>
+<span id="cb4-14"><a href="mlm-2-levels-pupil-popularity.html#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmerTest)     <span class="co"># Tests on lmer objects</span></span>
+<span id="cb4-15"><a href="mlm-2-levels-pupil-popularity.html#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(optimx)       <span class="co"># Different optimizers to solve mlm&#39;s</span></span>
+<span id="cb4-16"><a href="mlm-2-levels-pupil-popularity.html#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="mlm-2-levels-pupil-popularity.html#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance)  <span class="co"># icc and r-squared functions **NEWER**</span></span>
+<span id="cb4-18"><a href="mlm-2-levels-pupil-popularity.html#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(interactions) <span class="co"># interaction plots **NEWER**</span></span>
+<span id="cb4-19"><a href="mlm-2-levels-pupil-popularity.html#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="mlm-2-levels-pupil-popularity.html#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(HLMdiag)      <span class="co"># Diagnostic Tools for for MLM</span></span>
+<span id="cb4-21"><a href="mlm-2-levels-pupil-popularity.html#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(redres)       <span class="co"># Diagnosing MLM models</span></span>
+<span id="cb4-22"><a href="mlm-2-levels-pupil-popularity.html#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjstats)      <span class="co"># ICC calculations</span></span></code></pre></div>
 <div id="background" class="section level2" number="4.1">
 <h2><span class="header-section-number">4.1</span> Background</h2>
 <div class="rmdlink">
@@ -846,16 +851,24 @@ The text <strong>“Multilevel Analysis: Techniques and Applications, Third Edit
 </p>
 </div>
 <p>The following example is used through out <span class="citation">(<a href="references.html#ref-hox2017" role="doc-biblioref">Hox, Moerbeek, and Van de Schoot 2017</a>)</span>’s chapater 2.</p>
+<p><img src="images/diagram_hox_popular2.png" width="668" style="display: block; margin: auto;" /></p>
 <blockquote>
 <p>From <strong>Appendix E</strong>:</p>
-<p>The popularity data in <strong>popular2.sav</strong> are simulated data for <strong>2000 pupils in 100 schools</strong>. The purpose is to offer a very simple example for multilevel regression analysis. The main outcome variable is the <strong>pupil popularity</strong>, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil. Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: <strong>pupil popularity</strong> as rated by their teacher, on a scale from 1-10. The explanatory variables are <strong>pupil gender</strong> (boy=0, girl=1), <strong>pupil extroversion</strong> (10-point scale) and <strong>teacher experience</strong> in years. The popularity data have been generated to be a ‘nice’ well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.</p>
+<p>The popularity data in <strong>popular2.sav</strong> are <em>simulated</em> data for <strong>2000 pupils</strong> (<code>pupil</code>) in <strong>100 schools</strong> (<code>class</code>). The purpose is to offer a very simple example for multilevel regression analysis.</p>
+<p>The main <strong>OUTCOME or DEPENDENT VARIABLE (DV)</strong> is the <strong>pupil popularity</strong>, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil (<code>pupular</code>). Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable, pupil popularity as rated by their teacher (<code>popteach</code>), on a scale from 1-10.</p>
+<p>The <strong>PREDICTORS or INDEPENDENT VARIABLES (IVs)</strong> are:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>pupil gender</strong> (<code>sex</code>) only two levels: boy = 0, girl = 1</p></li>
+<li><p><strong>pupil extroversion</strong> (<code>extrav</code>) 10-point scale <em>(whole number)</em> as rated by the teacher, higher values correspond to more extroverted</p></li>
+<li><p><strong>teacher experience</strong> (<code>texp</code>) in years, reported as a whole number</p></li>
+</ol>
+<p>The popularity data have been generated to be a ‘nice’ well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.</p>
 </blockquote>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="mlm-2-levels-pupil-popularity.html#cb5-1" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(<span class="st">&quot;images/diagram_hox_popular2.png&quot;</span>)</span></code></pre></div>
-<p><img src="images/diagram_hox_popular2.PNG" width="668" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="mlm-2-levels-pupil-popularity.html#cb6-1" aria-hidden="true" tabindex="-1"></a>data_raw <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-2"><a href="mlm-2-levels-pupil-popularity.html#cb6-2" aria-hidden="true" tabindex="-1"></a>  haven<span class="sc">::</span><span class="fu">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span></span>
-<span id="cb6-3"><a href="mlm-2-levels-pupil-popularity.html#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="mlm-2-levels-pupil-popularity.html#cb6-4" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">glimpse</span>(data_raw) </span></code></pre></div>
+<p><em>Note: We will ignore the centered and standardized variables, which start with a capital Z or C.</em></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="mlm-2-levels-pupil-popularity.html#cb5-1" aria-hidden="true" tabindex="-1"></a>data_raw <span class="ot">&lt;-</span> haven<span class="sc">::</span><span class="fu">read_sav</span>(<span class="st">&quot;https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="mlm-2-levels-pupil-popularity.html#cb5-2" aria-hidden="true" tabindex="-1"></a>  haven<span class="sc">::</span><span class="fu">as_factor</span>()             <span class="co"># retain the labels from SPSS --&gt; factor</span></span>
+<span id="cb5-3"><a href="mlm-2-levels-pupil-popularity.html#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="mlm-2-levels-pupil-popularity.html#cb5-4" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">glimpse</span>(data_raw) </span></code></pre></div>
 <pre><code>Rows: 2,000
 Columns: 15
 $ pupil     &lt;dbl&gt; 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 1~
@@ -875,14 +888,14 @@ $ Ctexp     &lt;dbl&gt; 9.737, 9.737, 9.737, 9.737, 9.737, 9.737, 9.737, 9.737, 
 $ Csex      &lt;dbl&gt; 0.5, -0.5, 0.5, 0.5, 0.5, -0.5, -0.5, -0.5, -0.5, -0.5, 0.5,~</code></pre>
 <div id="unique-identifiers" class="section level3" number="4.1.1">
 <h3><span class="header-section-number">4.1.1</span> Unique Identifiers</h3>
-<p>We will restrict ourselves to a few of the variables and create a distinct identifier variable for each student.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="mlm-2-levels-pupil-popularity.html#cb8-1" aria-hidden="true" tabindex="-1"></a>data_pop <span class="ot">&lt;-</span> data_raw <span class="sc">%&gt;%</span>   </span>
-<span id="cb8-2"><a href="mlm-2-levels-pupil-popularity.html#cb8-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">paste</span>(class, pupil,</span>
-<span id="cb8-3"><a href="mlm-2-levels-pupil-popularity.html#cb8-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="sc">%&gt;%</span>   <span class="co"># create a unique id for each student (char)</span></span>
-<span id="cb8-4"><a href="mlm-2-levels-pupil-popularity.html#cb8-4" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>()) <span class="sc">%&gt;%</span>             <span class="co"># declare id is a factor</span></span>
-<span id="cb8-5"><a href="mlm-2-levels-pupil-popularity.html#cb8-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(id, pupil<span class="sc">:</span>popteach)         <span class="co"># reduce the variables included</span></span>
-<span id="cb8-6"><a href="mlm-2-levels-pupil-popularity.html#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="mlm-2-levels-pupil-popularity.html#cb8-7" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">glimpse</span>(data_pop)</span></code></pre></div>
+<p>We will restrict ourselves to a few of the variables and create a unique identifier variable for each student.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="mlm-2-levels-pupil-popularity.html#cb7-1" aria-hidden="true" tabindex="-1"></a>data_pop <span class="ot">&lt;-</span> data_raw <span class="sc">%&gt;%</span>   </span>
+<span id="cb7-2"><a href="mlm-2-levels-pupil-popularity.html#cb7-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">id =</span> <span class="fu">paste</span>(class, pupil,</span>
+<span id="cb7-3"><a href="mlm-2-levels-pupil-popularity.html#cb7-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">sep =</span> <span class="st">&quot;_&quot;</span>) <span class="sc">%&gt;%</span>   <span class="co"># create a unique id for each student (char)</span></span>
+<span id="cb7-4"><a href="mlm-2-levels-pupil-popularity.html#cb7-4" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>()) <span class="sc">%&gt;%</span>             <span class="co"># declare id is a factor</span></span>
+<span id="cb7-5"><a href="mlm-2-levels-pupil-popularity.html#cb7-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(id, pupil<span class="sc">:</span>popteach)         <span class="co"># reduce the variables included</span></span>
+<span id="cb7-6"><a href="mlm-2-levels-pupil-popularity.html#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="mlm-2-levels-pupil-popularity.html#cb7-7" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">glimpse</span>(data_pop)</span></code></pre></div>
 <pre><code>Rows: 2,000
 Columns: 8
 $ id       &lt;fct&gt; 1_1, 1_2, 1_3, 1_4, 1_5, 1_6, 1_7, 1_8, 1_9, 1_10, 1_11, 1_12~
@@ -897,9 +910,9 @@ $ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3, 7, 
 <div id="structure-and-variables" class="section level3" number="4.1.2">
 <h3><span class="header-section-number">4.1.2</span> Structure and variables</h3>
 <p>Its a good idea to visually inspect the first few lines in the datast to get a sense of how it is organized.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="mlm-2-levels-pupil-popularity.html#cb10-1" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span>  </span>
-<span id="cb10-2"><a href="mlm-2-levels-pupil-popularity.html#cb10-2" aria-hidden="true" tabindex="-1"></a>  psych<span class="sc">::</span><span class="fu">headTail</span>(<span class="at">top =</span> <span class="dv">25</span>, <span class="at">bottom =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb10-3"><a href="mlm-2-levels-pupil-popularity.html#cb10-3" aria-hidden="true" tabindex="-1"></a>  pander<span class="sc">::</span><span class="fu">pander</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="mlm-2-levels-pupil-popularity.html#cb9-1" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span>  </span>
+<span id="cb9-2"><a href="mlm-2-levels-pupil-popularity.html#cb9-2" aria-hidden="true" tabindex="-1"></a>  psych<span class="sc">::</span><span class="fu">headTail</span>(<span class="at">top =</span> <span class="dv">25</span>, <span class="at">bottom =</span> <span class="dv">5</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb9-3"><a href="mlm-2-levels-pupil-popularity.html#cb9-3" aria-hidden="true" tabindex="-1"></a>  pander<span class="sc">::</span><span class="fu">pander</span>()</span></code></pre></div>
 <table style="width:96%;">
 <colgroup>
 <col width="12%" />
@@ -1245,13 +1258,18 @@ $ popteach &lt;dbl&gt; 6, 5, 6, 5, 6, 5, 5, 5, 5, 3, 5, 5, 5, 6, 5, 5, 2, 3, 7, 
 <h3><span class="header-section-number">4.2.1</span> Summarize Descriptive Statistics</h3>
 <div id="the-stargazer-package" class="section level4" number="4.2.1.1">
 <h4><span class="header-section-number">4.2.1.1</span> The <code>stargazer</code> package</h4>
-<p>Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as <em>Table 1</em>. The <code>stargazer()</code> function can be used to create such a table, but only for the entire dataset <span class="citation">(<a href="references.html#ref-R-stargazer" role="doc-biblioref">Hlavac 2018</a>)</span>. I haven’t been able to find a way to get it to summarize subsamples and compare them in the standard format.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="mlm-2-levels-pupil-popularity.html#cb11-1" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span> </span>
-<span id="cb11-2"><a href="mlm-2-levels-pupil-popularity.html#cb11-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(extrav, texp, popular) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-3"><a href="mlm-2-levels-pupil-popularity.html#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb11-4"><a href="mlm-2-levels-pupil-popularity.html#cb11-4" aria-hidden="true" tabindex="-1"></a>  stargazer<span class="sc">::</span><span class="fu">stargazer</span>(<span class="at">title  =</span> <span class="st">&quot;Descriptive statistics, aggregate over entire sample&quot;</span>,</span>
-<span id="cb11-5"><a href="mlm-2-levels-pupil-popularity.html#cb11-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">header =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb11-6"><a href="mlm-2-levels-pupil-popularity.html#cb11-6" aria-hidden="true" tabindex="-1"></a>                       <span class="at">type =</span> <span class="st">&quot;html&quot;</span>)</span></code></pre></div>
+<p>Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as <em>Table 1</em>.</p>
+<p>The <code>stargazer()</code> function can be used to create such a table, but only for the entire dataset <span class="citation">(<a href="references.html#ref-R-stargazer" role="doc-biblioref">Hlavac 2018</a>)</span>. I haven’t been able to find a way to get it to summarize subsamples and compare them in the standard format. It is nice that this table includes the minimum and maximum, as well as the quartiles.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="mlm-2-levels-pupil-popularity.html#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to Website: type = &quot;html&quot; </span></span>
+<span id="cb10-2"><a href="mlm-2-levels-pupil-popularity.html#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to PDF:     type = &quot;latex&quot;</span></span>
+<span id="cb10-3"><a href="mlm-2-levels-pupil-popularity.html#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># View on Screen:  type = &quot;text&quot;</span></span>
+<span id="cb10-4"><a href="mlm-2-levels-pupil-popularity.html#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="mlm-2-levels-pupil-popularity.html#cb10-5" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span> </span>
+<span id="cb10-6"><a href="mlm-2-levels-pupil-popularity.html#cb10-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(extrav, texp, popular) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-7"><a href="mlm-2-levels-pupil-popularity.html#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb10-8"><a href="mlm-2-levels-pupil-popularity.html#cb10-8" aria-hidden="true" tabindex="-1"></a>  stargazer<span class="sc">::</span><span class="fu">stargazer</span>(<span class="at">title  =</span> <span class="st">&quot;Descriptive statistics, aggregate over entire sample&quot;</span>,</span>
+<span id="cb10-9"><a href="mlm-2-levels-pupil-popularity.html#cb10-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">header =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-10"><a href="mlm-2-levels-pupil-popularity.html#cb10-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">type =</span> <span class="st">&quot;text&quot;</span>)</span></code></pre></div>
 <table style="text-align:center">
 <caption>
 <strong>Descriptive statistics, aggregate over entire sample</strong>
@@ -1377,19 +1395,21 @@ popular
 <div id="the-furniture-package" class="section level4" number="4.2.1.2">
 <h4><span class="header-section-number">4.2.1.2</span> The <code>furniture</code> package</h4>
 <p>Tyson Barrett’s <strong>furniture</strong> package includes the extremely useful function <code>table1()</code> which simplifies the common task of creating a stratified, comparative table of descriptive statistics. Full documentation can be accessed by executing <code>?furniture::table1</code>.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="mlm-2-levels-pupil-popularity.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to Website: output = &quot;html&quot; </span></span>
-<span id="cb12-2"><a href="mlm-2-levels-pupil-popularity.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></span>
-<span id="cb12-3"><a href="mlm-2-levels-pupil-popularity.html#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></span>
-<span id="cb12-4"><a href="mlm-2-levels-pupil-popularity.html#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="mlm-2-levels-pupil-popularity.html#cb12-5" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span> </span>
-<span id="cb12-6"><a href="mlm-2-levels-pupil-popularity.html#cb12-6" aria-hidden="true" tabindex="-1"></a>  furniture<span class="sc">::</span><span class="fu">table1</span>(<span class="st">&quot;Pupil&#39;s extroversion (10 pt)&quot;</span>   <span class="ot">=</span> extrav, </span>
-<span id="cb12-7"><a href="mlm-2-levels-pupil-popularity.html#cb12-7" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;Teacher&#39;s Experience (years)&quot;</span>  <span class="ot">=</span> texp, </span>
-<span id="cb12-8"><a href="mlm-2-levels-pupil-popularity.html#cb12-8" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;Popularity, Sociometric Score&quot;</span> <span class="ot">=</span> popular, </span>
-<span id="cb12-9"><a href="mlm-2-levels-pupil-popularity.html#cb12-9" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;Popularity, Teacher Evaluated&quot;</span> <span class="ot">=</span> popteach,</span>
-<span id="cb12-10"><a href="mlm-2-levels-pupil-popularity.html#cb12-10" aria-hidden="true" tabindex="-1"></a>                     <span class="at">splitby    =</span> <span class="sc">~</span> sex,        <span class="co"># divide sample into columns by...</span></span>
-<span id="cb12-11"><a href="mlm-2-levels-pupil-popularity.html#cb12-11" aria-hidden="true" tabindex="-1"></a>                     <span class="at">test       =</span> <span class="cn">TRUE</span>,         <span class="co"># test groups different?</span></span>
-<span id="cb12-12"><a href="mlm-2-levels-pupil-popularity.html#cb12-12" aria-hidden="true" tabindex="-1"></a>                     <span class="at">output     =</span> <span class="st">&quot;markdown&quot;</span>,   <span class="co"># output for on screen/knitting</span></span>
-<span id="cb12-13"><a href="mlm-2-levels-pupil-popularity.html#cb12-13" aria-hidden="true" tabindex="-1"></a>                     <span class="at">caption    =</span> <span class="st">&quot;Compare genders on four main variables&quot;</span>)  <span class="co"># title</span></span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="mlm-2-levels-pupil-popularity.html#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to Website: output = &quot;html&quot; </span></span>
+<span id="cb11-2"><a href="mlm-2-levels-pupil-popularity.html#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to PDF:     output = &quot;latex2&quot;</span></span>
+<span id="cb11-3"><a href="mlm-2-levels-pupil-popularity.html#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># View on Screen:  output = &quot;&quot;text&quot;, or &quot;markdown&quot;, &quot;html&quot;</span></span>
+<span id="cb11-4"><a href="mlm-2-levels-pupil-popularity.html#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="mlm-2-levels-pupil-popularity.html#cb11-5" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span> </span>
+<span id="cb11-6"><a href="mlm-2-levels-pupil-popularity.html#cb11-6" aria-hidden="true" tabindex="-1"></a>  furniture<span class="sc">::</span><span class="fu">table1</span>(<span class="st">&quot;Pupil&#39;s extroversion (10 pt)&quot;</span>   <span class="ot">=</span> extrav, </span>
+<span id="cb11-7"><a href="mlm-2-levels-pupil-popularity.html#cb11-7" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Teacher&#39;s Experience (years)&quot;</span>  <span class="ot">=</span> texp, </span>
+<span id="cb11-8"><a href="mlm-2-levels-pupil-popularity.html#cb11-8" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Popularity, Sociometric Score&quot;</span> <span class="ot">=</span> popular, </span>
+<span id="cb11-9"><a href="mlm-2-levels-pupil-popularity.html#cb11-9" aria-hidden="true" tabindex="-1"></a>                    <span class="st">&quot;Popularity, Teacher Evaluated&quot;</span> <span class="ot">=</span> popteach,</span>
+<span id="cb11-10"><a href="mlm-2-levels-pupil-popularity.html#cb11-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">splitby    =</span> <span class="sc">~</span> sex,        <span class="co"># divide sample into columns by...</span></span>
+<span id="cb11-11"><a href="mlm-2-levels-pupil-popularity.html#cb11-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">total      =</span> <span class="cn">TRUE</span>,         <span class="co"># include a total column</span></span>
+<span id="cb11-12"><a href="mlm-2-levels-pupil-popularity.html#cb11-12" aria-hidden="true" tabindex="-1"></a>                    <span class="at">test       =</span> <span class="cn">TRUE</span>,         <span class="co"># test groups different?</span></span>
+<span id="cb11-13"><a href="mlm-2-levels-pupil-popularity.html#cb11-13" aria-hidden="true" tabindex="-1"></a>                    <span class="at">digits     =</span> <span class="dv">2</span>,            <span class="co"># 2 decimal places</span></span>
+<span id="cb11-14"><a href="mlm-2-levels-pupil-popularity.html#cb11-14" aria-hidden="true" tabindex="-1"></a>                    <span class="at">output     =</span> <span class="st">&quot;markdown&quot;</span>,   <span class="co"># output for on screen/knitting</span></span>
+<span id="cb11-15"><a href="mlm-2-levels-pupil-popularity.html#cb11-15" aria-hidden="true" tabindex="-1"></a>                    <span class="at">caption    =</span> <span class="st">&quot;Compare genders on four main variables&quot;</span>)  <span class="co"># title</span></span></code></pre></div>
 <table>
 <caption>
 <span id="tab:unnamed-chunk-44">Table 4.1: </span>Compare genders on four main variables
@@ -1397,6 +1417,9 @@ popular
 <thead>
 <tr>
 <th>
+</th>
+<th>
+Total
 </th>
 <th>
 boy
@@ -1412,6 +1435,9 @@ P-Value
 <tbody>
 <tr>
 <td>
+</td>
+<td>
+n = 2000
 </td>
 <td>
 n = 989
@@ -1431,6 +1457,8 @@ Pupil’s extroversion (10 pt)
 <td>
 </td>
 <td>
+</td>
+<td>
 &lt;.001
 </td>
 </tr>
@@ -1438,10 +1466,13 @@ Pupil’s extroversion (10 pt)
 <td>
 </td>
 <td>
-5.1 (1.2)
+5.21 (1.26)
 </td>
 <td>
-5.3 (1.3)
+5.10 (1.17)
+</td>
+<td>
+5.33 (1.34)
 </td>
 <td>
 </td>
@@ -1455,6 +1486,8 @@ Teacher’s Experience (years)
 <td>
 </td>
 <td>
+</td>
+<td>
 0.001
 </td>
 </tr>
@@ -1462,10 +1495,13 @@ Teacher’s Experience (years)
 <td>
 </td>
 <td>
-13.8 (6.3)
+14.26 (6.55)
 </td>
 <td>
-14.7 (6.8)
+13.78 (6.28)
+</td>
+<td>
+14.73 (6.78)
 </td>
 <td>
 </td>
@@ -1479,6 +1515,8 @@ Popularity, Sociometric Score
 <td>
 </td>
 <td>
+</td>
+<td>
 &lt;.001
 </td>
 </tr>
@@ -1486,10 +1524,13 @@ Popularity, Sociometric Score
 <td>
 </td>
 <td>
-4.3 (1.1)
+5.08 (1.38)
 </td>
 <td>
-5.9 (1.1)
+4.28 (1.14)
+</td>
+<td>
+5.85 (1.14)
 </td>
 <td>
 </td>
@@ -1503,6 +1544,8 @@ Popularity, Teacher Evaluated
 <td>
 </td>
 <td>
+</td>
+<td>
 &lt;.001
 </td>
 </tr>
@@ -1510,10 +1553,13 @@ Popularity, Teacher Evaluated
 <td>
 </td>
 <td>
-4.3 (1.2)
+5.06 (1.40)
 </td>
 <td>
-5.8 (1.2)
+4.29 (1.18)
+</td>
+<td>
+5.82 (1.18)
 </td>
 <td>
 </td>
@@ -1529,22 +1575,22 @@ Popularity, Teacher Evaluated
 <div id="scatterplots" class="section level5" number="4.2.2.1.1">
 <h5><span class="header-section-number">4.2.2.1.1</span> Scatterplots</h5>
 <p>For a first look, its useful to plot all the data points on a single scatterplot as displayed in Figure <a href="mlm-2-levels-pupil-popularity.html#fig:scatter">4.1</a>. Due to ganularity in the rating scale, many points end up being plotted on top of each other (<em>overplotted</em>), so its a good idea to use <code>geom_count()</code> rather than <code>geom_point()</code> so the size of the dot can convey the number of points at that location <span class="citation">(<a href="references.html#ref-R-ggplot2" role="doc-biblioref">Wickham et al. 2021</a>)</span>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="mlm-2-levels-pupil-popularity.html#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disaggregate: pupil (level 1) only, ignore level 2&#39;s existance</span></span>
-<span id="cb13-2"><a href="mlm-2-levels-pupil-popularity.html#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># extroversion treated: continuous measure</span></span>
-<span id="cb13-3"><a href="mlm-2-levels-pupil-popularity.html#cb13-3" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span> </span>
-<span id="cb13-4"><a href="mlm-2-levels-pupil-popularity.html#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb13-5"><a href="mlm-2-levels-pupil-popularity.html#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> extrav,                                <span class="co"># x-axis variable</span></span>
-<span id="cb13-6"><a href="mlm-2-levels-pupil-popularity.html#cb13-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> popular) <span class="sc">+</span>                             <span class="co"># y-axis variable</span></span>
-<span id="cb13-7"><a href="mlm-2-levels-pupil-popularity.html#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_count</span>() <span class="sc">+</span>                                 <span class="co"># POINTS w/ SIZE = COUNT</span></span>
-<span id="cb13-8"><a href="mlm-2-levels-pupil-popularity.html#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span>                   <span class="co"># linear regression line</span></span>
-<span id="cb13-9"><a href="mlm-2-levels-pupil-popularity.html#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span>                                   <span class="co"># white background  </span></span>
-<span id="cb13-10"><a href="mlm-2-levels-pupil-popularity.html#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x    =</span> <span class="st">&quot;extroversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span></span>
-<span id="cb13-11"><a href="mlm-2-levels-pupil-popularity.html#cb13-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>,   <span class="co"># y-axis label</span></span>
-<span id="cb13-12"><a href="mlm-2-levels-pupil-popularity.html#cb13-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">size =</span> <span class="st">&quot;Count&quot;</span>) <span class="sc">+</span>                         <span class="co"># legend key&#39;s title  </span></span>
-<span id="cb13-13"><a href="mlm-2-levels-pupil-popularity.html#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.2</span>),                          <span class="co"># key at</span></span>
-<span id="cb13-14"><a href="mlm-2-levels-pupil-popularity.html#cb13-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span>    <span class="co"># key box </span></span>
-<span id="cb13-15"><a href="mlm-2-levels-pupil-popularity.html#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span> <span class="co"># x-ticks</span></span>
-<span id="cb13-16"><a href="mlm-2-levels-pupil-popularity.html#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="mlm-2-levels-pupil-popularity.html#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disaggregate: pupil (level 1) only, ignore level 2&#39;s existance</span></span>
+<span id="cb12-2"><a href="mlm-2-levels-pupil-popularity.html#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># extroversion treated: continuous measure</span></span>
+<span id="cb12-3"><a href="mlm-2-levels-pupil-popularity.html#cb12-3" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span> </span>
+<span id="cb12-4"><a href="mlm-2-levels-pupil-popularity.html#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb12-5"><a href="mlm-2-levels-pupil-popularity.html#cb12-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> extrav,                                <span class="co"># x-axis variable</span></span>
+<span id="cb12-6"><a href="mlm-2-levels-pupil-popularity.html#cb12-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> popular) <span class="sc">+</span>                             <span class="co"># y-axis variable</span></span>
+<span id="cb12-7"><a href="mlm-2-levels-pupil-popularity.html#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_count</span>() <span class="sc">+</span>                                 <span class="co"># POINTS w/ SIZE = COUNT</span></span>
+<span id="cb12-8"><a href="mlm-2-levels-pupil-popularity.html#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>) <span class="sc">+</span>                   <span class="co"># linear regression line</span></span>
+<span id="cb12-9"><a href="mlm-2-levels-pupil-popularity.html#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span>                                   <span class="co"># white background  </span></span>
+<span id="cb12-10"><a href="mlm-2-levels-pupil-popularity.html#cb12-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x    =</span> <span class="st">&quot;extroversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span></span>
+<span id="cb12-11"><a href="mlm-2-levels-pupil-popularity.html#cb12-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>,   <span class="co"># y-axis label</span></span>
+<span id="cb12-12"><a href="mlm-2-levels-pupil-popularity.html#cb12-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">size =</span> <span class="st">&quot;Count&quot;</span>) <span class="sc">+</span>                         <span class="co"># legend key&#39;s title  </span></span>
+<span id="cb12-13"><a href="mlm-2-levels-pupil-popularity.html#cb12-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.9</span>, <span class="fl">0.2</span>),                          <span class="co"># key at</span></span>
+<span id="cb12-14"><a href="mlm-2-levels-pupil-popularity.html#cb12-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span>    <span class="co"># key box </span></span>
+<span id="cb12-15"><a href="mlm-2-levels-pupil-popularity.html#cb12-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span> <span class="co"># x-ticks</span></span>
+<span id="cb12-16"><a href="mlm-2-levels-pupil-popularity.html#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:scatter"></span>
 <img src="eBook_multilevel_files/figure-html/scatter-1.png" alt="Disaggregate: pupil level only with extroversion treated as an continuous measure." width="576" />
 <p class="caption">
@@ -1555,20 +1601,19 @@ Figure 4.1: Disaggregate: pupil level only with extroversion treated as an conti
 <div id="density-plots" class="section level5" number="4.2.2.1.2">
 <h5><span class="header-section-number">4.2.2.1.2</span> Density Plots</h5>
 <p>When the degree of overplotting as high as it is in Figure <a href="mlm-2-levels-pupil-popularity.html#fig:scatter">4.1</a>, it can be useful to represent the data with density contours as seen in Figure <a href="mlm-2-levels-pupil-popularity.html#fig:scatter2d">4.2</a>. I’ve chosen to leave the points displayed in this redition, but color them much lighter so that they are present, but do not detract from the pattern of association.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="mlm-2-levels-pupil-popularity.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># visualize all the data - another way</span></span>
-<span id="cb14-2"><a href="mlm-2-levels-pupil-popularity.html#cb14-2" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span> </span>
-<span id="cb14-3"><a href="mlm-2-levels-pupil-popularity.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb14-4"><a href="mlm-2-levels-pupil-popularity.html#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> extrav,                                <span class="co"># x-axis variable</span></span>
-<span id="cb14-5"><a href="mlm-2-levels-pupil-popularity.html#cb14-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> popular) <span class="sc">+</span>                             <span class="co"># y-axis variable</span></span>
-<span id="cb14-6"><a href="mlm-2-levels-pupil-popularity.html#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_count</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="sc">+</span>                   <span class="co"># POINTS w/ SIZE = COUNT</span></span>
-<span id="cb14-7"><a href="mlm-2-levels-pupil-popularity.html#cb14-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density2d</span>() <span class="sc">+</span>                             <span class="co"># DENSITY CURVES </span></span>
-<span id="cb14-8"><a href="mlm-2-levels-pupil-popularity.html#cb14-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span>    <span class="co"># linear regression line</span></span>
-<span id="cb14-9"><a href="mlm-2-levels-pupil-popularity.html#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span>                                   <span class="co"># white background  </span></span>
-<span id="cb14-10"><a href="mlm-2-levels-pupil-popularity.html#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x    =</span> <span class="st">&quot;Extroversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span></span>
-<span id="cb14-11"><a href="mlm-2-levels-pupil-popularity.html#cb14-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>) <span class="sc">+</span> <span class="co"># y-axis label </span></span>
-<span id="cb14-12"><a href="mlm-2-levels-pupil-popularity.html#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">size =</span> <span class="cn">FALSE</span>)  <span class="sc">+</span>                        <span class="co"># don&#39;t include a legend</span></span>
-<span id="cb14-13"><a href="mlm-2-levels-pupil-popularity.html#cb14-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span> <span class="co"># x-ticks</span></span>
-<span id="cb14-14"><a href="mlm-2-levels-pupil-popularity.html#cb14-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="mlm-2-levels-pupil-popularity.html#cb13-1" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="mlm-2-levels-pupil-popularity.html#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb13-3"><a href="mlm-2-levels-pupil-popularity.html#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> extrav,                                <span class="co"># x-axis variable</span></span>
+<span id="cb13-4"><a href="mlm-2-levels-pupil-popularity.html#cb13-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">y =</span> popular) <span class="sc">+</span>                             <span class="co"># y-axis variable</span></span>
+<span id="cb13-5"><a href="mlm-2-levels-pupil-popularity.html#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_count</span>(<span class="at">color =</span> <span class="st">&quot;gray&quot;</span>) <span class="sc">+</span>                   <span class="co"># POINTS w/ SIZE = COUNT</span></span>
+<span id="cb13-6"><a href="mlm-2-levels-pupil-popularity.html#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density2d</span>() <span class="sc">+</span>                             <span class="co"># DENSITY CURVES </span></span>
+<span id="cb13-7"><a href="mlm-2-levels-pupil-popularity.html#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span>    <span class="co"># linear regression line</span></span>
+<span id="cb13-8"><a href="mlm-2-levels-pupil-popularity.html#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span>                                   <span class="co"># white background  </span></span>
+<span id="cb13-9"><a href="mlm-2-levels-pupil-popularity.html#cb13-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x    =</span> <span class="st">&quot;Extroversion (10 pt scale)&quot;</span>,      <span class="co"># x-axis label</span></span>
+<span id="cb13-10"><a href="mlm-2-levels-pupil-popularity.html#cb13-10" aria-hidden="true" tabindex="-1"></a>       <span class="at">y    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>) <span class="sc">+</span> <span class="co"># y-axis label </span></span>
+<span id="cb13-11"><a href="mlm-2-levels-pupil-popularity.html#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">size =</span> <span class="cn">FALSE</span>)  <span class="sc">+</span>                        <span class="co"># don&#39;t include a legend</span></span>
+<span id="cb13-12"><a href="mlm-2-levels-pupil-popularity.html#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">+</span> <span class="co"># x-ticks</span></span>
+<span id="cb13-13"><a href="mlm-2-levels-pupil-popularity.html#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">10</span>, <span class="at">by =</span> <span class="dv">2</span>))   <span class="co"># y-ticks</span></span></code></pre></div>
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:scatter2d"></span>
 <img src="eBook_multilevel_files/figure-html/scatter2d-1.png" alt="Disaggregate: pupil level only with extroversion treated as an continuous measure." width="576" />
 <p class="caption">
@@ -1576,25 +1621,24 @@ Figure 4.2: Disaggregate: pupil level only with extroversion treated as an conti
 </p>
 </div>
 </div>
-<div id="hexagonal-heatmap-plots" class="section level5" number="4.2.2.1.3">
-<h5><span class="header-section-number">4.2.2.1.3</span> Hexagonal Heatmap Plots</h5>
-<p>Divides the x-y plane into regular hexagons, counts the number of cases in each hexagon, and then (by default) maps the number of cases to the hexagon fill.</p>
+<div id="histograms-stacked" class="section level5" number="4.2.2.1.3">
+<h5><span class="header-section-number">4.2.2.1.3</span> Histograms, stacked</h5>
 <p>The argument could be made that the extroversion score should be treated as an ordinal factor instead of as a truly continuous scale since the only valid values are the whole number 1 through 10 and there is no assurance that these category assignments represent a true ratio measurement scale. However, we must keep in mind that this was an observational study, ans as such, the number of pupils assignment each level of extroversion is not equal.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="mlm-2-levels-pupil-popularity.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># count the number of pupils in assigned each extroversion value, 1:10</span></span>
-<span id="cb15-2"><a href="mlm-2-levels-pupil-popularity.html#cb15-2" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> data_pop <span class="sc">%&gt;%</span> </span>
-<span id="cb15-3"><a href="mlm-2-levels-pupil-popularity.html#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(extrav) <span class="sc">%&gt;%</span> </span>
-<span id="cb15-4"><a href="mlm-2-levels-pupil-popularity.html#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n_distinct</span>(id),</span>
-<span id="cb15-5"><a href="mlm-2-levels-pupil-popularity.html#cb15-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">percent  =</span> <span class="dv">100</span> <span class="sc">*</span> count <span class="sc">/</span> <span class="dv">2000</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="mlm-2-levels-pupil-popularity.html#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to Website: type = &quot;html&quot; </span></span>
-<span id="cb16-2"><a href="mlm-2-levels-pupil-popularity.html#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to PDF:     type = &quot;latex&quot;</span></span>
-<span id="cb16-3"><a href="mlm-2-levels-pupil-popularity.html#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># View on Screen:  type = &quot;text&quot;</span></span>
-<span id="cb16-4"><a href="mlm-2-levels-pupil-popularity.html#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-5"><a href="mlm-2-levels-pupil-popularity.html#cb16-5" aria-hidden="true" tabindex="-1"></a>table <span class="sc">%&gt;%</span> </span>
-<span id="cb16-6"><a href="mlm-2-levels-pupil-popularity.html#cb16-6" aria-hidden="true" tabindex="-1"></a>  stargazer<span class="sc">::</span><span class="fu">stargazer</span>(<span class="at">summary  =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb16-7"><a href="mlm-2-levels-pupil-popularity.html#cb16-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb16-8"><a href="mlm-2-levels-pupil-popularity.html#cb16-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">header   =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb16-9"><a href="mlm-2-levels-pupil-popularity.html#cb16-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">type     =</span> <span class="st">&quot;text&quot;</span>,</span>
-<span id="cb16-10"><a href="mlm-2-levels-pupil-popularity.html#cb16-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">title    =</span> <span class="st">&quot;Distribution of extroversion in pupils&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="mlm-2-levels-pupil-popularity.html#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># count the number of pupils in assigned each extroversion value, 1:10</span></span>
+<span id="cb14-2"><a href="mlm-2-levels-pupil-popularity.html#cb14-2" aria-hidden="true" tabindex="-1"></a>table <span class="ot">&lt;-</span> data_pop <span class="sc">%&gt;%</span> </span>
+<span id="cb14-3"><a href="mlm-2-levels-pupil-popularity.html#cb14-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(extrav) <span class="sc">%&gt;%</span> </span>
+<span id="cb14-4"><a href="mlm-2-levels-pupil-popularity.html#cb14-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">count =</span> <span class="fu">n_distinct</span>(id),</span>
+<span id="cb14-5"><a href="mlm-2-levels-pupil-popularity.html#cb14-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">percent  =</span> <span class="dv">100</span> <span class="sc">*</span> count <span class="sc">/</span> <span class="dv">2000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="mlm-2-levels-pupil-popularity.html#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to Website: type = &quot;html&quot; </span></span>
+<span id="cb15-2"><a href="mlm-2-levels-pupil-popularity.html#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Knit to PDF:     type = &quot;latex&quot;</span></span>
+<span id="cb15-3"><a href="mlm-2-levels-pupil-popularity.html#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># View on Screen:  type = &quot;text&quot;</span></span>
+<span id="cb15-4"><a href="mlm-2-levels-pupil-popularity.html#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="mlm-2-levels-pupil-popularity.html#cb15-5" aria-hidden="true" tabindex="-1"></a>table <span class="sc">%&gt;%</span> </span>
+<span id="cb15-6"><a href="mlm-2-levels-pupil-popularity.html#cb15-6" aria-hidden="true" tabindex="-1"></a>  stargazer<span class="sc">::</span><span class="fu">stargazer</span>(<span class="at">summary  =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-7"><a href="mlm-2-levels-pupil-popularity.html#cb15-7" aria-hidden="true" tabindex="-1"></a>                       <span class="at">rownames =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-8"><a href="mlm-2-levels-pupil-popularity.html#cb15-8" aria-hidden="true" tabindex="-1"></a>                       <span class="at">header   =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb15-9"><a href="mlm-2-levels-pupil-popularity.html#cb15-9" aria-hidden="true" tabindex="-1"></a>                       <span class="at">type     =</span> <span class="st">&quot;text&quot;</span>,</span>
+<span id="cb15-10"><a href="mlm-2-levels-pupil-popularity.html#cb15-10" aria-hidden="true" tabindex="-1"></a>                       <span class="at">title    =</span> <span class="st">&quot;Distribution of extroversion in pupils&quot;</span>)</span></code></pre></div>
 <table style="text-align:center">
 <caption>
 <strong>Distribution of extroversion in pupils</strong>
@@ -1733,10 +1777,24 @@ percent
 </td>
 </tr>
 </table>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="mlm-2-levels-pupil-popularity.html#cb16-1" aria-hidden="true" tabindex="-1"></a>data_pop <span class="sc">%&gt;%</span> </span>
+<span id="cb16-2"><a href="mlm-2-levels-pupil-popularity.html#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(popular)) <span class="sc">+</span>                     <span class="co"># y-axis variable</span></span>
+<span id="cb16-3"><a href="mlm-2-levels-pupil-popularity.html#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb16-4"><a href="mlm-2-levels-pupil-popularity.html#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span>                                   <span class="co"># white background  </span></span>
+<span id="cb16-5"><a href="mlm-2-levels-pupil-popularity.html#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="co">#y    = &quot;Extroversion (10 pt scale)&quot;,      # x-axis label</span></span>
+<span id="cb16-6"><a href="mlm-2-levels-pupil-popularity.html#cb16-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x    =</span> <span class="st">&quot;Popularity, Sociometric Score&quot;</span>) <span class="sc">+</span> <span class="co"># y-axis label </span></span>
+<span id="cb16-7"><a href="mlm-2-levels-pupil-popularity.html#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">size =</span> <span class="cn">FALSE</span>)  <span class="sc">+</span>                        <span class="co"># don&#39;t include a legend</span></span>
+<span id="cb16-8"><a href="mlm-2-levels-pupil-popularity.html#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(extrav<span class="sc">~</span>.)</span></code></pre></div>
+<div class="figure" style="text-align: center"><span style="display:block;" id="fig:histostack"></span>
+<img src="eBook_multilevel_files/figure-html/histostack-1.png" alt="Disaggregate: pupil level only with extroversion treated as an continuous measure." width="576" />
+<p class="caption">
+Figure 4.3: Disaggregate: pupil level only with extroversion treated as an continuous measure.
+</p>
+</div>
 </div>
 <div id="boxplots" class="section level5" number="4.2.2.1.4">
 <h5><span class="header-section-number">4.2.2.1.4</span> Boxplots</h5>
-<p>Figure <a href="mlm-2-levels-pupil-popularity.html#fig:boxes">4.3</a> displays the same data as Figure <a href="mlm-2-levels-pupil-popularity.html#fig:scatter">4.1</a>, but uses boxplots for the distribution of scores at each level of extroversion. On one extreme, the lowest extroversion score possible was a value of “one,” but only 3 pupils or 0.15% of the 2000 pupils recieved this value. On the other extreme, the middle value of “five” was applied to 688 pupils or a wopping 34.4%. The option <code>varwidth=TRUE</code> in the <code>geom_boxplot()</code> function helps reflect such unbalanced sample sizes by allowing the width of the boxes to be proportional to the square-roots of the number of observations each box represents.</p>
+<p>Figure <a href="mlm-2-levels-pupil-popularity.html#fig:boxes">4.4</a> displays the same data as Figure <a href="mlm-2-levels-pupil-popularity.html#fig:scatter">4.1</a>, but uses boxplots for the distribution of scores at each level of extroversion. On one extreme, the lowest extroversion score possible was a value of “one,” but only 3 pupils or 0.15% of the 2000 pupils recieved this value. On the other extreme, the middle value of “five” was applied to 688 pupils or a wopping 34.4%. The option <code>varwidth=TRUE</code> in the <code>geom_boxplot()</code> function helps reflect such unbalanced sample sizes by allowing the width of the boxes to be proportional to the square-roots of the number of observations each box represents.</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="mlm-2-levels-pupil-popularity.html#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Disaggregate: pupil (level 1) only, ignore level 2&#39;s existance</span></span>
 <span id="cb17-2"><a href="mlm-2-levels-pupil-popularity.html#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># extroversion treated: ordinal factor</span></span>
 <span id="cb17-3"><a href="mlm-2-levels-pupil-popularity.html#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(data_pop,                        <span class="co"># dataset&#39;s name</span></span>
@@ -1753,7 +1811,7 @@ percent
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:boxes"></span>
 <img src="eBook_multilevel_files/figure-html/boxes-1.png" alt="Disaggregate: pupil level only with extroversion treated as an ordinal factor.  The width of the boxes are proportional to the square-roots of the number of observations each box represents." width="576" />
 <p class="caption">
-Figure 4.3: Disaggregate: pupil level only with extroversion treated as an ordinal factor. The width of the boxes are proportional to the square-roots of the number of observations each box represents.
+Figure 4.4: Disaggregate: pupil level only with extroversion treated as an ordinal factor. The width of the boxes are proportional to the square-roots of the number of observations each box represents.
 </p>
 </div>
 </div>
@@ -1785,7 +1843,7 @@ Figure 4.3: Disaggregate: pupil level only with extroversion treated as an ordin
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:scatter3x3"></span>
 <img src="eBook_multilevel_files/figure-html/scatter3x3-1.png" alt="Illustration of the degree of class level variability in the association between extroversion and popularity. Each panel represents a class and each point a pupil in that class.  First nice classes shown." width="576" />
 <p class="caption">
-Figure 4.4: Illustration of the degree of class level variability in the association between extroversion and popularity. Each panel represents a class and each point a pupil in that class. First nice classes shown.
+Figure 4.5: Illustration of the degree of class level variability in the association between extroversion and popularity. Each panel represents a class and each point a pupil in that class. First nice classes shown.
 </p>
 </div>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="mlm-2-levels-pupil-popularity.html#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select specific classes by number for illustration purposes</span></span>
@@ -1810,7 +1868,7 @@ Figure 4.4: Illustration of the degree of class level variability in the associa
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:scatter3x3b"></span>
 <img src="eBook_multilevel_files/figure-html/scatter3x3b-1.png" alt="Illustration of the degree of class level variability in the association between extroversion and popularity. Each panel represents a class and each point a pupil in that class.  A set of nine classes was chosen to show a sampling of variability.  The facet labels are not shown as the identification number probably would not be advisable for a general publication." width="576" />
 <p class="caption">
-Figure 4.5: Illustration of the degree of class level variability in the association between extroversion and popularity. Each panel represents a class and each point a pupil in that class. A set of nine classes was chosen to show a sampling of variability. The facet labels are not shown as the identification number probably would not be advisable for a general publication.
+Figure 4.6: Illustration of the degree of class level variability in the association between extroversion and popularity. Each panel represents a class and each point a pupil in that class. A set of nine classes was chosen to show a sampling of variability. The facet labels are not shown as the identification number probably would not be advisable for a general publication.
 </p>
 </div>
 </div>
@@ -1833,7 +1891,7 @@ Figure 4.5: Illustration of the degree of class level variability in the associa
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:classLMs"></span>
 <img src="eBook_multilevel_files/figure-html/classLMs-1.png" alt="Spaghetti plot of seperate, independent linear models for each of the 100 classes." width="576" />
 <p class="caption">
-Figure 4.6: Spaghetti plot of seperate, independent linear models for each of the 100 classes.
+Figure 4.7: Spaghetti plot of seperate, independent linear models for each of the 100 classes.
 </p>
 </div>
 <div class="rmdlink">
@@ -1866,7 +1924,7 @@ A helpful resource for choosing colors to use in plots: <a href="https://www.nce
 <div class="figure" style="text-align: center"><span style="display:block;" id="fig:classLMs3x2"></span>
 <img src="eBook_multilevel_files/figure-html/classLMs3x2-1.png" alt="Spaghetti plot of seperate, independent linear models for each of the 100 classes.  Seperate panels are used to untangle the 'hairball' in the previous figure.  The columns are seperated by the pupils' gender and the rows by the teacher's experince in years." width="576" />
 <p class="caption">
-Figure 4.7: Spaghetti plot of seperate, independent linear models for each of the 100 classes. Seperate panels are used to untangle the ‘hairball’ in the previous figure. The columns are seperated by the pupils’ gender and the rows by the teacher’s experince in years.
+Figure 4.8: Spaghetti plot of seperate, independent linear models for each of the 100 classes. Seperate panels are used to untangle the ‘hairball’ in the previous figure. The columns are seperated by the pupils’ gender and the rows by the teacher’s experince in years.
 </p>
 </div>
 </div>
@@ -2638,12 +2696,12 @@ This often leads to refitting identical models via BOTH estimation methods.
 </div>
 <div id="interpretation-2" class="section level4" number="4.4.1.4">
 <h4><span class="header-section-number">4.4.1.4</span> Interpretation</h4>
-<p>The grand average popularity of all students is 5.0779 and the class averages tend to vary by about 0.8333 points above or below that.</p>
+<p>The grand average popularity of all students is 5.0779 and the class averages tend to vary by about 0.8379 points above or below that.</p>
 </div>
 </div>
 <div id="intraclass-correlation-icc-1" class="section level3" number="4.4.2">
 <h3><span class="header-section-number">4.4.2</span> Intraclass Correlation (ICC)</h3>
-<p>Although the Null model above does not explain any variance in the dependent variable <em>(popularity)</em>, since there are no independent variables, it does decompose (i.e. divide up) the variance into two pieces. We can compute the amount of total variance in popularity that is attribute to the clustering of students in classes verses the residual variance.</p>
+<p>Although the Null model above does not explain any variance in the dependent variable <em>(popularity)</em>, since there are no independent variables, it does <strong>decompose (i.e. divide up) the variance in the dependent variable into two pieces</strong>. We can compute the amount of total variance in popularity that is attribute to the clustering of students <em>(i.e. class-to-class variance or between-class variance)</em> in classes verses the residual variance <em>(i.e. student-to-student variance or within-class variance)</em>.</p>
 <div class="genericEq">
 <p>
 <strong>Intraclass Correlation (ICC) Formula</strong> <span class="math display"><span class="math display">\[
@@ -2684,9 +2742,10 @@ $var.dispersion
 $var.intercept
     class 
 0.7021047 </code></pre>
+<p>Again, this partitions the amount of total variance in popularity that is attribute to the clustering of students <em>(i.e. class-to-class variance or between-class variance)</em> in classes verses the residual variance <em>(i.e. student-to-student variance or within-class variance)</em>.</p>
 <p><span class="math display">\[
 \begin{align*}
-\text{classes}      \rightarrow \; &amp; \sigma^2_{u0} = 0.83792^2 = 0.702\\
+\text{between classes}      \rightarrow \; &amp; \sigma^2_{u0} = 0.83792^2 = 0.702\\
 \text{pupils within classes}      \rightarrow \; &amp; \sigma^2_{e}  = 1.10535^2 = 1.222\\
 \end{align*}
 \]</span></p>
@@ -4751,12 +4810,12 @@ Slope of extrav when texp = 20.00:
 </div>
 <div id="interpretation-5" class="section level4" number="4.4.6.5">
 <h4><span class="header-section-number">4.4.6.5</span> Interpretation</h4>
-<p>Form more infromation, see the <a href="https://goodekat.github.io/redres/articles/redres-vignette.html">vingette page for the <code>redre</code> package</a>.</p>
 <p>After accounting for class-to-class variation and the effect of gender, a positive association was found between teacher rated extroversion and peer rated popularity. This relationship was more marked for less experienced teachers.</p>
 </div>
 </div>
 <div id="residual-plots" class="section level3" number="4.4.7">
 <h3><span class="header-section-number">4.4.7</span> Residual Plots</h3>
+<p>Form more infromation, see the <a href="https://goodekat.github.io/redres/articles/redres-vignette.html">vingette page for the <code>redre</code> package</a>.</p>
 <div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="mlm-2-levels-pupil-popularity.html#cb133-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(pop_lmer_2_re,</span>
 <span id="cb133-2"><a href="mlm-2-levels-pupil-popularity.html#cb133-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;diag&quot;</span>)</span></code></pre></div>
 <pre><code>[[1]]</code></pre>
@@ -4780,11 +4839,14 @@ Slope of extrav when texp = 20.00:
 <li>BAD = any pattern or change in the spread</li>
 </ul>
 <p>This plot looks great!</p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="mlm-2-levels-pupil-popularity.html#cb138-1" aria-hidden="true" tabindex="-1"></a>redres<span class="sc">::</span><span class="fu">plot_redres</span>(pop_lmer_2_re, <span class="at">type =</span> <span class="st">&quot;std_cond&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb138-1"><a href="mlm-2-levels-pupil-popularity.html#cb138-1" aria-hidden="true" tabindex="-1"></a>redres<span class="sc">::</span><span class="fu">plot_redres</span>(pop_lmer_2_re, </span>
+<span id="cb138-2"><a href="mlm-2-levels-pupil-popularity.html#cb138-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">&quot;std_cond&quot;</span>)</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-126-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p><strong>Standardized residuals vs. a predictor’s values</strong></p>
 <p>You are looking for the same things as above. Note: the vertical stripes are fine, as they just reflect the fact that the <code>extrav</code> variable was a whole number value, ranging from one to ten.</p>
-<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="mlm-2-levels-pupil-popularity.html#cb139-1" aria-hidden="true" tabindex="-1"></a>redres<span class="sc">::</span><span class="fu">plot_redres</span>(pop_lmer_2_re, <span class="at">type =</span> <span class="st">&quot;std_cond&quot;</span>, <span class="at">xvar =</span> <span class="st">&quot;extrav&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="mlm-2-levels-pupil-popularity.html#cb139-1" aria-hidden="true" tabindex="-1"></a>redres<span class="sc">::</span><span class="fu">plot_redres</span>(pop_lmer_2_re, </span>
+<span id="cb139-2"><a href="mlm-2-levels-pupil-popularity.html#cb139-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">&quot;std_cond&quot;</span>, </span>
+<span id="cb139-3"><a href="mlm-2-levels-pupil-popularity.html#cb139-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">xvar =</span> <span class="st">&quot;extrav&quot;</span>)</span></code></pre></div>
 <p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-127-1.png" width="576" style="display: block; margin: auto;" /></p>
 <p><strong>Normal Quantile plot of Residuals</strong></p>
 <p>As you look across the plot, along the diagonal:</p>

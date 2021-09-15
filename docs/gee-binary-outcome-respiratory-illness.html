@@ -1032,7 +1032,7 @@ month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
 <span id="cb780-10"><a href="gee-binary-outcome-respiratory-illness.html#cb780-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">total =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb780-11"><a href="gee-binary-outcome-respiratory-illness.html#cb780-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">test =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-603">Table 15.1: </span>Participant Demographics</caption>
+<caption><span id="tab:unnamed-chunk-605">Table 15.1: </span>Participant Demographics</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -1165,7 +1165,7 @@ month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
 <span id="cb781-10"><a href="gee-binary-outcome-respiratory-illness.html#cb781-10" aria-hidden="true" tabindex="-1"></a>                    <span class="at">total =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb781-11"><a href="gee-binary-outcome-respiratory-illness.html#cb781-11" aria-hidden="true" tabindex="-1"></a>                    <span class="at">test =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
 <table>
-<caption><span id="tab:unnamed-chunk-604">Table 15.2: </span>Respiratory Status Over Time</caption>
+<caption><span id="tab:unnamed-chunk-606">Table 15.2: </span>Respiratory Status Over Time</caption>
 <thead>
 <tr class="header">
 <th></th>
@@ -1303,7 +1303,7 @@ month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
 <span id="cb782-3"><a href="gee-binary-outcome-respiratory-illness.html#cb782-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate_all</span>(<span class="cf">function</span>(x) x <span class="sc">==</span> <span class="st">&quot;good&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb782-4"><a href="gee-binary-outcome-respiratory-illness.html#cb782-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cor</span>() <span class="sc">%&gt;%</span> </span>
 <span id="cb782-5"><a href="gee-binary-outcome-respiratory-illness.html#cb782-5" aria-hidden="true" tabindex="-1"></a>  corrplot<span class="sc">::</span><span class="fu">corrplot.mixed</span>()</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-605-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-607-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb783"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb783-1"><a href="gee-binary-outcome-respiratory-illness.html#cb783-1" aria-hidden="true" tabindex="-1"></a>data_month_trt_prop <span class="ot">&lt;-</span> data_long <span class="sc">%&gt;%</span> </span>
 <span id="cb783-2"><a href="gee-binary-outcome-respiratory-illness.html#cb783-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(treatment, month) <span class="sc">%&gt;%</span> </span>
 <span id="cb783-3"><a href="gee-binary-outcome-respiratory-illness.html#cb783-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">n =</span> <span class="fu">n</span>(),</span>
@@ -1339,7 +1339,7 @@ month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
 <span id="cb785-7"><a href="gee-binary-outcome-respiratory-illness.html#cb785-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> <span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
 <span id="cb785-8"><a href="gee-binary-outcome-respiratory-illness.html#cb785-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb785-9"><a href="gee-binary-outcome-respiratory-illness.html#cb785-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(treatment <span class="sc">~</span> .)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-607-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-609-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="status-by-age" class="section level4" number="15.3.2.2">
 <h4><span class="header-section-number">15.3.2.2</span> Status by Age</h4>
@@ -1355,7 +1355,7 @@ month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
 <span id="cb786-10"><a href="gee-binary-outcome-respiratory-illness.html#cb786-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb786-11"><a href="gee-binary-outcome-respiratory-illness.html#cb786-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Age in Years&quot;</span>,</span>
 <span id="cb786-12"><a href="gee-binary-outcome-respiratory-illness.html#cb786-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Number of Visits out of Four, with &#39;Good&#39; Respiration&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-608-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-610-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="status-over-time-1" class="section level4" number="15.3.2.3">
 <h4><span class="header-section-number">15.3.2.3</span> Status Over Time</h4>
@@ -1375,7 +1375,7 @@ month_4*     10 111  1.53  0.50   1   2     1 0.05</code></pre>
 <span id="cb787-13"><a href="gee-binary-outcome-respiratory-illness.html#cb787-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Proportion of Participants</span><span class="sc">\n</span><span class="st">with &#39;Good&#39; Respiratory Status&quot;</span>) <span class="sc">+</span></span>
 <span id="cb787-14"><a href="gee-binary-outcome-respiratory-illness.html#cb787-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,</span>
 <span id="cb787-15"><a href="gee-binary-outcome-respiratory-illness.html#cb787-15" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-609-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-611-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="rmdimportant">
 <p>
 It is NOT the purpose of this analysis to investigate change over time!
@@ -2483,7 +2483,7 @@ Dispersion
 <span id="cb827-5"><a href="gee-binary-outcome-respiratory-illness.html#cb827-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">at =</span> <span class="fu">list</span>(<span class="at">centre =</span> <span class="st">&quot;1&quot;</span>,</span>
 <span id="cb827-6"><a href="gee-binary-outcome-respiratory-illness.html#cb827-6" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">BL_status =</span> <span class="st">&quot;good&quot;</span>),  <span class="co"># hold constant</span></span>
 <span id="cb827-7"><a href="gee-binary-outcome-respiratory-illness.html#cb827-7" aria-hidden="true" tabindex="-1"></a>                            <span class="at">type =</span> <span class="st">&quot;mean_subject&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-629-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-631-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="full-version" class="section level4" number="15.5.6.2">
 <h4><span class="header-section-number">15.5.6.2</span> Full Version</h4>
@@ -2507,7 +2507,7 @@ Dispersion
 <span id="cb828-17"><a href="gee-binary-outcome-respiratory-illness.html#cb828-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Predicted Probability of GOOD Respiratory Status&quot;</span>,</span>
 <span id="cb828-18"><a href="gee-binary-outcome-respiratory-illness.html#cb828-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Sex:&quot;</span>,</span>
 <span id="cb828-19"><a href="gee-binary-outcome-respiratory-illness.html#cb828-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">linetype =</span> <span class="st">&quot;Assignment:&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-630-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-632-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="females-in-center-1" class="section level4" number="15.5.6.3">
 <h4><span class="header-section-number">15.5.6.3</span> Females in Center 1</h4>
@@ -2518,7 +2518,7 @@ Dispersion
 <span id="cb829-4"><a href="gee-binary-outcome-respiratory-illness.html#cb829-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">mod2 =</span> BL_status,</span>
 <span id="cb829-5"><a href="gee-binary-outcome-respiratory-illness.html#cb829-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">at =</span> <span class="fu">list</span>(<span class="at">sex =</span> <span class="st">&quot;female&quot;</span>,</span>
 <span id="cb829-6"><a href="gee-binary-outcome-respiratory-illness.html#cb829-6" aria-hidden="true" tabindex="-1"></a>                                      <span class="at">centre =</span> <span class="st">&quot;1&quot;</span>)) </span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-631-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-633-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="males-in-center-2" class="section level4" number="15.5.6.4">
 <h4><span class="header-section-number">15.5.6.4</span> Males in Center 2</h4>
@@ -2541,7 +2541,7 @@ Dispersion
 <span id="cb830-16"><a href="gee-binary-outcome-respiratory-illness.html#cb830-16" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>),</span>
 <span id="cb830-17"><a href="gee-binary-outcome-respiratory-illness.html#cb830-17" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="fl">1.5</span>, <span class="st">&quot;cm&quot;</span>)) <span class="sc">+</span></span>
 <span id="cb830-18"><a href="gee-binary-outcome-respiratory-illness.html#cb830-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">caption =</span> <span class="st">&quot;Note: Probibilities shown are specific to males at center 2&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-632-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-634-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>

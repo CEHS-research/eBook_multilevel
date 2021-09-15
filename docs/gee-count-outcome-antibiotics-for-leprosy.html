@@ -1047,7 +1047,7 @@ Ames, Iowa: Iowa State University Press</p>
 <span id="cb879-13"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb879-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb879-14"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb879-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>,</span>
 <span id="cb879-15"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb879-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Number of Leprosy Bacilli at Six Sites of the Body&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-663-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-665-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb880"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb880-1"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb880-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
 <span id="cb880-2"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb880-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">time_name =</span> <span class="fu">case_when</span>(time <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">&quot;Pre&quot;</span>,</span>
 <span id="cb880-3"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb880-3" aria-hidden="true" tabindex="-1"></a>                                      time <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Post&quot;</span>) <span class="sc">%&gt;%</span> </span>
@@ -1066,7 +1066,7 @@ Ames, Iowa: Iowa State University Press</p>
 <span id="cb880-16"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb880-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
 <span id="cb880-17"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb880-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>,</span>
 <span id="cb880-18"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb880-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Number of Leprosy Bacilli at Six Sites of the Body&quot;</span>)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-664-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-666-1.png" width="576" style="display: block; margin: auto;" /></p>
 <div class="sourceCode" id="cb881"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb881-1"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb881-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
 <span id="cb881-2"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb881-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">time_name =</span> <span class="fu">case_when</span>(time <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">&quot;Pre&quot;</span>,</span>
 <span id="cb881-3"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb881-3" aria-hidden="true" tabindex="-1"></a>                                      time <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">&quot;Post&quot;</span>) <span class="sc">%&gt;%</span> </span>
@@ -1089,7 +1089,7 @@ Ames, Iowa: Iowa State University Press</p>
 <span id="cb881-20"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb881-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
 <span id="cb881-21"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb881-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="dv">0</span><span class="sc">:</span><span class="dv">1</span>,</span>
 <span id="cb881-22"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb881-22" aria-hidden="true" tabindex="-1"></a>                     <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;Pre-Treatment&quot;</span>, <span class="st">&quot;Post-Treatment&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-665-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-667-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 <div id="generalized-estimating-equations-gee-2" class="section level2" number="17.4">
@@ -1476,7 +1476,7 @@ Number of clusters:   30  Maximum cluster size: 2 </code></pre>
 <div class="sourceCode" id="cb896"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb896-1"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb896-1" aria-hidden="true" tabindex="-1"></a>interactions<span class="sc">::</span><span class="fu">interact_plot</span>(<span class="at">model =</span> mod_geeglm_exc,</span>
 <span id="cb896-2"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb896-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">pred =</span> time,</span>
 <span id="cb896-3"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb896-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">modx =</span> drug)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-672-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-674-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="predict-over-a-manual-grid-of-predictors" class="section level4" number="17.4.3.2">
 <h4><span class="header-section-number">17.4.3.2</span> Predict over a manual grid of predictors</h4>
@@ -1517,7 +1517,7 @@ Number of clusters:   30  Maximum cluster size: 2 </code></pre>
 <span id="cb899-23"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb899-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
 <span id="cb899-24"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb899-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>, <span class="sc">-</span><span class="fl">0.1</span>),</span>
 <span id="cb899-25"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb899-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-674-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-676-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
@@ -1731,7 +1731,7 @@ Dispersion
 <div class="sourceCode" id="cb907"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb907-1"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb907-1" aria-hidden="true" tabindex="-1"></a>interactions<span class="sc">::</span><span class="fu">interact_plot</span>(<span class="at">model =</span> mod_geeglm_exc2,</span>
 <span id="cb907-2"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb907-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">pred =</span> time,</span>
 <span id="cb907-3"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb907-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">modx =</span> antibiotic)</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-679-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-681-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 <div id="predict-over-a-manual-grid" class="section level4" number="17.5.5.3">
 <h4><span class="header-section-number">17.5.5.3</span> Predict over a manual grid</h4>
@@ -1766,7 +1766,7 @@ Dispersion
 <span id="cb910-19"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb910-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</span>
 <span id="cb910-20"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb910-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.justification =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.1</span>, <span class="sc">-</span><span class="fl">0.1</span>),</span>
 <span id="cb910-21"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cb910-21" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>))</span></code></pre></div>
-<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-681-1.png" width="576" style="display: block; margin: auto;" /></p>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-683-1.png" width="576" style="display: block; margin: auto;" /></p>
 </div>
 </div>
 </div>
