@@ -1,7 +1,7 @@
 # MLM, 2-levels: Pupil Popularity
 
 ```{r echo=FALSE}
-knitr::include_graphics("images/header_hox_popular2.PNG")
+knitr::include_graphics("images/header_hox_popular2.png")
 ```
 
 
@@ -58,9 +58,8 @@ The following example is used through out [@hox2017]'s chapater 2.
 > The popularity data in **popular2.sav** are simulated data for **2000 pupils in 100 schools**. The purpose is to offer a very simple example for multilevel regression analysis. The main outcome variable is the **pupil popularity**, a popularity rating on a scale of 1-10 derived by a sociometric procedure. Typically, a sociometric procedure asks all pupils in a class to rate all the other pupils, and then assigns the average received popularity rating to each pupil. Because of the sociometric procedure, group effects as apparent from higher level variance components are rather strong. There is a second outcome variable: **pupil popularity** as rated by their teacher, on a scale from 1-10. The explanatory variables are **pupil gender** (boy=0, girl=1), **pupil extroversion** (10-point scale) and **teacher experience** in years. The popularity data have been generated to be a 'nice' well-behaved data set: the sample sizes at both levels are sufficient, the residuals have a normal distribution, and the multilevel effects are strong.
 
 ```{r}
-knitr::include_graphics("images/diagram_hox_popular2.PNG")
+knitr::include_graphics("images/diagram_hox_popular2.png")
 ```
-
 
 ```{r}
 data_raw <- haven::read_sav("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/popularity/SPSS/popular2.sav") %>% 
