@@ -1,0 +1,166 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(nlme)
+```
+
+
+
+```{r}
+df_long <- read.table("data/bock1983_wpss_tca.txt",
+           col.names = c("id", "wpss", 
+                         "int", "linear_time", "change_time",
+                         "group", "x2", "x3")) %>% 
+  dplyr::mutate(week = 3.5 + linear_time) %>% 
+  dplyr::mutate(group = factor(group,
+                               levels = c(0, 1),
+                               labels = c("TCA-None",
+                                          "None-TCA"))) %>% 
+  dplyr::select(id, group, week, wpss)
+```
+
+
+```{r}
+df_long
+```
+
+
+```{r}
+df_wide <- df_long %>% 
+  tidyr::pivot_wider(names_from = week,
+                     names_prefix = "wpss_",
+                     values_from = wpss)
+```
+
+
+```{r}
+df_wide %>% 
+  dplyr::select(starts_with("wpss")) %>% 
+  cor() %>% 
+  corrplot::corrplot.mixed()
+```
+
+```{r}
+df_long %>% 
+  ggplot(aes(x = week,
+             y = wpss)) +
+  geom_line(aes(group = id),
+            alpha = .2) +
+  theme_bw() +
+  facet_grid(. ~ group) +
+  stat_summary() +
+  stat_summary(fun = "mean",
+               geom = "line") +
+  geom_vline(xintercept = 3.5, linetype = "dashed")
+```
+
+
+## Autoregression 1
+
+```{r}
+fit_cpm_ar1 <- nlme::gls(wpss ~ group*I(week-3.5) + group*I((week - 3.5)^2),
+                         data = df_long,
+                         correlation = corAR1(form = ~ 1 | id))
+```
+
+
+```{r}
+summary(fit_cpm_ar1)
+```
+
+
+```{r}
+texreg::knitreg(fit_cpm_ar1, single.row = TRUE)
+```
+
+
+```{r}
+fit_cpm_ar1 %>% 
+  emmeans::emmeans(~ week*group,
+                   at = list(week = seq(from = 1, to = 6, by = .01))) %>% 
+  data.frame() %>% 
+  ggplot(aes(x = week,
+             y = emmean,
+             fill = group)) +
+  geom_ribbon(aes(ymin = emmean - SE,
+                    ymax = emmean + SE),
+              alpha = .5) +
+  geom_line(aes(linetype = group)) +
+  theme_bw() +
+  geom_vline(xintercept = 3.5, linetype = "dashed")
+```
+
+### Unstructured
+
+```{r}
+fit_cpm_uns <- nlme::gls(wpss ~ group*I(week-3.5) + group*I((week - 3.5)^2),
+                         data = df_long,
+                         correlation = corSymm(form = ~ 1 | id))
+```
+
+
+```{r}
+summary(fit_cpm_uns)
+```
+
+
+
+```{r}
+fit_cpm_uns %>% 
+  emmeans::emmeans(~ week*group,
+                   at = list(week = seq(from = 1, to = 6, by = .01))) %>% 
+  data.frame() %>% 
+  ggplot(aes(x = week,
+             y = emmean,
+             fill = group)) +
+  geom_ribbon(aes(ymin = emmean - SE,
+                    ymax = emmean + SE),
+              alpha = .5) +
+  geom_line(aes(linetype = group)) +
+  theme_bw() +
+  geom_vline(xintercept = 3.5, linetype = "dashed")
+```
+
+
+
+
+### Compound Symmetry (with constant correlation)
+
+```{r}
+fit_cpm_cps <- nlme::gls(wpss ~ group*I(week-3.5) + group*I((week - 3.5)^2),
+                         data = df_long,
+                         correlation = corCompSymm(form = ~ 1 | id))
+```
+
+
+
+
+
+```{r}
+fit_cpm_cps %>% 
+  emmeans::emmeans(~ week*group,
+                   at = list(week = seq(from = 1, to = 6, by = .01))) %>% 
+  data.frame() %>% 
+  ggplot(aes(x = week,
+             y = emmean,
+             fill = group)) +
+  geom_ribbon(aes(ymin = emmean - SE,
+                    ymax = emmean + SE),
+              alpha = .5) +
+  geom_line(aes(linetype = group)) +
+  theme_bw() +
+  geom_vline(xintercept = 3.5, linetype = "dashed")
+```
+
+
+### Compare performance
+
+
+```{r}
+performance::compare_performance(fit_cpm_ar1, fit_cpm_cps, fit_cpm_uns)
+```
+
