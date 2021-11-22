@@ -23,6 +23,7 @@ library(psych)        # contains some useful functions, like headTail
 
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(effects)      # Plotting estimated marginal means
+library(emmeans)
 library(interactions)
 library(performance)
 
@@ -482,3 +483,43 @@ effects::Effect(focal.predictors = c("dose", "time"),
                                 "Third",
                                 "Fourth"))
 ```
+
+
+### Post hoc compairsons
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 0))
+```
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 0), type = "response")
+```
+
+
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 1))
+```
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 1), type = "response")
+```
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 2), type = "response")
+```
+
+
+
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 3), type = "response")
+```
+
+
