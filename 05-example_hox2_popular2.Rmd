@@ -28,6 +28,7 @@ library(lmerTest)     # Tests on lmer objects
 library(HLMdiag)      # Diagnostic Tools for for nlme & lmer4
 library(sjstats)      # ICC calculations
 library(optimx)       # Different optimizers to solve mlm's
+library(ggbeeswarm)
 ```
 
 
@@ -534,11 +535,7 @@ On average, girls were rated `r coef(pop_lm_1)[2] %>% round(2)` points more popu
 Create a table to compare the two nested models:
 
 ```{r lmtable, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lm_0, 
+texreg::knitreg(list(pop_lm_0, 
                      pop_lm_1),
                 custom.model.names = c("Null Model",
                                        "With Predictors"),
@@ -625,7 +622,75 @@ deviance(pop_lm_0)  # returns the RSS, not deviance = -2LL
 ```
 
 
+#### Visualization
 
+There is VARIATION in the popularity values amongst the students.
+
+```{r}
+data_pop %>% 
+  ggplot(aes(popular)) +
+  geom_histogram(color = "black",
+                 alpha = .5) +
+  theme_bw()
+```
+
+Each class has a unique mean or avrage level of popularity.
+
+```{r}
+data_pop %>% 
+  dplyr::filter(class <= 20) %>% 
+  dplyr::mutate(class = factor(class)) %>% 
+  ggplot(aes(x = class,
+             y = popular,
+             color = class))  +
+  theme_bw() +
+  geom_point(aes(size = "Student",
+                 alpha = "Student",
+                 shape = "Student"),
+             position = position_jitterdodge(jitter.width = 0.15,
+                                             seed = 1)) +
+  stat_summary(aes(size = "Class Mean",
+                   alpha = "Class Mean",
+                   shape = "Class Mean"),
+               color = "black",
+               fun = mean, 
+               geom = "point") +
+  scale_alpha_manual(values = c(2, .5)) +
+  scale_size_manual(values = c(4, 2)) +
+  scale_shape_manual(values = c(8, 19)) +
+  guides(color = FALSE) +
+  labs(alpha = NULL,
+       size = NULL,
+       shape = NULL)
+```
+
+```{r}
+data_pop %>% 
+  dplyr::filter(class <= 20) %>% 
+  dplyr::mutate(class = factor(class)) %>% 
+  ggplot(aes(x = class,
+             y = popular,
+             color = class))  +
+  theme_bw() +
+  geom_boxplot(aes(fill = class),
+               alpha = .25) +
+  stat_summary(aes(size = "Class Mean",
+                   alpha = "Class Mean",
+                   shape = "Class Mean"),
+               color = "black",
+               fun = mean, 
+               geom = "point") +
+  geom_hline(aes(yintercept = mean(popular)),
+             size = 1) +
+  scale_alpha_manual(values = c(2, .5)) +
+  scale_size_manual(values = c(4, 2)) +
+  scale_shape_manual(values = c(8, 19)) +
+  guides(color = FALSE,
+         fill = FALSE) +
+  labs(alpha = NULL,
+       size = NULL,
+       shape = NULL)
+```
 
 #### Equations
 
@@ -790,12 +855,12 @@ $$
 
 
 
-#### The `sjstats` package
+#### The `performance` package
 
-Calculate the ICC with the `icc()` fucntion in the `sjstats` package:
+Calculate the ICC with the `icc()` fucntion in the `performance` package:
 
 ```{r}
-sjstats::icc(pop_lmer_0_re) 
+performance::icc(pop_lmer_0_re) 
 ```
 
 #### Interpretation
@@ -931,7 +996,7 @@ pop_lmer_0_ml <- lmerTest::lmer(popular ~ 1 + (1|class),
 pop_lmer_1_ml <- lmerTest::lmer(popular ~ sex + extrav + texp + (sex + extrav|class), 
                                 data   = data_pop,
                                 REML   = FALSE,
-                                control = lmerControl(optimizer ="Nelder_Mead")) #helps converge
+                                control = lmerControl(optimizer = "Nelder_Mead")) #helps converge
 
 summary(pop_lmer_1_ml)
 ```
@@ -943,11 +1008,7 @@ After accounting for the heiarchical nesting of students in classes, girls were 
 Reproduce Table 2.1 on the top of page 14 [@hox2017]
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lm_0, 
+texreg::knitreg(list(pop_lm_0, 
                      pop_lmer_0_ml, 
                      pop_lmer_1_ml),
                 custom.model.names = c("Single-level", 
@@ -1025,11 +1086,7 @@ Create a table to compare the three nested models:
 The middle column below reproduces Hox's Table 2.2 found on the bottom of page 15 [@hox2017], except the values differ slightly becuase here the model was fit via `REML` where as in the text, Hox used `ML`.
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
+texreg::knitreg(list(pop_lmer_1_re, pop_lmer_1a_re, pop_lmer_1b_re),
                 custom.model.names = c("M1", "M1a", "M1b"),
                 caption            = "Assessing Significance of Random Slopes",
                 caption.above      = TRUE,
@@ -1067,7 +1124,9 @@ When using the 'anova()' function to conduct a LRT for RANDOM effects, make sure
 These two models are identical, except for the inclusing/exclusion of the random specification of the level 1 `sex` predictor.  Note, both models were fit with REML.  Although we are dropping only ONE variance component, we are also dropping TWO covariances (`sex` paired with both the random intercept and random slope for `extrav`).  This results in a $\chi^2$ test with THREE degrees of freedom.
 
 ```{r}
-anova(pop_lmer_1_re, pop_lmer_1a_re, refit = FALSE)  # don't let it refit the models via LM
+anova(pop_lmer_1_re, 
+      pop_lmer_1a_re, 
+      refit = FALSE)  # don't let it refit the models via LM
 ```
 
 The NON-significance likelihood ratio test (LRT: $\chi^2(3) = 1.51$, $p = .679$) conveys that the more complex model does NOT fit the data better.  Thus the more SIMPLE model does just as good of a job.  This is evidence for the EXCLUSION of `sex` as a random component.
@@ -1079,7 +1138,9 @@ The NON-significance likelihood ratio test (LRT: $\chi^2(3) = 1.51$, $p = .679$)
 These two models are identical, except for the inclusing/exclusion of the random specification of the level 1 `extrav` predictor.  Note, both models were fit with REML.  Although we are dropping only ONE variance component, we are also dropping ONE covariances (`extrav` paired with the random intercept).  This results in a $\chi^2$ test with TWO degrees of freedom.
 
 ```{r}
-anova(pop_lmer_1a_re, pop_lmer_1b_re, refit = FALSE)  # don't let it refit the models via LM
+anova(pop_lmer_1a_re, 
+      pop_lmer_1b_re, 
+      refit = FALSE)  # don't let it refit the models via LM
 ```
 
 The significance likelihood ratio test (LRT: $\chi^2(2) = 50.26$, $p < .0001$) conveys that the more complex model DOES fit the data better.  Thus the more COMPLEX model does just as good of a job.  This is evidence for the INCLUSION of `extrav` as a random component.
@@ -1139,22 +1200,15 @@ pop_lmer_3_ml  <- lmerTest::lmer(popular ~ extrav*texp + sex*texp + sex*extrav +
 
 pop_lmer_4_ml  <- lmerTest::lmer(popular ~ extrav*texp*sex + (extrav|class),  
                                  data = data_pop,
-                                 REML = FALSE)
+                                 REML = FALSE,
+                                 control = lmerControl(optimizer ="Nelder_Mead"))
 ```
 
 Create a table to compare the two nested models:
 
-```{r, include=FALSE}
-texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml))
-```
-
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
+texreg::knitreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
                 custom.model.names = c("M1a: Main Effects",
                                        "M2: With Interaction"),
                 caption            = "Hox Table 2.3 on page 17",
@@ -1165,18 +1219,11 @@ texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml),
 
 Investigate further interactions, not shown in by @hox2017.
 
-```{r, include=FALSE}
-texreg::screenreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml))
-```
 
 
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
+texreg::knitreg(list(pop_lmer_1a_ml, pop_lmer_2_ml, pop_lmer_3_ml, pop_lmer_4_ml),
                 custom.model.names = c("M1a: Main Effects",
                                        "M2: With Interaction",
                                        "Add 2-way Inter",
@@ -1225,11 +1272,7 @@ pop_lmer_2_re  <- lmerTest::lmer(popular ~ sex + extrav*texp + (extrav|class),
 #### Parameters
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_2_ml),
+texreg::knitreg(list(pop_lmer_2_ml),
                 custom.model.names = c("Final Model"),
                 caption            = "MLM for Popularity",
                 caption.above      = TRUE,

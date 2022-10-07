@@ -13,19 +13,22 @@ panderOptions('keep.line.breaks', TRUE)
 
 ```{r}
 library(tidyverse)    # all things tidy
-library(pander)       # nice looking genderal tabulations
-library(furniture)    # nice table1() descriptives
+
+library(pander)       # nice looking general tabulations
+library(furniture)    # nice table1() descriptions
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
-library(psych)        # contains some useful functions, like headTail
-library(sjstats)      # ICC calculationsv
+
+library(psych)        # contains some useful functions, like headTail()
+library(sjstats)      # ICC calculations
 library(effects)      # Estimated Marginal Means
+library(performance)
 library(VIM)          # Visualization and Imputation of Missing Values 
-library(naniar)       # Summaries and Visualisations for Missing Data
-library(corrplot)     # Vizualize correlation matrix
+library(naniar)       # Summaries and Visualizations for Missing Data
+library(corrplot)     # Visualize correlation matrix
 
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
-
-library(haven)        # read in SPSS dataset
+library(lmerTest)
+library(optimx)
 ```
 
 
@@ -36,24 +39,24 @@ Starting in chapter 4, @hedeker2006 details analysis of a psychiatric study desc
 Dependent or outcome variable:   
 
 * `hamd` Hamilton Depression Scores (HD)
-    
-    
+
+
 Independent or predictor variables:  
 
 * `endog` Prepression Diagnosis 
-    + endogenous  
-    + non-endogenous/reactive 
-    
++ endogenous  
++ non-endogenous/reactive 
+
 * IMI (imipramine) drug-plasma levels (µg/l)     
-    + antidepressant given 225 mg/day, weeks 3-6   
-    
++ antidepressant given 225 mg/day, weeks 3-6   
+
 * DMI (desipramine) drug-plasma levels (µg/l)
-    + metabolite of imipramine
++ metabolite of imipramine
 
 
 ```{r}
-data_raw <- haven::read_spss("http://www.uic.edu/~hedeker/riesby.sav") %>%         # read from teh webpage 
-  dplyr::select(-intrcpt, -endweek)                                                # de-select or delete some variables 
+data_raw <- read.table("data/RIESBY.DAT",                       # save the dataset as a new name
+                       header = TRUE)                          # de-select or delete some variables 
 ```
 
 
@@ -62,26 +65,33 @@ data_raw %>%
   psych::headTail(top = 11, bottom = 8)
 ```
 
+
+
 ### Long Format
 
 
 ```{r}
-data_long <- data_raw %>%                                        # save the dataset as a new name
+data_long <- data_raw %>%                        
   dplyr::filter(!is.na(hamd)) %>%                                # remove NA or missing scores
   dplyr::mutate(id = factor(id)) %>%                             # declare grouping var a factor
   dplyr::mutate(endog = factor(endog,                            # attach labels to a grouping variable
                                levels = c(0, 1),                 # order of the levels should match levels
                                labels = c("Reactive",            # order matters!
                                           "Endogenous"))) %>% 
+  dplyr::mutate(hamd = as.numeric(hamd)) %>% 
   dplyr::select(id, week, endog, hamd) %>%                       # select the order of variables to include
-  dplyr::arrange(id, week)                                       # sort observations 
+  dplyr::arrange(id, week)                                       # sort observations  
+
 ```
+
 
 
 ```{r}
 data_long %>% 
   psych::headTail(top = 11, bottom = 8)
 ```
+
+
 
 ### Wide Format
 
@@ -120,7 +130,7 @@ data_long %>%
 
 ### Missing Data & Attrition
 
-Plot the amount of missing vlaues and the amount of each patter of missing values.
+Plot the amount of missing values and the amount of each patter of missing values.
 
 #### `VIM` package
 
@@ -204,12 +214,14 @@ Each person's data is stored on multiple lines, one for each time point.
 ```{r}
 data_sum_all <- data_long %>% 
   dplyr::group_by(endog, week) %>%                # specify the groups
+  dplyr::filter(!is.na(hamd)) %>% 
   dplyr::summarise(hamd_n    = n(),                      # count of valid scores
                    hamd_mean = mean(hamd),               # mean score
                    hamd_sd   = sd(hamd),                 # standard deviation of scores
                    hamd_sem  = hamd_sd / sqrt(hamd_n))   # stadard error for the mean of scores
 
-data_sum_all
+data_sum_all %>% 
+  pander::pander()
 ```
 
 
@@ -219,6 +231,7 @@ data_sum_all
 ```{r}
 data_sum_cc <- data_long %>% 
   dplyr::group_by(id) %>%               # group-by participant
+  dplyr::filter(!is.na(hamd)) %>% 
   dplyr::mutate(person_vsae_n = n()) %>%    # count the number of valid VSAE scores
   dplyr::filter(person_vsae_n == 6) %>%     # restrict to only thoes children with 5 valid scores
   dplyr::group_by(endog, week) %>%                # specify the groups
@@ -227,7 +240,8 @@ data_sum_cc <- data_long %>%
                    hamd_sd   = sd(hamd),                 # standard deviation of scores
                    hamd_sem  = hamd_sd / sqrt(hamd_n))   # stadard error for the mean of scores
 
-data_sum_cc
+data_sum_cc %>% 
+  pander::pander()
 ```
 
 
@@ -245,67 +259,113 @@ A scatterplot of all observations of depression scores over time, joining the do
 
 ```{r}
 data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
   ggplot(aes(x = week,
              y = hamd)) +
   geom_point() +
-  geom_line(aes(group = id))   # join points that belong to the same "id"
+  geom_line(aes(group = id)) +   # join points that belong to the same "id"
+  theme_bw() +
+  labs(x = "Weeks, post baseline",
+       y = "Hamilton Depression Score")
 ```
 
 
 ```{r}
 data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
   ggplot(aes(x = week,
              y = hamd,
              color = endog)) +    # color points and lines by the "endog" variable
-  geom_point() +
-  geom_line(aes(group = id))
+  geom_line(aes(group = id)) +
+  theme_bw() +
+  labs(x = "Weeks, post baseline",
+       y = "Hamilton Depression Score")
 ```
 
 ```{r}
 data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
   ggplot(aes(x = week,
              y = hamd)) +
-  geom_point() +
   geom_line(aes(group = id)) +
-  facet_grid( ~ endog)            # side-by-side pandels by the "endog" variable
+  facet_grid( ~ endog) +           # side-by-side pandels by the "endog" variable
+  theme_bw() +
+  labs(x = "Weeks, post baseline",
+       y = "Hamilton Depression Score")
 ```
 
 ```{r}
 data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
   ggplot(aes(x = week %>% factor(),
              y = hamd)) +
   geom_boxplot() +                   # compare center and spread
-  facet_grid( ~ endog)           
+  facet_grid( ~ endog) +  
+  theme_bw() +
+  labs(x = "Weeks, post baseline",
+       y = "Hamilton Depression Score")          
 ```
 
 ```{r}
 data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
   ggplot(aes(x = week %>% factor(),
              y = hamd)) +
-  geom_violin() +                   # similar to boxplots to show distribution
-  facet_grid( ~ endog)           
+  geom_violin(fill = "gray75") +                   # similar to boxplots to show distribution
+  stat_summary() +  
+  stat_summary(aes(group = "endog"),
+               fun = mean,
+               geom = "line") +
+  facet_grid( ~ endog)   +  
+  theme_bw() +
+  labs(x = "Weeks, post baseline",
+       y = "Hamilton Depression Score")          
 ```
+
 
 ```{r}
 data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
+  ggplot(aes(x = week,
+             y = hamd,
+             color = endog)) +
+  stat_summary() +
+  stat_summary(aes(group = endog,
+                   linetype = endog),
+               fun = mean,
+               geom = "line") +
+  scale_linetype_manual(values = c("solid", "longdash")) +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(2, "cm")) +  
+  theme_bw() +
+  labs(x = "Weeks, post baseline",
+       y = "Hamilton Depression Score")
+```
+
+
+
+```{r}
+data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
   ggplot(aes(x = week,
              y = hamd)) +
-  geom_point() +
   geom_line(aes(group = id)) +
   facet_grid( ~ endog) +
   geom_smooth() +                     # DEFAULTS: method = "loess", se = TRUE, color = "blue"
   geom_smooth(method = "lm",
               se = FALSE,
-              color = "hot pink")
+              color = "hot pink")+  
+  theme_bw() +
+  labs(x = "Weeks, post baseline",
+       y = "Hamilton Depression Score") 
 ```
 
 
 ```{r}
 data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
   ggplot(aes(x = week,
              y = hamd)) +
-  geom_point() +
-  geom_line(aes(group = id)) +
   facet_grid( ~ endog) +
   geom_smooth(aes(color = "Flexible"),
               method = "loess",
@@ -317,9 +377,55 @@ data_long %>%
                      values = c("Flexible" = "blue", 
                                 "Linear"    = "red")) +
   theme_bw() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom")+  
+  theme_bw() +
+  labs(x = "Weeks, post baseline",
+       y = "Hamilton Depression Score") 
 ```
 
+
+```{r}
+data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
+  ggplot(aes(x = week,
+             y = hamd,
+             group = endog,
+             linetype = endog)) +
+  geom_smooth(method = "loess",
+              color = "black",
+              alpha = .25) +
+  theme_bw() +
+  scale_linetype_manual(values = c("solid", "longdash")) +
+  theme(legend.position = c(1, 1),
+        legend.justification = c(1.1, 1.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(2, "cm")) +
+  labs(x = "Weeks After Baseline",
+       y = "Hamilton Depression Scale",
+       linetype = "Type of Depression")
+```
+
+
+```{r}
+data_long %>% 
+  dplyr::filter(!is.na(hamd)) %>% 
+  ggplot(aes(x = week,
+             y = hamd,
+             group = endog,
+             linetype = endog)) +
+  geom_smooth(method = "lm",
+              color = "black",
+              alpha = .25) +
+  theme_bw() +
+  scale_linetype_manual(values = c("solid", "longdash")) +
+  theme(legend.position = c(1, 1),
+        legend.justification = c(1.1, 1.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "Weeks After Baseline",
+       y = "Hamilton Depression Scale",
+       linetype = "Type of Depression")
+```
 
 
 ## Patterns in the Outcome Over Time
@@ -329,8 +435,8 @@ data_long %>%
 #### Full Matrix
 
 * Variances are down the diagonal    
-     + Increasing variance over time violates the ANOVA assumption of *homogeity of variance*
-     
++ Increasing variance over time violates the ANOVA assumption of *homogeity of variance*
+
 ```{r}
 data_wide %>% 
   dplyr::select(starts_with("week_")) %>%  # just the outcome(s)
@@ -436,17 +542,11 @@ fit_lmer_week_RI_reml <- lme4::lmer(hamd ~ week + (1|id),
 
 ### Table of Parameter Estimates
 
-```{r, include = FALSE}
-texreg::screenreg(fit_lmer_week_RI_reml, single.row = TRUE)
-```
+
 
 
 ```{r mlmRI, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(fit_lmer_week_RI_reml, 
+texreg::knitreg(fit_lmer_week_RI_reml, 
                 single.row = TRUE,
                 caption = "MLM: Random Intercepts Null Model fit w/REML",
                 caption.above = TRUE,
@@ -464,7 +564,7 @@ On average, patients start off with HDRS scores of `r fixef(fit_lmer_week_RI_rem
 
 $$
 \hat{y} = `r fixef(fit_lmer_week_RI_reml)["(Intercept)"] %>% round(3)` + 
-          `r fixef(fit_lmer_week_RI_reml)["week"] %>% round(3)` week
+`r fixef(fit_lmer_week_RI_reml)["week"] %>% round(3)` week
 $$
 
 
@@ -502,7 +602,7 @@ data_long %>%
                                 "Marginal" = "blue"))  +
   scale_size_manual(name    = "Type of Prediction",
                     values = c("BLUP"      = .5,
-                                "Marginal" = 1.25))  +
+                               "Marginal" = 1.25))  +
   scale_linetype_manual(name   = "Type of Prediction",
                         values = c("BLUP"     = "longdash",
                                    "Marginal" = "solid"))  +
@@ -548,7 +648,16 @@ sjstats::icc(fit_lmer_week_RI_reml)
 
 **Interpretation**  Nearly HALF of the variance in depression scores not explained by the linear effect of time is attributable to person-to-person differences.  Thus, subjects display considerable heterogeneity in depression levels.
 
-This value of 46% is an oversimplification of the correlation matrix above.
+This value of 46% is an oversimplification of the correlation matrix above and may be thought of as the expected correlation between two randomly drawn weeks for any given person.
+
+```{r}
+performance::r2(fit_lmer_week_RI_reml)
+```
+
+
+**Interpretation** Linear growth accounts for 31% of the variance in Hamilton Depression Scores across the six weeks. Linear growth AND person-to-person differences account for a total 63% of this variance.
+
+> Note: The marginal R^2 considers only the variance of the fixed effects, while the conditional R^2 takes both the fixed and random effects into account. The random effect variances are actually the mean random effect variances, thus the R^2 value is also appropriate for mixed models with random slopes or nested random effects (see Johnson 2014).
 
 
 
@@ -560,29 +669,24 @@ To compare, fit the single level regression model
 
 ```{r}
 fit_lm_week_ml <- lm(hamd ~ week,
-               data = data_long)
+                     data = data_long)
 ```
 
 #### Table of Parameter Estimates
 
-```{r, include = FALSE}
-texreg::screenreg(list(fit_lm_week_ml, fit_lmer_week_RI_reml))
-```
+
 
 ```{r olsvsmlm, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(fit_lm_week_ml, fit_lmer_week_RI_reml),
+texreg::knitreg(list(fit_lm_week_ml, fit_lmer_week_RI_reml),
                 custom.model.names = c("Single-Level", "Multilevel"),
+                single.row = TRUE,
                 caption = "MLM: Longitudinal Null Models",
                 caption.above = TRUE,
                 custom.note = "The singel-level model treats are observations as being independent and unrelated to each other, even if they were made on the same person.")
 ```
 
 
-For the multilevel model, the Wald tests indicated the fixed intercept is significant (no surprized that the depressions scores are not zero at baseline).  More of note is the significance of the fixed effect of time.  This signifies that depression scores are declining over time.  On average, patients are improving across time, by an average of 2.4 points a week.
+For the multilevel model, the Wald tests indicated the fixed intercept is significant (no surprised that the depressions scores are not zero at baseline). More of note is the significance of the fixed effect of time. This signifies that depression scores are declining over time. On average, patients are improving (Hamilton Depression Scores get smaller) across time, by an average of 2.4’ish points a week.
 
 
 
@@ -626,20 +730,13 @@ fit_lmer_week_RIAS_reml <- lme4::lmer(hamd ~ week + (week|id), #     MLM-RIAS
 
 ### Table of Prameter Estimates
 
-```{r, include = FALSE}
-texreg::screenreg(list(fit_lmer_week_RI_reml, fit_lmer_week_RIAS_reml), single.row = TRUE)
-```
-
 
 ```{r mlmRS, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(fit_lmer_week_RI_reml, 
+texreg::knitreg(list(fit_lmer_week_RI_reml, 
                      fit_lmer_week_RIAS_reml),
                 custom.model.names = c("Random Intercepts",
                                        " And Random Slopes"),
+                single.row = TRUE,
                 caption = "MLM: Null models fit w/REML",
                 caption.above = TRUE,
                 custom.note = "Hedeker table 4.4 on page 55 and table 4.5 on page 58, except using REML here instead of ML")
@@ -665,6 +762,15 @@ anova(fit_lmer_week_RI_reml, fit_lmer_week_RIAS_reml,
 ```
 
 Including the random slope for time significantly improved the model fit via the formal **Likelihood Ratio Test**.  This rejects the assumption of compound symmetry.
+
+
+```{r}
+performance::compare_performance(fit_lmer_week_RI_reml, 
+                                 fit_lmer_week_RIAS_reml,
+                                 rank = TRUE)
+```
+
+
 
 
 ### Estimated Marginal Means Plot
@@ -701,7 +807,7 @@ data_long %>%
                                 "Marginal" = "blue"))  +
   scale_size_manual(name    = "Type of Prediction",
                     values = c("BLUP"      = .5,
-                                "Marginal" = 1.25))  +
+                               "Marginal" = 1.25))  +
   scale_linetype_manual(name   = "Type of Prediction",
                         values = c("BLUP"     = "longdash",
                                    "Marginal" = "solid"))  +
@@ -760,8 +866,9 @@ coef(fit_lmer_week_RIAS_reml)$id %>%
   labs(title = "Hedeker's Figure 4.4 on page 59",
        subtitle = "Reisby data: Estimated random effects",
        x = "Week Change in Depression",
-       y = "Baseline Depression Level") 
-  
+       y = "Baseline Depression Level") +
+  theme_bw()
+
 ```
 
 
@@ -769,52 +876,42 @@ coef(fit_lmer_week_RIAS_reml)$id %>%
 
 So far we have used the variable `week` to denote time as weeks since baseline = `week` $\in 0, 1, 2, 3, 4, 5$
 
+But We could CENTER week at the middle of the study (`week` = 2.5).
 
-```{r}
-data_long_wc <- data_long %>% 
-  dplyr::mutate(weekc = week - 2.5)
 
-head(data_long_wc)
-```
 
 ### Fit the Model
 
 ```{r}
-fit_lmer_week_RIAS_reml_wc <- lme4::lmer(hamd ~ weekc + (weekc|id), #     MLM-RIAS
-                                        data = data_long_wc,
-                                        REML = TRUE)
+fit_lmer_week_RIAS_reml_wc <- lme4::lmer(hamd ~ I(week-2.5) + (I(week-2.5)|id), #     MLM-RIAS
+                                         data = data_long,
+                                         REML = TRUE)
 ```
 
 ### Table of Parameter Estimates
 
-```{r, include = FALSE}
-texreg::screenreg(list(fit_lmer_week_RIAS_reml, fit_lmer_week_RIAS_reml_wc), single.row = TRUE)
-```
 
 
 ```{r mlmwc, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(fit_lmer_week_RIAS_reml, 
+texreg::knitreg(list(fit_lmer_week_RIAS_reml, 
                      fit_lmer_week_RIAS_reml_wc),
                 custom.model.names = c("Random Intercepts",
                                        " And Random Slopes"),
+                single.row = TRUE,
                 caption = "MLM: Null models fit w/REML",
                 caption.above = TRUE,
                 custom.note = "Hedeker table table 4.5 on page 58 and table 4.6 on page 61, except using REML here instead of ML")
 ```
 
 * Unchanged    
-    + model fit: AIC, BIC, -2LL, residual variance    
-    + fixed effect of week    
-    + variance for random intercepts     
-    
++ model fit: AIC, BIC, -2LL, residual variance    
++ fixed effect of week    
++ variance for random intercepts     
+
 * Changed    
-    + fixed intercept    
-    + variance for random slopes   
-    + covariance between random intercepts and random slopes
++ fixed intercept    
++ variance for random slopes   
++ covariance between random intercepts and random slopes
 
 ### Estimated Marginal Means and Emperical Bayes Plots
 
@@ -839,7 +936,7 @@ data_long_wc %>%
                                 "Marginal" = "blue"))  +
   scale_size_manual(name    = "Type of Prediction",
                     values = c("BLUP"      = .5,
-                                "Marginal" = 1.25))  +
+                               "Marginal" = 1.25))  +
   scale_linetype_manual(name   = "Type of Prediction",
                         values = c("BLUP"     = "longdash",
                                    "Marginal" = "solid"))  +
@@ -882,10 +979,12 @@ fit_lmer_wkdx_RIAS_ml <- lme4::lmer(hamd ~ week*endog + (week|id),
 ### Estimated Marginal Meanse Plot
 
 ```{r}
-sjPlot::plot_model(fit_lmer_wkdx_RIAS_ml,
-                   type = "pred",
-                   terms = c("week", "endog"),
-                   title = "Hedeker's Table 4.7 on page 64")
+interactions::interact_plot(fit_lmer_wkdx_RIAS_ml,
+                            pred = week,
+                            modx = endog,
+                            interval = TRUE,
+                            main.title = "Hedeker's Table 4.7 on page 64") +
+  theme_bw()
 ```
 
 ### Likelihood Ratio Test
@@ -895,6 +994,15 @@ anova(fit_lmer_week_RIAS_ml, fit_lmer_wkdx_RIAS_ml,
       model.names = c("Just Time", "Time X Dx")) %>% 
   pander::pander(caption = "LRT: Assess Significance of Diagnosis Moderation of Trend")
 ```
+
+
+```{r}
+performance::compare_performance(fit_lmer_week_RIAS_ml, 
+                                 fit_lmer_wkdx_RIAS_ml,
+                                 rank = TRUE)
+```
+
+
 
 The more complicated model (including the moderating effect of diagnosis) is NOT supported.
 
@@ -909,26 +1017,24 @@ The more complicated model (including the moderating effect of diagnosis) is NOT
 ```{r}
 fit_lmer_quad_RIAS_ml <- lme4::lmer(hamd ~ week + I(week^2) + (week+ I(week^2)|id), 
                                     data = data_long,
-                                    REML = FALSE)
+                                    REML = FALSE,
+                                    control = lmerControl(optimizer = "optimx",    # get it to converge
+                                                          calc.derivs = FALSE,
+                                                          optCtrl = list(method = "nlminb",
+                                                                         starttests = FALSE,
+                                                                         kkt = FALSE))) 
 ```
 
 
 ### Table of Parameter Estimates
 
-```{r, include = FALSE}
-texreg::screenreg(list(fit_lmer_week_RIAS_ml, fit_lmer_quad_RIAS_ml), single.row = TRUE)
-```
-
 
 ```{r mlmquad, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(fit_lmer_week_RIAS_ml,
+texreg::knitreg(list(fit_lmer_week_RIAS_ml,
                      fit_lmer_quad_RIAS_ml),
                 custom.model.names = c("Linear Trend",
                                        "QUadratic Trend"),
+                single.row = TRUE,
                 caption = "MLM: RIAS models fit w/ML",
                 caption.above = TRUE,
                 custom.note = "Hedeker table 4.5 on page 58 and table 5.1 on page 84")
@@ -941,7 +1047,15 @@ texreg::htmlreg(list(fit_lmer_week_RIAS_ml,
 anova(fit_lmer_week_RIAS_ml, fit_lmer_quad_RIAS_ml)
 ```
 
-Even though the Wald test did not find the quadratic fixed time trend to be significant at the population level (marginal), the LRT finds that including the quadratic terms improves the model's fit.  
+```{r}
+performance::compare_performance(fit_lmer_week_RIAS_ml, 
+                                 fit_lmer_quad_RIAS_ml,
+                                 rank = TRUE)
+```
+
+
+
+Even though the Wald test did not find the quadratic fixed time trend to be significant at the population level (marginal), the LRT and Bayes Factor both find that including the quadratic terms improves the model’s fit.
 
 
 
@@ -973,15 +1087,15 @@ For Illustration, two cases have been hand selected: `id` = 115 and 610.
 ```{r}
 fun_115 <- function(week){
   coef(fit_lmer_quad_RIAS_ml)$id["115", "(Intercept)"] +
-  coef(fit_lmer_quad_RIAS_ml)$id["115", "week"] * week +
-  coef(fit_lmer_quad_RIAS_ml)$id["115", "I(week^2)"] * week^2
+    coef(fit_lmer_quad_RIAS_ml)$id["115", "week"] * week +
+    coef(fit_lmer_quad_RIAS_ml)$id["115", "I(week^2)"] * week^2
 }
 
 
 fun_610 <- function(week){
   coef(fit_lmer_quad_RIAS_ml)$id["610", "(Intercept)"] +
-  coef(fit_lmer_quad_RIAS_ml)$id["610", "week"] * week +
-  coef(fit_lmer_quad_RIAS_ml)$id["610", "I(week^2)"] * week^2
+    coef(fit_lmer_quad_RIAS_ml)$id["610", "week"] * week +
+    coef(fit_lmer_quad_RIAS_ml)$id["610", "I(week^2)"] * week^2
 }
 ```
 
@@ -997,8 +1111,8 @@ data_long %>%
   stat_function(fun = fun_115) +          # add cure for ID = 115
   stat_function(fun = fun_610) +          # add cure for ID = 610
   geom_line(aes(y        = pred_fixed),
-                color    = "blue",
-                size     = 1.25)  +
+            color    = "blue",
+            size     = 1.25)  +
   theme_bw() +
   theme(legend.position = c(0, 0),
         legend.justification = c(-0.1, -0.1),
@@ -1010,11 +1124,11 @@ data_long %>%
        subtitle = "Marginal Mean show in thinker blue")
 ```
 
-These two individuals have quite different curvitures and illustrated how this type of curvatures in person-specific trajectories may end up cancelling each other out to arive at a fairly linear marginal model.
+These two individuals have quite different curvatures and illustrated how this type of curvatures in person-specific trajectories may end up cancelling each other out to arrive at a fairly linear marginal model.
 
 
 ### Estimated Marginal Means and Emperical Bayes Plots
- 
+
 Note: although the BLUPs are shown for all participants, the predictions are just connects and are therefore slightly jagged and now smoother like the lines on the plot above.
 
 ```{r, fig.cap = "EStimated curvilinear trends"}
@@ -1038,7 +1152,7 @@ data_long %>%
                                 "Marginal" = "blue"))  +
   scale_size_manual(name    = "Type of Prediction",
                     values = c("BLUP"      = .5,
-                                "Marginal" = 1.25))  +
+                               "Marginal" = 1.25))  +
   scale_linetype_manual(name   = "Type of Prediction",
                         values = c("BLUP"     = "longdash",
                                    "Marginal" = "solid"))  +

@@ -132,7 +132,7 @@ data_pop %>%
                        type   = "text")
 ```
 
-```{r, results="asis"}
+```{r, echo=FALSE, results="asis"}
 data_pop %>% 
   dplyr::select(extrav, extravG, extravZ) %>% 
   data.frame() %>% 
@@ -167,11 +167,7 @@ texreg::screenreg(list(pop_lmer_1_raw, pop_lmer_1_cen, pop_lmer_1_std))
 
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_1_raw, 
+texreg::knitreg(list(pop_lmer_1_raw, 
                      pop_lmer_1_cen, 
                      pop_lmer_1_std),
                 custom.model.names = c("Raw", 
@@ -208,31 +204,6 @@ texreg::htmlreg(list(pop_lmer_1_raw,
 * Stays the SAME:    
     + random estimates, i.e. variance and covariance components, includin the residual variance  
     + model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)    
-```
-
-
-
-
-### Investigating a MLM-RI Model
-
-
-
-```{r}
-pop_lmer_1_raw %>% 
-  broom::tidy()
-```
-
-
-```{r}
-pop_lmer_1_raw %>% 
-  broom::glance()
-```
-
-
-```{r}
-pop_lmer_1_raw %>% 
-  broom::augment() %>% 
-  head()                  # onle line per observation (2000 students)
 ```
 
 
@@ -522,17 +493,9 @@ pop_lmer_2_std <- lme4::lmer(popular ~ extravZ + (extravZ|class),
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(pop_lmer_2_raw, pop_lmer_2_cen, pop_lmer_2_std))
-```
-
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(pop_lmer_2_raw, 
+texreg::knitreg(list(pop_lmer_2_raw, 
                      pop_lmer_2_cen, 
                      pop_lmer_2_std),
                 custom.model.names = c("Raw", 
@@ -569,31 +532,6 @@ texreg::htmlreg(list(pop_lmer_2_raw,
 * Stays the SAME:    
     + model fit statistics, including AIC, BIC, and the Log Loikelihood (-2LL or deviance)    
 ```
-
-
-### Investigating a MLM-RI Model
-
-
-```{r}
-pop_lmer_2_raw %>% 
-  broom::tidy()
-```
-
-
-```{r}
-pop_lmer_2_raw %>% 
-  broom::glance()
-```
-
-
-```{r}
-pop_lmer_2_raw %>% 
-  broom::augment() %>% 
-  head()                  # onle line per observation (2000 students)
-```
-
-
-
 
 
 #### Fixed Effects: intercept and slope
