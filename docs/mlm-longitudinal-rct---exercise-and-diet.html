@@ -1,0 +1,2439 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>13 MLM, Longitudinal: RCT - Exercise and Diet | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</title>
+  <meta name="description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="generator" content="bookdown 0.23 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="13 MLM, Longitudinal: RCT - Exercise and Diet | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:image" content="/EQM_v1_cover.png" />
+  <meta property="og:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="github-repo" content="cehs-research/eBook_wrangle" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="13 MLM, Longitudinal: RCT - Exercise and Diet | Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models" />
+  
+  <meta name="twitter:description" content="RM Regression: ICCs, MLM/HLM, and GEEs." />
+  <meta name="twitter:image" content="/EQM_v1_cover.png" />
+
+<meta name="author" content="Sarah Schwartz &amp; Tyson Barrett" />
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="mlm-longitudinal-hox-ch-5---student-gpa.html"/>
+<link rel="next" href="gee-continuous-outcome-beat-the-blues.html"/>
+<script src="libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.0.1/anchor-sections.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.0.1/anchor-sections.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="libs/lightable-0.0.1/lightable.css" rel="stylesheet" />
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+/* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+<link rel="stylesheet" href="heading.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Vol. 5: Multilevel Models</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#blocked-notes"><i class="fa fa-check"></i>Blocked Notes</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#code-and-output"><i class="fa fa-check"></i>Code and Output</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#the-authors"><i class="fa fa-check"></i>The Authors</a>
+<ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#why-choose-r"><i class="fa fa-check"></i>Why choose R ?</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#fyi"><i class="fa fa-check"></i>FYI</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="1" data-path="learning-resources.html"><a href="learning-resources.html"><i class="fa fa-check"></i><b>1</b> Learning Resources</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="learning-resources.html"><a href="learning-resources.html#introduction"><i class="fa fa-check"></i><b>1.1</b> Introduction</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="formula-warehouse.html"><a href="formula-warehouse.html"><i class="fa fa-check"></i><b>2</b> Formula Warehouse</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#data-notation"><i class="fa fa-check"></i><b>2.1</b> Data Notation</a></li>
+<li class="chapter" data-level="2.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#single-level-regression-analysis"><i class="fa fa-check"></i><b>2.2</b> Single-level Regression Analysis</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#the-only-equation"><i class="fa fa-check"></i><b>2.2.1</b> The Only Equation</a></li>
+<li class="chapter" data-level="2.2.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#parameters"><i class="fa fa-check"></i><b>2.2.2</b> Parameters</a></li>
+<li class="chapter" data-level="2.2.3" data-path="formula-warehouse.html"><a href="formula-warehouse.html#assumptions-to-check"><i class="fa fa-check"></i><b>2.2.3</b> Assumptions to Check</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="formula-warehouse.html"><a href="formula-warehouse.html#multi-level-regression-analysis"><i class="fa fa-check"></i><b>2.3</b> Multi-level Regression Analysis</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#level-1-regression-equation"><i class="fa fa-check"></i><b>2.3.1</b> Level 1 Regression Equation*</a></li>
+<li class="chapter" data-level="2.3.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#level-2-regression-equations"><i class="fa fa-check"></i><b>2.3.2</b> Level 2 Regression Equations</a></li>
+<li class="chapter" data-level="2.3.3" data-path="formula-warehouse.html"><a href="formula-warehouse.html#combinded-multilevel-regression-equation"><i class="fa fa-check"></i><b>2.3.3</b> Combinded, Multilevel Regression Equation</a></li>
+<li class="chapter" data-level="2.3.4" data-path="formula-warehouse.html"><a href="formula-warehouse.html#parameters-1"><i class="fa fa-check"></i><b>2.3.4</b> Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="formula-warehouse.html"><a href="formula-warehouse.html#intraclass-correlation-icc"><i class="fa fa-check"></i><b>2.4</b> Intraclass Correlation (ICC)</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#two-level-models"><i class="fa fa-check"></i><b>2.4.1</b> Two Level Models</a></li>
+<li class="chapter" data-level="2.4.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#three-level-models"><i class="fa fa-check"></i><b>2.4.2</b> Three Level Models</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="formula-warehouse.html"><a href="formula-warehouse.html#proporion-of-variance-explianed"><i class="fa fa-check"></i><b>2.5</b> Proporion of Variance Explianed</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="formula-warehouse.html"><a href="formula-warehouse.html#level-1-variance-explained"><i class="fa fa-check"></i><b>2.5.1</b> Level 1 Variance Explained</a></li>
+<li class="chapter" data-level="2.5.2" data-path="formula-warehouse.html"><a href="formula-warehouse.html#level-2-variance-explined"><i class="fa fa-check"></i><b>2.5.2</b> Level 2 Variance Explined</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="formula-warehouse.html"><a href="formula-warehouse.html#using-latex-for-equation-typesetting"><i class="fa fa-check"></i><b>2.6</b> Using <span class="math inline">\(\LaTeX\)</span> for Equation Typesetting</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="example-articles.html"><a href="example-articles.html"><i class="fa fa-check"></i><b>3</b> Example Articles</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="example-articles.html"><a href="example-articles.html#cross-sectional-clustered-or-hierarchical"><i class="fa fa-check"></i><b>3.1</b> Cross-sectional: clustered or hierarchical</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="example-articles.html"><a href="example-articles.html#non-randomized-intervention"><i class="fa fa-check"></i><b>3.1.1</b> Non-randomized Intervention</a></li>
+<li class="chapter" data-level="3.1.2" data-path="example-articles.html"><a href="example-articles.html#dyadic-design"><i class="fa fa-check"></i><b>3.1.2</b> Dyadic Design</a></li>
+<li class="chapter" data-level="3.1.3" data-path="example-articles.html"><a href="example-articles.html#binary-outcome"><i class="fa fa-check"></i><b>3.1.3</b> Binary Outcome</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="example-articles.html"><a href="example-articles.html#repeated-measures-longitudinal-change-over-time-or-conditional-no-time-component"><i class="fa fa-check"></i><b>3.2</b> Repeated Measures: longitudinal (change over time) or conditional (no time component)</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="example-articles.html"><a href="example-articles.html#repeated-measures---linear-growth"><i class="fa fa-check"></i><b>3.2.1</b> Repeated Measures - linear growth</a></li>
+<li class="chapter" data-level="3.2.2" data-path="example-articles.html"><a href="example-articles.html#cohort-sequential-or-accelerated-longitudinal-design"><i class="fa fa-check"></i><b>3.2.2</b> Cohort sequential or accelerated longitudinal design</a></li>
+<li class="chapter" data-level="3.2.3" data-path="example-articles.html"><a href="example-articles.html#sem-framework"><i class="fa fa-check"></i><b>3.2.3</b> SEM Framework</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="example-articles.html"><a href="example-articles.html#both-hierarchical-longitudinal"><i class="fa fa-check"></i><b>3.3</b> Both: Hierarchical longitudinal</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html"><i class="fa fa-check"></i><b>4</b> MLM, 2-levels: Pupil Popularity</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#background"><i class="fa fa-check"></i><b>4.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#unique-identifiers"><i class="fa fa-check"></i><b>4.1.1</b> Unique Identifiers</a></li>
+<li class="chapter" data-level="4.1.2" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#structure-and-variables"><i class="fa fa-check"></i><b>4.1.2</b> Structure and variables</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#exploratory-data-analysis"><i class="fa fa-check"></i><b>4.2</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#summarize-descriptive-statistics"><i class="fa fa-check"></i><b>4.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="4.2.2" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#visualizations-of-raw-data"><i class="fa fa-check"></i><b>4.2.2</b> Visualizations of Raw Data</a></li>
+<li class="chapter" data-level="4.2.3" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#consider-clustering"><i class="fa fa-check"></i><b>4.2.3</b> Consider Clustering</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#single-level-regression-analysis-1"><i class="fa fa-check"></i><b>4.3</b> Single-level Regression Analysis</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#null-model"><i class="fa fa-check"></i><b>4.3.1</b> Null Model</a></li>
+<li class="chapter" data-level="4.3.2" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#add-predictors-to-the-model"><i class="fa fa-check"></i><b>4.3.2</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="4.3.3" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#compare-fixed-effects"><i class="fa fa-check"></i><b>4.3.3</b> Compare Fixed Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#multi-level-regression-analysis-1"><i class="fa fa-check"></i><b>4.4</b> Multi-level Regression Analysis</a>
+<ul>
+<li class="chapter" data-level="4.4.1" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#intercept-only-or-null-model"><i class="fa fa-check"></i><b>4.4.1</b> Intercept-only or Null Model</a></li>
+<li class="chapter" data-level="4.4.2" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#intraclass-correlation-icc-1"><i class="fa fa-check"></i><b>4.4.2</b> Intraclass Correlation (ICC)</a></li>
+<li class="chapter" data-level="4.4.3" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#add-predictors-to-the-model-1"><i class="fa fa-check"></i><b>4.4.3</b> Add Predictors to the Model</a></li>
+<li class="chapter" data-level="4.4.4" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#testing-random-components"><i class="fa fa-check"></i><b>4.4.4</b> Testing Random Components</a></li>
+<li class="chapter" data-level="4.4.5" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#testing-cross-level-interactions"><i class="fa fa-check"></i><b>4.4.5</b> Testing Cross-Level Interactions</a></li>
+<li class="chapter" data-level="4.4.6" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#final-model"><i class="fa fa-check"></i><b>4.4.6</b> Final Model</a></li>
+<li class="chapter" data-level="4.4.7" data-path="mlm-2-levels-pupil-popularity.html"><a href="mlm-2-levels-pupil-popularity.html#residual-plots"><i class="fa fa-check"></i><b>4.4.7</b> Residual Plots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html"><i class="fa fa-check"></i><b>5</b> MLM, 3 levels: Nurse’s Stress Intervention</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#background-1"><i class="fa fa-check"></i><b>5.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="5.1.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#unique-identifiers-1"><i class="fa fa-check"></i><b>5.1.1</b> Unique Identifiers</a></li>
+<li class="chapter" data-level="5.1.2" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#centering-variables"><i class="fa fa-check"></i><b>5.1.2</b> Centering Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#exploratory-data-analysis-1"><i class="fa fa-check"></i><b>5.2</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="5.2.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#summarize-descriptive-statistics-1"><i class="fa fa-check"></i><b>5.2.1</b> Summarize Descriptive Statistics</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#mlm-null-model"><i class="fa fa-check"></i><b>5.3</b> MLM: Null Model</a></li>
+<li class="chapter" data-level="5.4" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#estimate-the-icc"><i class="fa fa-check"></i><b>5.4</b> Estimate the ICC</a></li>
+<li class="chapter" data-level="5.5" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#mlm-add-fixed-effects"><i class="fa fa-check"></i><b>5.5</b> MLM: Add Fixed Effects</a>
+<ul>
+<li class="chapter" data-level="5.5.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#fit-the-model-5"><i class="fa fa-check"></i><b>5.5.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="5.5.2" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#assess-significance"><i class="fa fa-check"></i><b>5.5.2</b> Assess Significance</a></li>
+<li class="chapter" data-level="5.5.3" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#centering-variables-1"><i class="fa fa-check"></i><b>5.5.3</b> Centering Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#mlm-add-random-slope"><i class="fa fa-check"></i><b>5.6</b> MLM: Add Random Slope</a>
+<ul>
+<li class="chapter" data-level="5.6.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#fit-the-model-6"><i class="fa fa-check"></i><b>5.6.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="5.6.2" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#assess-significance-1"><i class="fa fa-check"></i><b>5.6.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#mlm-add-cross-level-interaction"><i class="fa fa-check"></i><b>5.7</b> MLM: Add Cross-Level Interaction</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#fit-the-model-7"><i class="fa fa-check"></i><b>5.7.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="5.7.2" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#assess-significance-2"><i class="fa fa-check"></i><b>5.7.2</b> Assess Significance</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#final-model-1"><i class="fa fa-check"></i><b>5.8</b> Final Model</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#fit-the-model-8"><i class="fa fa-check"></i><b>5.8.1</b> Fit the model</a></li>
+<li class="chapter" data-level="5.8.2" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#table-of-estimated-parameters"><i class="fa fa-check"></i><b>5.8.2</b> Table of Estimated Parameters</a></li>
+<li class="chapter" data-level="5.8.3" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#visualization-estimated-marginal-means-plot"><i class="fa fa-check"></i><b>5.8.3</b> Visualization: Estimated Marginal Means Plot</a></li>
+<li class="chapter" data-level="5.8.4" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#post-hoc-pairwise-tests"><i class="fa fa-check"></i><b>5.8.4</b> Post Hoc Pairwise Tests</a></li>
+<li class="chapter" data-level="5.8.5" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#effect-sizes"><i class="fa fa-check"></i><b>5.8.5</b> Effect Sizes</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#interpretation-6"><i class="fa fa-check"></i><b>5.9</b> Interpretation</a>
+<ul>
+<li class="chapter" data-level="5.9.1" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#strength"><i class="fa fa-check"></i><b>5.9.1</b> Strength</a></li>
+<li class="chapter" data-level="5.9.2" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#weakness"><i class="fa fa-check"></i><b>5.9.2</b> Weakness</a></li>
+</ul></li>
+<li class="chapter" data-level="5.10" data-path="mlm-3-levels-nurses-stress-intervention.html"><a href="mlm-3-levels-nurses-stress-intervention.html#reproduction-of-table-2.5"><i class="fa fa-check"></i><b>5.10</b> Reproduction of Table 2.5</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html"><i class="fa fa-check"></i><b>6</b> MLM, Centering/Scaling: Reading Achievement (2-levels only)</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#background-2"><i class="fa fa-check"></i><b>6.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="6.1.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#sample-structure"><i class="fa fa-check"></i><b>6.1.1</b> Sample Structure</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#exploratory-data-analysis-2"><i class="fa fa-check"></i><b>6.2</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#summarize-descriptive-statistics-2"><i class="fa fa-check"></i><b>6.2.1</b> Summarize Descriptive Statistics</a></li>
+<li class="chapter" data-level="6.2.2" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#visualization-of-raw-data"><i class="fa fa-check"></i><b>6.2.2</b> Visualization of Raw Data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#single-level-regression"><i class="fa fa-check"></i><b>6.3</b> Single-Level Regression</a>
+<ul>
+<li class="chapter" data-level="6.3.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#fit-nested-models-2"><i class="fa fa-check"></i><b>6.3.1</b> Fit Nested Models</a></li>
+<li class="chapter" data-level="6.3.2" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#visualize-the-interaction"><i class="fa fa-check"></i><b>6.3.2</b> Visualize the Interaction</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#mlm---step-1-null-model-only-fixed-and-random-intercepts"><i class="fa fa-check"></i><b>6.4</b> MLM - Step 1: Null Model, only fixed and random intercepts</a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#fit-the-model-9"><i class="fa fa-check"></i><b>6.4.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="6.4.2" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#estimate-the-icc-1"><i class="fa fa-check"></i><b>6.4.2</b> Estimate the ICC</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#mlm---step-2-add-lower-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>6.5</b> MLM - Step 2: Add Lower-level explanatory variables, fixed, ML</a>
+<ul>
+<li class="chapter" data-level="6.5.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#add-pupils-vocab-score-as-a-fixed-effects-predictor"><i class="fa fa-check"></i><b>6.5.1</b> Add pupil’s vocab score as a fixed effects predictor</a></li>
+<li class="chapter" data-level="6.5.2" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#investigate-more-level-1-predictors"><i class="fa fa-check"></i><b>6.5.2</b> Investigate More Level 1 Predictors</a></li>
+</ul></li>
+<li class="chapter" data-level="6.6" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#mlm---step-3-higher-level-explanatory-variables-fixed-ml"><i class="fa fa-check"></i><b>6.6</b> MLM - Step 3: Higher-level explanatory variables, fixed, ML</a>
+<ul>
+<li class="chapter" data-level="6.6.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#assess-significance-of-effects-2"><i class="fa fa-check"></i><b>6.6.1</b> Assess Significance of Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="6.7" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#mlm---step-4-explanatory-variables-predict-slopes-random-reml"><i class="fa fa-check"></i><b>6.7</b> MLM - Step 4: Explanatory variables predict Slopes, random, REML</a></li>
+<li class="chapter" data-level="6.8" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#mlm---step-5-cross-level-interactions-between-explanatory-variables---fixed-ml"><i class="fa fa-check"></i><b>6.8</b> MLM - Step 5: Cross-Level interactions between explanatory variables - fixed, ML</a></li>
+<li class="chapter" data-level="6.9" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#centering-predictors-change-center"><i class="fa fa-check"></i><b>6.9</b> Centering Predictors: Change Center</a>
+<ul>
+<li class="chapter" data-level="6.9.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#use-centered-variables"><i class="fa fa-check"></i><b>6.9.1</b> Use Centered Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6.10" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#rescaling-predictors-change-units-or-standardize"><i class="fa fa-check"></i><b>6.10</b> Rescaling Predictors: Change Units or Standardize</a>
+<ul>
+<li class="chapter" data-level="6.10.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#scale-varaibles"><i class="fa fa-check"></i><b>6.10.1</b> Scale Varaibles</a></li>
+<li class="chapter" data-level="6.10.2" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#use-scaled-variables"><i class="fa fa-check"></i><b>6.10.2</b> Use Scaled Variables</a></li>
+</ul></li>
+<li class="chapter" data-level="6.11" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#final-model-2"><i class="fa fa-check"></i><b>6.11</b> Final Model</a>
+<ul>
+<li class="chapter" data-level="6.11.1" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#table"><i class="fa fa-check"></i><b>6.11.1</b> Table</a></li>
+<li class="chapter" data-level="6.11.2" data-path="mlm-centeringscaling-reading-achievement-2-levels-only.html"><a href="mlm-centeringscaling-reading-achievement-2-levels-only.html#interpretation-of-model"><i class="fa fa-check"></i><b>6.11.2</b> Interpretation of model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html"><i class="fa fa-check"></i><b>7</b> MLM, Centering/Scaling: Student Popularity</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#background-3"><i class="fa fa-check"></i><b>7.1</b> Background</a></li>
+<li class="chapter" data-level="7.2" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#grand-mean-centering-and-standardizing-variables"><i class="fa fa-check"></i><b>7.2</b> Grand-Mean-Centering and Standardizing Variables</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#grand-mean-centering"><i class="fa fa-check"></i><b>7.2.1</b> Grand-Mean-Centering</a></li>
+<li class="chapter" data-level="7.2.2" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#standardizing"><i class="fa fa-check"></i><b>7.2.2</b> Standardizing</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#ri-only-random-intercepts"><i class="fa fa-check"></i><b>7.3</b> RI = ONLY Random Intercepts</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#fit-mlm-with-all-3-versions-of-the-predictor"><i class="fa fa-check"></i><b>7.3.1</b> Fit MLM with all 3 versions of the predictor</a></li>
+<li class="chapter" data-level="7.3.2" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#investigating-a-mlm-ri-model"><i class="fa fa-check"></i><b>7.3.2</b> Investigating a MLM-RI Model</a></li>
+<li class="chapter" data-level="7.3.3" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-centered-version"><i class="fa fa-check"></i><b>7.3.3</b> Comapre the Centered Version</a></li>
+<li class="chapter" data-level="7.3.4" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-standardized-version"><i class="fa fa-check"></i><b>7.3.4</b> Comapre the Standardized Version</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#rias-random-intercepts-and-slopes"><i class="fa fa-check"></i><b>7.4</b> RIAS = Random Intercepts AND Slopes</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#fit-mlm-with-all-3-versions-of-the-predictor-1"><i class="fa fa-check"></i><b>7.4.1</b> Fit MLM with all 3 versions of the predictor</a></li>
+<li class="chapter" data-level="7.4.2" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#investigating-a-mlm-ri-model-1"><i class="fa fa-check"></i><b>7.4.2</b> Investigating a MLM-RI Model</a></li>
+<li class="chapter" data-level="7.4.3" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-centered-version-1"><i class="fa fa-check"></i><b>7.4.3</b> Comapre the Centered Version</a></li>
+<li class="chapter" data-level="7.4.4" data-path="mlm-centeringscaling-student-popularity.html"><a href="mlm-centeringscaling-student-popularity.html#comapre-the-standardized-version-1"><i class="fa fa-check"></i><b>7.4.4</b> Comapre the Standardized Version</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html"><i class="fa fa-check"></i><b>8</b> Effect Size: Variance Explained</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#mlm-or-lmm"><i class="fa fa-check"></i><b>8.1</b> MLM or LMM</a></li>
+<li class="chapter" data-level="8.2" data-path="effect-size-variance-explained.html"><a href="effect-size-variance-explained.html#glmm"><i class="fa fa-check"></i><b>8.2</b> GLMM</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="sjplot-package.html"><a href="sjplot-package.html"><i class="fa fa-check"></i><b>9</b> sjPlot Package</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="sjplot-package.html"><a href="sjplot-package.html#plotting-coefficients"><i class="fa fa-check"></i><b>9.1</b> Plotting Coefficients</a>
+<ul>
+<li class="chapter" data-level="9.1.1" data-path="sjplot-package.html"><a href="sjplot-package.html#fixed-effects"><i class="fa fa-check"></i><b>9.1.1</b> Fixed Effects</a></li>
+<li class="chapter" data-level="9.1.2" data-path="sjplot-package.html"><a href="sjplot-package.html#random-effects"><i class="fa fa-check"></i><b>9.1.2</b> Random Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="sjplot-package.html"><a href="sjplot-package.html#plotting-marginal-effects"><i class="fa fa-check"></i><b>9.2</b> Plotting Marginal Effects</a>
+<ul>
+<li class="chapter" data-level="9.2.1" data-path="sjplot-package.html"><a href="sjplot-package.html#predicted-values"><i class="fa fa-check"></i><b>9.2.1</b> Predicted Values</a></li>
+<li class="chapter" data-level="9.2.2" data-path="sjplot-package.html"><a href="sjplot-package.html#effect-plots"><i class="fa fa-check"></i><b>9.2.2</b> Effect Plots</a></li>
+<li class="chapter" data-level="9.2.3" data-path="sjplot-package.html"><a href="sjplot-package.html#interaction-plots"><i class="fa fa-check"></i><b>9.2.3</b> Interaction Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="sjplot-package.html"><a href="sjplot-package.html#model-diagnostics"><i class="fa fa-check"></i><b>9.3</b> Model Diagnostics</a>
+<ul>
+<li class="chapter" data-level="9.3.1" data-path="sjplot-package.html"><a href="sjplot-package.html#slope-of-coefficentes"><i class="fa fa-check"></i><b>9.3.1</b> Slope of Coefficentes</a></li>
+<li class="chapter" data-level="9.3.2" data-path="sjplot-package.html"><a href="sjplot-package.html#residuals"><i class="fa fa-check"></i><b>9.3.2</b> Residuals</a></li>
+<li class="chapter" data-level="9.3.3" data-path="sjplot-package.html"><a href="sjplot-package.html#diagnostics"><i class="fa fa-check"></i><b>9.3.3</b> Diagnostics</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html"><i class="fa fa-check"></i><b>10</b> MLM, Longitudinal: Autism</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#background-4"><i class="fa fa-check"></i><b>10.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="10.1.1" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#long-format"><i class="fa fa-check"></i><b>10.1.1</b> Long Format</a></li>
+<li class="chapter" data-level="10.1.2" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#wide-format"><i class="fa fa-check"></i><b>10.1.2</b> Wide Format</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#exploratory-data-analysis-3"><i class="fa fa-check"></i><b>10.2</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="10.2.1" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#demographic-summary"><i class="fa fa-check"></i><b>10.2.1</b> Demographic Summary</a></li>
+<li class="chapter" data-level="10.2.2" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#baseline-summary"><i class="fa fa-check"></i><b>10.2.2</b> Baseline Summary</a></li>
+<li class="chapter" data-level="10.2.3" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#missing-data-attrition"><i class="fa fa-check"></i><b>10.2.3</b> Missing Data &amp; Attrition</a></li>
+<li class="chapter" data-level="10.2.4" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#means-across-time"><i class="fa fa-check"></i><b>10.2.4</b> Means Across Time</a></li>
+<li class="chapter" data-level="10.2.5" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#person-profile-plots"><i class="fa fa-check"></i><b>10.2.5</b> Person Profile Plots</a></li>
+<li class="chapter" data-level="10.2.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#side-by-side-boxplots"><i class="fa fa-check"></i><b>10.2.6</b> Side-by-side Boxplots</a></li>
+<li class="chapter" data-level="10.2.7" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#means-plots"><i class="fa fa-check"></i><b>10.2.7</b> Means Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#model-1-full-model-with-loaded-mean-structure"><i class="fa fa-check"></i><b>10.3</b> Model 1: Full model with ‘loaded’ mean structure</a>
+<ul>
+<li class="chapter" data-level="10.3.1" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#fit-the-model-10"><i class="fa fa-check"></i><b>10.3.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="10.3.2" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#table-of-prameter-estimates"><i class="fa fa-check"></i><b>10.3.2</b> Table of Prameter Estimates</a></li>
+<li class="chapter" data-level="10.3.3" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#plot-of-the-estimated-marginal-means"><i class="fa fa-check"></i><b>10.3.3</b> Plot of the Estimated Marginal Means</a></li>
+</ul></li>
+<li class="chapter" data-level="10.4" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#model-2a-drop-random-intercepts"><i class="fa fa-check"></i><b>10.4</b> Model 2A: Drop Random Intercepts</a>
+<ul>
+<li class="chapter" data-level="10.4.1" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#fit-the-model-11"><i class="fa fa-check"></i><b>10.4.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="10.4.2" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#assess-the-signifcance"><i class="fa fa-check"></i><b>10.4.2</b> Assess the Signifcance</a></li>
+</ul></li>
+<li class="chapter" data-level="10.5" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#model-2b-drop-random-quadratic-slope"><i class="fa fa-check"></i><b>10.5</b> Model 2B: Drop Random Quadratic Slope</a>
+<ul>
+<li class="chapter" data-level="10.5.1" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#fit-the-model-12"><i class="fa fa-check"></i><b>10.5.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="10.5.2" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#assess-the-signifcance-1"><i class="fa fa-check"></i><b>10.5.2</b> Assess the Signifcance</a></li>
+</ul></li>
+<li class="chapter" data-level="10.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#model-3-drop-quadratic-time-fixed-effect"><i class="fa fa-check"></i><b>10.6</b> Model 3: Drop Quadratic Time Fixed Effect</a>
+<ul>
+<li class="chapter" data-level="10.6.1" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#fit-the-models"><i class="fa fa-check"></i><b>10.6.1</b> Fit the Models</a></li>
+<li class="chapter" data-level="10.6.2" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#assess-the-signifcance-2"><i class="fa fa-check"></i><b>10.6.2</b> Assess the Signifcance</a></li>
+</ul></li>
+<li class="chapter" data-level="10.7" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#final-model-3"><i class="fa fa-check"></i><b>10.7</b> Final Model</a>
+<ul>
+<li class="chapter" data-level="10.7.1" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#table-of-parameter-esitmates"><i class="fa fa-check"></i><b>10.7.1</b> Table of Parameter Esitmates</a></li>
+<li class="chapter" data-level="10.7.2" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#interpretation-of-fixed-effects"><i class="fa fa-check"></i><b>10.7.2</b> Interpretation of Fixed Effects</a></li>
+<li class="chapter" data-level="10.7.3" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#interpretation-of-random-effects"><i class="fa fa-check"></i><b>10.7.3</b> Interpretation of Random Effects</a></li>
+<li class="chapter" data-level="10.7.4" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#assumption-checking"><i class="fa fa-check"></i><b>10.7.4</b> Assumption Checking</a></li>
+<li class="chapter" data-level="10.7.5" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#plot-of-the-estimated-marginal-means-1"><i class="fa fa-check"></i><b>10.7.5</b> Plot of the Estimated Marginal Means</a></li>
+<li class="chapter" data-level="10.7.6" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#post-hoc-compairisons"><i class="fa fa-check"></i><b>10.7.6</b> Post Hoc Compairisons</a></li>
+<li class="chapter" data-level="10.7.7" data-path="mlm-longitudinal-autism.html"><a href="mlm-longitudinal-autism.html#blups-vs.-fixed-effects"><i class="fa fa-check"></i><b>10.7.7</b> Blups vs. Fixed Effects</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html"><i class="fa fa-check"></i><b>11</b> MLM, Longitudinal: Hedeker &amp; Gibbons - Depression</a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#background-5"><i class="fa fa-check"></i><b>11.1</b> Background</a>
+<ul>
+<li class="chapter" data-level="11.1.1" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#long-format-1"><i class="fa fa-check"></i><b>11.1.1</b> Long Format</a></li>
+<li class="chapter" data-level="11.1.2" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#wide-format-1"><i class="fa fa-check"></i><b>11.1.2</b> Wide Format</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#exploratory-data-analysis-4"><i class="fa fa-check"></i><b>11.2</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="11.2.1" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#diagnosis-group"><i class="fa fa-check"></i><b>11.2.1</b> Diagnosis Group</a></li>
+<li class="chapter" data-level="11.2.2" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#missing-data-attrition-1"><i class="fa fa-check"></i><b>11.2.2</b> Missing Data &amp; Attrition</a></li>
+<li class="chapter" data-level="11.2.3" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#depression-over-time-by-group"><i class="fa fa-check"></i><b>11.2.3</b> Depression Over Time, by Group</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#patterns-in-the-outcome-over-time"><i class="fa fa-check"></i><b>11.3</b> Patterns in the Outcome Over Time</a>
+<ul>
+<li class="chapter" data-level="11.3.1" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#variance-covariance"><i class="fa fa-check"></i><b>11.3.1</b> Variance-Covariance</a></li>
+<li class="chapter" data-level="11.3.2" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#correlation"><i class="fa fa-check"></i><b>11.3.2</b> Correlation</a></li>
+<li class="chapter" data-level="11.3.3" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#for-each-group"><i class="fa fa-check"></i><b>11.3.3</b> For Each Group</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#mlm---null-or-emptly-models"><i class="fa fa-check"></i><b>11.4</b> MLM - Null or Emptly Models</a>
+<ul>
+<li class="chapter" data-level="11.4.1" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#fit-the-model-13"><i class="fa fa-check"></i><b>11.4.1</b> Fit the model</a></li>
+<li class="chapter" data-level="11.4.2" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#table-of-parameter-estimates"><i class="fa fa-check"></i><b>11.4.2</b> Table of Parameter Estimates</a></li>
+<li class="chapter" data-level="11.4.3" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#estimated-marginal-means-plot"><i class="fa fa-check"></i><b>11.4.3</b> Estimated Marginal Means Plot</a></li>
+<li class="chapter" data-level="11.4.4" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#estimated-marginal-means-and-emperical-bayes-plots"><i class="fa fa-check"></i><b>11.4.4</b> Estimated Marginal Means and Emperical Bayes Plots</a></li>
+<li class="chapter" data-level="11.4.5" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#intra-individual-correlation-icc"><i class="fa fa-check"></i><b>11.4.5</b> Intra-individual Correlation (ICC)</a></li>
+<li class="chapter" data-level="11.4.6" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#compare-to-the-single-level-null-no-random-effects"><i class="fa fa-check"></i><b>11.4.6</b> Compare to the Single-Level Null: No Random Effects</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#mlm-add-random-slope-for-time-i.e.-trend"><i class="fa fa-check"></i><b>11.5</b> MLM: Add Random Slope for Time (i.e. Trend)</a>
+<ul>
+<li class="chapter" data-level="11.5.1" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#fit-the-model-14"><i class="fa fa-check"></i><b>11.5.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="11.5.2" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#table-of-prameter-estimates-1"><i class="fa fa-check"></i><b>11.5.2</b> Table of Prameter Estimates</a></li>
+<li class="chapter" data-level="11.5.3" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#likelihood-ratio-test"><i class="fa fa-check"></i><b>11.5.3</b> Likelihood Ratio Test</a></li>
+<li class="chapter" data-level="11.5.4" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#estimated-marginal-means-plot-1"><i class="fa fa-check"></i><b>11.5.4</b> Estimated Marginal Means Plot</a></li>
+<li class="chapter" data-level="11.5.5" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#estimated-marginal-means-and-emperical-bayes-plots-1"><i class="fa fa-check"></i><b>11.5.5</b> Estimated Marginal Means and Emperical Bayes Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="11.6" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#mlm-coding-of-time"><i class="fa fa-check"></i><b>11.6</b> MLM: Coding of Time</a>
+<ul>
+<li class="chapter" data-level="11.6.1" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#fit-the-model-15"><i class="fa fa-check"></i><b>11.6.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="11.6.2" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#table-of-parameter-estimates-2"><i class="fa fa-check"></i><b>11.6.2</b> Table of Parameter Estimates</a></li>
+<li class="chapter" data-level="11.6.3" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#estimated-marginal-means-and-emperical-bayes-plots-2"><i class="fa fa-check"></i><b>11.6.3</b> Estimated Marginal Means and Emperical Bayes Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="11.7" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#mlm-effect-of-diagnosis-on-time-trends-fixed-interaction"><i class="fa fa-check"></i><b>11.7</b> MLM: Effect of DIagnosis on Time Trends (Fixed Interaction)</a>
+<ul>
+<li class="chapter" data-level="11.7.1" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#fit-the-models-1"><i class="fa fa-check"></i><b>11.7.1</b> Fit the Models</a></li>
+<li class="chapter" data-level="11.7.2" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#estimated-marginal-meanse-plot"><i class="fa fa-check"></i><b>11.7.2</b> Estimated Marginal Meanse Plot</a></li>
+<li class="chapter" data-level="11.7.3" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#likelihood-ratio-test-1"><i class="fa fa-check"></i><b>11.7.3</b> Likelihood Ratio Test</a></li>
+</ul></li>
+<li class="chapter" data-level="11.8" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#mlm-quadratic-trend"><i class="fa fa-check"></i><b>11.8</b> MLM: Quadratic Trend</a>
+<ul>
+<li class="chapter" data-level="11.8.1" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#fit-the-model-16"><i class="fa fa-check"></i><b>11.8.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="11.8.2" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#table-of-parameter-estimates-3"><i class="fa fa-check"></i><b>11.8.2</b> Table of Parameter Estimates</a></li>
+<li class="chapter" data-level="11.8.3" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#likelihood-ratio-test-2"><i class="fa fa-check"></i><b>11.8.3</b> Likelihood Ratio Test</a></li>
+<li class="chapter" data-level="11.8.4" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#estimated-marginal-means-plot-2"><i class="fa fa-check"></i><b>11.8.4</b> Estimated Marginal Means Plot</a></li>
+<li class="chapter" data-level="11.8.5" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#blups-or-emperical-bayes-estimates"><i class="fa fa-check"></i><b>11.8.5</b> BLUPs or Emperical Bayes Estimates</a></li>
+<li class="chapter" data-level="11.8.6" data-path="mlm-longitudinal-hedeker-gibbons---depression.html"><a href="mlm-longitudinal-hedeker-gibbons---depression.html#estimated-marginal-means-and-emperical-bayes-plots-3"><i class="fa fa-check"></i><b>11.8.6</b> Estimated Marginal Means and Emperical Bayes Plots</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html"><i class="fa fa-check"></i><b>12</b> MLM, Longitudinal: Hox ch 5 - student GPA</a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#background-6"><i class="fa fa-check"></i><b>12.1</b> Background</a></li>
+<li class="chapter" data-level="12.2" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#mlm"><i class="fa fa-check"></i><b>12.2</b> MLM</a>
+<ul>
+<li class="chapter" data-level="12.2.1" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#null-models-and-icc"><i class="fa fa-check"></i><b>12.2.1</b> Null Models and ICC</a></li>
+<li class="chapter" data-level="12.2.2" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#fixed-effects-2"><i class="fa fa-check"></i><b>12.2.2</b> Fixed Effects</a></li>
+<li class="chapter" data-level="12.2.3" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#variance-explained-by-linear-time-at-level-one"><i class="fa fa-check"></i><b>12.2.3</b> Variance Explained by linear TIME at Level ONE</a></li>
+<li class="chapter" data-level="12.2.4" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#variance-explained-by-linear-time-at-level-two"><i class="fa fa-check"></i><b>12.2.4</b> Variance Explained by linear TIME at Level TWO</a></li>
+<li class="chapter" data-level="12.2.5" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#random-effects-2"><i class="fa fa-check"></i><b>12.2.5</b> Random Effects</a></li>
+<li class="chapter" data-level="12.2.6" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#cross-level-interaction"><i class="fa fa-check"></i><b>12.2.6</b> Cross-Level Interaction</a></li>
+<li class="chapter" data-level="12.2.7" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#visualize-the-model-3"><i class="fa fa-check"></i><b>12.2.7</b> Visualize the Model</a></li>
+<li class="chapter" data-level="12.2.8" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#effect-sizes-1"><i class="fa fa-check"></i><b>12.2.8</b> Effect Sizes</a></li>
+<li class="chapter" data-level="12.2.9" data-path="mlm-longitudinal-hox-ch-5---student-gpa.html"><a href="mlm-longitudinal-hox-ch-5---student-gpa.html#significance"><i class="fa fa-check"></i><b>12.2.9</b> Significance</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html"><i class="fa fa-check"></i><b>13</b> MLM, Longitudinal: RCT - Exercise and Diet</a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#the-dataset"><i class="fa fa-check"></i><b>13.1</b> The dataset</a></li>
+<li class="chapter" data-level="13.2" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#exploratory-data-analysis-5"><i class="fa fa-check"></i><b>13.2</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="13.2.1" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#participant-summary"><i class="fa fa-check"></i><b>13.2.1</b> Participant Summary</a></li>
+<li class="chapter" data-level="13.2.2" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#baseline-summary-1"><i class="fa fa-check"></i><b>13.2.2</b> Baseline Summary</a></li>
+<li class="chapter" data-level="13.2.3" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#raw-trajectories---person-profile-plot"><i class="fa fa-check"></i><b>13.2.3</b> Raw Trajectories - Person Profile Plot</a></li>
+</ul></li>
+<li class="chapter" data-level="13.3" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#multilevel-modeling"><i class="fa fa-check"></i><b>13.3</b> Multilevel Modeling</a>
+<ul>
+<li class="chapter" data-level="13.3.1" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#null-model-1"><i class="fa fa-check"></i><b>13.3.1</b> Null Model</a></li>
+<li class="chapter" data-level="13.3.2" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#icc-r-squared"><i class="fa fa-check"></i><b>13.3.2</b> ICC &amp; R-squared</a></li>
+<li class="chapter" data-level="13.3.3" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#add-fixed-effects-level-specific"><i class="fa fa-check"></i><b>13.3.3</b> Add fixed effects: level specific</a></li>
+<li class="chapter" data-level="13.3.4" data-path="mlm-longitudinal-rct---exercise-and-diet.html"><a href="mlm-longitudinal-rct---exercise-and-diet.html#final-model-4"><i class="fa fa-check"></i><b>13.3.4</b> Final Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html"><i class="fa fa-check"></i><b>14</b> GEE, Continuous Outcome: Beat the Blues</a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#packages"><i class="fa fa-check"></i><b>14.1</b> Packages</a>
+<ul>
+<li class="chapter" data-level="14.1.1" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#cran"><i class="fa fa-check"></i><b>14.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="14.1.2" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#github"><i class="fa fa-check"></i><b>14.1.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="14.2" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#background-7"><i class="fa fa-check"></i><b>14.2</b> Background</a>
+<ul>
+<li class="chapter" data-level="14.2.1" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#read-in-the-data"><i class="fa fa-check"></i><b>14.2.1</b> Read in the data</a></li>
+<li class="chapter" data-level="14.2.2" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#wide-format-2"><i class="fa fa-check"></i><b>14.2.2</b> Wide Format</a></li>
+<li class="chapter" data-level="14.2.3" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#long-format-2"><i class="fa fa-check"></i><b>14.2.3</b> Long Format</a></li>
+</ul></li>
+<li class="chapter" data-level="14.3" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#exploratory-data-analysis-6"><i class="fa fa-check"></i><b>14.3</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="14.3.1" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#visualize-person-profile-plots"><i class="fa fa-check"></i><b>14.3.1</b> Visualize: Person-profile Plots</a></li>
+<li class="chapter" data-level="14.3.2" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#calculate-the-observed-correlation-structure"><i class="fa fa-check"></i><b>14.3.2</b> Calculate the Observed Correlation Structure</a></li>
+<li class="chapter" data-level="14.3.3" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#plot-the-correlation-matrix-to-get-a-better-feel-for-the-pattern"><i class="fa fa-check"></i><b>14.3.3</b> Plot the correlation matrix to get a better feel for the pattern</a></li>
+</ul></li>
+<li class="chapter" data-level="14.4" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#multiple-regression-ols"><i class="fa fa-check"></i><b>14.4</b> Multiple Regression (OLS)</a>
+<ul>
+<li class="chapter" data-level="14.4.1" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#fit-the-models-2"><i class="fa fa-check"></i><b>14.4.1</b> Fit the models</a></li>
+<li class="chapter" data-level="14.4.2" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#parameter-estimates-table"><i class="fa fa-check"></i><b>14.4.2</b> Parameter Estimates Table</a></li>
+<li class="chapter" data-level="14.4.3" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#plot-the-model-predictions"><i class="fa fa-check"></i><b>14.4.3</b> Plot the model predictions</a></li>
+</ul></li>
+<li class="chapter" data-level="14.5" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#multilevel-models-mlm"><i class="fa fa-check"></i><b>14.5</b> Multilevel Models (MLM)</a>
+<ul>
+<li class="chapter" data-level="14.5.1" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#fit-the-models-3"><i class="fa fa-check"></i><b>14.5.1</b> Fit the models</a></li>
+<li class="chapter" data-level="14.5.2" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#parameter-estimates-table-1"><i class="fa fa-check"></i><b>14.5.2</b> Parameter Estimates Table</a></li>
+<li class="chapter" data-level="14.5.3" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#likelihood-ratio-test-3"><i class="fa fa-check"></i><b>14.5.3</b> Likelihood Ratio Test</a></li>
+<li class="chapter" data-level="14.5.4" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#plot-the-model-predictions-1"><i class="fa fa-check"></i><b>14.5.4</b> Plot the model predictions</a></li>
+</ul></li>
+<li class="chapter" data-level="14.6" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#general-estimating-equations-gee"><i class="fa fa-check"></i><b>14.6</b> General Estimating Equations, GEE</a>
+<ul>
+<li class="chapter" data-level="14.6.1" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#explore-various-correlation-structures"><i class="fa fa-check"></i><b>14.6.1</b> Explore Various Correlation Structures</a></li>
+<li class="chapter" data-level="14.6.2" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#final-best-model"><i class="fa fa-check"></i><b>14.6.2</b> Final “Best” Model</a></li>
+<li class="chapter" data-level="14.6.3" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#investigate-interactions-not-with-time-month"><i class="fa fa-check"></i><b>14.6.3</b> Investigate interactions NOT with time (<code>month</code>)</a></li>
+<li class="chapter" data-level="14.6.4" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#investigate-interactions-with-time-month"><i class="fa fa-check"></i><b>14.6.4</b> Investigate interactions with time (<code>month</code>)</a></li>
+</ul></li>
+<li class="chapter" data-level="14.7" data-path="gee-continuous-outcome-beat-the-blues.html"><a href="gee-continuous-outcome-beat-the-blues.html#conclusion"><i class="fa fa-check"></i><b>14.7</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html"><i class="fa fa-check"></i><b>15</b> GEE, Binary Outcome: Respiratory Illness</a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#packages-1"><i class="fa fa-check"></i><b>15.1</b> Packages</a>
+<ul>
+<li class="chapter" data-level="15.1.1" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#cran-1"><i class="fa fa-check"></i><b>15.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="15.1.2" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#github-1"><i class="fa fa-check"></i><b>15.1.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="15.2" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#background-8"><i class="fa fa-check"></i><b>15.2</b> Background</a>
+<ul>
+<li class="chapter" data-level="15.2.1" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#read-in-the-data-1"><i class="fa fa-check"></i><b>15.2.1</b> Read in the data</a></li>
+<li class="chapter" data-level="15.2.2" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#wide-format-3"><i class="fa fa-check"></i><b>15.2.2</b> Wide Format</a></li>
+<li class="chapter" data-level="15.2.3" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#long-format-3"><i class="fa fa-check"></i><b>15.2.3</b> Long Format</a></li>
+</ul></li>
+<li class="chapter" data-level="15.3" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#exploratory-data-analysis-7"><i class="fa fa-check"></i><b>15.3</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="15.3.1" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#summary-statistics"><i class="fa fa-check"></i><b>15.3.1</b> Summary Statistics</a></li>
+<li class="chapter" data-level="15.3.2" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#visualization-1"><i class="fa fa-check"></i><b>15.3.2</b> Visualization</a></li>
+</ul></li>
+<li class="chapter" data-level="15.4" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#logisitc-regression-glm"><i class="fa fa-check"></i><b>15.4</b> Logisitc Regression (GLM)</a>
+<ul>
+<li class="chapter" data-level="15.4.1" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#fit-the-model-17"><i class="fa fa-check"></i><b>15.4.1</b> Fit the Model</a></li>
+<li class="chapter" data-level="15.4.2" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#tabulate-the-model-parameters"><i class="fa fa-check"></i><b>15.4.2</b> Tabulate the Model Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="15.5" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#generalized-estimating-equations-gee"><i class="fa fa-check"></i><b>15.5</b> Generalized Estimating Equations (GEE)</a>
+<ul>
+<li class="chapter" data-level="15.5.1" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#indepdendence"><i class="fa fa-check"></i><b>15.5.1</b> Indepdendence</a></li>
+<li class="chapter" data-level="15.5.2" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#exchangeable"><i class="fa fa-check"></i><b>15.5.2</b> Exchangeable</a></li>
+<li class="chapter" data-level="15.5.3" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#paramgeter-estimates-table"><i class="fa fa-check"></i><b>15.5.3</b> Paramgeter Estimates Table</a></li>
+<li class="chapter" data-level="15.5.4" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#final-model-5"><i class="fa fa-check"></i><b>15.5.4</b> Final Model</a></li>
+<li class="chapter" data-level="15.5.5" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#predicted-probabilities"><i class="fa fa-check"></i><b>15.5.5</b> Predicted Probabilities</a></li>
+<li class="chapter" data-level="15.5.6" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#marginal-plot-to-visualize-the-model"><i class="fa fa-check"></i><b>15.5.6</b> Marginal Plot to Visualize the Model</a></li>
+</ul></li>
+<li class="chapter" data-level="15.6" data-path="gee-binary-outcome-respiratory-illness.html"><a href="gee-binary-outcome-respiratory-illness.html#conclusion-1"><i class="fa fa-check"></i><b>15.6</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html"><i class="fa fa-check"></i><b>16</b> GEE, Count Outcome: Epilepsy</a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#packages-2"><i class="fa fa-check"></i><b>16.1</b> Packages</a>
+<ul>
+<li class="chapter" data-level="16.1.1" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#cran-2"><i class="fa fa-check"></i><b>16.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="16.1.2" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#github-2"><i class="fa fa-check"></i><b>16.1.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#background-9"><i class="fa fa-check"></i><b>16.2</b> Background</a>
+<ul>
+<li class="chapter" data-level="16.2.1" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#read-in-the-data-2"><i class="fa fa-check"></i><b>16.2.1</b> Read in the data</a></li>
+<li class="chapter" data-level="16.2.2" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#long-format-4"><i class="fa fa-check"></i><b>16.2.2</b> Long Format</a></li>
+<li class="chapter" data-level="16.2.3" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#wide-format-4"><i class="fa fa-check"></i><b>16.2.3</b> Wide Format</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#exploratory-data-analysis-8"><i class="fa fa-check"></i><b>16.3</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="16.3.1" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#summarize"><i class="fa fa-check"></i><b>16.3.1</b> Summarize</a></li>
+<li class="chapter" data-level="16.3.2" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#visualize-1"><i class="fa fa-check"></i><b>16.3.2</b> Visualize</a></li>
+</ul></li>
+<li class="chapter" data-level="16.4" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#poisson-regression-glm"><i class="fa fa-check"></i><b>16.4</b> Poisson Regression (GLM)</a>
+<ul>
+<li class="chapter" data-level="16.4.1" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#fit-the-model-18"><i class="fa fa-check"></i><b>16.4.1</b> Fit the model</a></li>
+<li class="chapter" data-level="16.4.2" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#tabulate-the-model-parameters-1"><i class="fa fa-check"></i><b>16.4.2</b> Tabulate the Model Parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="16.5" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#generalized-estimating-equations-gee-1"><i class="fa fa-check"></i><b>16.5</b> Generalized Estimating Equations (GEE)</a>
+<ul>
+<li class="chapter" data-level="16.5.1" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#match-poisson-regresssion-glm"><i class="fa fa-check"></i><b>16.5.1</b> Match Poisson Regresssion (GLM)</a></li>
+<li class="chapter" data-level="16.5.2" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#change-correlation-sturucture"><i class="fa fa-check"></i><b>16.5.2</b> Change Correlation Sturucture</a></li>
+<li class="chapter" data-level="16.5.3" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#estimate-the-additional-scale-parameter"><i class="fa fa-check"></i><b>16.5.3</b> Estimate the Additional Scale Parameter</a></li>
+<li class="chapter" data-level="16.5.4" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#compare-models"><i class="fa fa-check"></i><b>16.5.4</b> Compare Models</a></li>
+</ul></li>
+<li class="chapter" data-level="16.6" data-path="gee-count-outcome-epilepsy.html"><a href="gee-count-outcome-epilepsy.html#conculsion"><i class="fa fa-check"></i><b>16.6</b> Conculsion</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html"><i class="fa fa-check"></i><b>17</b> GEE, Count Outcome: Antibiotics for Leprosy</a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#packages-3"><i class="fa fa-check"></i><b>17.1</b> Packages</a>
+<ul>
+<li class="chapter" data-level="17.1.1" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#cran-3"><i class="fa fa-check"></i><b>17.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="17.1.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#github-3"><i class="fa fa-check"></i><b>17.1.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="17.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#background-10"><i class="fa fa-check"></i><b>17.2</b> Background</a>
+<ul>
+<li class="chapter" data-level="17.2.1" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#enter-the-data-by-hand"><i class="fa fa-check"></i><b>17.2.1</b> Enter the data by hand!</a></li>
+<li class="chapter" data-level="17.2.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#wide-format-5"><i class="fa fa-check"></i><b>17.2.2</b> Wide Format</a></li>
+<li class="chapter" data-level="17.2.3" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#long-format-5"><i class="fa fa-check"></i><b>17.2.3</b> Long Format</a></li>
+</ul></li>
+<li class="chapter" data-level="17.3" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#exploratory-data-analysis-9"><i class="fa fa-check"></i><b>17.3</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="17.3.1" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#summary-statistics-1"><i class="fa fa-check"></i><b>17.3.1</b> Summary Statistics</a></li>
+<li class="chapter" data-level="17.3.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#visualize-2"><i class="fa fa-check"></i><b>17.3.2</b> Visualize</a></li>
+</ul></li>
+<li class="chapter" data-level="17.4" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#generalized-estimating-equations-gee-2"><i class="fa fa-check"></i><b>17.4</b> Generalized Estimating Equations (GEE)</a>
+<ul>
+<li class="chapter" data-level="17.4.1" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#explore-various-correlation-structures-1"><i class="fa fa-check"></i><b>17.4.1</b> Explore Various Correlation Structures</a></li>
+<li class="chapter" data-level="17.4.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#interpretation-9"><i class="fa fa-check"></i><b>17.4.2</b> Interpretation</a></li>
+<li class="chapter" data-level="17.4.3" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#visualize-the-final-model"><i class="fa fa-check"></i><b>17.4.3</b> Visualize the Final Model</a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#follow-up-analysis"><i class="fa fa-check"></i><b>17.5</b> Follow-up Analysis</a>
+<ul>
+<li class="chapter" data-level="17.5.1" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#collapse-the-predictor"><i class="fa fa-check"></i><b>17.5.1</b> Collapse the Predictor</a></li>
+<li class="chapter" data-level="17.5.2" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#reduce-the-model---geegee"><i class="fa fa-check"></i><b>17.5.2</b> Reduce the Model - <code>gee::gee()</code></a></li>
+<li class="chapter" data-level="17.5.3" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#compare-parameters"><i class="fa fa-check"></i><b>17.5.3</b> Compare Parameters</a></li>
+<li class="chapter" data-level="17.5.4" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#interpretation-10"><i class="fa fa-check"></i><b>17.5.4</b> Interpretation</a></li>
+<li class="chapter" data-level="17.5.5" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#visualize-3"><i class="fa fa-check"></i><b>17.5.5</b> Visualize</a></li>
+</ul></li>
+<li class="chapter" data-level="17.6" data-path="gee-count-outcome-antibiotics-for-leprosy.html"><a href="gee-count-outcome-antibiotics-for-leprosy.html#conclusion-2"><i class="fa fa-check"></i><b>17.6</b> Conclusion</a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html"><i class="fa fa-check"></i><b>18</b> GLMM, Binary Outcome: Contraception &amp; Amenorrhea</a>
+<ul>
+<li class="chapter" data-level="18.1" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#packages-4"><i class="fa fa-check"></i><b>18.1</b> Packages</a>
+<ul>
+<li class="chapter" data-level="18.1.1" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#cran-4"><i class="fa fa-check"></i><b>18.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="18.1.2" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#github-4"><i class="fa fa-check"></i><b>18.1.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="18.2" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#data-prep"><i class="fa fa-check"></i><b>18.2</b> Data Prep</a>
+<ul>
+<li class="chapter" data-level="18.2.1" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#import"><i class="fa fa-check"></i><b>18.2.1</b> Import</a></li>
+<li class="chapter" data-level="18.2.2" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#long-format-6"><i class="fa fa-check"></i><b>18.2.2</b> Long Format</a></li>
+<li class="chapter" data-level="18.2.3" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#wide-format-6"><i class="fa fa-check"></i><b>18.2.3</b> Wide Format</a></li>
+</ul></li>
+<li class="chapter" data-level="18.3" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#exploratory-data-analysis-10"><i class="fa fa-check"></i><b>18.3</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="18.3.1" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#summary-statistics-2"><i class="fa fa-check"></i><b>18.3.1</b> Summary Statistics</a></li>
+<li class="chapter" data-level="18.3.2" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#visualize-4"><i class="fa fa-check"></i><b>18.3.2</b> Visualize</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#glmm---basic"><i class="fa fa-check"></i><b>18.4</b> GLMM - Basic</a>
+<ul>
+<li class="chapter" data-level="18.4.1" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#fit-models"><i class="fa fa-check"></i><b>18.4.1</b> Fit Models</a></li>
+<li class="chapter" data-level="18.4.2" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#model-parameter-tables"><i class="fa fa-check"></i><b>18.4.2</b> Model Parameter Tables</a></li>
+<li class="chapter" data-level="18.4.3" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#visualize-the-model-4"><i class="fa fa-check"></i><b>18.4.3</b> Visualize the Model</a></li>
+</ul></li>
+<li class="chapter" data-level="18.5" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#glmm---optimizers"><i class="fa fa-check"></i><b>18.5</b> GLMM - Optimizers</a>
+<ul>
+<li class="chapter" data-level="18.5.1" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#adaptive-gauss-hermite-quadrature-increase-the-number-of-quadrature-points"><i class="fa fa-check"></i><b>18.5.1</b> Adaptive Gauss-Hermite Quadrature: Increase the number of quadrature points</a></li>
+<li class="chapter" data-level="18.5.2" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#laplace-approximation-switch-to-the-nelder_mead-optimizer"><i class="fa fa-check"></i><b>18.5.2</b> Laplace Approximation: switch to the Nelder_Mead optimizer</a></li>
+<li class="chapter" data-level="18.5.3" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#laplace-approximation-switch-to-the-l-bfgs-b-method"><i class="fa fa-check"></i><b>18.5.3</b> Laplace Approximation: Switch to the <code>L-BFGS-B</code> method</a></li>
+<li class="chapter" data-level="18.5.4" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#laplace-approximation-switch-to-the-nlminb-method"><i class="fa fa-check"></i><b>18.5.4</b> Laplace Approximation: Switch to the <code>nlminb</code> method</a></li>
+</ul></li>
+<li class="chapter" data-level="18.6" data-path="glmm-binary-outcome-contraception-amenorrhea.html"><a href="glmm-binary-outcome-contraception-amenorrhea.html#quadratic-time"><i class="fa fa-check"></i><b>18.6</b> Quadratic Time?</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html"><i class="fa fa-check"></i><b>19</b> GLMM, Binary Outcome: Muscatine Obesity</a>
+<ul>
+<li class="chapter" data-level="19.1" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#packages-5"><i class="fa fa-check"></i><b>19.1</b> Packages</a>
+<ul>
+<li class="chapter" data-level="19.1.1" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#cran-5"><i class="fa fa-check"></i><b>19.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="19.1.2" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#github-5"><i class="fa fa-check"></i><b>19.1.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="19.2" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#data-prep-1"><i class="fa fa-check"></i><b>19.2</b> Data Prep</a>
+<ul>
+<li class="chapter" data-level="19.2.1" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#import-1"><i class="fa fa-check"></i><b>19.2.1</b> Import</a></li>
+<li class="chapter" data-level="19.2.2" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#restrict-to-350ids-of-children-with-complete-data-for-class-demonstration"><i class="fa fa-check"></i><b>19.2.2</b> Restrict to 350ID’s of children with complete data for Class Demonstration</a></li>
+<li class="chapter" data-level="19.2.3" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#long-format-7"><i class="fa fa-check"></i><b>19.2.3</b> Long Format</a></li>
+<li class="chapter" data-level="19.2.4" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#wide-format-7"><i class="fa fa-check"></i><b>19.2.4</b> Wide Format</a></li>
+</ul></li>
+<li class="chapter" data-level="19.3" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#exploratory-data-analysis-11"><i class="fa fa-check"></i><b>19.3</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="19.3.1" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#summary-statistics-3"><i class="fa fa-check"></i><b>19.3.1</b> Summary Statistics</a></li>
+<li class="chapter" data-level="19.3.2" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#visualize-5"><i class="fa fa-check"></i><b>19.3.2</b> Visualize</a></li>
+</ul></li>
+<li class="chapter" data-level="19.4" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#analysis-goal"><i class="fa fa-check"></i><b>19.4</b> Analysis Goal</a>
+<ul>
+<li class="chapter" data-level="19.4.1" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#center-time-at-twelve-years-old"><i class="fa fa-check"></i><b>19.4.1</b> Center time at twelve years old</a></li>
+</ul></li>
+<li class="chapter" data-level="19.5" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#glm-analysis"><i class="fa fa-check"></i><b>19.5</b> GLM Analysis</a>
+<ul>
+<li class="chapter" data-level="19.5.1" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#standard-logistic-regression"><i class="fa fa-check"></i><b>19.5.1</b> Standard logistic regression</a></li>
+</ul></li>
+<li class="chapter" data-level="19.6" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#gee-analysis"><i class="fa fa-check"></i><b>19.6</b> GEE Analysis</a>
+<ul>
+<li class="chapter" data-level="19.6.1" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#drop-the-interaction-with-gender."><i class="fa fa-check"></i><b>19.6.1</b> Drop the interaction with <code>gender</code>.</a></li>
+<li class="chapter" data-level="19.6.2" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#select-the-final-model."><i class="fa fa-check"></i><b>19.6.2</b> Select the <strong>“final”</strong> model.</a></li>
+</ul></li>
+<li class="chapter" data-level="19.7" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#glmm-analysis"><i class="fa fa-check"></i><b>19.7</b> GLMM Analysis</a></li>
+<li class="chapter" data-level="19.8" data-path="glmm-binary-outcome-muscatine-obesity.html"><a href="glmm-binary-outcome-muscatine-obesity.html#compare-methods"><i class="fa fa-check"></i><b>19.8</b> Compare Methods</a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html"><i class="fa fa-check"></i><b>20</b> GLMM, Count Outcome: Bolous</a>
+<ul>
+<li class="chapter" data-level="20.1" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#packages-6"><i class="fa fa-check"></i><b>20.1</b> Packages</a>
+<ul>
+<li class="chapter" data-level="20.1.1" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#cran-6"><i class="fa fa-check"></i><b>20.1.1</b> CRAN</a></li>
+<li class="chapter" data-level="20.1.2" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#github-6"><i class="fa fa-check"></i><b>20.1.2</b> GitHub</a></li>
+</ul></li>
+<li class="chapter" data-level="20.2" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#data-prep-2"><i class="fa fa-check"></i><b>20.2</b> Data Prep</a>
+<ul>
+<li class="chapter" data-level="20.2.1" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#import-2"><i class="fa fa-check"></i><b>20.2.1</b> Import</a></li>
+<li class="chapter" data-level="20.2.2" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#long-format-8"><i class="fa fa-check"></i><b>20.2.2</b> Long Format</a></li>
+<li class="chapter" data-level="20.2.3" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#wide-format-8"><i class="fa fa-check"></i><b>20.2.3</b> Wide Format</a></li>
+</ul></li>
+<li class="chapter" data-level="20.3" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#exploratory-data-analysis-12"><i class="fa fa-check"></i><b>20.3</b> Exploratory Data Analysis</a>
+<ul>
+<li class="chapter" data-level="20.3.1" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#summary-statistics-4"><i class="fa fa-check"></i><b>20.3.1</b> Summary Statistics</a></li>
+<li class="chapter" data-level="20.3.2" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#visualize-6"><i class="fa fa-check"></i><b>20.3.2</b> Visualize</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#gee-analysis-1"><i class="fa fa-check"></i><b>20.4</b> GEE Analysis</a>
+<ul>
+<li class="chapter" data-level="20.4.1" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#fit-various-correlation-structures"><i class="fa fa-check"></i><b>20.4.1</b> Fit Various Correlation Structures</a></li>
+<li class="chapter" data-level="20.4.2" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#compare-corelation-structures"><i class="fa fa-check"></i><b>20.4.2</b> Compare Corelation Structures</a></li>
+<li class="chapter" data-level="20.4.3" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#add-interaction-terms"><i class="fa fa-check"></i><b>20.4.3</b> Add Interaction Terms</a></li>
+<li class="chapter" data-level="20.4.4" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#visualize-best-model"><i class="fa fa-check"></i><b>20.4.4</b> Visualize Best Model</a></li>
+</ul></li>
+<li class="chapter" data-level="20.5" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#glmm-analysis-1"><i class="fa fa-check"></i><b>20.5</b> GLMM Analysis</a>
+<ul>
+<li class="chapter" data-level="20.5.1" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#ri-random-intercepts-only"><i class="fa fa-check"></i><b>20.5.1</b> RI: Random Intercepts Only</a></li>
+<li class="chapter" data-level="20.5.2" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#rias-random-intercepts-and-slopes-1"><i class="fa fa-check"></i><b>20.5.2</b> RIAS: Random Intercepts and Slopes</a></li>
+<li class="chapter" data-level="20.5.3" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#rais-add-interaction"><i class="fa fa-check"></i><b>20.5.3</b> RAIS: Add Interaction</a></li>
+<li class="chapter" data-level="20.5.4" data-path="glmm-count-outcome-bolous.html"><a href="glmm-count-outcome-bolous.html#visualize-best-model-1"><i class="fa fa-check"></i><b>20.5.4</b> Visualize Best Model</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html"><i class="fa fa-check"></i><b>21</b> Sample Size and Power</a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#key-publications"><i class="fa fa-check"></i><b>21.1</b> Key Publications</a></li>
+<li class="chapter" data-level="21.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#r-packages"><i class="fa fa-check"></i><b>21.2</b> R packages</a>
+<ul>
+<li class="chapter" data-level="21.2.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#powerlmm"><i class="fa fa-check"></i><b>21.2.1</b> powerlmm</a></li>
+<li class="chapter" data-level="21.2.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#simr"><i class="fa fa-check"></i><b>21.2.2</b> simr</a></li>
+<li class="chapter" data-level="21.2.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#sjstatssmpsize_lmm"><i class="fa fa-check"></i><b>21.2.3</b> sjstats::smpsize_lmm()</a></li>
+<li class="chapter" data-level="21.2.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#mlpowsim"><i class="fa fa-check"></i><b>21.2.4</b> MLPowSim</a></li>
+</ul></li>
+<li class="chapter" data-level="21.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#online-interactive-interfaces"><i class="fa fa-check"></i><b>21.3</b> Online Interactive Interfaces</a>
+<ul>
+<li class="chapter" data-level="21.3.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#glimmpse"><i class="fa fa-check"></i><b>21.3.1</b> GLIMMPSE</a></li>
+<li class="chapter" data-level="21.3.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#webpower"><i class="fa fa-check"></i><b>21.3.2</b> WebPower</a></li>
+</ul></li>
+<li class="chapter" data-level="21.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#stand-alone-computer-programs"><i class="fa fa-check"></i><b>21.4</b> Stand-alone Computer Programs</a>
+<ul>
+<li class="chapter" data-level="21.4.1" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#optimal-design"><i class="fa fa-check"></i><b>21.4.1</b> Optimal Design</a></li>
+<li class="chapter" data-level="21.4.2" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#pint"><i class="fa fa-check"></i><b>21.4.2</b> PinT</a></li>
+<li class="chapter" data-level="21.4.3" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#rmass2"><i class="fa fa-check"></i><b>21.4.3</b> RMASS2</a></li>
+<li class="chapter" data-level="21.4.4" data-path="sample-size-and-power.html"><a href="sample-size-and-power.html#acluster"><i class="fa fa-check"></i><b>21.4.4</b> ACluster</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="mlm-longitudinal-rct---exercise-and-diet" class="section level1" number="13">
+<h1><span class="header-section-number">13</span> MLM, Longitudinal: RCT - Exercise and Diet</h1>
+<div class="sourceCode" id="cb666"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb666-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)    <span class="co"># all things tidy</span></span>
+<span id="cb666-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pander)       <span class="co"># nice looking genderal tabulations</span></span>
+<span id="cb666-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(furniture)    <span class="co"># nice table1() descriptives</span></span>
+<span id="cb666-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(texreg)       <span class="co"># Convert Regression Output to LaTeX or HTML Tables</span></span>
+<span id="cb666-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(psych)        <span class="co"># contains some useful functions, like headTail</span></span>
+<span id="cb666-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(performance) <span class="co"># ICC calculations</span></span>
+<span id="cb666-7"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(interactions)</span>
+<span id="cb666-8"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sjPlot)       <span class="co"># Visualization for Models</span></span>
+<span id="cb666-9"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(effects)      <span class="co"># Effec displays for Models</span></span>
+<span id="cb666-10"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb666-11"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb666-11" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lme4)         <span class="co"># non-linear mixed-effects models</span></span></code></pre></div>
+<div id="the-dataset" class="section level2" number="13.1">
+<h2><span class="header-section-number">13.1</span> The dataset</h2>
+<p>This comes from a <strong>Randomized Controled Trial</strong>.</p>
+<div class="sourceCode" id="cb667"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb667-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb667-1" aria-hidden="true" tabindex="-1"></a>data_raw <span class="ot">&lt;-</span> <span class="fu">read.table</span>(<span class="st">&quot;https://raw.githubusercontent.com/CEHS-research/data/master/MLM/exercise_diet.txt&quot;</span>,</span>
+<span id="cb667-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb667-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">header =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb667-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb667-3" aria-hidden="true" tabindex="-1"></a>                  <span class="at">sep =</span> <span class="st">&quot;,&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb668"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb668-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb668-1" aria-hidden="true" tabindex="-1"></a>tibble<span class="sc">::</span><span class="fu">glimpse</span>(data_raw)</span></code></pre></div>
+<pre><code>Rows: 120
+Columns: 5
+$ id       &lt;int&gt; 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6~
+$ exertype &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1~
+$ diet     &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2~
+$ pulse    &lt;int&gt; 90, 92, 93, 93, 90, 92, 93, 93, 97, 97, 94, 94, 80, 82, 83, 8~
+$ time     &lt;int&gt; 0, 228, 296, 639, 0, 56, 434, 538, 0, 150, 295, 541, 0, 121, ~</code></pre>
+<div class="sourceCode" id="cb670"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb670-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="ot">&lt;-</span> data_raw <span class="sc">%&gt;%</span> </span>
+<span id="cb670-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">id =</span> id <span class="sc">%&gt;%</span> factor) <span class="sc">%&gt;%</span> </span>
+<span id="cb670-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">exertype =</span> exertype <span class="sc">%&gt;%</span> </span>
+<span id="cb670-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-4" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>(<span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb670-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;At Rest&quot;</span>,</span>
+<span id="cb670-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-6" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Leisurely Walking&quot;</span>,</span>
+<span id="cb670-7"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-7" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;Moderate Running&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb670-8"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">diet =</span> diet <span class="sc">%&gt;%</span> </span>
+<span id="cb670-9"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-9" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">factor</span>(<span class="at">levels =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb670-10"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-10" aria-hidden="true" tabindex="-1"></a>                         <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;low-fat&quot;</span>,</span>
+<span id="cb670-11"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-11" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">&quot;non-fat&quot;</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb670-12"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb670-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">time_min =</span> time <span class="sc">/</span> <span class="dv">60</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb671"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb671-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb671-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
+<span id="cb671-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb671-2" aria-hidden="true" tabindex="-1"></a>  psych<span class="sc">::</span><span class="fu">headTail</span>(<span class="at">top =</span> <span class="dv">10</span>, <span class="at">bottom =</span> <span class="dv">10</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb671-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb671-3" aria-hidden="true" tabindex="-1"></a>  pander<span class="sc">::</span><span class="fu">pander</span>(<span class="at">caption =</span> <span class="st">&quot;Raw Data&quot;</span>)</span></code></pre></div>
+<table style="width:97%;">
+<caption>Raw Data</caption>
+<colgroup>
+<col width="13%" />
+<col width="6%" />
+<col width="26%" />
+<col width="13%" />
+<col width="11%" />
+<col width="9%" />
+<col width="15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center"> </th>
+<th align="center">id</th>
+<th align="center">exertype</th>
+<th align="center">diet</th>
+<th align="center">pulse</th>
+<th align="center">time</th>
+<th align="center">time_min</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>1</strong></td>
+<td align="center">1</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">90</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>2</strong></td>
+<td align="center">1</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">92</td>
+<td align="center">228</td>
+<td align="center">3.8</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>3</strong></td>
+<td align="center">1</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">93</td>
+<td align="center">296</td>
+<td align="center">4.93</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>4</strong></td>
+<td align="center">1</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">93</td>
+<td align="center">639</td>
+<td align="center">10.65</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>5</strong></td>
+<td align="center">2</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">90</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>6</strong></td>
+<td align="center">2</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">92</td>
+<td align="center">56</td>
+<td align="center">0.93</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>7</strong></td>
+<td align="center">2</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">93</td>
+<td align="center">434</td>
+<td align="center">7.23</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>8</strong></td>
+<td align="center">2</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">93</td>
+<td align="center">538</td>
+<td align="center">8.97</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>9</strong></td>
+<td align="center">3</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">97</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>10</strong></td>
+<td align="center">3</td>
+<td align="center">At Rest</td>
+<td align="center">low-fat</td>
+<td align="center">97</td>
+<td align="center">150</td>
+<td align="center">2.5</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>…</strong></td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">NA</td>
+<td align="center">…</td>
+<td align="center">…</td>
+<td align="center">…</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>111</strong></td>
+<td align="center">28</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">140</td>
+<td align="center">263</td>
+<td align="center">4.38</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>112</strong></td>
+<td align="center">28</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">143</td>
+<td align="center">588</td>
+<td align="center">9.8</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>113</strong></td>
+<td align="center">29</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">94</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>114</strong></td>
+<td align="center">29</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">135</td>
+<td align="center">164</td>
+<td align="center">2.73</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>115</strong></td>
+<td align="center">29</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">130</td>
+<td align="center">353</td>
+<td align="center">5.88</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>116</strong></td>
+<td align="center">29</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">137</td>
+<td align="center">560</td>
+<td align="center">9.33</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>117</strong></td>
+<td align="center">30</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">99</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>118</strong></td>
+<td align="center">30</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">111</td>
+<td align="center">114</td>
+<td align="center">1.9</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>119</strong></td>
+<td align="center">30</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">140</td>
+<td align="center">362</td>
+<td align="center">6.03</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>120</strong></td>
+<td align="center">30</td>
+<td align="center">Moderate Running</td>
+<td align="center">non-fat</td>
+<td align="center">148</td>
+<td align="center">501</td>
+<td align="center">8.35</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="exploratory-data-analysis-5" class="section level2" number="13.2">
+<h2><span class="header-section-number">13.2</span> Exploratory Data Analysis</h2>
+<div id="participant-summary" class="section level3" number="13.2.1">
+<h3><span class="header-section-number">13.2.1</span> Participant Summary</h3>
+<p>In this experiment, both exercise (<code>exertype</code>) and diet (<code>diet</code>) were randomized at the subject level to create a 2x3 = 6 combinations each with exactly 5 participants.</p>
+<div class="sourceCode" id="cb672"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb672-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb672-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
+<span id="cb672-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb672-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(time <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb672-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb672-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(exertype) <span class="sc">%&gt;%</span> </span>
+<span id="cb672-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb672-4" aria-hidden="true" tabindex="-1"></a>  furniture<span class="sc">::</span><span class="fu">table1</span>(<span class="st">&quot;Diet, randomized&quot;</span> <span class="ot">=</span> diet, </span>
+<span id="cb672-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb672-5" aria-hidden="true" tabindex="-1"></a>                    <span class="at">caption =</span> <span class="st">&quot;Participants&quot;</span>,</span>
+<span id="cb672-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb672-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">output =</span> <span class="st">&quot;markdown&quot;</span>)</span></code></pre></div>
+<table>
+<caption><span id="tab:unnamed-chunk-532">Table 13.1: </span>Participants</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th>At Rest</th>
+<th>Leisurely Walking</th>
+<th>Moderate Running</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td></td>
+<td>n = 10</td>
+<td>n = 10</td>
+<td>n = 10</td>
+</tr>
+<tr class="even">
+<td>Diet, randomized</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>low-fat</td>
+<td>5 (50%)</td>
+<td>5 (50%)</td>
+<td>5 (50%)</td>
+</tr>
+<tr class="even">
+<td>non-fat</td>
+<td>5 (50%)</td>
+<td>5 (50%)</td>
+<td>5 (50%)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="baseline-summary-1" class="section level3" number="13.2.2">
+<h3><span class="header-section-number">13.2.2</span> Baseline Summary</h3>
+<div class="sourceCode" id="cb673"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb673-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb673-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
+<span id="cb673-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb673-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(time <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb673-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb673-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(exertype, diet) <span class="sc">%&gt;%</span> </span>
+<span id="cb673-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb673-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="at">mean =</span> <span class="fu">mean</span>(pulse)) <span class="sc">%&gt;%</span> </span>
+<span id="cb673-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb673-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">ungroup</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb673-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb673-6" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_wider</span>(<span class="at">names_from =</span> diet,</span>
+<span id="cb673-7"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb673-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">values_from =</span> mean) <span class="sc">%&gt;%</span> </span>
+<span id="cb673-8"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb673-8" aria-hidden="true" tabindex="-1"></a>  pander<span class="sc">::</span><span class="fu">pander</span>(<span class="at">caption =</span> <span class="st">&quot;Baseline Pulse, Means&quot;</span>)</span></code></pre></div>
+<p><code>summarise()</code> has grouped output by ‘exertype.’ You can override using the <code>.groups</code> argument.</p>
+<table style="width:56%;">
+<caption>Baseline Pulse, Means</caption>
+<colgroup>
+<col width="27%" />
+<col width="13%" />
+<col width="13%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">exertype</th>
+<th align="center">low-fat</th>
+<th align="center">non-fat</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">At Rest</td>
+<td align="center">90</td>
+<td align="center">92</td>
+</tr>
+<tr class="even">
+<td align="center">Leisurely Walking</td>
+<td align="center">91</td>
+<td align="center">96</td>
+</tr>
+<tr class="odd">
+<td align="center">Moderate Running</td>
+<td align="center">94</td>
+<td align="center">98</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raw-trajectories---person-profile-plot" class="section level3" number="13.2.3">
+<h3><span class="header-section-number">13.2.3</span> Raw Trajectories - Person Profile Plot</h3>
+<div id="connect-the-dots" class="section level4" number="13.2.3.1">
+<h4><span class="header-section-number">13.2.3.1</span> Connect the dots</h4>
+<div class="sourceCode" id="cb674"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb674-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb674-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
+<span id="cb674-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb674-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time_min,</span>
+<span id="cb674-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb674-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> pulse)) <span class="sc">+</span></span>
+<span id="cb674-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb674-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb674-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb674-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> id)) <span class="sc">+</span></span>
+<span id="cb674-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb674-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(diet <span class="sc">~</span> exertype) <span class="sc">+</span></span>
+<span id="cb674-7"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb674-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>()</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-534-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+<div id="loess---moving-average-smoothers" class="section level4" number="13.2.3.2">
+<h4><span class="header-section-number">13.2.3.2</span> Loess - Moving Average Smoothers</h4>
+<div class="sourceCode" id="cb675"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb675-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-1" aria-hidden="true" tabindex="-1"></a>data_long <span class="sc">%&gt;%</span> </span>
+<span id="cb675-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time_min,</span>
+<span id="cb675-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-3" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> pulse,</span>
+<span id="cb675-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-4" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> diet)) <span class="sc">+</span></span>
+<span id="cb675-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> id)) <span class="sc">+</span></span>
+<span id="cb675-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> exertype) <span class="sc">+</span></span>
+<span id="cb675-7"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb675-8"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>,</span>
+<span id="cb675-9"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-9" aria-hidden="true" tabindex="-1"></a>              <span class="at">se =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb675-10"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-10" aria-hidden="true" tabindex="-1"></a>              <span class="at">size =</span> <span class="dv">2</span>,</span>
+<span id="cb675-11"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">span =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb675-12"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.08</span>, <span class="fl">0.85</span>),</span>
+<span id="cb675-13"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb675-14"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,</span>
+<span id="cb675-15"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,</span>
+<span id="cb675-16"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,</span>
+<span id="cb675-17"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Pulse (Beats per Minute)&quot;</span>,</span>
+<span id="cb675-18"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb675-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-535-1.png" width="576" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+<div id="multilevel-modeling" class="section level2" number="13.3">
+<h2><span class="header-section-number">13.3</span> Multilevel Modeling</h2>
+<div id="null-model-1" class="section level3" number="13.3.1">
+<h3><span class="header-section-number">13.3.1</span> Null Model</h3>
+<div class="sourceCode" id="cb676"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb676-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb676-1" aria-hidden="true" tabindex="-1"></a>fit_lmer_0re <span class="ot">&lt;-</span> lmerTest<span class="sc">::</span><span class="fu">lmer</span>(pulse <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> id),</span>
+<span id="cb676-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb676-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">data =</span> data_long)</span></code></pre></div>
+<div class="sourceCode" id="cb677"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb677-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb677-1" aria-hidden="true" tabindex="-1"></a>texreg<span class="sc">::</span><span class="fu">knitreg</span>(fit_lmer_0re, <span class="at">single.row =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
+<caption>
+Statistical models
+</caption>
+<thead>
+<tr>
+<th style="padding-left: 5px;padding-right: 5px;">
+ 
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 1
+</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+(Intercept)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+102.13 (2.54)<sup>***</sup>
+</td>
+</tr>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+AIC
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+963.89
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+BIC
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+972.25
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Log Likelihood
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-478.95
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Num. obs.
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+120
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Num. groups: id
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+30
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Var: id (Intercept)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+165.84
+</td>
+</tr>
+<tr style="border-bottom: 2px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+Var: Residual
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+109.39
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="font-size: 0.8em;" colspan="2">
+<sup><em><strong></sup>p &lt; 0.001; <sup></strong></sup>p &lt; 0.01; <sup></em></sup>p &lt; 0.05
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div id="icc-r-squared" class="section level3" number="13.3.2">
+<h3><span class="header-section-number">13.3.2</span> ICC &amp; R-squared</h3>
+<div class="sourceCode" id="cb678"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb678-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb678-1" aria-hidden="true" tabindex="-1"></a>performance<span class="sc">::</span><span class="fu">icc</span>(fit_lmer_0re)</span></code></pre></div>
+<pre><code># Intraclass Correlation Coefficient
+
+     Adjusted ICC: 0.603
+  Conditional ICC: 0.603</code></pre>
+<div class="sourceCode" id="cb680"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb680-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb680-1" aria-hidden="true" tabindex="-1"></a>performance<span class="sc">::</span><span class="fu">r2</span>(fit_lmer_0re)</span></code></pre></div>
+<pre><code># R2 for Mixed Models
+
+  Conditional R2: 0.603
+     Marginal R2: 0.000</code></pre>
+</div>
+<div id="add-fixed-effects-level-specific" class="section level3" number="13.3.3">
+<h3><span class="header-section-number">13.3.3</span> Add fixed effects: level specific</h3>
+<div id="fit-nested-models-3" class="section level4" number="13.3.3.1">
+<h4><span class="header-section-number">13.3.3.1</span> Fit nested models</h4>
+<div class="sourceCode" id="cb682"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb682-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Null Model (random intercept only)</span></span>
+<span id="cb682-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-2" aria-hidden="true" tabindex="-1"></a>fit_lmer_0ml <span class="ot">&lt;-</span> lmerTest<span class="sc">::</span><span class="fu">lmer</span>(pulse <span class="sc">~</span> <span class="dv">1</span> <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> id),</span>
+<span id="cb682-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">data =</span> data_long,</span>
+<span id="cb682-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb682-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb682-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Add quadratic time</span></span>
+<span id="cb682-7"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-7" aria-hidden="true" tabindex="-1"></a>fit_lmer_1ml <span class="ot">&lt;-</span> lmerTest<span class="sc">::</span><span class="fu">lmer</span>(pulse <span class="sc">~</span> time_min <span class="sc">+</span> <span class="fu">I</span>(time_min<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> id),</span>
+<span id="cb682-8"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-8" aria-hidden="true" tabindex="-1"></a>                               <span class="at">data =</span> data_long,</span>
+<span id="cb682-9"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-9" aria-hidden="true" tabindex="-1"></a>                               <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb682-10"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb682-11"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Add main effects for 2 interventions (person-specific, i.e. level-2 factors)</span></span>
+<span id="cb682-12"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-12" aria-hidden="true" tabindex="-1"></a>fit_lmer_2ml <span class="ot">&lt;-</span> lmerTest<span class="sc">::</span><span class="fu">lmer</span>(pulse <span class="sc">~</span> diet <span class="sc">+</span> exertype <span class="sc">+</span> time_min <span class="sc">+</span> <span class="fu">I</span>(time_min<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> id),</span>
+<span id="cb682-13"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-13" aria-hidden="true" tabindex="-1"></a>                               <span class="at">data =</span> data_long,</span>
+<span id="cb682-14"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-14" aria-hidden="true" tabindex="-1"></a>                               <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb682-15"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb682-16"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Add interaction between level-2 factors</span></span>
+<span id="cb682-17"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-17" aria-hidden="true" tabindex="-1"></a>fit_lmer_3ml <span class="ot">&lt;-</span> lmerTest<span class="sc">::</span><span class="fu">lmer</span>(pulse <span class="sc">~</span> diet<span class="sc">*</span>exertype <span class="sc">+</span> time_min <span class="sc">+</span> <span class="fu">I</span>(time_min<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> id),</span>
+<span id="cb682-18"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-18" aria-hidden="true" tabindex="-1"></a>                               <span class="at">data =</span> data_long,</span>
+<span id="cb682-19"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-19" aria-hidden="true" tabindex="-1"></a>                               <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb682-20"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb682-21"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Add exercise interacting with [time &amp; time-squared]</span></span>
+<span id="cb682-22"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-22" aria-hidden="true" tabindex="-1"></a>fit_lmer_4ml <span class="ot">&lt;-</span> lmerTest<span class="sc">::</span><span class="fu">lmer</span>(pulse <span class="sc">~</span> diet<span class="sc">*</span>exertype <span class="sc">+</span> exertype<span class="sc">*</span>time_min <span class="sc">+</span> exertype<span class="sc">*</span><span class="fu">I</span>(time_min<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> id),</span>
+<span id="cb682-23"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-23" aria-hidden="true" tabindex="-1"></a>                               <span class="at">data =</span> data_long,</span>
+<span id="cb682-24"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-24" aria-hidden="true" tabindex="-1"></a>                               <span class="at">REML =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb682-25"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb682-26"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Add diet interacting with [time &amp; time-squared]</span></span>
+<span id="cb682-27"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-27" aria-hidden="true" tabindex="-1"></a>fit_lmer_5ml <span class="ot">&lt;-</span> lmerTest<span class="sc">::</span><span class="fu">lmer</span>(pulse <span class="sc">~</span> diet<span class="sc">*</span>exertype<span class="sc">*</span>time_min <span class="sc">+</span> diet<span class="sc">*</span>exertype<span class="sc">*</span><span class="fu">I</span>(time_min<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> id),</span>
+<span id="cb682-28"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-28" aria-hidden="true" tabindex="-1"></a>                               <span class="at">data =</span> data_long,</span>
+<span id="cb682-29"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb682-29" aria-hidden="true" tabindex="-1"></a>                               <span class="at">REML =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb683"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb683-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb683-1" aria-hidden="true" tabindex="-1"></a>texreg<span class="sc">::</span><span class="fu">knitreg</span>(<span class="fu">list</span>(fit_lmer_1ml, </span>
+<span id="cb683-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb683-2" aria-hidden="true" tabindex="-1"></a>                     fit_lmer_2ml, </span>
+<span id="cb683-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb683-3" aria-hidden="true" tabindex="-1"></a>                     fit_lmer_3ml, </span>
+<span id="cb683-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb683-4" aria-hidden="true" tabindex="-1"></a>                     fit_lmer_4ml, </span>
+<span id="cb683-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb683-5" aria-hidden="true" tabindex="-1"></a>                     fit_lmer_5ml))</span></code></pre></div>
+<table class="texreg" style="margin: 10px auto;border-collapse: collapse;border-spacing: 0px;caption-side: bottom;color: #000000;border-top: 2px solid #000000;">
+<caption>
+Statistical models
+</caption>
+<thead>
+<tr>
+<th style="padding-left: 5px;padding-right: 5px;">
+ 
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 1
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 2
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 3
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 4
+</th>
+<th style="padding-left: 5px;padding-right: 5px;">
+Model 5
+</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+(Intercept)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+94.05<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+79.30<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+82.15<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+89.89<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+89.81<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(2.71)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(2.46)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(2.64)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(2.69)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(2.78)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+time_min
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.57<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.58<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.44<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.24
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.37
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.65)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.64)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.64)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.62)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.87)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+time_min^2
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.21<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.21<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.20<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.01
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.03
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.06)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.06)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.06)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.05)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.09)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dietnon-fat
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+8.36<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+2.89
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+1.99
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+2.11
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(2.21)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(3.36)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(3.45)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(3.89)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+exertypeLeisurely Walking
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+5.20
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.81
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.84
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+1.40
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(2.70)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(3.34)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(3.78)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(3.92)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+exertypeModerate Running
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+26.43<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+19.71<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.53
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+5.71
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(2.70)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(3.34)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(3.77)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(3.92)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dietnon-fat:exertypeLeisurely Walking
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+2.83
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.70
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+2.53
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(4.73)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(4.86)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(5.50)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dietnon-fat:exertypeModerate Running
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+13.47<sup>**</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+14.02<sup>**</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+3.99
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(4.74)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(4.86)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(5.50)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+exertypeLeisurely Walking:time_min
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+1.17
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+1.09
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.87)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(1.17)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+exertypeModerate Running:time_min
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+8.19<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+5.77<sup>***</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.90)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(1.20)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+exertypeLeisurely Walking:time_min^2
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.07
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.08
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.11)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+exertypeModerate Running:time_min^2
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.48<sup>***</sup>
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.33<sup>**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.08)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.11)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dietnon-fat:time_min
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.17
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(1.14)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dietnon-fat:time_min^2
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.02
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.10)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dietnon-fat:exertypeLeisurely Walking:time_min
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.21
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(1.56)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dietnon-fat:exertypeModerate Running:time_min
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+4.42<sup>**</sup>
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(1.61)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dietnon-fat:exertypeLeisurely Walking:time_min^2
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+0.01
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.14)
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+dietnon-fat:exertypeModerate Running:time_min^2
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-0.27
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+ 
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+(0.15)
+</td>
+</tr>
+<tr style="border-top: 1px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+AIC
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+927.70
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+884.96
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+881.11
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+785.34
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+769.23
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+BIC
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+941.64
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+907.26
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+908.99
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+824.36
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+824.98
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Log Likelihood
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-458.85
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-434.48
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-430.56
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-378.67
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+-364.62
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Num. obs.
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+120
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+120
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+120
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+120
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+120
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Num. groups: id
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+30
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+30
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+30
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+30
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+30
+</td>
+</tr>
+<tr>
+<td style="padding-left: 5px;padding-right: 5px;">
+Var: id (Intercept)
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+167.58
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+19.46
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+11.03
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+24.13
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+25.64
+</td>
+</tr>
+<tr style="border-bottom: 2px solid #000000;">
+<td style="padding-left: 5px;padding-right: 5px;">
+Var: Residual
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+67.47
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+67.47
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+67.52
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+20.95
+</td>
+<td style="padding-left: 5px;padding-right: 5px;">
+15.32
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr>
+<td style="font-size: 0.8em;" colspan="6">
+<sup><em><strong></sup>p &lt; 0.001; <sup></strong></sup>p &lt; 0.01; <sup></em></sup>p &lt; 0.05
+</td>
+</tr>
+</tfoot>
+</table>
+</div>
+<div id="evaluate-model-fit-i.e.-variable-significance" class="section level4" number="13.3.3.2">
+<h4><span class="header-section-number">13.3.3.2</span> Evaluate Model Fit, i.e. variable significance</h4>
+<div class="sourceCode" id="cb684"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb684-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb684-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit_lmer_1ml, </span>
+<span id="cb684-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb684-2" aria-hidden="true" tabindex="-1"></a>      fit_lmer_2ml, </span>
+<span id="cb684-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb684-3" aria-hidden="true" tabindex="-1"></a>      fit_lmer_3ml, </span>
+<span id="cb684-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb684-4" aria-hidden="true" tabindex="-1"></a>      fit_lmer_4ml, </span>
+<span id="cb684-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb684-5" aria-hidden="true" tabindex="-1"></a>      fit_lmer_5ml)</span></code></pre></div>
+<pre><code>Data: data_long
+Models:
+fit_lmer_1ml: pulse ~ time_min + I(time_min^2) + (1 | id)
+fit_lmer_2ml: pulse ~ diet + exertype + time_min + I(time_min^2) + (1 | id)
+fit_lmer_3ml: pulse ~ diet * exertype + time_min + I(time_min^2) + (1 | id)
+fit_lmer_4ml: pulse ~ diet * exertype + exertype * time_min + exertype * I(time_min^2) + (1 | id)
+fit_lmer_5ml: pulse ~ diet * exertype * time_min + diet * exertype * I(time_min^2) + (1 | id)
+             npar    AIC    BIC  logLik deviance   Chisq Df Pr(&gt;Chisq)    
+fit_lmer_1ml    5 927.70 941.64 -458.85   917.70                          
+fit_lmer_2ml    8 884.96 907.26 -434.48   868.96  48.742  3  1.480e-10 ***
+fit_lmer_3ml   10 881.11 908.99 -430.56   861.11   7.847  2    0.01977 *  
+fit_lmer_4ml   14 785.34 824.36 -378.67   757.34 103.776  4  &lt; 2.2e-16 ***
+fit_lmer_5ml   20 769.23 824.98 -364.62   729.23  28.108  6  8.968e-05 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<div class="sourceCode" id="cb686"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb686-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb686-1" aria-hidden="true" tabindex="-1"></a>performance<span class="sc">::</span><span class="fu">compare_performance</span>(fit_lmer_1ml, </span>
+<span id="cb686-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb686-2" aria-hidden="true" tabindex="-1"></a>                                 fit_lmer_2ml, </span>
+<span id="cb686-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb686-3" aria-hidden="true" tabindex="-1"></a>                                 fit_lmer_3ml, </span>
+<span id="cb686-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb686-4" aria-hidden="true" tabindex="-1"></a>                                 fit_lmer_4ml, </span>
+<span id="cb686-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb686-5" aria-hidden="true" tabindex="-1"></a>                                 fit_lmer_5ml,</span>
+<span id="cb686-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb686-6" aria-hidden="true" tabindex="-1"></a>                                 <span class="at">rank =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code># Comparison of Model Performance Indices
+
+Name         |           Model |     AIC |     BIC | R2 (cond.) | R2 (marg.) |   ICC |  RMSE | Sigma | Performance-Score
+------------------------------------------------------------------------------------------------------------------------
+fit_lmer_5ml | lmerModLmerTest | 769.232 | 824.981 |      0.944 |      0.850 | 0.626 | 3.462 | 3.914 |            97.76%
+fit_lmer_4ml | lmerModLmerTest | 785.339 | 824.364 |      0.923 |      0.835 | 0.535 | 4.080 | 4.577 |            88.06%
+fit_lmer_2ml | lmerModLmerTest | 884.962 | 907.262 |      0.750 |      0.678 | 0.224 | 7.644 | 8.214 |            21.72%
+fit_lmer_3ml | lmerModLmerTest | 881.115 | 908.990 |      0.750 |      0.710 | 0.140 | 7.800 | 8.217 |            19.91%
+fit_lmer_1ml | lmerModLmerTest | 927.704 | 941.641 |      0.748 |      0.121 | 0.713 | 7.221 | 8.214 |            16.20%</code></pre>
+</div>
+</div>
+<div id="final-model-4" class="section level3" number="13.3.4">
+<h3><span class="header-section-number">13.3.4</span> Final Model</h3>
+<p>Refit via REML</p>
+<div class="sourceCode" id="cb688"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb688-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb688-1" aria-hidden="true" tabindex="-1"></a>fit_lmer_5re <span class="ot">&lt;-</span> lmerTest<span class="sc">::</span><span class="fu">lmer</span>(pulse <span class="sc">~</span> diet<span class="sc">*</span>exertype<span class="sc">*</span>time_min <span class="sc">+</span> </span>
+<span id="cb688-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb688-2" aria-hidden="true" tabindex="-1"></a>                                 diet<span class="sc">*</span>exertype<span class="sc">*</span><span class="fu">I</span>(time_min<span class="sc">^</span><span class="dv">2</span>) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> id),</span>
+<span id="cb688-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb688-3" aria-hidden="true" tabindex="-1"></a>                               <span class="at">data =</span> data_long,</span>
+<span id="cb688-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb688-4" aria-hidden="true" tabindex="-1"></a>                               <span class="at">REML =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<div id="visualize" class="section level4" number="13.3.4.1">
+<h4><span class="header-section-number">13.3.4.1</span> Visualize</h4>
+<div class="sourceCode" id="cb689"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb689-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb689-1" aria-hidden="true" tabindex="-1"></a>sjPlot<span class="sc">::</span><span class="fu">plot_model</span>(fit_lmer_5re,</span>
+<span id="cb689-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb689-2" aria-hidden="true" tabindex="-1"></a>                   <span class="at">type =</span> <span class="st">&quot;pred&quot;</span>,</span>
+<span id="cb689-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb689-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">terms =</span> <span class="fu">c</span>(<span class="st">&quot;time_min&quot;</span>, <span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>))</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-545-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb690"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb690-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb690-1" aria-hidden="true" tabindex="-1"></a>interactions<span class="sc">::</span><span class="fu">interact_plot</span>(fit_lmer_5re,</span>
+<span id="cb690-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb690-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">pred =</span> time_min,</span>
+<span id="cb690-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb690-3" aria-hidden="true" tabindex="-1"></a>                            <span class="at">modx =</span> diet,</span>
+<span id="cb690-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb690-4" aria-hidden="true" tabindex="-1"></a>                            <span class="at">mod2 =</span> exertype,</span>
+<span id="cb690-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb690-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">interval =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-546-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb691"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb691-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-1" aria-hidden="true" tabindex="-1"></a>effects<span class="sc">::</span><span class="fu">Effect</span>(<span class="at">focal.predictors =</span> <span class="fu">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),</span>
+<span id="cb691-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">mod =</span> fit_lmer_5re) <span class="sc">%&gt;%</span> </span>
+<span id="cb691-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-3" aria-hidden="true" tabindex="-1"></a>  data.frame <span class="sc">%&gt;%</span> </span>
+<span id="cb691-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time_min,</span>
+<span id="cb691-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-5" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> fit,</span>
+<span id="cb691-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">fill =</span> diet,</span>
+<span id="cb691-7"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">color =</span> diet)) <span class="sc">+</span></span>
+<span id="cb691-8"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">size =</span> <span class="fl">1.5</span>) <span class="sc">+</span></span>
+<span id="cb691-9"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb691-10"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> exertype) <span class="sc">+</span></span>
+<span id="cb691-11"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.08</span>, <span class="fl">0.85</span>),</span>
+<span id="cb691-12"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb691-13"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,</span>
+<span id="cb691-14"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By Exercise and Diet Groupings&quot;</span>,</span>
+<span id="cb691-15"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,</span>
+<span id="cb691-16"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="sc">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,</span>
+<span id="cb691-17"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,</span>
+<span id="cb691-18"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb691-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Diet Plan&quot;</span>)</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-547-1.png" width="576" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb692"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb692-1"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-1" aria-hidden="true" tabindex="-1"></a>effects<span class="sc">::</span><span class="fu">Effect</span>(<span class="at">focal.predictors =</span> <span class="fu">c</span>(<span class="st">&quot;diet&quot;</span>, <span class="st">&quot;exertype&quot;</span>, <span class="st">&quot;time_min&quot;</span>),</span>
+<span id="cb692-2"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">mod =</span> fit_lmer_5re,</span>
+<span id="cb692-3"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">xlevels =</span> <span class="fu">list</span>(<span class="st">&quot;time_min&quot;</span> <span class="ot">=</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, </span>
+<span id="cb692-4"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-4" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">to   =</span> <span class="dv">12</span>, </span>
+<span id="cb692-5"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-5" aria-hidden="true" tabindex="-1"></a>                                                <span class="at">by   =</span> <span class="fl">0.5</span>))) <span class="sc">%&gt;%</span> </span>
+<span id="cb692-6"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-6" aria-hidden="true" tabindex="-1"></a>  data.frame <span class="sc">%&gt;%</span> </span>
+<span id="cb692-7"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">diet =</span> <span class="fu">fct_rev</span>(diet)) <span class="sc">%&gt;%</span>  <span class="co"># reverse the order of the levels</span></span>
+<span id="cb692-8"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> time_min,</span>
+<span id="cb692-9"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> fit)) <span class="sc">+</span></span>
+<span id="cb692-10"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> fit <span class="sc">-</span> se,</span>
+<span id="cb692-11"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-11" aria-hidden="true" tabindex="-1"></a>                  <span class="at">ymax =</span> fit <span class="sc">+</span> se,</span>
+<span id="cb692-12"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-12" aria-hidden="true" tabindex="-1"></a>                  <span class="at">fill =</span> diet),</span>
+<span id="cb692-13"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-13" aria-hidden="true" tabindex="-1"></a>              <span class="at">alpha =</span> <span class="fl">0.3</span>) <span class="sc">+</span></span>
+<span id="cb692-14"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">linetype =</span> diet),</span>
+<span id="cb692-15"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-15" aria-hidden="true" tabindex="-1"></a>                <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb692-16"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb692-17"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="sc">~</span> exertype) <span class="sc">+</span></span>
+<span id="cb692-18"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="fu">c</span>(<span class="fl">0.12</span>, <span class="fl">0.85</span>),</span>
+<span id="cb692-19"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-19" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.background =</span> <span class="fu">element_rect</span>(<span class="at">color =</span> <span class="st">&quot;black&quot;</span>),</span>
+<span id="cb692-20"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-20" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.key.width =</span> <span class="fu">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb692-21"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Raw Pulse Trajectories&quot;</span>,</span>
+<span id="cb692-22"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">&quot;By Randomized Exercise and Diet Intervention&quot;</span>,</span>
+<span id="cb692-23"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">&quot;Time (Minutes Post-Baseline)&quot;</span>,</span>
+<span id="cb692-24"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Estimated Marginal Mean</span><span class="sc">\n</span><span class="st">Pulse (Beats per Minute)&quot;</span>,</span>
+<span id="cb692-25"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-25" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">&quot;Diet Plan&quot;</span>,</span>
+<span id="cb692-26"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-26" aria-hidden="true" tabindex="-1"></a>       <span class="at">color =</span> <span class="st">&quot;Diet Plan&quot;</span>,</span>
+<span id="cb692-27"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-27" aria-hidden="true" tabindex="-1"></a>       <span class="at">linetype =</span> <span class="st">&quot;Diet Plan&quot;</span>) <span class="sc">+</span></span>
+<span id="cb692-28"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;gray50&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb692-29"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_linetype_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;solid&quot;</span>, <span class="st">&quot;longdash&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb692-30"><a href="mlm-longitudinal-rct---exercise-and-diet.html#cb692-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">breaks =</span> <span class="fu">seq</span>(<span class="at">from =</span> <span class="dv">0</span>, <span class="at">to =</span> <span class="dv">14</span>, <span class="at">by =</span> <span class="dv">5</span>))</span></code></pre></div>
+<p><img src="eBook_multilevel_files/figure-html/unnamed-chunk-548-1.png" width="576" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="mlm-longitudinal-hox-ch-5---student-gpa.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="gee-continuous-outcome-beat-the-blues.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": null,
+"search": {
+"engine": "lunr",
+"options": null
+},
+"toc": {
+"collapse": "section",
+"toc_depth": 3
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

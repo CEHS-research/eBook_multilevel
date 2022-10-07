@@ -24,8 +24,10 @@ library(psych)        # contains some useful functions, like headTail
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(gee)          # Generalized Estimating Equations
 library(effects)      # Plotting estimated marginal means
+library(performance)
+library(interactions)
 
-library(gridExtra)    # combining graphics
+library(patchwork)    # combining graphics
 ```
 
 
@@ -88,9 +90,15 @@ This data was also using in an article title *"Missing data methods in longitudi
 
 ```{r}
 data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/data/master/MLM/Muscatine.txt", header=TRUE)
+```
 
+
+```{r}
 str(data_raw)
+```
 
+
+```{r}
 psych::headTail(data_raw, top = 10)
 ```
 
@@ -110,7 +118,7 @@ complete_ids <- data_raw %>%
   dplyr::filter(n == 3) %>% 
   dplyr::pull(id)
 
-set.seed(8892)
+set.seed(8892)  # needed?
 
 use_ids <- complete_ids %>% sample(350)
 
@@ -133,9 +141,15 @@ data_long <- data_raw %>%
   mutate(obesity  = obesity %>% factor(levels = 0:1, 
                                        labels = c("No", "Yes"))) %>% 
   select(id, gender, age_base, age_curr, occation, obesity)
+```
 
+
+```{r}
 str(data_long)
+```
 
+
+```{r}
 psych::headTail(data_long, top = 10)
 ```
 
@@ -144,22 +158,23 @@ psych::headTail(data_long, top = 10)
 
 ```{r}
 data_wide <- data_long %>% 
-  gather(key = var,
-         value = val,
-         age_curr, obesity) %>% 
-  unite(col = var_occ,
-        var, occation) %>% 
-  spread(key = var_occ,
-         value = val) %>% 
+  tidyr::pivot_wider(names_from = occation,
+                     names_sep = "_",
+                     values_from = c(obesity, age_curr)) %>% 
   mutate_if(is.character, factor)%>% 
   group_by(id) %>% 
   mutate(num_miss = sum(is.na(c(obesity_1, obesity_2, obesity_3)))) %>% 
   ungroup() %>% 
-  mutate(num_miss = as.factor(num_miss)) 
+  mutate(num_miss = as.factor(num_miss))
+```
 
 
+```{r}
 str(data_wide)
+```
 
+
+```{r}
 psych::headTail(data_wide, top = 10)
 ```
 
@@ -183,11 +198,13 @@ psych::headTail(data_wide, top = 10)
 
 ```{r}
 data_wide %>% 
-  furniture::table1(age_base, obesity_1,
-                    splitby = ~ gender,
+  dplyr::group_by(gender) %>% 
+  furniture::table1("Baseline Age" = age_base, 
+                    "Baseline Obesity" = obesity_1,
+                    total   = TRUE,
                     test    = TRUE,
                     na.rm   = FALSE,
-                    output  = "html")
+                    output  = "markdown")
 ```
 
 
@@ -296,13 +313,12 @@ data_long %>%
   mutate(time = (occation %>% as.numeric) * 2 - 2) %>% 
   ggplot(aes(x = time,
              y = prop,
-             color = gender,
              fill = gender))  +
   geom_ribbon(aes(ymin = prop - se,
                   ymax = prop + se),
               alpha = 0.2) +
-  geom_point() +
-  geom_line() +
+  geom_point(aes(color = gender)) +
+  geom_line(aes(color = gender)) +
   theme_bw() +
   facet_wrap(~ age_base, labeller = label_both) +
   labs(title    = "Observed Obesity Rates, by Gender within Cohort",
@@ -328,13 +344,12 @@ data_long %>%
   ggplot(aes(x = age_curr %>% as.character %>% as.numeric,
              y = prop,
              group = gender,
-             color = gender,
              fill = gender))  +
   geom_ribbon(aes(ymin = prop - se,
                   ymax = prop + se),
               alpha = 0.2) +
-  geom_point() +
-  geom_line() +
+  geom_point(aes(color = gender)) +
+  geom_line(aes(color = gender)) +
   theme_bw() +
   geom_vline(xintercept = 12, 
              linetype   = "dashed", 
@@ -372,17 +387,17 @@ psych::headTail(data_long)
 ```{r}
 fit_glm_1 <- glm(obesity_num ~ gender*age_center + gender*I(age_center^2), 
                  data   = data_long,
-                 family = binomial)
+                 family = binomial(link = "logit"))
 
 fit_glm_2 <- glm(obesity_num ~ gender + age_center + I(age_center^2), 
                  data   = data_long,
-                 family = binomial)
+                 family = binomial(link = "logit"))
 ```
 
 
-```{r}
-texreg::screenreg(list(extract_glm_exp(fit_glm_1), 
-                       extract_glm_exp(fit_glm_2)),
+```{r, results='asis'}
+texreg::knitreg(list(extract_glm_exp(fit_glm_1), 
+                     extract_glm_exp(fit_glm_2)),
                   custom.model.names = c("Interaction",
                                          "Main Effects"),
                   caption = "GLM: Parameter EStimates",
@@ -400,12 +415,12 @@ plot_pred_glm <- Effect(c("gender", "age_center"),
               y        = fit,
               group    = gender,
               linetype = gender,
-              fill     = gender,
-              color    = gender)) +
+              fill     = gender)) +
   geom_ribbon(aes(ymin = fit - se,
                   ymax = fit + se),
               alpha = .3) +
-   geom_line(size = 1.5) +
+   geom_line(aes(color = gender),
+             size = 1.5) +
    theme_bw() +
    labs(title    = "Generalized Linear Model: Model #2",
         subtitle = "Predicted Probability of Obesity",
@@ -433,7 +448,7 @@ plot_pred_glm
 fit_gee_1in <- gee::gee(obesity_num ~ gender*age_center + gender*I(age_center^2), 
                         id          = id, 
                         data        = data_long,
-                        family      = binomial,
+                        family      = binomial(link = "logit"),
                         corstr      = 'independence', 
                         scale.fix   = TRUE,
                         scale.value = 1)
@@ -441,7 +456,7 @@ fit_gee_1in <- gee::gee(obesity_num ~ gender*age_center + gender*I(age_center^2)
 fit_gee_1ex <- gee::gee(obesity_num ~ gender*age_center + gender*I(age_center^2), 
                         id          = id, 
                         data        = data_long,
-                        family      = binomial,
+                        family      = binomial(link = "logit"),
                         corstr      = 'exchangeable', 
                         scale.fix   = TRUE,
                         scale.value = 1)
@@ -449,22 +464,22 @@ fit_gee_1ex <- gee::gee(obesity_num ~ gender*age_center + gender*I(age_center^2)
 fit_gee_1un <- gee::gee(obesity_num ~ gender*age_center + gender*I(age_center^2), 
                         id          = id, 
                         data        = data_long,
-                        family      = binomial,
+                        family      = binomial(link = "logit"),
                         corstr      = 'unstructured', 
                         scale.fix   = TRUE,
                         scale.value = 1)
 ```
 
-```{r}
-texreg::screenreg(list(extract_gee_exp(fit_gee_1in), 
-                       extract_gee_exp(fit_gee_1ex),
-                       extract_gee_exp(fit_gee_1un)),
-                  custom.model.names = c("Independent",
-                                         "Exchangable",
-                                         "Unstructured"),
-                  caption = "Gee Model Parameters: With Interactions",
-                  single.row = TRUE,
-                  ci.test = 1)
+```{r, results='asis'}
+texreg::knitreg(list(extract_gee_exp(fit_gee_1in), 
+                     extract_gee_exp(fit_gee_1ex),
+                     extract_gee_exp(fit_gee_1un)),
+                custom.model.names = c("Independent",
+                                       "Exchangable",
+                                       "Unstructured"),
+                caption = "Gee Model Parameters: With Interactions",
+                single.row = TRUE,
+                ci.test = 1)
 ```
 
 ### Drop the interaction with `gender`.
@@ -473,7 +488,7 @@ texreg::screenreg(list(extract_gee_exp(fit_gee_1in),
 fit_gee_2in <- gee::gee(obesity_num ~ gender + age_center + I(age_center^2), 
                         id          = id, 
                         data        = data_long,
-                        family      = binomial,
+                        family      = binomial(link = "logit"),
                         corstr      = 'independence', 
                         scale.fix   = TRUE,
                         scale.value = 1)
@@ -481,7 +496,7 @@ fit_gee_2in <- gee::gee(obesity_num ~ gender + age_center + I(age_center^2),
 fit_gee_2ex <- gee::gee(obesity_num ~ gender + age_center + I(age_center^2), 
                         id          = id, 
                         data        = data_long,
-                        family      = binomial,
+                        family      = binomial(link = "logit"),
                         corstr      = 'exchangeable', 
                         scale.fix   = TRUE,
                         scale.value = 1)
@@ -489,15 +504,15 @@ fit_gee_2ex <- gee::gee(obesity_num ~ gender + age_center + I(age_center^2),
 fit_gee_2un <- gee::gee(obesity_num ~ gender + age_center + I(age_center^2),  
                         id          = id, 
                         data        = data_long,
-                        family      = binomial,
+                        family      = binomial(link = "logit"),
                         corstr      = 'unstructured', 
                         scale.fix   = TRUE,
                         scale.value = 1)
 ```
 
 
-```{r}
-texreg::screenreg(list(extract_gee_exp(fit_gee_2in), 
+```{r, results='asis'}
+texreg::knitreg(list(extract_gee_exp(fit_gee_2in), 
                        extract_gee_exp(fit_gee_2ex),
                        extract_gee_exp(fit_gee_2un)),
                   custom.model.names = c("Independent",
@@ -515,11 +530,17 @@ texreg::screenreg(list(extract_gee_exp(fit_gee_2in),
 fit_geeglm_2un <- geepack::geeglm(obesity_num ~ gender + age_center + I(age_center^2),  
                                   id          = id, 
                                   data        = data_long,
-                                  family      = binomial,
+                                  family      = binomial(link = "logit"),
                                   corstr      = 'unstructured')
 
 ```
 
+
+```{r}
+interactions::interact_plot(model = fit_geeglm_2un,
+                            pred = age_center,
+                            modx = gender)
+```
 
 
 
@@ -563,11 +584,11 @@ plot_pred_gee
 ```{r}
 fit_glmm_1 <- lme4::glmer(obesity_num ~ age_center*gender + I(age_center^2)*gender + (1|id), 
                           data = data_long,
-                          family = binomial) 
+                          family      = binomial(link = "logit")) 
 
 fit_glmm_2 <- lme4::glmer(obesity_num ~ gender + age_center + I(age_center^2) + (1|id), 
                           data = data_long,
-                          family = binomial) 
+                          family      = binomial(link = "logit")) 
 
 ```
 
@@ -578,16 +599,21 @@ anova(fit_glmm_1, fit_glmm_2)
 ```
 
 
-```{r}
-texreg::screenreg(list(extract_glmer_exp(fit_glmm_1), 
-                       extract_glmer_exp(fit_glmm_2)),
-                  custom.model.names = c("Interaction",
-                                         "Main Effects"),
-                  caption = "GLMM: Parameter EStimates",
-                  single.row = TRUE,
-                  ci.test = 1)
+```{r, results='asis'}
+texreg::knitreg(list(extract_glmer_exp(fit_glmm_1), 
+                     extract_glmer_exp(fit_glmm_2)),
+                custom.model.names = c("Interaction",
+                                       "Main Effects"),
+                caption = "GLMM: Parameter EStimates",
+                single.row = TRUE,
+                ci.test = 1)
 ```
 
+```{r}
+interactions::interact_plot(model = fit_glmm_2,
+                            pred = age_center,
+                            modx = gender)
+```
 
 
 
@@ -630,8 +656,8 @@ plot_pred_glmm
 
 ## Compare Methods
 
-```{r}
-texreg::screenreg(list(extract_glm_exp(fit_glm_2),
+```{r, results="asis"}
+texreg::knitreg(list(extract_glm_exp(fit_glm_2),
                        extract_gee_exp(fit_gee_2un),
                        extract_glmer_exp(fit_glmm_2)),
                   custom.model.names = c("GLM",
@@ -643,11 +669,16 @@ texreg::screenreg(list(extract_glm_exp(fit_glm_2),
 ```
 
 
-```{r, fig.height=10, fig.width=7.5}
-gridExtra::grid.arrange(plot_pred_glm, 
-                        plot_pred_gee, 
-                        plot_pred_glmm)
+```{block type='rmdlink', echo=TRUE}
+The goal of patchwork is to make it ridiculously simple to combine separate `ggplots` into the same graphic. As such it tries to solve the same problem as `gridExtra::grid.arrange()` and `cowplot::plot_grid()` but using an API that incites exploration and iteration, and scales to arbitrarily complex layouts.
+
+Website: https://patchwork.data-imaginist.com/index.html
 ```
+
+```{r, fig.height=10, fig.width=7.5}
+plot_pred_glm / plot_pred_gee / plot_pred_glmm
+```
+
 
 
 

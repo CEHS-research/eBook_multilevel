@@ -21,6 +21,8 @@ library(furniture)    # nice table1() descriptives
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 library(psych)        # contains some useful functions, like headTail
 
+library(interactions)
+library(performance)
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 
 library(corrplot)     # Vizualize correlation matrix
@@ -35,17 +37,13 @@ library(MuMIn)        # Multi-Model Inference (caluclate QIC)
 Helper `extract` functions for exponentiating parameters form generalized regression models within a `texreg` table of model parameters.
 
 ```{r, message=FALSE, error=FALSE}
-# install.packages("devtools")
-# library(devtools)
-# install_github("SarBearSchwartz/texreghelpr")
+# remotes::install_github("sarbearschwartz/texreghelpr") # first time
 
 library(texreghelpr)
 ```
 
 
-## Data
-
-### Import
+## Background
 
 
 ```{block type='rmdlink', echo=TRUE}
@@ -53,8 +51,6 @@ The following example is presented in the textbook: "Applied Longitudinal Analys
 
 The dataset maybe downloaded from: https://content.sph.harvard.edu/fitzmaur/ala/
 ```
-
-
 
 > Data on count of leprosy bacilli pre- and post-treatment from a clinical trial of antibiotics for leprosy.
 
@@ -67,14 +63,21 @@ Reference: Snedecor, G.W. and Cochran, W.G. (1967). Statistical Methods, (6th ed
 Ames, Iowa: Iowa State University Press
 
 
-**Description:**
+**The Background**
 
-The dataset consists of count data from a placebo-controlled clinical trial of 30 patients with leprosy at the Eversley Childs Sanitorium in the Philippines. Participants in the study were randomized to either of two  antibiotics (denoted treatment drug A and B) or to a placebo (denoted treatment  drug C). Prior to receiving treatment, baseline data on the number of leprosy bacilli at six sites of the body where the bacilli tend to congregate were recorded for each patient. After several months of treatment, the number of leprosy bacilli at six sites of the body were recorded a second time. The outcome variable is the total count of the number of leprosy bacilli at the six sites.
+The dataset consists of count data from a placebo-controlled clinical trial of 30 patients with leprosy at the Eversley Childs Sanitorium in the Philippines. Participants in the study were randomized to either of two **antibiotics** *(denoted treatment drug A and B)* or to a **placebo** *(denoted treatment  drug C)*. 
+
+Prior to receiving treatment, baseline data on the number of leprosy bacilli at six sites of the body where the bacilli tend to congregate were recorded for each patient. After several months of treatment, the number of leprosy bacilli at six sites of the body were recorded a second time. The outcome variable is the total count of the number of leprosy bacilli at the six sites.
+
+
+
+**The Research Question**
 
 In this study, the question of main scientific interest is whether treatment with antibiotics (drugs A and B) reduces the abundance of leprosy bacilli at the six sites of the body when compared to placebo (drug C). 
 
 
-**Variables:**
+
+**The Data**
 
 * Outcome or dependent variable(s) 
 
@@ -85,6 +88,8 @@ In this study, the question of main scientific interest is whether treatment wit
 
     + `drug` the treatment group: antibiotics (drugs A and B) or placebo (drug C)
 
+
+### Enter the data by hand!
 
 ```{r}
 data_raw <- tibble::tribble(
@@ -229,9 +234,15 @@ data_long %>%
 ```
 
 
+
 ## Generalized Estimating Equations (GEE)
 
-#### The `gee()` function in the `gee` package 
+### Explore Various Correlation Structures
+
+
+#### Fit the models - to determine correlation structure
+
+The `gee()` function in the `gee` package 
 
 ```{r}
 mod_gee_ind <- gee::gee(count ~ drug*time,
@@ -256,30 +267,12 @@ mod_gee_uns <- gee::gee(count ~ drug*time,
 ```
 
 
+The GEE models display the robust (sandwich) standard errors.
 
-### Compare Models
-
-#### Raw Estimates (log-rate scale) 
-
-```{r, include=FALSE}
-texreg::screenreg(list(mod_gee_ind, 
-                       mod_gee_exc, 
-                       mod_gee_uns), 
-                  custom.model.names = c("Independence",
-                                         "Exchangeable",
-                                         "Unstructured"),
-                  single.row = TRUE,
-                  digits = 3,
-                  caption = "Estimates on Log Scale")
-```
-
+#### Raw Estimates (Logit Scale)
 
 ```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(mod_gee_ind, 
+texreg::knitreg(list(mod_gee_ind, 
                      mod_gee_exc, 
                      mod_gee_uns), 
                 custom.model.names = c("Independence",
@@ -287,33 +280,15 @@ texreg::htmlreg(list(mod_gee_ind,
                                        "Unstructured"),
                 single.row = TRUE,
                 digits = 3,
-                caption = "Estimates on Log Scale")
+                caption = "GEE - Estimates on Log Scale")
 ```
 
 
-
-#### Exponentiate the Estimates (risk scale)
-
-```{r, include=FALSE}
-texreg::screenreg(list(extract_gee_exp(mod_gee_ind), 
-                       extract_gee_exp(mod_gee_exc), 
-                       extract_gee_exp(mod_gee_uns)), 
-                  custom.model.names = c("Independence",
-                                         "Exchangeable",
-                                         "Unstructured"),
-                  single.row = TRUE,
-                  digits = 3,
-                  ci.test = 1,
-                  caption = "Estimates on Count Scale")
-```
+#### Exponentiate the Estimates (odds ratio scale)
 
 
 ```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(extract_gee_exp(mod_gee_ind), 
+texreg::knitreg(list(extract_gee_exp(mod_gee_ind), 
                      extract_gee_exp(mod_gee_exc), 
                      extract_gee_exp(mod_gee_uns)),
                 custom.model.names = c("Independence",
@@ -322,7 +297,7 @@ texreg::htmlreg(list(extract_gee_exp(mod_gee_ind),
                 single.row = TRUE,
                 digits = 3,
                 ci.test = 1,
-                caption = "Estimates on Count Scale")
+                caption = "GEE - Estimates on Count Scale (RR)")
 ```
 
 
@@ -338,13 +313,15 @@ mod_gee_exc %>% coef() %>% exp()
 ```
 
 
-> Interpretation
->
-> Antibiotic A Group: Starts with mean of 9.3 and drops by 45% (nearly cut in half) over the course of treatment.
->
-> Antibiotic B Group: Starts at about the same mean at Antibiotic A group and experiences the same decrease.
->
-> Control Group (C): Starts at about the same mean at Antibiotic A group BUT experiences a less than a 5% decrease over the student period while on the placebo pills.
+### Interpretation
+
+* **Antibiotic A Group:** Starts with mean of 9.3 and drops by 45% (nearly cut in half) over the course of treatment.
+
+* **Antibiotic B Group:** Starts at about the same mean at Antibiotic A group and experiences the same decrease.
+
+* **Control Group (C):** Starts at about the same mean at Antibiotic A group BUT experiences a less than a 5% decrease over the student period while on the placebo pills.
+
+
 
 
 ### Visualize the Final Model
@@ -361,6 +338,15 @@ mod_geeglm_exc <- geepack::geeglm(count ~ drug*time,
 
 summary(mod_geeglm_exc)
 ```
+
+**Quick**
+
+```{r}
+interactions::interact_plot(model = mod_geeglm_exc,
+                            pred = time,
+                            modx = drug)
+```
+
 
 
 #### Predict over a manual grid of predictors
@@ -410,9 +396,9 @@ expand.grid(drug = levels(data_long$drug),
 
 ```{r}
 data_remodel <- data_long %>% 
-  dplyr::mutate(antibiotic = fct_collapse(drug,
-                                          yes = c("A", "B"),
-                                          no = c("C")))
+  dplyr::mutate(antibiotic = drug %>% 
+                  forcats::fct_collapse(yes = c("A", "B"),
+                                        no = c("C")))
 ```
 
 ### Reduce the Model - `gee::gee()`
@@ -429,24 +415,10 @@ summary(mod_gee_exc2)
 
 ### Compare Parameters
 
-```{r, include=FALSE}
-texreg::screenreg(list(extract_gee_exp(mod_gee_exc), 
-                       extract_gee_exp(mod_gee_exc2)), 
-                  custom.model.names = c("Original",
-                                         "Refit"),
-                  single.row = TRUE,
-                  digits = 3,
-                  ci.test = 1,
-                  caption = "Estimates on Count Scale (Exchangeable)")
-```
 
 
 ```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(extract_gee_exp(mod_gee_exc), 
+texreg::knitreg(list(extract_gee_exp(mod_gee_exc), 
                      extract_gee_exp(mod_gee_exc2)), 
                 custom.model.names = c("Original",
                                        "Refit"),
@@ -456,11 +428,12 @@ texreg::htmlreg(list(extract_gee_exp(mod_gee_exc),
                 caption = "Estimates on Count Scale (Exchangeable)")
 ```
 
-> Interpretation
-> 
-> Grand mean is 10.73 at pre-treatment. 
->
-> The mean count dropped by about 40% among thoes on antibiotics, but there was no decrease for thoes on placebo pills.
+### Interpretation
+ 
+* The grand mean is 10.73 at pre-treatment. 
+
+* The mean count dropped by about 40% among those on antibiotics, but there was no decrease for those on placebo pills, exp(b) = 0.592, p < .05, 95% CI [0.476, 0.74].
+
 
 
 ### Visualize
@@ -475,8 +448,27 @@ mod_geeglm_exc2 <- geepack::geeglm(count ~ antibiotic:time,
                                    corstr = "exchangeable")
 ```
 
+#### Quick
+
+```{r}
+interactions::interact_plot(model = mod_geeglm_exc2,
+                            pred = time,
+                            modx = antibiotic)
+```
+
+
 
 #### Predict over a manual grid
+
+
+```{r}
+expand.grid(antibiotic = levels(data_remodel$antibiotic),
+            time = 0:1) %>% 
+  dplyr::mutate(fit = predict(mod_geeglm_exc2,
+                              newdata = .,
+                              type = "response"))
+```
+
 
 ```{r}
 expand.grid(antibiotic = levels(data_remodel$antibiotic),
@@ -501,3 +493,14 @@ expand.grid(antibiotic = levels(data_remodel$antibiotic),
         legend.justification = c(-0.1, -0.1),
         legend.background = element_rect(color = "black"))
 ```
+
+## Conclusion
+
+**The Research Question**
+
+In this study, the question of main scientific interest is whether treatment with antibiotics (drugs A and B) reduces the abundance of leprosy bacilli at the six sites of the body when compared to placebo (drug C). 
+
+**The Conclusion**
+
+Both of these antibiotics significantly reduce leprosy bacilli from the pre-level (M = 10.7, equivalent groups at baseline) to lower (M = 6.3), compared to no change seen when on the placebo.
+

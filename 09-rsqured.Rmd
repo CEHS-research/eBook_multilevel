@@ -1,12 +1,102 @@
-# Variance Explained
+# Effect Size: Variance Explained
 
+
+> Note that these versions of $R^2$ are becoming more common, but are not entirely agreed upon or standard. You will not be able to calculate them directly in standard software. Instead, you need to calculate the components and program the calculation. Importantly, **if** you choose to report one or both of them, you should not only **identify which one you are using**, but provide some **brief interpretation** and a **citation** of the article.
+>
+> *The Analysis Factor*, [R-Squared for Mixed Effects Models](https://www.theanalysisfactor.com/r-squared-for-mixed-effects-models/), by Kim Love
+
+
+
+```{block type='rmdlink', echo=TRUE}
+Marginal vs. Conditional $R^2$:
+
+**A general and simple method for obtaining R2 from generalized linear mixed‐effects models**
+
+- [2012: Journal Article](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.2041-210x.2012.00261.x)
+
+Authors: Shinichi Nakagawa and Holger Schielzeth
+```
+
+
+```{block type='rmdlink', echo=TRUE}
+Somewhat technical, but good figures:
+
+**Quantifying Explained Variance in Multilevel Models: An Integrative Framework for Defining R-Squared Measures**
+
+- [2019: manuscript, Psychological Methods](https://pdfs.semanticscholar.org/2472/c8aa3a50f8388f7ebb3f6ce6e5c6746e8b0f.pdf)
+
+Authors: Jason D. Rights and Sonya K. Sterba, *Vanderbilt University*
+```
+
+
+## MLM or LMM
+
+Multilevel Model or Linear Multilevel Models
+
+```{block type='rmdlink', echo=TRUE}
+Social and Behavioral Science Focus:
+
+**R-squared measures in Multilevel Modeling: The undesirable property of negative R-squared values**
+
+- [2018: First Year Paper, Research Master in Social and Behavioral Science](http://arno.uvt.nl/show.cgi?fid=146739)
+
+Student:  Edoardo Costantini
+Supervisor: prof. dr. M.A.L.M. van Assen
+```
+
+
+```{block type='rmdlink', echo=TRUE}
+Education Focus:
+
+**Effect size measures for multilevel models: definition, interpretation, and TIMSS example**
+
+- [2018: Manuscript, Large-sclae ASsessments in Educaiton](https://link.springer.com/article/10.1186/s40536-018-0061-2)
+
+Author: Julie Lorah
+```
+
+
+```{block type='rmdlink', echo=TRUE}
+Psychology Focus:
+
+**Effect Size Measures for Multilevel Models in Clinical Child and Adolescent Research: New R-Squared Methods and Recommendations**
+
+- [2018: manuscript, Journal of Clinical Child & Adolescent Psychology](https://www.tandfonline.com/doi/full/10.1080/15374416.2018.1528550?scroll=top&needAccess=true)
+
+Authors: Jason D. Rights and David A. Cole
+
+[Online Appendix: `r2MLMcomp`](https://cdn.vanderbilt.edu/vu-my/wp-content/uploads/sites/2149/2016/07/29193821/OnlineAppendix_Rights.Sterba_MBR.ID_.18-106.pdf)
+
+[Software - R functions](https://my.vanderbilt.edu/jasonrights/software/) 
+
+- [`r2MLM`](https://my.vanderbilt.edu/jasonrights/software/r2MLM) computes and outputs R-squared measures and analytic decompositions of variance for multilevel models
+
+- [`r2MLMcomp`](https://my.vanderbilt.edu/jasonrights/software/r2MLMcomp)  computes R-squared differences between pairs of multilevel models under comparison
+
+- `r2MLM3` computes all measures relevant for a three-level model and provides a barchart graphic
+```
+
+
+## GLMM
+
+Generalized Linear Multilevel Models
+
+
+```{block type='rmdlink', echo=TRUE}
+Ecology Focus: for MLM/LMM and GLMM
+
+**R squared for mixed models** 
+
+- [2013: Blogpost by Phil Martin](https://ecologyforacrowdedplanet.wordpress.com/2013/02/26/r-squared-for-mixed-models/)
+
+**R squared for mixed models – the easy way** 
+
+- [2013: Blogplot by Phil Martin](https://ecologyforacrowdedplanet.wordpress.com/2013/08/27/r-squared-in-mixed-models-the-easy-way/)
 
 @nakagawa2013 
+```
 
-https://ecologyforacrowdedplanet.wordpress.com/2013/08/27/r-squared-in-mixed-models-the-easy-way/
 
-
-## For Generalized MLMs
 
 https://stats.stackexchange.com/questions/111150/calculating-r2-in-mixed-models-using-nakagawa-schielzeths-2013-r2glmm-me
 
@@ -20,6 +110,4 @@ I am answering by pasting Douglas Bates's reply in the R-Sig-ME mailing list, on
 >It may seem that **I am being a grumpy old man about this, and perhaps I am, but the danger is that people expect an "$R^2$-like" quantity **to have all the properties of an $R^2$ for linear models. It can't. There is no way to generalize all the properties to a much more complicated model like a GLMM.
 >
 > I was once on the committee reviewing a thesis proposal for Ph.D. candidacy. The proposal was to examine I think 9 different formulas that could be considered ways of computing an $R^2$ for a nonlinear regression model to decide which one was "best". Of course, this would be done through a simulation study with only a couple of different models and only a few different sets of parameter values for each. My suggestion that this was an entirely meaningless exercise was not greeted warmly.
-
-
 

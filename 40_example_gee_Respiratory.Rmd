@@ -21,6 +21,8 @@ library(furniture)    # nice table1() descriptives
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 library(psych)        # contains some useful functions, like headTail
 
+library(interactions)
+library(performance)
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 
 library(corrplot)     # Vizualize correlation matrix
@@ -33,25 +35,35 @@ library(HSAUR)        # package with the dataset
 
 ### GitHub
 
-Helper `extract` functions for exponentiating parameters form generalized regression models within a `texreg` table of model parameters.
+Helper `extract` functions for exponentiation of parameters form generalized regression models within a `texreg` table of model parameters.
 
 ```{r, message=FALSE, error=FALSE}
-# install.packages("devtools")
-# library(devtools)
-# install_github("SarBearSchwartz/texreghelpr")
+# remotes::install_github("sarbearschwartz/texreghelpr") # first time
 
 library(texreghelpr)
 ```
 
-## Prepare and get to know the dataset
 
-### Read in the data
+## Background
 
-> This data set is in the **HSAUR** package. 
+> This dataset was used as an example in Chapter 11 of "A Handbook of Statistical Analysis using R" by Brian S. Everitt and Torsten Hothorn.  The authors include this data set in their **HSAUR** package on `CRAN`. 
 
-In each of two centres, eligible patients were randomly assigned to active treatment or placebo. During the treatment, the respiratory status (categorised poor or good) was determined at each of four, monthly visits. The trial recruited 111 participants (54 in the active group, 57 in the placebo group) and there were no missing data for either the responses or the covariates. The question of interest is to assess whether the treatment is effective and to estimate its effect.
 
-Note that the data (555 observations on the following 7 variables) are in long form, i.e, repeated measurments are stored as additional rows in the data frame.
+**The Background**
+
+In each of two centers, eligible patients were randomly assigned to active treatment or placebo. During the treatment, the respiratory status *(categorized poor or good)* was determined at each of four, monthly visits. The trial recruited 111 participants *(54 in the active group, 57 in the placebo group)* and there were no missing data for either the responses or the covariates. 
+
+
+**The Research Question**
+
+The question of interest is to assess whether the **treatment** is effective and to estimate its effect.  
+
+> Note: We are NOT interested in change over time, but rather mean differences in the treatment group compared to the placebo group, net of any potential confounding due to age, sex, and site.
+
+
+**The Data**
+
+Note that the data *(555 observations on the following 7 variables)* are in long form, i.e, repeated measurements are stored as additional rows in the data frame.
 
 * Indicators    
 
@@ -70,23 +82,28 @@ Note that the data (555 observations on the following 7 variables) are in long f
     + `treatment` the treatment arm, a factor with levels placebo and treatment  
     
     
-* Time-invariant Covariates    
+* Time-invariant Covariates to control for    
 
     + `sex` a factor with levels female and male    
     + `age` the age of the patient
 
 
-
+### Read in the data
 
 ```{r}
 data("respiratory", package = "HSAUR")
 
 str(respiratory)
+```
 
+
+```{r}
 psych::headTail(respiratory)
 ```
 
 ### Wide Format
+
+> Wide format has one line per participant.
 
 ```{r}
 data_wide <- respiratory %>% 
@@ -95,14 +112,22 @@ data_wide <- respiratory %>%
                 sep = "_") %>% 
   dplyr::rename("BL_status" = "month_0") %>% 
   dplyr::arrange(subject) %>% 
-  dplyr::select(subject, centre, sex, age, treatment, BL_status, starts_with("month"))  
+  dplyr::select(subject, centre, 
+                sex, age, treatment, 
+                BL_status, starts_with("month"))  
 
-str(data_wide)
+tibble::glimpse(data_wide)
+```
 
+
+```{r}
 psych::headTail(data_wide)
 ```
 
 ### Long Format
+
+
+> Long format has one line per observation.
 
 ```{r}
 data_long <- data_wide%>% 
@@ -116,8 +141,11 @@ data_long <- data_wide%>%
   dplyr::select(subject, centre, sex, age, treatment, BL_status, month, status) 
 
 
-str(data_long)
+tibble::glimpse(data_long)
+```
 
+
+```{r}
 psych::headTail(data_long)
 ```
 
@@ -128,22 +156,59 @@ psych::headTail(data_long)
 
 #### Demographics and Baseline Measure
 
+Notice that numerical summaries are computed for all variables, even the categorical variables *(i.e. factors)*.  The have an `*` after the variable name to remind you that the `mean`, `sd`, and `se` are of limited use.
+
+> Notice: the mean age is 33
 
 ```{r}
 data_wide %>% 
-  furniture::table1(centre, sex, age, BL_status, 
-                    splitby = ~ treatment,
-                    output = "html")
+  psych::describe(skew = FALSE)
+```
+
+
+
+
+```{r}
+data_wide %>% 
+  dplyr::group_by(treatment) %>% 
+  furniture::table1("Center" = centre, 
+                    "Sex" = sex, 
+                    "Age" = age, 
+                    "Baseline Status" = BL_status, 
+                    caption = "Participant Demographics",
+                    output = "markdown",
+                    na.rm = FALSE,
+                    total = TRUE,
+                    test = TRUE)
 ```
 
 #### Status  Over Time
 
 ```{r}
 data_wide %>% 
-  furniture::table1(month_1, month_2, month_3, month_4, 
-                    splitby = ~ treatment,
-                    output = "markdown")
+  dplyr::group_by(treatment) %>% 
+  furniture::table1("Month One" = month_1, 
+                    "Month Two" = month_2, 
+                    "Month Three" = month_3, 
+                    "Month Four" = month_4, 
+                    caption = "Respiratory Status Over Time",
+                    output = "markdown",
+                    na.rm = FALSE,
+                    total = TRUE,
+                    test = TRUE)
 ```
+
+
+Correlation between repeated observations:
+
+```{r}
+data_wide %>% 
+  dplyr::select(starts_with("month")) %>% 
+  dplyr::mutate_all(function(x) x == "good") %>% 
+  cor() %>% 
+  corrplot::corrplot.mixed()
+```
+
 
 
 ```{r}
@@ -152,16 +217,54 @@ data_month_trt_prop <- data_long %>%
   dplyr::summarise(n = n(),
                    prop_good = mean(status),
                    prop_sd = sd(status),
-                   prop_se = prop_sd/n)
+                   prop_se = prop_sd/sqrt(n))
 
-psych::headTail(data_month_trt_prop)
+data_month_trt_prop
 ```
+
+
+
+
 
 
 ### Visualization
 
+#### Age
+
+```{r}
+data_wide %>% 
+  ggplot(aes(age)) +
+  geom_histogram(binwidth = 5,
+                 color = "black",
+                 alpha = .3) +
+  geom_vline(xintercept = c(20, 35, 45),
+             color = "red") +
+  theme_bw() +
+  facet_grid(treatment ~ .)
+```
+
+#### Status by Age 
+
+
+```{r}
+data_wide %>% 
+  dplyr::mutate(n_good = furniture::rowsums(month_1 == "good", 
+                                            month_2 == "good",
+                                            month_3 == "good",
+                                            month_4 == "good")) %>% 
+  ggplot(aes(x = age,
+             y = n_good)) +
+  geom_count() +
+  geom_smooth() +
+  theme_bw() +
+  labs(x = "Age in Years",
+       y = "Number of Visits out of Four, with 'Good' Respiration")
+```
+
+
 #### Status Over Time
 
+It apears that status is fairly constant over time.  
 
 ```{r}
 data_month_trt_prop %>% 
@@ -174,31 +277,65 @@ data_month_trt_prop %>%
                 width = .25) +
   geom_point() +
   geom_line() +
-  theme_bw()
+  theme_bw() +
+  labs(x = "Time, months",
+       y = "Proportion of Participants\nwith 'Good' Respiratory Status") +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(1.5, "cm"))
 ```
+
+
+
+```{block type='rmdimportant', echo=TRUE}
+It is NOT the purpose of this analysis to investigate change over time! 
+
+Since status is largely stable over time, no linear *(or even quadratic)* effect of the `month` variable will be modeled.  
+
+Instead, the four observations on each subject are treated as correlated *(at least with non-independent correlation structure in GEE)*, but no time trend will be included.
+```
+
+
+
 
 ## Logisitc Regression (GLM)
 
+> **Note:** THIS IS NEVER APPROPRIATE TO CONDUCT A GLM ON REPEATED MEASURES.  THIS IS DONE FOR ILLUSTRATION PURPOSES ONLY!
+ 
+Since participants in the middle ages seem to do worse than either extreme, the potential quadratic effect of age will be included.  Age is also being grand-mean centered to make the intercept more meaningful.
+
+### Fit the Model
 
 ```{r}
 resp_glm <- glm(status ~ centre + treatment + sex + BL_status + 
-                   I(age-33) + I((age-33)^2),
+                  I(age-33) + I((age-33)^2),
                 data = data_long,
                 family = binomial(link = "logit"))
 
 summary(resp_glm)
 ```
 
+### Tabulate the Model Parameters
 
-
-```{r}
-sjPlot::tab_model(resp_glm)
+```{r, results='asis'}
+texreg::knitreg(list(resp_glm,
+                     texreghelpr::extract_glm_exp(resp_glm,
+                                                  include.any = FALSE)),
+                custom.model.names = c("b (SE)", "OR [95 CI]"),
+                caption = "Logistic Generalized Linear Regression (GLM)",
+                single.row = TRUE,
+                digits = 3,
+                ci.test = 1)
 ```
+
 
 
 ## Generalized Estimating Equations (GEE)
 
+Again, since participants age is likely to be a risk at either end of the spectrum, the potential quadratic effect of age will be modeled.  Age is also being grand-mean centered to make the intercept more meaningful.
+
 ### Indepdendence
+
+Using an `"independence"` correlation structure is equivalent to using a GLM analysis *(logistic regression in this case)* and is never appropriate for repeated measures data.  It is only being done here for comparison purposes.
 
 ```{r}
 resp_gee_in <- gee::gee(status ~ centre + treatment + sex + BL_status + 
@@ -215,7 +352,7 @@ summary(resp_gee_in)
 
 The results for GEE fit with the independence correlation structure produces results that are nearly identical to the GLM model.
 
-The robust (sandwhich) standard errors are however much larger than the naive stadard errors
+The **robust (sandwich) standard errors** are however much larger than the naive standard errors.
 
 
 ### Exchangeable
@@ -233,79 +370,43 @@ resp_gee_ex <- gee::gee(status ~ centre + treatment + sex + BL_status +
 summary(resp_gee_ex)
 ```
 
-Notice that the naive stadard errors are more similar to the robust (sandwhich) standard errors, supporting that this is a better fitting model
+Notice that the naive standard errors are more similar to the robust (sandwich) standard errors, supporting that this is a better fitting model
+
+
 
 ### Paramgeter Estimates Table
 
-The GEE models display the robus (sandwhich) standard errors.
+The GEE models display the robust (sandwich) standard errors.
 
 #### Raw Estimates (Logit Scale)
 
-```{r, include=FALSE}
-texreg::screenreg(list(resp_glm, 
-                       resp_gee_in, 
-                       resp_gee_ex),
-                  custom.model.names = c("GLM", 
-                                         "GEE-INDEP", 
-                                         "GEE-EXCH"),
-                  caption = "Estimates on Logit Scale",
-                  digits = 4)
-```
-
-
 ```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(resp_glm, 
+texreg::knitreg(list(resp_glm, 
                      resp_gee_in, 
                      resp_gee_ex),
                 custom.model.names = c("GLM", 
                                        "GEE-INDEP", 
                                        "GEE-EXCH"),
                 caption = "Estimates on Logit Scale",
+                single.row = TRUE,
                 digits = 4)
 ```
 
-Comparing the two GEE models: parameters are identical and so are the robust (sandwhich) standard errors.
+Comparing the two GEE models: parameters are identical and so are the robust (sandwich) standard errors.
 
 
 
 #### Exponentiate the Estimates (odds ratio scale)
 
-```{r, include=FALSE}
-texreg::screenreg(list(extract_glm_exp(resp_glm), 
-                       extract_gee_exp(resp_gee_in), 
-                       extract_gee_exp(resp_gee_ex)),
-                  custom.model.names = c("GLM", 
-                                         "GEE-INDEP", 
-                                         "GEE-EXCH"),
-                  caption = "Estimates on Odds-Ratio Scale",
-                  ci.test = 1,
-                  digits = 3)
-```
-
-```{r, eval=FALSE}
-texreg::texreg(list(extract_glm_exp(resp_glm), 
-                    extract_gee_exp(resp_gee_in), 
-                    extract_gee_exp(resp_gee_ex)),
-               custom.model.names = c("GLM", 
-                                      "GEE-INDEP", 
-                                      "GEE-EXCH"),
-               caption = "Estimates on Odds-Ratio Scale",
-               ci.test = 1,
-               digits = 3)
-```
-
-```{r, echo=FALSE, results="asis"}
-texreg::htmlreg(list(extract_glm_exp(resp_glm), 
+```{r, results="asis"}
+texreg::knitreg(list(extract_glm_exp(resp_glm), 
                      extract_gee_exp(resp_gee_in), 
                      extract_gee_exp(resp_gee_ex)),
                 custom.model.names = c("GLM", 
                                        "GEE-INDEP", 
                                        "GEE-EXCH"),
                 caption = "Estimates on Odds-Ratio Scale",
+                single.row = TRUE,
                 ci.test = 1,
                 digits = 3)
 ```
@@ -337,54 +438,18 @@ exp(trt_95ci)
 ```
 
 
+### Final Model
 
-```{r, include=FALSE}
-texreg::screenreg(list(resp_gee_ex, 
-                       extract_gee_exp(resp_gee_ex,
-                                    include.dispersion = FALSE,
-                                    include.nobs = FALSE)),
-                  custom.model.names = c("b (SE)", 
-                                         "OR [95% CI]"),
-                  custom.coef.map = list(centre2 = "Center 2",
-                                         sexmale = "Male",
-                                         BL_statusgood = "Good at BL",
-                                         "I(age - 33)" = "Age (Yrs post 33)",
-                                         "I((age - 33)^2)" = "Age-Squared",
-                                         treatmenttreatment = "Treatment"), 
-                  caption = "GEE: Final Model (exchangable)",
-                  ci.test = 1,
-                  single.row = TRUE,
-                  digits = 3)
-```
+#### Estimates on both the logit and odds-ratio scales
 
-```{r, eval=FALSE}
-texreg::texreg(list(resp_gee_ex, 
-                    extract_gee_exp(resp_gee_ex,
-                                    include.dispersion = FALSE,
-                                    include.nobs = FALSE)),
-               custom.model.names = c("b (SE)", 
-                                      "OR [95% CI]"),
-               custom.coef.map = list(centre2 = "Center 2",
-                                      sexmale = "Male",
-                                      BL_statusgood = "Good at BL",
-                                      "I(age - 33)" = "Age (Yrs post 33)",
-                                      "I((age - 33)^2)" = "Age-Squared",
-                                      treatmenttreatment = "Treatment"), 
-               caption = "GEE: Final Model (exchangable)",
-               ci.test = 1,
-               single.row = TRUE,
-               digits = 3)
-```
-
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(resp_gee_ex, 
-                     extract_gee_exp(resp_gee_ex,
-                                     include.dispersion = FALSE,
-                                     include.nobs = FALSE)),
+```{r,  results='asis'}
+texreg::knitreg(list(resp_gee_ex, 
+                     texreghelpr::extract_gee_exp(resp_gee_ex,
+                                                  include.any = FALSE)),
                 custom.model.names = c("b (SE)", 
-                                       "OR [95% CI]"),
-                custom.coef.map = list(centre2 = "Center 2 vs. 1",
+                                       "OR [95 CI]"),
+                custom.coef.map = list("(Intercept)" = "(Intercept)",
+                                       centre2 = "Center 2 vs. 1",
                                        sexmale = "Male vs. Female",
                                        BL_statusgood = "BL Good vs. Poor",
                                        "I(age - 33)" = "Age (Yrs post 33)",
@@ -397,37 +462,111 @@ texreg::htmlreg(list(resp_gee_ex,
 ```
 
 
-* `centre`: Controlling for baseline status, sex, age, and treatetment, thoes in center 2 had 71% higher odds of having a good respiratory status.
+#### Interpretation
+
+* `centre`: Controlling for baseline status, sex, age, and treatment, participants at the two centers did not significantly differ in respiratory status during the intervention
 
 
-* `sex`: Controlling for baseline status, center, age, and treatetment, males had 53% higher odds of having a good respiratory status.
+* `sex`: Controlling for baseline status, center, age, and treatment, a participant's respiratory status did not differ between the two sexes.
 
-* `BL_status`: Controlling for sex, center, age, and treatetment, thoes with bood baseline staus had nearly 7 times higher odds of having a good respiratory status.
+* `BL_status`: Controlling for sex, center, age, and treatment, those with good baseline status had nearly 7 times higher odds of having a good respiratory status, compared to participants that starts out poor.
 
-* `age`:  Controlling for baseline status, sex, center, and treatment, the role of age was non-linear, such that the odds of a good respiratory statust was lowerst for patients age 40 and better for patiers that were either yonger or older.
+* `age`:  Controlling for baseline status, sex, center, and treatment, the role of age was non-linear, such that the odds of a good respiratory status was lowest for patients age 40 and better for those that were either younger or older.
 
-* `treatment`: Controlling for baseline status, sex, age, and center, thoes on the treatetment had 3.88 time higher odds of having a good respiratory status.
+**Most importantly:**
+
+* `treatment`: Controlling for baseline status, sex, age, and center, those on the treatment had 3.88 time higher odds of having a good respiratory status, compared to similar participants that were randomized to the placebo.
 
 
 
 
+### Predicted Probabilities
 
-### Refit with the `geepack` package
 
+#### Refit with the `geepack` package
+
+This package lets you plot, but not put the results in a table.
 
 ```{r}
-resp_geeglm_ex <- geepack::geeglm(status ~ centre + treatment + sex + BL_status + I(age-33) + I((age-33)^2),
-                        data = data_long,
-                        family = binomial(link = "logit"),
-                        id = subject,
-                        waves = month,
-                        corstr = "exchangeable")
+resp_geeglm_ex <- geepack::geeglm(status ~ centre + treatment + sex + BL_status + 
+                                    I(age-33) + I((age-33)^2),
+                                  data = data_long,
+                                  family = binomial(link = "logit"),
+                                  id = subject,
+                                  waves = month,
+                                  corstr = "exchangeable")
 ```
 
 
+
+#### Make predictions
+
+What is the change a 40 year old man in poor condition at center 1 change of being rated as being in "Good" respiratory condition?
+
 ```{r}
-summary(resp_geeglm_ex)
+data.frame(centre = "1",
+           treatment = "placebo",
+           sex = "male",
+           age = 40,
+           BL_status = "poor") %>% 
+  dplyr::mutate(fit = predict(resp_geeglm_ex,
+                              newdata = .,       
+                              type = "response")) 
 ```
+
+A 40 year old man in poor condition at center 1 has a 15.8% change of being rated as being in "Good" respiratory condition if he was randomized to placebo.
+
+```{r}
+data.frame(centre = "1",
+           treatment = "treatment",
+           sex = "male",
+           age = 40,
+           BL_status = "poor") %>% 
+  dplyr::mutate(fit = predict(resp_geeglm_ex,
+                              newdata = .,       
+                              type = "response")) 
+```
+A 40 year old man in poor condition at center 1 has a 42.1% change of being rated as being in "Good" respiratory condition if he was randomized to placebo.
+
+The odds ratio for treatment is:
+
+```{r}
+(.421/(1 -.421) )/( .158/(1 - .158))
+```
+
+
+#### Expand Grid
+
+Makes a dataset with all combinations
+
+```{r}
+expand.grid(centre    = levels(data_long$centre),
+            treatment = levels(data_long$treatment),
+            sex       = levels(data_long$sex),
+            age       = c(20, 35, 50),    # full range of age
+            BL_status = levels(data_long$BL_status))
+```
+
+
+
+#### Lots of Combinations
+
+```{r}
+expand.grid(centre    = levels(data_long$centre),
+            treatment = levels(data_long$treatment),
+            sex       = levels(data_long$sex),
+            age       = c(20, 35, 50),                     # choose some
+            BL_status = levels(data_long$BL_status)) %>% 
+  dplyr::mutate(fit = predict(resp_geeglm_ex,
+                              newdata = .,        # make predictions for all combinations
+                              type = "response")) 
+```
+
+
+
+### Marginal Plot to Visualize the Model
+
+
 
 ```{r}
 resp_geeglm_ex %>% coef() %>% exp()
@@ -439,26 +578,44 @@ resp_geeglm_ex %>% coef() %>% exp()
 
 
 
-### Visualize the Model
+#### Quickest Version
 
-#### Range of Data Values
+
+The `interactions::interact_plot()` function can only investigate 3 variables at once:
+
+* `pred` the x-axis *(must be continuous)*
+* `modx` different lines *(may be categorical or continuous)*
+* `mod2` side-by-side panels *(may be categorical or continuous)*
+
+All other variables must be held constant.
 
 ```{r}
-summary(data_long)
+interactions::interact_plot(model = resp_geeglm_ex,   # model name
+                            pred = age,               # x-axis
+                            modx = treatment,         # lines
+                            mod2 = sex,               # panels
+                            at = list(centre = "1",
+                                      BL_status = "good"),  # hold constant
+                            type = "mean_subject")
 ```
 
 
-#### Females in Center 1
+
+
+#### Full Version
+
+In order to include all **FIVE** variables, we must do it the LONG way...
+
 
 ```{r}
-expand.grid(centre = levels(data_long$centre),
+expand.grid(centre    = levels(data_long$centre),
             treatment = levels(data_long$treatment),
-            sex = levels(data_long$sex),
-            age = seq(from = 11, to = 68, by = 1),
+            sex       = levels(data_long$sex),
+            age       = seq(from = 11, to = 68, by = 1),    # full range of age
             BL_status = levels(data_long$BL_status)) %>% 
   dplyr::mutate(fit = predict(resp_geeglm_ex,
-                              newdata = .,
-                              type = "response")) %>% 
+                              newdata = .,                 # make predictions for all combinations
+                              type = "response")) %>%      # ensure the predictions are probabilities
   ggplot(aes(x = age,
              y = fit,
              color = fct_rev(sex),
@@ -475,46 +632,56 @@ expand.grid(centre = levels(data_long$centre),
 
 #### Females in Center 1
 
+
+This example uses default settings.
+
 ```{r}
-expand.grid(centre = "1",
-            treatment = levels(data_long$treatment),
-            sex = "female",
-            age = seq(from = 11, to = 68, by = 1),
-            BL_status = levels(data_long$BL_status)) %>% 
-  dplyr::mutate(fit = predict(resp_geeglm_ex,
-                              newdata = .,
-                              type = "response")) %>% 
-  ggplot(aes(x = age,
-             y = fit,
-             linetype = treatment)) +
-  geom_line() +
-  theme_bw() + 
-  facet_grid(.~ BL_status) +
-  labs(x = "Age, years",
-       y = "Predicted Probability of GOOD Respiratory Status",
-       title = "For Females at Center 1, by Baseline Status")
+interactions::interact_plot(model = resp_geeglm_ex,
+                            pred = age,
+                            modx = treatment,
+                            mod2 = BL_status,
+                            at = list(sex = "female",
+                                      centre = "1")) 
 ```
+
+
 
 
 #### Males in Center 2
 
+This example is more preped for publication.
+
 ```{r}
-expand.grid(centre = "2",
-            treatment = levels(data_long$treatment),
-            sex = "male",
-            age = seq(from = 11, to = 68, by = 1),
-            BL_status = levels(data_long$BL_status)) %>% 
-  dplyr::mutate(fit = predict(resp_geeglm_ex,
-                              newdata = .,
-                              type = "response")) %>% 
-  ggplot(aes(x = age,
-             y = fit,
-             linetype = treatment)) +
-  geom_line() +
-  theme_bw() + 
-  facet_grid(.~ BL_status) +
-  labs(x = "Age, years",
-       y = "Predicted Probability of GOOD Respiratory Status",
-       title = "For Males at Center 2, by Baseline Status")
+interactions::interact_plot(model = resp_geeglm_ex,
+                            pred = age,
+                            modx = treatment,
+                            mod2 = BL_status,
+                            at = list(sex = "male",
+                                      centre = "2"),
+                            x.label = "Age in Years",
+                            y.label = "Predicted Probability of 'Good' Respiratory Status",
+                            legend.main = "Intervention: ",
+                            mod2.labels = c("Poor at Baseline",
+                                            "Good at Baseline"),
+                            colors = rep("black", times = 2)) +
+  theme_bw() +
+  theme(legend.position = c(1, 0),
+        legend.justification = c(1.1, -0.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(caption = "Note: Probibilities shown are specific to males at center 2")
 ```
+
+
+## Conclusion
+
+
+**The Research Question**
+
+The question of interest is to assess whether the **treatment** is effective and to estimate its effect.  
+
+
+**The Conclusion**
+
+After accounting for baseline status, age, sex and center, participants in the active treatment group had nearly four times higher odds of having 'good' respiratory status, when compared to the placebo, exp(b) = 3.881, p<.001, 95% CI [1.85,  8.14]. 
 

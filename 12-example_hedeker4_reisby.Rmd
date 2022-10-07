@@ -1,6 +1,5 @@
 # MLM, Longitudinal: Hedeker & Gibbons - Depression
 
-
 ```{r, echo=FALSE}
 library(pander)
 
@@ -10,6 +9,8 @@ panderOptions('keep.trailing.zeros', TRUE)
 panderOptions('keep.line.breaks', TRUE)
 ```
 
+```{r, warning=FALSE, error=FALSE, message=FALSE, results='hide'}
+library(tidyverse)    # all things tidy
 
 ```{r}
 library(tidyverse)    # all things tidy
@@ -31,12 +32,11 @@ library(lmerTest)
 library(optimx)
 ```
 
-
 ## Background
 
-Starting in chapter 4, @hedeker2006 details analysis of a psychiatric study described by @reisby1977.  This study focues on the relationship between Imipramine (IMI) and Desipramine (DMI) plasma levels and clinical response in 66 depressed inpatients (37 endogenous and 29 non-endogenous).  The IMI and DMI measures were only taken in the later weeks, but are not used here.
+Starting in chapter 4, [@hedeker2006] details analysis of a psychiatric study described by [@reisby1977]. This study focuses on the relationship between Imipramine (IMI) and Desipramine (DMI) plasma levels and clinical response in 66 depressed inpatients (37 endogenous and 29 non-endogenous).
 
-Dependent or outcome variable:   
+> Note: The IMI and DMI measures were only taken in the later weeks, but are not used here.
 
 * `hamd` Hamilton Depression Scores (HD)
 
@@ -53,11 +53,20 @@ Independent or predictor variables:
 * DMI (desipramine) drug-plasma levels (µg/l)
 + metabolite of imipramine
 
+```{r}
+data_raw <- read.table("data/riesby.dat.txt") %>% 
+  dplyr::rename(id    = "V1",
+                hamd  = "V2",
+                endog = "V5",
+                week  = "V4") %>%
+  dplyr::select(-V3, -V6)
 
 ```{r}
 data_raw <- read.table("data/RIESBY.DAT",                       # save the dataset as a new name
                        header = TRUE)                          # de-select or delete some variables 
 ```
+
+
 
 
 ```{r}
@@ -68,7 +77,6 @@ data_raw %>%
 
 
 ### Long Format
-
 
 ```{r}
 data_long <- data_raw %>%                        
@@ -95,14 +103,12 @@ data_long %>%
 
 ### Wide Format
 
-
 ```{r}
 data_wide <- data_long %>%     # save the dataset as a new name
-  tidyr::spread(key = week,    # name the varaible that specifies how to spread
-                value = hamd,  # name the variable to be spread out
-                sep = "_")     # add to combine the key-variables name before its value
+  tidyr::pivot_wider(names_from = week,
+                     names_prefix = "hamd_",
+                     values_from = hamd)
 ```
-
 
 Notice the missing values, displayed as `NA`.
 
@@ -111,21 +117,14 @@ data_wide %>%
   psych::headTail()
 ```
 
-
-
 ## Exploratory Data Analysis
 
 ### Diagnosis Group
 
 ```{r, results="asis"}
-# Knit to Website: output = "html"
-# Knit to PDF:     output = "latex2"
-# View on Screen:  output = ""text", or "markdown", "html"
-
-data_long %>% 
-  dplyr::filter(week == 0) %>% 
+data_wide %>% 
   furniture::table1("Depression Type" = endog,
-                    output = "html")
+                    output = "markdown")
 ```
 
 ### Missing Data & Attrition
@@ -140,74 +139,68 @@ data_wide %>%
             prop = FALSE)     # shows counts instead of proportions
 ```
 
-
-
 #### `naniar` package
-
 
 ```{r}
 data_wide %>% 
-  naniar::gg_miss_upset(sets = c("week_0_NA",
-                                 "week_1_NA",
-                                 "week_2_NA",
-                                 "week_3_NA",
-                                 "week_4_NA",
-                                 "week_5_NA"),
+  naniar::gg_miss_upset(sets = c("hamd_5_NA",
+                                 "hamd_4_NA",
+                                 "hamd_3_NA",
+                                 "hamd_2_NA",
+                                 "hamd_1_NA",
+                                 "hamd_0_NA"),
                         keep.order = TRUE) 
 ```
 
-
-
-
-
 ### Depression Over Time, by Group
-
 
 #### Table of Means
 
-> Default = COMPLETE CASES ONLY!!!  
+> Default = COMPLETE CASES ONLY!!!
 
 Note - the sample size at each time point is the same, but subjects are only included if they have data at every time point
 
-```{r, results='asis'}
-# Knit to Website: output = "html"
-# Knit to PDF:     output = "latex2"
-# View on Screen:  output = ""text", or "markdown", "html"
-
+```{r}
 data_wide %>%          
-  furniture::table1(week_0, week_1, week_2, 
-                    week_3, week_4, week_5,
-                    splitby = ~ endog,
+  dplyr::group_by(endog) %>% 
+  furniture::table1("Baseline" = hamd_0,
+                    "Week 1" = hamd_1,
+                    "Week 2" = hamd_2,
+                    "Week 3" = hamd_3,
+                    "Week 4" = hamd_4,
+                    "Week 5" = hamd_5,
+                    total = TRUE,
                     test = TRUE,
                     na.rm = TRUE,              # default: COMPLETE CASES ONLY!!!!!
-                    output = "html")           
+                    digits = 2,
+                    output = "markdown",
+                    caption = "Hamilton Depression Scores Across Time, by Depression Type for Participants with 6 Complete Weeks")           
 ```
 
+> Specify All data:
 
-
-> Specify All data: 
-
-note -  that the smaple sizes will be different for each time point
+note - that the smaple sizes will be different for each time point
 
 ```{r, results='asis'}
-# Knit to Website: output = "html"
-# Knit to PDF:     output = "latex2"
-# View on Screen:  output = ""text", or "markdown", "html"
-
-data_wide %>%          
-  furniture::table1(week_0, week_1, week_2, 
-                    week_3, week_4, week_5,
-                    splitby = ~ endog,
+data_wide %>%                
+  dplyr::group_by(endog) %>% 
+  furniture::table1("Baseline" = hamd_0,
+                    "Week 1" = hamd_1,
+                    "Week 2" = hamd_2,
+                    "Week 3" = hamd_3,
+                    "Week 4" = hamd_4,
+                    "Week 5" = hamd_5,
+                    total = TRUE,
                     test = TRUE,
-                    na.rm = FALSE,           # INCLUDES ALL DATA !!!!
-                    output = "html")   
+                    na.rm = FALSE,              # default: COMPLETE CASES ONLY!!!!!
+                    digits = 2,
+                    output = "markdown",
+                    caption = "Hamilton Depression Scores Across Time, by Depression Type for All Participants")  
 ```
-
 
 #### Using the LONG formatted dataset
 
 Each person's data is stored on multiple lines, one for each time point.
-
 
 > FOR ALL DATA!
 
@@ -223,8 +216,6 @@ data_sum_all <- data_long %>%
 data_sum_all %>% 
   pander::pander()
 ```
-
-
 
 > FOR COMPLETE CASES ONLY!!!
 
@@ -243,11 +234,6 @@ data_sum_cc <- data_long %>%
 data_sum_cc %>% 
   pander::pander()
 ```
-
-
-
-
-
 
 #### Person-Profile Plot or Spaghetti Plot
 
@@ -268,7 +254,6 @@ data_long %>%
   labs(x = "Weeks, post baseline",
        y = "Hamilton Depression Score")
 ```
-
 
 ```{r}
 data_long %>% 
@@ -360,7 +345,6 @@ data_long %>%
        y = "Hamilton Depression Score") 
 ```
 
-
 ```{r}
 data_long %>% 
   dplyr::filter(!is.na(hamd)) %>% 
@@ -375,7 +359,7 @@ data_long %>%
               se = FALSE) +
   scale_color_manual(name = "Smoother Type: ",
                      values = c("Flexible" = "blue", 
-                                "Linear"    = "red")) +
+                                "Linear"   = "red")) +
   theme_bw() +
   theme(legend.position = "bottom")+  
   theme_bw() +
@@ -383,6 +367,25 @@ data_long %>%
        y = "Hamilton Depression Score") 
 ```
 
+```{r}
+data_long %>% 
+  ggplot(aes(x = week,
+             y = hamd,
+             group = endog,
+             linetype = endog)) +
+  geom_smooth(method = "loess",
+              color = "black",
+              alpha = .25) +
+  theme_bw() +
+  scale_linetype_manual(values = c("solid", "longdash")) +
+  theme(legend.position = c(1, 1),
+        legend.justification = c(1.1, 1.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  labs(x = "Weeks After Baseline",
+       y = "Hamilton Depression Scale",
+       linetype = "Type of Depression")
+```
 
 ```{r}
 data_long %>% 
@@ -439,14 +442,14 @@ data_long %>%
 
 ```{r}
 data_wide %>% 
-  dplyr::select(starts_with("week_")) %>%  # just the outcome(s)
+  dplyr::select(starts_with("hamd_")) %>%  # just the outcome(s)
   cov(use = "complete.obs")  %>%           # covariance matrix, LIST-wise deletion
   round(3)
 ```
 
 ```{r}
 data_wide %>% 
-  dplyr::select(starts_with("week_")) %>%  # just the outcome(s)
+  dplyr::select(starts_with("hamd_")) %>%  # just the outcome(s)
   cov(use = "pairwise.complete.obs")  %>%  # covariance matrix, PAIR-wise deletion
   round(3)
 ```
@@ -457,7 +460,7 @@ Notice the variance in scores increases over time, which is seen in the side-by-
 
 ```{r}
 data_wide %>% 
-  dplyr::select(starts_with("week_")) %>%  # just the outcome(s)
+  dplyr::select(starts_with("hamd_")) %>%  # just the outcome(s)
   cov(use = "pairwise.complete.obs")  %>%  # covariance matrix, PAIR-wise deletion
   diag()                                   #  extracts just the variances
 ```
@@ -470,32 +473,30 @@ Pairwise relationships are easier to eye-ball magnitude when presented as correl
 
 ```{r}
 data_wide %>% 
-  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
+  dplyr::select(starts_with("hamd_")) %>% # just the outcome(s)
   cor(use = "complete.obs") %>%           # correlation matrix - LIST-wise deletion
   round(2)                                
 ```
 
 ```{r}
 data_wide %>% 
-  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
+  dplyr::select(starts_with("hamd_")) %>% # just the outcome(s)
   cor(use = "pairwise.complete.obs") %>%   # correlation matrix - PAIR-wise deletion
   round(2)                                
 ```
 
-
 #### Visualization
 
-Looking for patterns is always easier with a plot.  All RM or mixed ANOVA assume sphericity or compound symmetry, meaning that all the correlations in the matrix would be the same.  This is not the case for these data.  Instead we see a classic pattern of corralary decay.  Measures taken close in time, say 1 week apart, exhibit the highest degree of correlation.  The farther apart in time that two measures are taken, the less correlated they are.  Note that the adjacent measures become more highly correlated, too.  This can be due to attrition; later time points having a smaller sample size.
-
+Looking for patterns is always easier with a plot. All RM or mixed ANOVA assume sphericity or compound symmetry, meaning that all the correlations in the matrix would be the same. This is not the case for these data. Instead we see a classic pattern of corralary decay. Measures taken close in time, say 1 week apart, exhibit the highest degree of correlation. The farther apart in time that two measures are taken, the less correlated they are. Note that the adjacent measures become more highly correlated, too. This can be due to attrition; later time points having a smaller sample size.
 
 ```{r}
 data_wide %>% 
-  dplyr::select(starts_with("week_")) %>% # just the outcome(s)
+  dplyr::select(starts_with("hamd_")) %>% # just the outcome(s)
   cor(use = "pairwise.complete.obs") %>%   # correlation matrix
   corrplot::corrplot.mixed(upper = "ellipse")
 ```
 
-### For Each Group 
+### For Each Group
 
 It can be a good ideal to investigate if the groups exhibit a similar pattern in correlation.
 
@@ -504,41 +505,34 @@ It can be a good ideal to investigate if the groups exhibit a similar pattern in
 ```{r}
 data_wide %>% 
   dplyr::filter(endog == "Reactive") %>%    # filter observations for the REACTIVE group
-  dplyr::select(starts_with("week_")) %>% 
+  dplyr::select(starts_with("hamd_")) %>% 
   cor(use = "pairwise.complete.obs") %>%   
   corrplot::corrplot.mixed(upper = "ellipse")
 ```
-
 
 > Endogenous Depression
 
 ```{r}
 data_wide %>% 
   dplyr::filter(endog == "Endogenous") %>%    # filter observations for the Endogenous group
-  dplyr::select(starts_with("week_")) %>%
+  dplyr::select(starts_with("hamd_")) %>%
   cor(use = "pairwise.complete.obs") %>%   
   corrplot::corrplot.mixed(upper = "ellipse")
 ```
 
-
-
-
-
 ## MLM - Null or Emptly Models
 
+### Fit the model
 
-###  Fit the model
-
-> Random Intercepts, with Fixed Intercept and Time Slope (i.e. Trend)....@hedeker2006 section 4.3.5, starting on page 55
+> Random Intercepts, with Fixed Intercept and Time Slope (i.e. Trend)....\@hedeker2006 section 4.3.5, starting on page 55
 
 Since this situation deals with longitudinal data, it is more appropriate to start off including the time variable in the null model as a fixed effect only.
 
 ```{r}
-fit_lmer_week_RI_reml <- lme4::lmer(hamd ~ week + (1|id), 
-                                    data = data_long,
-                                    REML = TRUE)
+fit_lmer_week_RI_reml <- lmerTest::lmer(hamd ~ week + (1|id), 
+                                        data = data_long,
+                                        REML = TRUE)
 ```
-
 
 ### Table of Parameter Estimates
 
@@ -553,10 +547,7 @@ texreg::knitreg(fit_lmer_week_RI_reml,
                 custom.note = "Reproduction of Hedeker's table 4.3 on page 55, except using REML here instead of ML")
 ```
 
-
-On average, patients start off with HDRS scores of `r fixef(fit_lmer_week_RI_reml)["(Intercept)"] %>% round(2)` and then change by `r fixef(fit_lmer_week_RI_reml)["week"] %>% round(2)` points each week.  This weekly improvement of about 2 points a week is statistically significant via the Wald test.
-
-
+On average, patients start off with HDRS scores of `r fixef(fit_lmer_week_RI_reml)["(Intercept)"] %>% round(2)` and then change by `r fixef(fit_lmer_week_RI_reml)["week"] %>% round(2)` points each week. This weekly improvement of about 2 points a week is statistically significant via the Wald test.
 
 ### Estimated Marginal Means Plot
 
@@ -567,15 +558,15 @@ $$
 `r fixef(fit_lmer_week_RI_reml)["week"] %>% round(3)` week
 $$
 
-
 The fastest way to plot a model is to use the `sjPlot::plot_model()` function.
+
+> Note: you can't use `interactions::interact_plot()` since there is only one predictor (i.e. independent variable) in this model.
 
 ```{r}
 sjPlot::plot_model(fit_lmer_week_RI_reml,
                    type = "pred",
                    terms = c("week"))
 ```
-
 
 ### Estimated Marginal Means and Emperical Bayes Plots
 
@@ -614,13 +605,11 @@ data_long %>%
        y = "Hamilton Depression Scores")
 ```
 
-Notice that in this model, all the BLUPs are parallel.  That is becuase we are only letting the intercept vary from person-to-person while keeping the effect of time (slope) constant.
-
-
+Notice that in this model, all the BLUPs are parallel. That is because we are only letting the intercept vary from person-to-person while keeping the effect of time (slope) constant.
 
 > Reproduce Table 4.4 on page 55 [@hedeker2006]
 
-One way to judge a model is to compare the estimated means to the observed means to see how accuratedly they are represented by the model.  This excellent fit of the estimated marginal means to the observed data supports the hypothesis that the change in depression across time is LINEAR.
+One way to judge a model is to compare the estimated means to the observed means to see how accuratedly they are represented by the model. This excellent fit of the estimated marginal means to the observed data supports the hypothesis that the change in depression across time is LINEAR.
 
 ```{r}
 obs <- data_long %>% 
@@ -638,15 +627,21 @@ effects::Effect(focal.predictors = "week",
   pander::pander(caption = "Observed and Estimated Means")
 ```
 
-
-
 ### Intra-individual Correlation (ICC)
 
 ```{r}
-sjstats::icc(fit_lmer_week_RI_reml)
+performance::icc(fit_lmer_week_RI_reml)
 ```
 
-**Interpretation**  Nearly HALF of the variance in depression scores not explained by the linear effect of time is attributable to person-to-person differences.  Thus, subjects display considerable heterogeneity in depression levels.
+**Interpretation** Just less than a third ($\rho_c = .32$) in baseline depression is explained by person-to-person differences. Thus, subjects display considerable heterogeneity in depression levels.
+
+This value of .46is an oversimplification of the correlation matrix above and may be thought of as the expected correlation between two randomly drawn weeks for any given person.
+
+```{r}
+performance::r2(fit_lmer_week_RI_reml)
+```
+
+**Interpretation**  Linear growth accounts for 31% of the variance in Hamilton Depression Scores across the six weeks.  Linear growth **AND** person-to-person differences account for a total 63% of this variance.
 
 This value of 46% is an oversimplification of the correlation matrix above and may be thought of as the expected correlation between two randomly drawn weeks for any given person.
 
@@ -654,6 +649,7 @@ This value of 46% is an oversimplification of the correlation matrix above and m
 performance::r2(fit_lmer_week_RI_reml)
 ```
 
+> Note: The marginal $R^2$ considers only the variance of the fixed effects, while the conditional $R^2$ takes both the fixed and random effects into account. The random effect variances are actually the mean random effect variances, thus the $R^2$ value is also appropriate for mixed models with random slopes or nested random effects (see Johnson 2014).
 
 **Interpretation** Linear growth accounts for 31% of the variance in Hamilton Depression Scores across the six weeks. Linear growth AND person-to-person differences account for a total 63% of this variance.
 
@@ -663,7 +659,7 @@ performance::r2(fit_lmer_week_RI_reml)
 
 ### Compare to the Single-Level Null: No Random Effects
 
-> Simple Linear Regression, @hedeker2006
+> Simple Linear Regression, [@hedeker2006]
 
 To compare, fit the single level regression model
 
@@ -685,6 +681,7 @@ texreg::knitreg(list(fit_lm_week_ml, fit_lmer_week_RI_reml),
                 custom.note = "The singel-level model treats are observations as being independent and unrelated to each other, even if they were made on the same person.")
 ```
 
+For the multilevel model, the Wald tests indicated the fixed intercept is significant *(no surprised that the depressions scores are not zero at baseline)*. More of note is the significance of the fixed effect of time. This signifies that depression scores are declining over time. On average, patients are improving (Hamilton Depression Scores get smaller) across time, by an average of 2.4'ish points a week.
 
 For the multilevel model, the Wald tests indicated the fixed intercept is significant (no surprised that the depressions scores are not zero at baseline). More of note is the significance of the fixed effect of time. This signifies that depression scores are declining over time. On average, patients are improving (Hamilton Depression Scores get smaller) across time, by an average of 2.4’ish points a week.
 
@@ -692,48 +689,40 @@ For the multilevel model, the Wald tests indicated the fixed intercept is signif
 
 #### Residual Variance
 
-
-Note: the fixed estimates are very similar for the two models, but the standard errors are different.  Additionally, whereas the single-level regression lumps all remaining variance together ($\sigma^2$), the multilevel model seperates it into within-subjects ($\sigma^2_{u0}$ or $\tau_{00}$) and between-subjects variance ($\sigma^2_{e}$ or $\sigma^2$).
-
+Note, the fixed estimates are very similar for the two models, but the standard errors are different. Additionally, whereas the single-level regression lumps all remaining variance together ($\sigma^2$), the multilevel model seperates it into within-subjects ($\sigma^2_{u0}$ or $\tau_{00}$) and between-subjects variance ($\sigma^2_{e}$ or $\sigma^2$).
 
 ```{r}
 sigma(fit_lm_week_ml)^2
 ```
 
-
 ```{r}
-
 lme4::VarCorr(fit_lmer_week_RI_reml) %>% # in longitudinal data, a group of observations = a participant or person
   print(comp = c("Variance", "Std.Dev"))
 ```
 
+
+
 > "One statistician's error term is another's career!"
 >
-> @hedeker2006, page 56
-
-
-
-
-
-
+> [@hedeker2006], page 56
 
 ## MLM: Add Random Slope for Time (i.e. Trend)
 
 ### Fit the Model
 
 ```{r}
-fit_lmer_week_RIAS_reml <- lme4::lmer(hamd ~ week + (week|id), #     MLM-RIAS
-                                      data = data_long,
-                                      REML = TRUE)
+fit_lmer_week_RIAS_reml <- lmerTest::lmer(hamd ~ week + (week|id), #     MLM-RIAS
+                                          data = data_long,
+                                          REML = TRUE)
 ```
 
 
-### Table of Prameter Estimates
 
 
 ```{r mlmRS, results='asis'}
 texreg::knitreg(list(fit_lmer_week_RI_reml, 
                      fit_lmer_week_RIAS_reml),
+                single.row = TRUE,
                 custom.model.names = c("Random Intercepts",
                                        " And Random Slopes"),
                 single.row = TRUE,
@@ -743,14 +732,15 @@ texreg::knitreg(list(fit_lmer_week_RI_reml,
 ```
 
 
+
 Visually, we can see that the unexplained or residual variance is less (12.21 vs 19.10) for the model that includes person-specific slopes (trajectories over time).
 
-Note: the negative covariance between random intercepts and random slopes ($\sigma_{u01} = \tau_{01} = -1.48$): 
+Note: the negative covariance between random intercepts and random slopes ($\sigma_{u01} = \tau_{01} = -1.48$):
 
-> "This suggests that patients who are initially more depressed (i.e. greater intercepts) improve at a greater rate (i.e. more pronounced negative slopes).  An alternative explainatio, though,is that of a floor effect due to the HDRS rating scale.  Simply put, patients with less depressed intitial scores have a more limited range of lower scores than those with higher initial scores."
+
+> "This suggests that patients who are initially more depressed (i.e. greater intercepts) improve at a greater rate (i.e. more pronounced negative slopes). An alternative explainatio, though,is that of a floor effect due to the HDRS rating scale. Simply put, patients with less depressed intitial scores have a more limited range of lower scores than those with higher initial scores."
 >
-> @hedeker2006, page 58
-
+> [@hedeker2006], page 58
 
 ### Likelihood Ratio Test
 
@@ -761,7 +751,7 @@ anova(fit_lmer_week_RI_reml, fit_lmer_week_RIAS_reml,
   pander::pander(caption = "LRT: Assess Significance of Random Slopes")
 ```
 
-Including the random slope for time significantly improved the model fit via the formal **Likelihood Ratio Test**.  This rejects the assumption of compound symmetry.
+Including the random slope for time significantly improved the model fit via the formal **Likelihood Ratio Test**. This rejects the assumption of compound symmetry.
 
 
 ```{r}
@@ -782,7 +772,6 @@ sjPlot::plot_model(fit_lmer_week_RIAS_reml,
 ```
 
 Adding the random slopes didn't change the estimates for the fixed effects much.
-
 
 ### Estimated Marginal Means and Emperical Bayes Plots
 
@@ -819,26 +808,23 @@ data_long %>%
        y = "Hamilton Depression Scores")
 ```
 
-BLUPs are also refered to as **Empirical Bayes Estimates** and may be extracted from a model fit.  In this cases there will be a specific intercept (`(Intercept)`) and time slope (`week`) for each individual or person (`id`).
+BLUPs are also refered to as **Empirical Bayes Estimates** and may be extracted from a model fit. In this cases there will be a specific intercept (`(Intercept)`) and time slope (`week`) for each individual or person (`id`).
 
-#### Fixed Effects 
+#### Fixed Effects
 
 Marginal Model = within-subject effects
-
 
 ```{r}
 fixef(fit_lmer_week_RIAS_reml)
 ```
 
-
 #### Random Effects
 
 between-subjects effects
 
-
 ```{r}
 ranef(fit_lmer_week_RIAS_reml)$id %>% 
-  head()
+  head()                                 # only the first 6 participants
 ```
 
 #### BLUPs or Empirical Bayes Estimates
@@ -847,9 +833,8 @@ fixed effects + random effects
 
 ```{r}
 coef(fit_lmer_week_RIAS_reml)$id %>% 
-  head()
+  head()                                 # only the first 6 participants
 ```
-
 
 We can create a scatterplot of these to see the correlation between them.
 
@@ -871,10 +856,9 @@ coef(fit_lmer_week_RIAS_reml)$id %>%
 
 ```
 
-
 ## MLM: Coding of Time
 
-So far we have used the variable `week` to denote time as weeks since baseline = `week` $\in 0, 1, 2, 3, 4, 5$
+So far we have used the variable `week` to denote time as weeks since baseline = `week` $\in 0, 1, 2, 3, 4, 5$.
 
 But We could CENTER week at the middle of the study (`week` = 2.5).
 
@@ -889,7 +873,6 @@ fit_lmer_week_RIAS_reml_wc <- lme4::lmer(hamd ~ I(week-2.5) + (I(week-2.5)|id), 
 ```
 
 ### Table of Parameter Estimates
-
 
 
 ```{r mlmwc, results='asis'}
@@ -913,13 +896,23 @@ texreg::knitreg(list(fit_lmer_week_RIAS_reml,
 + variance for random slopes   
 + covariance between random intercepts and random slopes
 
+    -   model fit: AIC, BIC, -2LL, residual variance\
+    -   fixed effect of week\
+    -   variance for random intercepts
+
+-   Changed
+
+    -   fixed intercept\
+    -   variance for random slopes\
+    -   covariance between random intercepts and random slopes
+
 ### Estimated Marginal Means and Emperical Bayes Plots
 
 ```{r}
-data_long_wc %>% 
+data_long %>% 
   dplyr::mutate(pred_fixed = predict(fit_lmer_week_RIAS_reml_wc, re.form = NA)) %>% # fixed effects only
   dplyr::mutate(pred_wrand = predict(fit_lmer_week_RIAS_reml_wc)) %>%               # fixed and random effects together
-  ggplot(aes(x = weekc,
+  ggplot(aes(x = week,
              y = hamd,
              group = id)) +
   geom_line(aes(y        = pred_wrand,
@@ -948,33 +941,25 @@ data_long_wc %>%
        y = "Hamilton Depression Scores")
 ```
 
-Again, centering time doesn't change the interpretation at all.
-
-
-
-
-
-
+**Again, centering time doesn't change the interpretation at all, since there are no interactions.**
 
 ## MLM: Effect of DIagnosis on Time Trends (Fixed Interaction)
 
+The researcher specifically wants to know if the trajectory over time differs for the two types of depression. This translates into a fixed effects interaction between time and group.
 
-The researcher specifically wants to know if the trajectory over time differs for the two types of depression.  This translates into a fixed effects interaction between time and group.  
-
-> Start by comapring random intercepts only (RI) to a random intercetps and slopes (RIAS) model. 
+> Start by comapring random intercepts only (RI) to a random intercetps and slopes (RIAS) model.
 
 ### Fit the Models
 
 ```{r}
-fit_lmer_week_RIAS_ml <- lme4::lmer(hamd ~ week + (week|id), 
-                                    data = data_long,
-                                    REML = FALSE)
+fit_lmer_week_RIAS_ml <- lmerTest::lmer(hamd ~ week + (week|id), 
+                                        data = data_long,
+                                        REML = FALSE)
 
-fit_lmer_wkdx_RIAS_ml <- lme4::lmer(hamd ~ week*endog + (week|id), 
-                                    data = data_long,
-                                    REML = FALSE)
+fit_lmer_wkdx_RIAS_ml <- lmerTest::lmer(hamd ~ week*endog + (week|id), 
+                                        data = data_long,
+                                        REML = FALSE)
 ```
-
 
 ### Estimated Marginal Meanse Plot
 
@@ -987,11 +972,23 @@ interactions::interact_plot(fit_lmer_wkdx_RIAS_ml,
   theme_bw()
 ```
 
+```{r}
+interactions::interact_plot(fit_lmer_wkdx_RIAS_ml,
+                            pred = week,
+                            modx = endog,
+                            interval = TRUE,
+                   main.title = "Hedeker's Table 4.7 on page 64")
+```
+
+
+
 ### Likelihood Ratio Test
 
 ```{r}
-anova(fit_lmer_week_RIAS_ml, fit_lmer_wkdx_RIAS_ml, 
-      model.names = c("Just Time", "Time X Dx")) %>% 
+anova(fit_lmer_week_RIAS_ml, 
+      fit_lmer_wkdx_RIAS_ml, 
+      model.names = c("Just Time", 
+                      "Time X Dx")) %>% 
   pander::pander(caption = "LRT: Assess Significance of Diagnosis Moderation of Trend")
 ```
 
@@ -1007,8 +1004,7 @@ performance::compare_performance(fit_lmer_week_RIAS_ml,
 The more complicated model (including the moderating effect of diagnosis) is NOT supported.
 
 
-
-
+The more complicated model (including the moderating effect of diagnosis) is **NOT** supported.
 
 ## MLM: Quadratic Trend
 
@@ -1025,7 +1021,6 @@ fit_lmer_quad_RIAS_ml <- lme4::lmer(hamd ~ week + I(week^2) + (week+ I(week^2)|i
                                                                          kkt = FALSE))) 
 ```
 
-
 ### Table of Parameter Estimates
 
 
@@ -1041,7 +1036,6 @@ texreg::knitreg(list(fit_lmer_week_RIAS_ml,
 ```
 
 ### Likelihood Ratio Test
-
 
 ```{r}
 anova(fit_lmer_week_RIAS_ml, fit_lmer_quad_RIAS_ml)
@@ -1066,7 +1060,6 @@ Even though the Wald test did not find the quadratic fixed time trend to be sign
 fixef(fit_lmer_quad_RIAS_ml)
 ```
 
-
 ```{r}
 sjPlot::plot_model(fit_lmer_quad_RIAS_ml,
                    type = "pred",
@@ -1074,7 +1067,6 @@ sjPlot::plot_model(fit_lmer_quad_RIAS_ml,
 ```
 
 At the population level, the curviture is very slight.
-
 
 ### BLUPs or Emperical Bayes Estimates
 
@@ -1099,8 +1091,6 @@ fun_610 <- function(week){
 }
 ```
 
-
-
 ```{r, fig.cap="Two Example BLUPS for two different participants"}
 data_long %>% 
   dplyr::mutate(pred_fixed = predict(fit_lmer_quad_RIAS_ml, re.form = NA)) %>% # fixed effects only
@@ -1121,11 +1111,12 @@ data_long %>%
   labs(x = "Weeks Since Baseline",
        y = "Hamilton Depression Scores",
        title = "Similar to Hedeker's Figure 5.3 on page 84",
-       subtitle = "Marginal Mean show in thinker blue")
+       subtitle = "Marginal Mean show in thicker blue\nBLUPs for two of the participant in thinner black")
 ```
 
 These two individuals have quite different curvatures and illustrated how this type of curvatures in person-specific trajectories may end up cancelling each other out to arrive at a fairly linear marginal model.
 
+### Estimated Marginal Means and Emperical Bayes Plots
 
 ### Estimated Marginal Means and Emperical Bayes Plots
 
@@ -1165,9 +1156,6 @@ data_long %>%
        title = "Hedeker's Figure 5.4 on page 85")
 ```
 
-At the person-level, the curviture is very diverse (heterogeneous).  Some individuals have accelerating downward tend while other have accelerating upward trends.  
+At the person-level, the curviture is very diverse (heterogeneous). Some individuals have accelerating downward tend while other have accelerating upward trends.
 
-Th improvement that the curvilinear model provides in describing change across time is perhaps modest.
-
-
-
+The improvement that the curvi-linear model provides in describing change across time is perhaps modest.

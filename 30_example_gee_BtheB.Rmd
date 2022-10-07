@@ -1,6 +1,8 @@
 # GEE, Continuous Outcome: Beat the Blues
 
+## Packages
 
+### CRAN
 
 ```{r, message=FALSE, error=FALSE}
 library(tidyverse)    # all things tidy
@@ -9,6 +11,8 @@ library(furniture)    # nice table1() descriptives
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 library(psych)        # contains some useful functions, like headTail
 
+library(interactions)
+library(performance)
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 
 library(corrplot)     # Vizualize correlation matrix
@@ -19,11 +23,38 @@ library(MuMIn)        # Multi-Model Inference (caluclate QIC)
 library(HSAUR)        # package with the dataset
 ```
 
-## Prepare and get to know the dataset
+### GitHub
 
-### Read in the data
+Helper `extract` functions for exponentiation of parameters form generalized regression models within a `texreg` table of model parameters.
 
-This data set is in the **HSAUR** package.  It is from a clinical trial of an interactive multimedia program called 'Beat the Blues'. The variables are as follows:   
+```{r, message=FALSE, error=FALSE}
+# remotes::install_github("sarbearschwartz/texreghelpr") # first time
+
+library(texreghelpr)
+```
+
+
+## Background
+
+
+> This dataset was used as an example in Chapter 11 of "A Handbook of Statistical Analysis using R" by Brian S. Everitt and Torsten Hothorn.  The authors include this data set in their **HSAUR** package on `CRAN`. 
+
+
+**The Background**
+
+
+"These data resulted from a clinical trial of an interactive multimedia program called 'Beat the Blues' designed to deliver cognitive behavioral therapy (CBT) to depressed patients via a computer terminal.  Full details are given [here: Proudfoot et. al (2003)](https://www.cambridge.org/core/journals/psychological-medicine/article/computerized-interactive-multimedia-cognitivebehavioural-program-for-anxiety-and-depression-in-general-practice/6FF75F9283DF2209226D8910921F5307), but in essence Beat the Blues is an interactive program using multimedia techniques, in particular video vignettes."
+
+"In a randomized controlled trial of the program, patients with depression recruited in primary care were randomized to either the Beating the Blues program or to "Treatment as Usual" (TAU). Patients randomized to the BEat the Blues also received pharmacology and/or general practice (GP) support and practical/social help,offered as part of treatment as usual, with the exception of any face-to-face counseling or psychological intervention.  Patients allocated to TAU received whatever treatment their GP prescribed.  The latter included, besides any medication, discussion of problems with GP, provisions of practical/social help, referral to a counselor, referral to a practice nurse, referral to mental health professionals, or further physical examination.
+
+**The Research Question**
+
+Net of other factors (use of antidepressants and length of the current episode), does the Beat-the-Blues program results in better depression trajectories over treatment as usual?
+
+
+**The Data**
+
+The variables are as follows:   
 
   * `drug` did the patient take anti-depressant drugs (No or Yes)    
   * `length`  the length of the current episode of depression, a factor with levels:    
@@ -39,6 +70,8 @@ This data set is in the **HSAUR** package.  It is from a clinical trial of an in
   * `bdi.8m` Beck Depression Inventory II, after 8 months    
 
 
+### Read in the data
+
 ```{r}
 data(BtheB, package = "HSAUR")
 
@@ -47,7 +80,14 @@ BtheB %>%
 ```
 
 
-### Tidy up the dataset
+### Wide Format
+
+Tidy up the dataset
+
+**WIDE format**
+* One line per person
+* Good for descriptive tables & correlation matrices
+
 
 ```{r}
 btb_wide <- BtheB %>% 
@@ -57,24 +97,26 @@ btb_wide <- BtheB %>%
                 bdi.pre, bdi.2m, bdi.4m, bdi.6m, bdi.8m)
 ```
 
-
-```{r, results='asis'}
+```{r}
 btb_wide %>% 
-  furniture::table1(bdi.pre, bdi.2m, bdi.4m, bdi.6m, bdi.8m,
-                    splitby = ~ treatment,
-                    test = TRUE,
-                    output = "html")
+  psych::headTail(top = 10, bottom = 10) 
 ```
 
-### Restructure to long format
+### Long Format
+
+Restructure to long format
+
+**LONG FORMAT**
+* One line per observation
+* Good for plots and modeling
 
 ```{r}
 btb_long <- btb_wide %>% 
   tidyr::pivot_longer(cols = c(bdi.2m, bdi.4m, bdi.6m, bdi.8m),  # all existing variables (not quoted)
                       names_to = "month", 
                       names_pattern = "bdi.(.)m",
-                      names_ptype = list(month = numeric()),
                       values_to = "bdi") %>% 
+  dplyr::mutate(month = as.numeric(month)) %>% 
   dplyr::filter(complete.cases(id, bdi, treatment, month)) %>% 
   dplyr::arrange(id, month) %>% 
   dplyr::select(id, treatment, drug, length, bdi.pre, month, bdi)
@@ -86,6 +128,7 @@ btb_long %>%
   psych::headTail(top = 10, bottom = 10) 
 ```
 
+## Exploratory Data Analysis
 
 ### Visualize: Person-profile Plots
 
@@ -170,7 +213,8 @@ bdi_corr
 ### Plot the correlation matrix to get a better feel for the pattern
 
 ```{r}
-corrplot::corrplot.mixed(bdi_corr)
+bdi_corr %>% 
+  corrplot::corrplot.mixed(upper = "ellipse")
 ```
 
 
@@ -200,23 +244,48 @@ btb_lm_4 <- stats::lm(bdi ~ bdi.pre + length + drug*treatment*month,
 ### Parameter Estimates Table
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4))
-```
-
-```{r, eval=FALSE,}
-texreg::texreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4),
-               label = "lm",
-               caption = "OLS")
-```
-
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4),
+```{r, results='asis'}
+texreg::knitreg(list(btb_lm_1, btb_lm_2, btb_lm_3, btb_lm_4),
                 label = "lm",
                 caption = "OLS")
 ```
 
 ### Plot the model predictions
+
+```{r}
+interactions::interact_plot(model = btb_lm_1,
+                            pred = month,
+                            modx = treatment,
+                            main.title = "LM with 95% CI",
+                            interval = TRUE)                 # default = 95% confidence interval
+```
+
+
+```{r}
+interactions::interact_plot(model = btb_lm_1,
+                            pred = month,
+                            modx = treatment,
+                            main.title = "LM with 68% CI (M +/- SEM)",
+                            interval = TRUE,
+                            int.width = 0.68)  # change to 68% CI, which is +/- 1 SEM
+```
+
+```{r}
+interactions::interact_plot(model = btb_lm_1,
+                            pred = month,
+                            modx = treatment,
+                            interval = TRUE,
+                            colors = rep("black", times = 3),
+                            x.label = "Month",
+                            y.label = "Predicted BDI",
+                            legend.main    = "Baseline BDI:") +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(2, "cm")) +
+  labs(title    = "BtheB - Predictions from the LM model (95% CI)",
+       subtitle = "Trajectory for a person with BL depression < 6 months and randomized to TAU") 
+```
+
 
 ```{r}
 effects::Effect(focal.predictors = c("treatment", "month"), 
@@ -226,11 +295,11 @@ effects::Effect(focal.predictors = c("treatment", "month"),
   ggplot(aes(x = month,
              y = fit)) +
   geom_line(aes(color = treatment)) +
-  geom_ribbon(aes(ymin = lower,
+  geom_ribbon(aes(ymin = lower,            # 95% confidence intervals
                   ymax = upper,
                   fill = treatment), 
               alpha = 0.3) +
-  geom_ribbon(aes(ymin = fit - se,
+  geom_ribbon(aes(ymin = fit - se,         # Mean +/- 1 standard error for the mean (SEM)
                   ymax = fit + se,
                   fill = treatment), 
               alpha = 0.3) +
@@ -262,21 +331,10 @@ btb_lmer_RIAS <- lmerTest::lmer(bdi ~ bdi.pre + length + drug + treatment + mont
 
 ### Parameter Estimates Table
 
-```{r, include=FALSE}
-texreg::screenreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
-          custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"))
-```
-
-```{r, eval=FALSE}
-texreg::texreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
-               custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"),
-               label = "mlm",
-               caption = "LM vs. MLM")
-```
 
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
+```{r, results='asis'}
+texreg::knitreg(list(btb_lm_1, btb_lmer_RI, btb_lmer_RIAS), 
                 custom.model.names = c("OLS", "MLM-RI", "MLM-RIAS"),
                 label = "mlm",
                 caption = "LM vs. MLM")
@@ -293,7 +351,31 @@ anova(btb_lmer_RI,
 ```
 
 
+```{r}
+performance::compare_performance(btb_lm_1, 
+                                 btb_lmer_RI, 
+                                 btb_lmer_RIAS,
+                                 rank = TRUE)
+```
+
+
+
 ### Plot the model predictions
+
+```{r}
+interactions::interact_plot(model = btb_lmer_RI,
+                            pred = month,
+                            modx = treatment,
+                            mod2 = drug,
+                            interval = TRUE) +
+  theme_bw() +
+  labs(title = "BtheB - Predictions from a Multilevel Model (lmer)") +
+  theme(legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.background = element_rect(color = "black"))
+```
+
+
 
 ```{r}
 effects::Effect(c("treatment", "month", "drug"), 
@@ -320,11 +402,14 @@ effects::Effect(c("treatment", "month", "drug"),
 
 ## General Estimating Equations, GEE
 
-### Fit the models - Main effects to determine correlation structure
+### Explore Various Correlation Structures
 
-**Use the `gee()` function from the `gee` package for the results to be used in a `texreg()` table.**
 
-The output below each model is the 'starting' model assuming indendence, so they will all be the same here.
+#### Fit the models - Main effects to determine correlation structure
+
+**Use the `gee()` function from the `gee` package for the results to be used in a `texreg::knitreg()` tables.**
+
+The output below each model is the 'starting' model assuming independence, so they will all be the same here.
 
 ```{r}
 btb_gee_in <- gee::gee(bdi ~ bdi.pre + length + drug + treatment + month, 
@@ -369,35 +454,14 @@ summary(btb_gee_ex)
 summary(btb_gee_un)
 ```
 
-### Parameter Estimates Table
-
-```{r, include=FALSE}
-texreg::screenreg(list(btb_lm_1, 
-                       btb_lmer_RI, 
-                       btb_gee_in, 
-                       btb_gee_ex, 
-                       btb_gee_un))
-```
 
 
-```{r, eval=FALSE}
-texreg::texreg(list(btb_lm_1, 
-                    btb_lmer_RI, 
-                    btb_gee_in, 
-                    btb_gee_ex, 
-                    btb_gee_un),
-               custom.model.names = c("OLS", 
-                                      "MLM-RI", 
-                                      "GEE-in", 
-                                      "GEE-ex", 
-                                      "GEE-un"),
-               label = "GEEs",
-               caption = "LM, MLM, and GEE")
-```
+
+#### Parameter Estimates Table
 
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(btb_lm_1, 
+```{r,  results='asis'}
+texreg::knitreg(list(btb_lm_1, 
                      btb_lmer_RI, 
                      btb_gee_in, 
                      btb_gee_ex, 
@@ -414,9 +478,9 @@ texreg::htmlreg(list(btb_lm_1,
 
 
 
-### Re-Fit Models
+#### Re-Fit Models
 
-**Use the `geeglm()` function from the `geepack` package for the results to be used in a `anova()` table.**
+**Use the `geeglm()` function from the `geepack` package for the results to be used in a `anova()` table and interaction plots.**
 
 This function does NOT produce the same starting model output as `gee::gee()`.
 
@@ -452,7 +516,7 @@ btb_geeglm_un <- geepack::geeglm(bdi ~ bdi.pre + length + drug + treatment + mon
 ```
 
 
-### Can't Use the Likelihood Ratio Test
+> Can't Use the Likelihood Ratio Test
 
 The `anova()` function is used to compare nested models for parameters (fixed effects), not correlation structures.
 
@@ -464,7 +528,7 @@ anova(btb_geeglm_in, btb_geeglm_un)
 
 
 
-### Variaous QIC Measures of Fit
+#### Variaous QIC Measures of Fit
 
 References:
 
@@ -523,11 +587,31 @@ MuMIn::model.sel(btb_geeglm_in,
 
 
 
-### Plot the model predictions
+
+### Final "Best" Model
+
+#### Tabulate Model Parameters
+
+```{r,  results='asis'}
+texreg::knitreg(list(btb_gee_ex),
+                custom.model.names = c("GEE-ex"),
+                single.row = TRUE,
+                caption = "Final GEE, exchangeable correlation")
+```
+
+
+#### Plot the Marginal Effects
+
 
 ```{r}
-summary(btb_long)
+interactions::interact_plot(model = btb_geeglm_ex,
+                            pred = "month",
+                            modx = "treatment")
 ```
+
+
+
+
 
 
 
@@ -575,6 +659,8 @@ expand.grid(bdi.pre = 23,
   theme(legend.key.width = unit(1, "cm")) +
   facet_wrap(~ covR)
 ```
+
+
 
 
 
@@ -654,30 +740,9 @@ btb_geeglm_ex_3 <- geepack::geeglm(bdi ~  bdi.pre*treatment + length + drug + mo
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(btb_geeglm_ex, 
-                       btb_geeglm_ex_1, 
-                       btb_geeglm_ex_2,
-                       btb_geeglm_ex_3))
-```
 
-
-```{r, eval=FALSE}
-texreg::texreg(list(btb_geeglm_ex, 
-                    btb_geeglm_ex_1, 
-                    btb_geeglm_ex_2,
-                    btb_geeglm_ex_3),
-               custom.model.names = c("None",
-                                      "Length",
-                                      "Antidpressant",
-                                      "Treatment"),
-               label = "GEE_inter1",
-               caption = "GEE (exchangable): Interactions, not with Time")
-```
-
-
-```{r, echo=FALSE, results='asis'}
-texreg::texreg(list(btb_geeglm_ex, 
+```{r,  results='asis'}
+texreg::knitreg(list(btb_geeglm_ex, 
                     btb_geeglm_ex_1, 
                     btb_geeglm_ex_2,
                     btb_geeglm_ex_3),
@@ -724,16 +789,8 @@ btb_geeglm_ex_14 <- geepack::geeglm(bdi ~ length + drug + treatment + bdi.pre*mo
 
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(btb_geeglm_ex, 
-                       btb_geeglm_ex_11, 
-                       btb_geeglm_ex_12,
-                       btb_geeglm_ex_13,
-                       btb_geeglm_ex_14))
-```
-
-```{r, eval=FALSE}
-texreg::texreg(list(btb_geeglm_ex, 
+```{r, results='asis'}
+texreg::knitreg(list(btb_geeglm_ex, 
                        btb_geeglm_ex_11, 
                        btb_geeglm_ex_12,
                        btb_geeglm_ex_13,
@@ -751,29 +808,42 @@ texreg::texreg(list(btb_geeglm_ex,
 
 Now only plot the significant variables for the 'best' model.
 
+
 ```{r}
-expand.grid(bdi.pre = c(10, 20, 30),
-            length = "<6m",
-            drug = "No",
-            treatment = "TAU",
-            month = seq(from = 2, to = 8, by = 2)) %>%  
-  dplyr::mutate(fit = predict(btb_geeglm_ex,
-                                 newdata = .,
-                                 type = "response")) %>% 
-  dplyr::mutate(bdi.pre = factor(bdi.pre) %>% fct_rev()) %>% 
-  ggplot(aes(x = month,
-             y = fit,
-             linetype = bdi.pre,
-             color = bdi.pre)) +
-  geom_line(size = 1) +
-  theme_bw() +
-  labs(title    = "BtheB - Predictions from the GEE model (exchangable)",
-       subtitle = "Trajectory for a person with BL depression < 6 months and randomized to TAU",
-       x = "Month",
-       y = "Predicted BDI",
-       color    = "Baseline BDI:",
-       linetype = "Baseline BDI:") +
-  theme(legend.key.width = unit(1.5, "cm")) +
-  scale_linetype_manual(values = c("solid", "longdash", "dotted"))
+interactions::interact_plot(model = btb_geeglm_ex,
+                            pred = "month",
+                            modx = "bdi.pre")
 ```
 
+
+```{r}
+interactions::interact_plot(model = btb_geeglm_ex,
+                            pred = "month",
+                            modx = "bdi.pre",
+                            modx.values = c(10, 20, 30),
+                            at = list(length = "<6m",
+                                      drug = "No",
+                                      treatment = "TAU"),
+                            colors = rep("black", times = 3),
+                            x.label = "Month",
+                            y.label = "Predicted BDI",
+                            legend.main    = "Baseline BDI:") +
+  theme_bw() +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(2, "cm")) +
+  labs(title    = "BtheB - Predictions from the GEE model (exchangable)",
+       subtitle = "Trajectory for a person with BL depression < 6 months and randomized to TAU") 
+```
+
+
+## Conclusion
+
+**The Research Question**
+
+Does the Beat-the-Blues program 
+
+Net of other factors (use of antidepressants and length of the current episode), does the Beat-the-Blues program results in better depression trajectories over treatment as usual?
+
+**The Conclusion**
+
+There is no evidence that depression trajectories differ between participants randomized to the Beat the Blues program or the Treatment as Usual condition, after accounting for covariates and the correlation between repeated measurements.

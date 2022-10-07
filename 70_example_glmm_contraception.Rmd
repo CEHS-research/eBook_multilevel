@@ -23,6 +23,9 @@ library(psych)        # contains some useful functions, like headTail
 
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(effects)      # Plotting estimated marginal means
+library(emmeans)
+library(interactions)
+library(performance)
 
 library(optimx)       # Unify and streamline optimization capabilities in R
 ```
@@ -81,9 +84,15 @@ In clinical trials of modern hormonal contraceptives, pregnancy is exceedingly r
 
 ```{r}
 data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/data/master/MLM/RCTcontraception.txt", header=TRUE)
+```
 
+
+```{r}
 str(data_raw)
+```
 
+
+```{r}
 psych::headTail(data_raw, top = 10)
 ```
 
@@ -101,9 +110,15 @@ data_long <- data_raw %>%
                   as.numeric()) %>% 
   dplyr::filter(complete.cases(amenorrhea)) %>%   # dump missing occations
   dplyr::arrange(id, time)
+```
 
+
+```{r}
 str(data_long)
+```
 
+
+```{r}
 psych::headTail(data_long, bottom = 10)
 ```
 
@@ -118,9 +133,15 @@ data_wide <- data_long %>%
                      names_from = occasion,
                      names_prefix = "occasion_",
                      values_from = amenorrhea)
+```
 
+
+```{r}
 str(data_wide)
+```
 
+
+```{r}
 psych::headTail(data_wide, bottom = 10)
 ```
 
@@ -215,22 +236,19 @@ anova(fit_1, fit_2)
 ```
 
 
+```{r}
+performance::compare_performance(fit_1, fit_2, rank = TRUE)
+```
+
+
 ### Model Parameter Tables
 
 #### Logit Scale
 
-```{r, include=FALSE}
-texreg::screenreg(list(fit_1, fit_2),
-                  single.row = TRUE)
-```
 
 
 ```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(fit_1, fit_2),
+texreg::knitreg(list(fit_1, fit_2),
                 custom.model.names = c("with", "without"),
                 single.row = TRUE,
                 caption = "MLM Parameter Estimates: Inclusion of Interaction (SE and p-values)")
@@ -239,45 +257,15 @@ texreg::htmlreg(list(fit_1, fit_2),
 
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(fit_1, fit_2),
-                  ci.force = TRUE,
-                  single.row = TRUE)
-```
-
-```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(fit_1, fit_2),
-                custom.model.names = c("with", "without"),
-                  ci.force = TRUE,
-                single.row = TRUE,
-                caption = "MLM Parameter Estimates: Inclusion of Interaction (95% CI's)")
-```
-
-
 #### Odds ratio scale
 
-```{r, include=FALSE}
-texreg::screenreg(list(extract_glmer_exp(fit_1), 
-                       extract_glmer_exp(fit_2)),
-                  ci.test = 1,
-                  single.row = TRUE)
-```
 
 
 ```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(extract_glmer_exp(fit_1), 
+texreg::knitreg(list(extract_glmer_exp(fit_1), 
                      extract_glmer_exp(fit_2)),
                 custom.model.names = c("with", "without"),
                 ci.test = 1,
-                ci.force = TRUE,
                 single.row = TRUE,
                 caption = "MLM Parameter Estimates: Inclusion of Interaction (95% CI's)")
 ```
@@ -285,7 +273,59 @@ texreg::htmlreg(list(extract_glmer_exp(fit_1),
 
 ### Visualize the Model
 
+#### Sclae = Likert
+
+```{r}
+interactions::interact_plot(model = fit_2,
+                            pred = time,
+                            modx = dose,
+                            interval = TRUE,
+                            outcome.scale = "link",
+                            y.label = "Likert Scale for Ammenorea")
+```
+
+
+
+
 #### Scale = Probability
+
+
+```{r}
+interactions::interact_plot(model = fit_2,
+                            pred = time,
+                            modx = dose,
+                            interval = TRUE,
+                            outcome.scale = "response",
+                            y.label = "Estimated Marginal Probability of Ammenorea") 
+```
+
+
+```{r}
+interactions::interact_plot(model = fit_2,
+                            pred = time,
+                            modx = dose,
+                            interval = TRUE,
+                            outcome.scale = "response",
+                            x.label = "Months",
+                            y.label = "Predicted Probability of Amenorrhea",
+                            legend.main = "Dosage:",
+                            colors = c("black", "black")) +
+  geom_hline(yintercept = 0.5,         # reference lines
+             color = "gray",
+             size = 1.5,
+             alpha = .5) +
+  theme_bw() +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(-0.1, 1.1),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(1.5, "cm")) +
+  scale_x_continuous(breaks = 0:3,
+                     labels = c("0",
+                                "3",
+                                "6",
+                                "9"))
+```
+
 
 ```{r}
 effects::Effect(focal.predictors = c("dose", "time"),
@@ -399,17 +439,20 @@ anova(fit_2, fit_3d)
 
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(fit_3a, fit_3b, fit_3c, fit_3d),
-                  digits = 4)
-```
-
 ```{r, results="asis"}
-texreg::htmlreg(list(fit_3a, fit_3b, fit_3c, fit_3d),
+texreg::knitreg(list(fit_3a, fit_3b, fit_3c, fit_3d),
                 custom.model.names = c("nAGQ", "Nelder_Mead",
                                        "L BFGS B", "nlminb"),
                 caption = "GLMM: Various methods of ML approximation",
                 digits = 4)
+```
+
+
+```{r}
+interactions::interact_plot(model = fit_3d,
+                            pred = time,
+                            modx = dose,
+                            interval = TRUE)
 ```
 
 
@@ -440,3 +483,43 @@ effects::Effect(focal.predictors = c("dose", "time"),
                                 "Third",
                                 "Fourth"))
 ```
+
+
+### Post hoc compairsons
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 0))
+```
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 0), type = "response")
+```
+
+
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 1))
+```
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 1), type = "response")
+```
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 2), type = "response")
+```
+
+
+
+
+```{r}
+fit_3d %>% 
+  emmeans::emmeans(pairwise ~ dose, at = c(time = 3), type = "response")
+```
+
+

@@ -1,6 +1,9 @@
 # MLM, 3 levels: Nurse's Stress Intervention
 
-![](images/header_hox_nurses.png)
+```{r echo=FALSE}
+knitr::include_graphics("images/header_hox_nurses.png")
+```
+
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(comment     = "",
@@ -12,8 +15,9 @@ knitr::opts_chunk$set(comment     = "",
                       fig.height  = 4)        # set default figure height to 3 inches
 ```
 
+
 ```{r, message=FALSE, error=FALSE}
-library(tidyverse)
+library(tidyverse)    # basically everything ;)
 library(haven)        # read in SPSS dataset
 library(furniture)    # nice table1() descriptives
 library(stargazer)    # display nice tables: summary & regression
@@ -22,7 +26,8 @@ library(psych)        # contains some useful functions, like headTail
 library(car)          # Companion to Applied Regression
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(lmerTest)     # Tests on lmer objects
-library(sjstats)      # ICC calculations
+library(performance)  # ICC calculations
+library(interactions) # plotting interactions
 library(effects)      # Effects for regression models
 library(optimx)       # Different optimizers to solve mlm's
 ```
@@ -43,14 +48,23 @@ The following example is used through out @hox2017's chapater 2.
 >
 > The **nurses.sav** file contains three-level simulated data from a hypothetical study on stress in hospitals.  The data are from nurses working in wards nested within hospitals.  It is a cluster-randomized experiment.  In each of **25** hospitals, **four wards** are selected and randomly assigned to an experimental and a control condition.  In the experimental condition, a training program is offered to all nurses to cope with job-related stress.  After the program is completed, a sample of about 10 nurses from each ward is given a test that measures job-related stress.  Additional variables *(covariates)* are: nurse age (years), nurse experience (years), nurse gender (0=male, 1 = female), type of ward (0=general care, 1=special care), and hospital size (0=small, 1 = medium, 2=large).  The data have been generated to illustrate three-level analysis with a random slope for the effect of the intervention.
 
-![](images/diagram_hox_nurses.png)
+
+
+```{r echo=FALSE}
+knitr::include_graphics("images/diagram_hox_nurses.png")
+```
 
 
 Here the data is read in and the SPSS variables with labels are converted to $R$ factors. 
 
 ```{r}
-data_raw <- haven::read_sav("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/Nurses/SPSS/Nurses.sav") %>% 
+data_raw <- haven::read_spss("https://github.com/MultiLevelAnalysis/Datasets-third-edition-Multilevel-book/raw/master/chapter%202/Nurses/SPSS/Nurses.sav") %>% 
   haven::as_factor()             # retain the labels from SPSS --> factor
+```
+
+
+```{r, include=FALSE}
+tibble::glimpse(data_raw)
 ```
 
 
@@ -63,7 +77,7 @@ data_nurse <- data_raw %>%
   dplyr::mutate(genderF = factor(gender, 
                                  labels = c("Male", "Female"))) %>% # apply factor labels
   dplyr::mutate(id = paste(hospital, ward, nurse,
-                           sep = "_") %>%                                   # cunique id for each student
+                           sep = "_") %>%                                   # unique id for each nurse
                   factor()) %>%                                             # declare id is a factor
   dplyr::mutate_at(vars(hospital, ward, 
                         wardid, nurse), factor) %>%                         # declare to be factors
@@ -129,11 +143,21 @@ data_nurse %>%
 
 Most posters, journal articles, and reports start with a table of descriptive statistics.  Since it tends to come first, this type of table is often refered to as *Table 1*.  The `stargazer()` function can be used to create such a table, but only for the entire dataset [@R-stargazer].  I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.
 
-```{r, results='asis'}
+
+```{r, eval=FALSE}
 # Knit to Website: type = "html" 
 # Knit to PDF:     type = "latex"
 # View on Screen:  type = "text"
 
+data_nurse %>% 
+  data.frame() %>% 
+  stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
+                       header = FALSE,
+                       type = "text")
+```
+
+
+```{r, echo=FALSE, results='asis'}
 data_nurse %>% 
   data.frame() %>% 
   stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
@@ -146,7 +170,7 @@ data_nurse %>%
 
 Tyson Barrett's  **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics.  Full documentation can be accessed by executing `?furniture::table1`.    
 
-```{r, results='asis'}
+```{r, eval=FALSE}
 # Knit to Website: output = "html" 
 # Knit to PDF:     output = "latex2"
 # View on Screen:  output = ""text", or "markdown", "html"
@@ -156,11 +180,19 @@ data_nurse %>%
                     splitby    = ~ expcon,                                              # var to divide sample by
                     test       = TRUE,                                                  # test groups different?
                     type       = "full",                                                # give the test statistic
-                    output     = "html",                                                # output for html
+                    output     = "text",                                                # output for html
                     caption    = "Compare Intervention groups on five main variables")  # title
 ```
 
-
+```{r, echo=FALSE, results='asis'}
+data_nurse %>% 
+  furniture::table1(age, genderF, experien, wardtype, hospsize, hospsizeN, hospsizeNG,
+                    splitby    = ~ expcon,                                              # var to divide sample by
+                    test       = TRUE,                                                  # test groups different?
+                    type       = "full",                                                # give the test statistic
+                    output     = "html",                                                # output for html
+                    caption    = "Compare Intervention groups on five main variables")  # title
+```
 
 
 ```{block type='rmdlightbulb', echo=TRUE}
@@ -192,24 +224,9 @@ nurse_lmer_0_ml <- lmerTest::lmer(stress ~ 1 +              # Fixed Intercept fo
                                   REML = FALSE)             # fit via ML for comparing FIXED effects inclusion
 ```
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_0_re))
-```
 
-```{r, eval = FALSE}
-texreg::texreg(list(nurse_lmer_0_ml, 
-                    nurse_lmer_0_re),
-               custom.model.names = c("M0: Null, ML", 
-                                      "M0: Null, REML"),
-               caption            = "NULL Model: different estimation methods",
-               caption.above      = TRUE,
-               single.row         = TRUE)
-```
-
-
-
-```{r, echo = FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_0_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_0_ml, 
                      nurse_lmer_0_re),
                 custom.model.names = c("M0: Null, ML", 
                                        "M0: Null, REML"),
@@ -247,7 +264,16 @@ pie(x = vc$vcov,
     labels = vc$grp)
 ```
 
-The `sjstats` package has a few really helpful funcitons:
+The `performance` package has a few really helpful funcitons:
+
+```{r}
+lme4::VarCorr(nurse_lmer_0_re)
+```
+
+```{r}
+insight::get_variance(nurse_lmer_0_re)
+```
+
 
 
 $$
@@ -270,7 +296,7 @@ $$
 $$
 $$
 \overbrace{\rho_{top}}^{\text{ICC}\atop\text{ at level 3}} = 
-\frac{\overbrace{\sigma^2_{u0}}^{\text{Random Intercept}\atop\text{Variance Level 3}}}
+\frac{\overbrace{\sigma^2_{v0}}^{\text{Random Intercept}\atop\text{Variance Level 3}}}
      {\underbrace{\sigma^2_{v0}+\sigma^2_{u0}+\sigma^2_{e}}_{\text{Total}\atop\text{Variance}}}
 \tag{Hox 2.17}
 $$
@@ -285,20 +311,22 @@ $$
 
 
 ```{block type='rmdimportant', echo=TRUE}
-For more than two levels, the 'sjstats::icc()' function computes ICC's by the Davis and Scott method AND combines the values.  You will have to manually seperate the ICC values for each level.
+For more than two levels, the 'performance::icc()' function computes ICC's by the Davis and Scott method.
 ```
 
 ```{r}
-sjstats::icc(nurse_lmer_0_re)
+performance::icc(nurse_lmer_0_re)
+```
+
+```{r}
+performance::icc(nurse_lmer_0_re, by_group = TRUE)
 ```
 
 
+The proportion of variance in nurse stress level is 0.51 at the ward level and 0.18 at the hospital level, for a total of 0.69.
 
 
-The proportion of variange in nurse stress level is 0.51 at the ward level and 0.18 at the hospital level.
-
-
-To test if the three level model FOR MEANS is justified statistically, compare the null models with and without the nesting of wards in hospitals.
+To test if the three level model is justified statistically, compare the null models with and without the nesting of wards in hospitals.
 
 ```{r}
 nurse_lmer_0_re_2level <- lmerTest::lmer(stress ~ 1 + (1|wardid),  # each hospital contains several wards
@@ -307,22 +335,8 @@ nurse_lmer_0_re_2level <- lmerTest::lmer(stress ~ 1 + (1|wardid),  # each hospit
 ```
 
 
-```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_0_re_2level, 
-                    nurse_lmer_0_re),
-               custom.model.names = c("2 levels", 
-                                      "3 levels"),
-               caption            = "MLM: Two or Three Levels?",
-               caption.above      = TRUE,
-               single.row         = TRUE)
-```
-
-```{r, echo=FALSE, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(nurse_lmer_0_re_2level, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_0_re_2level, 
                      nurse_lmer_0_re),
                 custom.model.names = c("2 levels", 
                                        "3 levels"),
@@ -363,23 +377,10 @@ nurse_lmer_1_ml <- lmerTest::lmer(stress ~ expcon +             # experimental c
 
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_0_ml, nurse_lmer_1_ml))
-```
-
-```{r, eval = FALSE}
-texreg::texreg(list(nurse_lmer_0_ml, 
-                    nurse_lmer_1_ml),
-               custom.model.names = c("M0: null", 
-                                      "M1: fixed pred"),
-               caption            = "Nested Models: Fixed effects via ML",
-               caption.above      = TRUE,
-               single.row         = TRUE)
-```
 
 
-```{r, echo = FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_0_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_0_ml, 
                      nurse_lmer_1_ml),
                 custom.model.names = c("M0: null", 
                                        "M1: fixed pred"),
@@ -431,25 +432,11 @@ nurse_lmer_1b_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental 
 
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_1_ml, nurse_lmer_1a_ml, nurse_lmer_1b_ml))
-```
 
 
-```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_1_ml, 
-                    nurse_lmer_1a_ml, 
-                    nurse_lmer_1b_ml),
-               custom.model.names = c("Factor", 
-                                      "0 vs 1", 
-                                      "Centered"),
-               caption            = "MLM: Model 1 - Expereimental Condiditon Coding (2-levels)",
-               caption.above      = TRUE,
-               single.row         = TRUE)
-```
 
-```{r, echo=TRUE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_1_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_1_ml, 
                      nurse_lmer_1a_ml, 
                      nurse_lmer_1b_ml),
                 custom.model.names = c("Factor", 
@@ -489,25 +476,11 @@ nurse_lmer_1d_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental 
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_1b_ml, nurse_lmer_1c_ml, nurse_lmer_1d_ml))
-```
 
 
-```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_1b_ml, 
-                    nurse_lmer_1c_ml, 
-                    nurse_lmer_1d_ml),
-               custom.model.names = c("Factor", 
-                                      "0 vs 1", 
-                                      "Centered"),
-               caption            = "MLM: Model 1 - Hospital Coding (3-levels)",
-               caption.above      = TRUE,
-               single.row         = TRUE)
-```
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_1b_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_1b_ml, 
                      nurse_lmer_1c_ml, 
                      nurse_lmer_1d_ml),
                 custom.model.names = c("Factor", 
@@ -553,23 +526,10 @@ nurse_lmer_2_re <- lmerTest::lmer(stress ~ expconNG +             # experimental
 ```
 
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_1d_re, nurse_lmer_2_re))
-```
-
-```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_1d_re, 
-                    nurse_lmer_2_re),
-               custom.model.names = c("M1: RI", 
-                                      "M2: RIAS"),
-               caption            = "Nested Models: Random Slope via REML",
-               caption.above      = TRUE,
-                single.row         = TRUE)
-```
 
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_1d_re, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_1d_re, 
                      nurse_lmer_2_re),
                 custom.model.names = c("M1: RI", 
                                        "M2: RIAS"),
@@ -616,27 +576,15 @@ nurse_lmer_3_ml <- lmerTest::lmer(stress ~ expconNG +           # experimental c
                                     hospsizeNG +                # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED   
                                     expconNG*hospsizeNG +       # CROSS-LEVEL interaction
                                     (1|hospital/ward) +         # Random Intercepts for wards within hospitals
-                                    (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!) 
+                                    (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary within a ward!) 
                                   data = data_nurse,
                                   REML = FALSE)                 # fit via ML for nested FIXED Effects
 ```
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_2_ml, nurse_lmer_3_ml))
-```
 
-```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_2_ml, 
-                     nurse_lmer_3_ml),
-                custom.model.names = c("M2: RAIS", 
-                                       "M3: Xlevel Int"),
-                caption            = "Nested Models: Fixed Cross-Level Interaction via ML",
-                caption.above      = TRUE,
-                single.row         = TRUE)
-```
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_2_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_2_ml, 
                      nurse_lmer_3_ml),
                 custom.model.names = c("M2: RAIS", 
                                        "M3: Xlevel Int"),
@@ -661,45 +609,47 @@ There is evidence that hospital size moderated the effect of the intervention.  
 
 ### Fit the model
 
-The final model should be fit via REML.
+The final model should be fit via REML.  
+I'm going to revert back to the factor versions of hospital size and experimental condition, but grand-mean center age and experience
 
 ```{r}
-nurse_lmer_3_re <- lmerTest::lmer(stress ~ expconNG +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
-                                    age + gender + experien +   # level 1 covariates
-                                    wardtype +                  # level 2 covariate
-                                    hospsizeNG +                # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED   
-                                    expconNG*hospsizeNG +       # CROSS-LEVEL interaction
-                                    (1|hospital/ward) +         # Random Intercepts for wards within hospitals
-                                    (0 + expconNG|hospital),    # RANDOM SLOPES for exp cond within hospital (does not vary witin a ward!)  
-                                  data = data_nurse,
-                                  REML = TRUE)                                       # fit via REML for final model        
+data_nurse %>% 
+  dplyr::select(age, experien) %>%
+  dplyr::summarise_all(mean)
+```
+
+
+```{r}
+nurse_lmer_final <- lmerTest::lmer(stress ~ expcon +           # experimental condition = CONTINUOUS GRAND-MEAN CENTERED
+                                     I(age - 43.01) + gender + I(experien - 17.06) +   # level 1 covariates
+                                     wardtype +                  # level 2 covariate
+                                     hospsize +                  # level 3 covariate, hospital size = CONTINUOUS GRAND-MEAN CENTERED   
+                                     expcon*hospsize +       # CROSS-LEVEL interaction
+                                     (1|hospital/ward) +         # Random Intercepts for wards within hospitals
+                                     (0 + expconNG|hospital),    # RANDOM SLOPES for exp condition within hospital (does not vary within a ward!)  
+                                   data = data_nurse,
+                                   REML = TRUE)                                       # fit via REML for final model        
 ```
 
 
 
 ### Table of Estimated Parameters
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_3_re), single.row = TRUE)
-```
-
-```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_3_re),
-               custom.model.names = c("M3: Xlevel Int"),
-               caption            = "Final Model: with REML",
-               caption.above      = TRUE,
-               single.row         = TRUE)
+```{r}
+anova(nurse_lmer_final)
 ```
 
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_3_re),
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_final),
                 custom.model.names = c("M3: Xlevel Int"),
                 caption            = "Final Model: with REML",
                 caption.above      = TRUE,
                 single.row         = TRUE)
 ```
 
+> **Interpretation:**
+> After accounting for the a nurses' age, gender, and experience, as well as the ward type, the effect of the intervention is moderated by hospital size, b = 1.96, SE = 0.35, p < .001,
 
 
 ### Visualization: Estimated Marginal Means Plot 
@@ -707,25 +657,165 @@ texreg::htmlreg(list(nurse_lmer_3_re),
 
 Although there are many variables in this model, only two are involved in any interaction(s).  For this reason, we will choose to display the estimated marginal means across only experimental condition and hospital size.  For this illustration, all other continuous predictors are taken to be at their mean and categorical predictors at their reference category.
 
+#### Using `interactions::interact_plot()`
+
+All Defaults:
 
 ```{r}
-sjPlot::plot_model(nurse_lmer_3_re, 
-                   type = "pred", 
-                   terms = c("hospsizeNG", "expconNG"))
+interactions::cat_plot(model = nurse_lmer_final,
+                       pred = hospsize,          # main predictor/independent variable, for x-axis
+                       modx = expcon,            # moderating independent variable, for different lines
+                       interval = TRUE)
+```
+
+Look: We can make NASTY dynamite plots!  DO NOT EVER USE THESE!
+
+From the help menu:  "Many applied researchers advise **against** this type of plot because it does not represent the distribution of the observed data or the uncertainty of the predictions very well."
+
+```{r}
+interactions::cat_plot(model = nurse_lmer_final,
+                       pred = hospsize,          # main predictor/independent variable, for x-axis
+                       modx = expcon,            # moderating independent variable, for different lines
+                       interval = TRUE,
+                       geom = "bar")
+```
+
+
+### Post Hoc Pairwise Tests
+
+When an interactions is between two categorical predictors, compare pairs of mean predictions.
+
+```{r}
+nurse_lmer_final %>% 
+  emmeans::emmeans(~ expcon | hospsize) %>% 
+  pairs() 
+```
+
+> **Interpretation:**
+> For hospitals that are small in size, the intervention does substantially decrease stress levels by 1.55 points, SE = 0.20, p <.001. For hospitals that are medium sizes, the intervention does decrease stress, but by a modest 0.43 points, SD = 0.17, p = .020.  For large hospitals the intervention was not effective at reducing stress, p = .200.
+
+
+
+### Effect Sizes
+
+From the help page for `emmeans::eff_size`:
+
+*For models having a single random effect, such as those fitted using `lm`; in that case, the `stats::sigma()` and `stats::df.residual()` functions may be useful for specifying `sigma` and `edf`.` For models with **more than one random effect**, `sigma` may be based on some combination of the random-effect variances.*
+
+*Specifying `edf` can be rather un-intuitive but is also relatively un-critical; but the smaller the value, the wider the confidence intervals for effect size. The value of `sqrt(2/edf)` can be interpreted as the relative accuracy of `sigm`a; for example, with `edf = 50`,* $\sqrt{\frac{2}{50}}$ *= 0.2, meaning that `sigma` is accurate to plus or minus 20 percent. Note in an example below, we tried two different `edf` values as kind of a bracketing/sensitivity-analysis strategy. A value of `Inf` is allowable, in which case you are assuming that `sigma` is known exactly. Obviously, this narrows the confidence intervals for the effect sizes – unrealistically if in fact `sigma` is unknown.*
+
+
+
+#### Compute Standardized Mean Differences
+
+**FIRST:** We need to compute the values to standardize by..."Sigma".
+
+Option 1) Pooled SD  **<-- My favorite**
+
+* added all the model's variance components
+* took the standard deviation
+
+```{r}
+totalSD <- VarCorr(nurse_lmer_final) %>% 
+  data.frame() %>% 
+  dplyr::summarise(tot_var = sum(vcov)) %>% 
+  dplyr::pull(tot_var) %>% 
+  sqrt()
+  
+totalSD
+```
+
+
+Option 2) SD of all stress levels for all participants
+
+```{r}
+data_nurse %>%  
+  dplyr::summarise(sd(stress))
+```
+Option 3) SD of stress levels for participants in the control group
+
+```{r}
+data_nurse %>% 
+  dplyr::filter(expcon == "control") %>% 
+  dplyr::summarise(sd(stress))
+```
+
+**SECOND:**  We need to compute the numeric scalar that specifies the equivalent degrees of freedom for the `sigma`.
+
+This is a way of specifying the uncertainty in `sigma`, in that we regard our estimate of `sigma^2` as being proportional to a chi-square random variable with `edf` degrees of freedom. (`edf` should not be confused with the `df` argument that may be passed via ... to specify the degrees of freedom to use in t statistics and confidence intervals.)
+
+This value has an effect the SE and confidence intervals, which I suggest you do not report, so just throw any old number in there ;)
+
+```{r}
+nurse_lmer_final %>% 
+  emmeans::emmeans(~ expcon | hospsize) %>% 
+  emmeans::eff_size(sigma = totalSD,        # which SD to divide by???
+                    edf = 10)               # df  
 ```
 
 
 ```{r}
-sjPlot::plot_model(nurse_lmer_3_re, 
+nurse_lmer_final %>% 
+  emmeans::emmeans(~ expcon | hospsize) %>% 
+  emmeans::eff_size(sigma = totalSD, 
+                    edf = 100)
+```
+
+
+> **FULL INTERPRETATION:**
+> After accounting for the a nurses' age, gender, and experience, as well as the ward type, the effect of the intervention is moderated by hospital size, F(2, 22) = 17.50, p < .001. For hospitals that are small in size, the intervention does substantially decrease stress levels by 1.55 points, SE = 0.20, p <.001, Cohen's d = 1.83.  For hospitals that are medium sizes, the intervention does decrease stress, but by a modest 0.43 points, SD = 0.17, p = .020, Cohen's d =  0.51.  For large hospitals the intervention was not effective at reducing stress, p = .200.
+
+
+
+Adding more options:
+
+```{r}
+interactions::cat_plot(nurse_lmer_final,
+                       pred = "hospsize",
+                       modx = "expcon",
+                       interval = TRUE,
+                       y.label = "Estimated Marginal Mean Norse's Stress Score",
+                       x.label = "Hospital Size",
+                       legend.main = "Condition:",
+                       modx.labels = c("Control", "Intervention"),
+                       colors = c("gray40", "black"),
+                       point.shape = TRUE,
+                       pred.point.size = 5,
+                       dodge.width = .3,
+                       errorbar.width = .25,
+                       geom = "line") +
+  theme_bw() +
+  theme(legend.key.width = unit(2, "cm"),
+        legend.background = element_rect(color = "Black"),
+        legend.position = c(1, 0),
+        legend.justification = c(1.1, -0.1)) +
+  scale_y_continuous(breaks = seq(from = 0, to = 10, by = 1)) 
+
+```
+
+
+
+
+#### Using `sjPlot::plot_model()`
+
+All Defaults:
+
+```{r}
+sjPlot::plot_model(nurse_lmer_final, 
                    type = "pred", 
-                   terms = c("hospsizeNG [-0.776, 0.224, 1.224]", 
-                             "expconNG [-0.504, 0.496]")) +
-  scale_x_continuous(breaks = c(-0.776, 0.224, 1.224),
-                     labels = c("small", "medium", "large")) +
-  scale_color_manual(labels = c("Control", "Intervention"),
-                     values = c("red", "blue")) +
+                   terms = c("hospsize", "expcon"))
+```
+
+
+Adding more options:
+
+```{r}
+sjPlot::plot_model(nurse_lmer_final, 
+                   type = "pred", 
+                   terms = c("hospsize", 
+                             "expcon")) +
   labs(title = "Multilevel Modeling of Hospital Nurse Stress Intervention",
-       subtitle = "Ribbons display 95% Confidene Intervals",
+       subtitle = "Error bars display 95% Confidene Intervals",
        x = "Hospital Size",
        y = "Estimated Marginal Mean\nNorse's Stress Score",
        color = "Condition") +
@@ -733,7 +823,7 @@ sjPlot::plot_model(nurse_lmer_3_re,
 ```
 
 
-
+#### Using `effects::Effect()` and `ggplot`
 
 
 
@@ -753,35 +843,21 @@ Get Estimated Marginal Means - default 'nice' predictor values:
 
 
 ```{r}
-effects::Effect(focal.predictors = c("expconNG", "hospsizeNG"),
-                mod = nurse_lmer_3_re,
-                xlevels = list(expconNG   = c(-0.504, 0.496),
-                               hospsizeNG = c(-0.776, 0.224, 1.224))) %>% 
+effects::Effect(focal.predictors = c("expcon", "hospsize"),
+                mod = nurse_lmer_final) %>% 
   data.frame()  
 ```
 
 ```{r}
-effects::Effect(focal.predictors = c("expconNG", "hospsizeNG"),
-                mod = nurse_lmer_3_re,
-                xlevels = list(expconNG   = c(-0.504, 0.496),
-                               hospsizeNG = c(-0.776, 0.224, 1.224))) %>% 
-  data.frame()  %>% 
-  dplyr::mutate(expcon = factor(expconNG + 0.504,
-                                labels = c("Control", "Intervention"))) %>% 
-  dplyr::mutate(hopsize = factor(hospsizeNG + 0.776,
-                                 labels = c("Small", "Medium", "Large")))
+effects::Effect(focal.predictors = c("expcon", "hospsize"),
+                mod = nurse_lmer_final) %>% 
+  data.frame()
 ```
 
 ```{r}
-effects::Effect(focal.predictors = c("expconNG", "hospsizeNG"),
-                mod = nurse_lmer_3_re,
-                xlevels = list(expconNG   = c(-0.504, 0.496),
-                               hospsizeNG = c(-0.776, 0.224, 1.224))) %>% 
+effects::Effect(focal.predictors = c("expcon", "hospsize"),
+                mod = nurse_lmer_final) %>% 
   data.frame()  %>% 
-  dplyr::mutate(expcon = factor(expconNG + 0.504,
-                                labels = c("Control", "Intervention"))) %>% 
-  dplyr::mutate(hospsize = factor(hospsizeNG + 0.776,
-                                 labels = c("Small", "Medium", "Large"))) %>% 
   ggplot() +
   aes(x = hospsize,
       y = fit,
@@ -808,11 +884,11 @@ effects::Effect(focal.predictors = c("expconNG", "hospsizeNG"),
        linetype = "Condition") +
   theme(legend.key.width = unit(2, "cm"),
         legend.background = element_rect(color = "black"),
-        legend.position = c(1, 0),
-        legend.justification = c(1.1, -0.1))
+        legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1))
 ```
 
-This plot illustrates the estimated marginal means among male (gender's reference category) nurses at the overall mean age (43.01 years), with the mean level experience (17.06 years), since thoes variables were not included as `focal.predictors` in the `effects::Effect()` function.  Different values for thoes predictors would yield the exact sample plot, shifted as a whole either up or down.
+This plot illustrates the estimated marginal means among male (gender's reference category) nurses at the overall mean age (43.01 years), with the mean level experience (17.06 years), since thoes variables were not included as `focal.predictors` in the `effects::Effect()` function.  Different values for those predictors would yield the exact sample plot, shifted as a whole either up or down.
 
 
 
@@ -825,12 +901,12 @@ There is evidence this intervention lowered stress among nurses working in small
 
 ### Strength
 
-This analysis was able to incorporated all three levels of clustering while additionally controlling for many covariates, both categorical (nurse gender and ward type) and continuous (nurse age and experience in years).  Also heterogeneity was accounted for in terms of the interventions's effect at various hospitals.  This would NOT be possible via any ANOVA type anlysis.
+This analysis was able to incorporated all three levels of clustering while additionally controlling for many co0-variates, both categorical (nurse gender and ward type) and continuous (nurse age and experience in years).  Also heterogeneity was accounted for in terms of the intervention's effect at various hospitals.  This would NOT be possible via any ANOVA type analysis.
 
 
 ### Weakness
 
-The approach presented by @hox2017 and shown above involved mean-centering categorical variables.  This would only be appropriate for a factor with more than two levels if its effect on the outcome was linear.  Also, as the mean-centered variables are treated as continuous variables, post hoc tests are increasingly difficult.
+The approach presented by @hox2017 and shown above involved mean-centering categorical variables.  This would only be appropriate for a factor with more than two levels if its effect on the outcome was linear.  Also, as the mean-centered variables are treated as continuous variables, post hoc tests are increasingly difficult.  That is why I did that in the final model.
 
 
 
@@ -838,26 +914,10 @@ The approach presented by @hox2017 and shown above involved mean-centering categ
 
 @hox2017 presents a table on page 23 comparing various models.  Note, that table includes models only fit via maximum likelihood, not REML.  Also, the model $M_3$: with cross-level interaction is slightly different for an unknown reason.
 
-```{r, include=FALSE}
-texreg::screenreg(list(nurse_lmer_0_ml, 
-                       nurse_lmer_1d_ml, 
-                       nurse_lmer_2_ml, 
-                       nurse_lmer_3_ml))
-```
 
-```{r, eval=FALSE}
-texreg::texreg(list(nurse_lmer_0_ml, 
-                    nurse_lmer_1d_ml, 
-                    nurse_lmer_2_ml, 
-                    nurse_lmer_3_ml),
-               custom.model.names = c("M0", "M1", "M2", "M3"),
-               caption            = "Hox Table 2.5: Models for stress in hospitals and wards",
-               caption.above      = TRUE,
-               single.row         = TRUE)
-```
 
-```{r, echo=FALSE, results='asis'}
-texreg::htmlreg(list(nurse_lmer_0_ml, 
+```{r, results='asis'}
+texreg::knitreg(list(nurse_lmer_0_ml, 
                      nurse_lmer_1d_ml, 
                      nurse_lmer_2_ml, 
                      nurse_lmer_3_ml),

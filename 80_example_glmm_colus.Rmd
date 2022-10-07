@@ -35,8 +35,10 @@ library(gee)          # Generalized Estimating Equations
 library(optimx)       # Optimizers for use in lme4::glmer
 library(MuMIn)        # Multi-Model Inference (caluclate QIC)
 library(effects)      # Plotting estimated marginal means
+library(interactions)
+library(performance)
 
-library(gridExtra)    # combining graphics
+library(patchwork)    # combining graphics
 ```
 
 
@@ -95,11 +97,16 @@ A ‘lock-out’ period followed each dose, where subject may not administer mor
 
 ```{r}
 data_raw <- read.table("https://raw.githubusercontent.com/CEHS-research/data/master/MLM/bolus.txt",
-  header = TRUE
-)
+  header = TRUE)
+```
 
+
+```{r}
 str(data_raw) # see the structure
+```
 
+
+```{r}
 psych::headTail(data_raw)
 ```
 
@@ -108,10 +115,17 @@ psych::headTail(data_raw)
 ```{r}
 data_long <- data_raw %>% 
   dplyr::mutate(id = factor(id)) %>% 
-  dplyr::mutate(timeF = factor(time))
+  dplyr::mutate(timeF = factor(time)) %>% 
+  dplyr::mutate(group = factor(group))
+```
 
+
+```{r}
 str(data_long) # see the structure
+```
 
+
+```{r}
 psych::headTail(data_long)
 ```
 
@@ -119,10 +133,10 @@ psych::headTail(data_long)
 
 ```{r}
 data_wide <- data_long %>% 
-  dplyr::select(-timeF) %>% 
-  tidyr::spread(key = time,
-                value = count,
-                sep = "_")
+  dplyr::select(-timeF) %>%
+  tidyr::pivot_wider(names_from = time,
+                     names_prefix = "time_",
+                     values_from = count)
 
 str(data_wide) # see the structure
 
@@ -138,11 +152,13 @@ psych::headTail(data_wide)
 
 ```{r}
 data_wide %>% 
-  furniture::table1(time_0,
-                    splitby = ~ group,
+  dplyr::group_by(group) %>% 
+  furniture::table1("Count at Baseline" = time_0,
+                    total   = TRUE,
                     test    = TRUE,
                     na.rm   = FALSE,
-                    output  = "html")
+                    digits  = 2,
+                    output  = "markdown")
 ```
 
 
@@ -151,13 +167,15 @@ data_wide %>%
 
 ```{r}
 data_wide %>% 
+  dplyr::group_by(group) %>% 
   furniture::table1(time_0, 
                     time_1, time_2, time_3, time_4, time_5, 
                     time_6, time_7, time_8, time_9, time_10,
-                    splitby = ~ group,
+                    total   = TRUE,
                     test    = TRUE,
                     na.rm   = FALSE,
-                    output  = "html")
+                    digits  = 2,
+                    output  = "markdown")
 ```
 
 
@@ -181,7 +199,8 @@ data_long %>%
   ggplot(aes(x = time, 
              y = count)) +
   geom_line(aes(group = id),
-              color = "gray") +
+            color = "black",
+            alpha = .4) +
   facet_grid(. ~ group) + 
   theme_bw()
 ```
@@ -253,22 +272,25 @@ data_long %>%
 data_long %>% 
   ggplot(aes(x = time, 
              y = count)) +
-  geom_smooth(method = "loess",
-              color = "gray",
+  geom_smooth(aes(color = "1. Loess"),
+              method = "loess",
               se = FALSE) +
-  geom_smooth(method = "lm",
-              color = "red",
+  geom_smooth(aes(color = "2. Linear"),
+              method = "lm",
               se = FALSE) +
-  geom_smooth(method = "lm",
+  geom_smooth(aes(color = "3. Quadratic"),
+              method = "lm",
               formula = y ~ poly(x, 2),
-              color = "green",
               se = FALSE) +
-  geom_smooth(method = "lm",
+  geom_smooth(aes(color = "4. Cubic"),
+              method = "lm",
               formula = y ~ poly(x, 3),
-              color = "purple",
               se = FALSE) +
   facet_grid(. ~ group) + 
-  theme_bw()
+  theme_bw() +
+  labs(color = "Type of Smoother") +
+  theme(legend.position = "bottom",
+        legend.key.width = unit(1.5, "cm"))
 ```
 
 #### Means over Time, BY Group
@@ -360,27 +382,20 @@ MuMIn::model.sel(mod_gee_ex,
 ```
 
 
-#### Model Parameter Table
-
-```{r, include = FALSE}
-texreg::screenreg(list(extract_gee_exp(mod_gee_ex),
-                       extract_gee_exp(mod_gee_ar),
-                       extract_gee_exp(mod_gee_un)),
-                  custom.model.names = c("Exchangable",
-                                         "AutoRegressive",
-                                         "Unstructured"),
-                  caption = "GEE: Main Effects Only, with Quadratic Time",
-                  single.row = TRUE,
-                  ci.test = 1)
+```{r}
+performance::compare_performance(mod_gee_ex, 
+                                 mod_gee_ar, 
+                                 mod_gee_un,
+                                 rank = TRUE)
 ```
 
 
-```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
+#### Model Parameter Table
 
-texreg::htmlreg(list(extract_gee_exp(mod_gee_ex),
+
+
+```{r, results='asis'}
+texreg::knitreg(list(extract_gee_exp(mod_gee_ex),
                      extract_gee_exp(mod_gee_ar),
                      extract_gee_exp(mod_gee_un)),
                 custom.model.names = c("Exchangable",
@@ -412,8 +427,8 @@ MuMIn::QIC(mod_gee_ar,
 ```
 
 ```{r}
-texreg::screenreg(list(extract_gee_exp(mod_gee_ar),
-                       extract_gee_exp(mod_gee_ar2)),
+texreg::knitreg(list(extract_gee_exp(mod_gee_ar),
+                     extract_gee_exp(mod_gee_ar2)),
                   single.row = TRUE,
                   ci.test = 1)
 ```
@@ -425,19 +440,11 @@ texreg::screenreg(list(extract_gee_exp(mod_gee_ar),
 
 #### Model Parameter Table
 
-```{r, include=FALSE}
-texreg::screenreg(extract_gee_exp(mod_gee_ar),
-                  single.row = TRUE,
-                  ci.test = 1)
-```
+
 
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(extract_gee_exp(mod_gee_ar),
+texreg::knitreg(extract_gee_exp(mod_gee_ar),
                 caption = "GEE: Final Model (auto regressive)",
                 single.row = TRUE,
                 ci.test = 1)
@@ -454,6 +461,13 @@ mod_geeglm_ar <- geepack::geeglm(count ~ group + time + I(time^2),
 
 summary(mod_geeglm_ar)
 ```
+
+```{r}
+interactions::interact_plot(model = mod_geeglm_ar,
+                            pred = time,
+                            modx = group)
+```
+
 
 
 #### Predict over a Grid 
@@ -522,25 +536,9 @@ summary(mod_glmer_rias)
 anova(mod_glmer_ri, mod_glmer_rias)
 ```
 
-```{r, include=FALSE}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::screenreg(list(extract_glmer_exp(mod_glmer_ri),
-                       extract_glmer_exp(mod_glmer_rias)),
-                  custom.model.names = c("Intecepts", "Intercepts and Slopes"),
-                  caption = "GLMM: Compare Random Effects",
-                  single.row = TRUE,
-                  ci.test = 1)
-```
 
 ```{r, results="asis"}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(extract_glmer_exp(mod_glmer_ri),
+texreg::knitreg(list(extract_glmer_exp(mod_glmer_ri),
                      extract_glmer_exp(mod_glmer_rias)),
                 custom.model.names = c("Intecepts", "Intercepts and Slopes"),
                 caption = "GLMM: Compare Random Effects",
@@ -572,24 +570,19 @@ anova(mod_glmer_rias, mod_glmer_rias2)
 
 #### Model Parameter Table
 
-```{r, include=FALSE}
-texreg::screenreg(list(extract_glmer_exp(mod_glmer_rias)),
-                  single.row = TRUE,
-                  ci.test = 1)
-```
-
 
 ```{r, results='asis'}
-# Knit to Website: texreg::htmlreg()
-# Knit to PDF:     texreg::texreg()
-# View on Screen:  texreg::screenreg()
-
-texreg::htmlreg(list(extract_glmer_exp(mod_glmer_rias)),
+texreg::knitreg(list(extract_glmer_exp(mod_glmer_rias)),
                 caption = "GLMM: Final Model",
                 single.row = TRUE,
                 ci.test = 1)
 ```
 
+```{r}
+interactions::interact_plot(model = mod_glmer_rias,
+                            pred = time,
+                            modx = group)
+```
 
 
 #### Estimated Marginal Means

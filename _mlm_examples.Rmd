@@ -1,0 +1,338 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+
+```{r}
+install.packages("agridat")
+```
+
+```{r}
+library(tidyverse)
+library(agridat)
+
+library(lme4)
+library(lmerTest)
+library(performance)
+library(interactions)
+```
+
+
+In their 1985 paper, Harville and Fenech presented a method for constructing an exact confidence interval for the ratio of two variance components in a linear mixed model. To illustrate their results, the authors used data on the weights at birth of **62 single-birth male lambs**. These lambs come from **five population lines** (two control lines and three selection lines). Each lamb was the offspring of one of **23 rams (male sheep)**, and each lamb had a different mother. The **age of the mother** is one of three categories: *1-2 years (category 1), 2-3 years (category 2), or 3+ years (category 3)*.
+
+
+
+```{r}
+data("harville.lamb", package = "agridat")
+
+df_raw <- harville.lamb
+
+
+df_raw
+```
+
+
+```{r}
+df_long <- df_raw %>% 
+  dplyr::mutate_at(vars(line, sire),
+                   factor) %>% 
+  dplyr::mutate(damage = factor(damage,
+                                levels = 1:3,
+                                labels = c("1-2 years",
+                                           "2-3 years",
+                                           "over 3 years")))
+
+df_long
+```
+
+
+
+```{r}
+df_long %>% 
+  ggplot(aes(x = damage,
+             y = weight)) +
+  geom_violin(fill = "gray") +
+  geom_boxplot(width = .2) +
+  geom_count() +
+  stat_summary(color = "red") +
+  theme_bw()
+```
+
+
+```{r}
+df_long %>% 
+  ggplot(aes(x = sire,
+             y = weight)) +
+  geom_violin(fill = "gray") +
+  geom_boxplot(width = .2) +
+  geom_count() +
+  stat_summary(color = "red") +
+  theme_bw()
+```
+
+
+
+```{r}
+df_long %>% 
+  ggplot(aes(x = line,
+             y = weight)) +
+  geom_violin(fill = "gray") +
+  geom_boxplot(width = .2) +
+  geom_count() +
+  stat_summary(color = "red") +
+  theme_bw()
+```
+
+
+
+```{r}
+fit_lmer_0_re <- lmerTest::lmer(weight ~ 1 + (1|sire),
+                                data = df_long,
+                                REML = TRUE)
+
+fit_lmer_0_ml <- lmerTest::lmer(weight ~ 1 + (1|sire),
+                                data = df_long,
+                                REML = FALSE)
+```
+
+
+```{r, results='asis'}
+texreg::knitreg(list(fit_lmer_0_re, fit_lmer_0_ml),
+                custom.model.names = c("REML", "ML"),
+                single.row = TRUE,
+                digits = 2,
+                caption = "Null Models")
+```
+
+
+
+```{r}
+performance::icc(fit_lmer_0_re)
+```
+
+
+
+```{r}
+fit_lmer_1_re <- lmerTest::lmer(weight ~ line + damage + (1|sire),
+                                data = df_long,
+                                REML = TRUE)
+```
+
+
+
+```{r, results='asis'}
+texreg::knitreg(list(fit_lmer_0_re, fit_lmer_1_re),
+                single.row = TRUE)
+```
+
+
+Conditional ICC:
+
+
+```{r}
+performance::icc(fit_lmer_1_re)
+```
+
+
+\clearpage
+
+
+# Carrots Example
+
+
+In a consumer study 103 consumers scored their preference of 12 danish carrot types on a scale from 1 to 7. Moreover the consumers scored the degree of sweetness, bitterness and crispiness in the products.
+
+* `Consumer` factor with 103 levels: numbering identifying consumers.
+
+* `Frequency` factor with 5 levels; "How often do you eat carrots?" 
+    + 1: once a week or more, 
+    + 2: once every two weeks, 
+    + 3: once every three weeks, 
+    + 4: at least once month, 
+    + 5: less than once a month.
+
+* `Gender` factor with 2 levels. 
+    + 1: male, 
+    + 2:female.
+
+* `Age` factor with 4 levels. 
+    + 1: less than 25 years, 
+    + 2: 26-40 years, 
+    + 3: 41-60 years, 
+    + 4 more than 61 years.
+
+* `Homesize`
+factor with two levels. Number of persons in the household. 
+    + 1: 1 or 2 persons, 
+    + 2: 3 or more persons.
+
+* `Work`
+factor with 7 levels. different types of employment. 
+    + 1: unskilled worker(no education), 
+    + 2: skilled worker(with education), 
+    + 3: office worker, 
+    + 4: housewife (or man), 
+    + 5: independent businessman/ self-employment,
+    + 6: student, 
+    + 7: retired
+
+* `Income`
+factor with 4 levels. 
+    + 1: <150000, 
+    + 2: 150000-300000, 
+    + 3: 300000-500000, 
+    + 4: >500000
+
+* `Preference` consumer score on a seven-point scale.
+
+* `Sweetness` consumer score on a seven-point scale.
+
+* `Bitterness` consumer score on a seven-point scale.
+
+* `Crispness` consumer score on a seven-point scale.
+
+* `sens1` first sensory variable derived from a PCA.
+
+* `sens2` second sensory variable derived from a PCA.
+
+* `Product` factor on 12 levels.
+
+The carrots were harvested in autumn 1996 and tested in march 1997. In addition to the consumer survey, the carrot products were evaluated by a trained panel of tasters, the sensory panel, with respect to a number of sensory (taste, odour and texture) properties. Since usually a high number of (correlated) properties (variables) are used, in this case 14, it is a common procedure to use a few, often 2, combined variables that contain as much of the information in the sensory variables as possible. This is achieved by extracting the first two principal components in a principal components analysis (PCA) on the product-by-property panel average data matrix. In this data set the variables for the first two principal components are named (sens1 and sens2).
+
+
+```{r}
+data(carrots, package = "lmerTest")
+```
+
+
+```{r}
+fit_carrot_lmer_1_re <- lmerTest::lmer(Preference ~ sens2 + Homesize + 
+                                         (1 + sens2 | Consumer), 
+                                       data = carrots,
+                                       REML = TRUE)
+
+summary(fit_carrot_lmer_1_re)
+```
+
+
+\celarpage
+
+
+# Ham example
+
+
+One of the purposes of the study was to investigate the effect of information given to the consumers measured in hedonic liking for the hams. Two of the hams were Spanish and two were Norwegian, each origin representing different salt levels and different aging time. The information about origin was given in such way that both true and false information was given. Essentially a 4x2 design with 4 samples and 2 information levels. A total of 81 Consumers participated in the study.
+
+* `Consumer` factor with 81 levels: numbering identifying consumers.
+
+* `Product` factor with four levels.
+
+* `Informed.liking` numeric: hedonic liking for the products.
+
+* `Information` factor with two levels.
+
+* `Gender` factor with two levels.
+
+* `Age` numeric: age of Consumer.
+
+
+```{r}
+fit_ham_lmer_0_re <- lmerTest::lmer(Informed.liking ~ 1 + (1|Consumer) , 
+                                    data = ham,
+                                      REML = TRUE)
+
+fit_ham_lmer_1_re <- lmerTest::lmer(Informed.liking ~ Product*Information + (1|Consumer) , 
+                                    data = ham,
+                                      REML = TRUE)
+
+fit_ham_lmer_2_refm <- lmerTest::lmer(Informed.liking ~ Product*Information*Gender*Age +
+                                        + (1|Consumer) + (1|Consumer:Product) +
+                                        (1|Consumer:Information),
+                                      data = ham,
+                                      REML = TRUE)
+```
+
+
+```{r}
+performance::icc(fit_ham_lmer_0_re)
+```
+
+```{r}
+anova(fit_ham_lmer_1_re)
+```
+
+
+```{r}
+lmerTest::ranova(fit_ham_lmer_1_re)
+```
+
+
+
+
+```{r}
+texreg::knitreg(list(fit_ham_lmer_0_re, fit_ham_lmer_1_re, fit_ham_lmer_2_refm),
+                single.row = TRUE)
+```
+
+
+
+```{r}
+interactions::cat_plot(model = fit_ham_lmer_1_re,
+                       pred = Product)
+```
+
+
+```{r}
+fit_ham_lmer_1_re %>% 
+  emmeans::emmeans(pairwise ~ Product)
+```
+
+
+```{r}
+totalSD <- VarCorr(fit_ham_lmer_1_re) %>% 
+  data.frame() %>% 
+  dplyr::summarise(tot_var = sum(vcov)) %>% 
+  dplyr::pull(tot_var) %>% 
+  sqrt()
+  
+totalSD
+```
+
+
+These effect sizes can be interpreted according to Cohen’s rule: 
+* 0.2 represents a small effect size, 
+* 0.5 represents a medium effect size and 
+* 0.8 represents a large effect size.
+
+```{r}
+fit_ham_lmer_1_re %>% 
+  emmeans::emmeans(~ Product) %>% 
+  emmeans::eff_size(sigma = totalSD,  # population SD
+                    edf = Inf)         # equivalent degrees of freedom for the sigma
+```
+
+
+https://www.r-bloggers.com/2021/02/split-plot-designs-the-transition-to-mixed-models-for-a-dinosaur/
+
+
+
+
+
+https://bcdudek.net/repeat1/linear-mixed-models.html
+
+
+
+```{r}
+fit_ham_lmer_1_re %>% 
+  lmerTest::difflsmeans(which = "Product")
+```
+
+
+```{r}
+fit_ham_lmer_1_re %>% 
+  lmerTest::ls_means(pairwise = "TRUE") %>% 
+  plot(which = "Product")
+```
+
