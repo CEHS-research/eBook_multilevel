@@ -503,29 +503,21 @@ resp_geeglm_ex <- geepack::geeglm(status ~ centre + treatment + sex + BL_status 
 
 What is the change a 40 year old man in poor condition at center 1 change of being rated as being in "Good" respiratory condition?
 
+
 ```{r}
-data.frame(centre = "1",
-           treatment = "placebo",
-           sex = "male",
-           age = 40,
-           BL_status = "poor") %>% 
-  dplyr::mutate(fit = predict(resp_geeglm_ex,
-                              newdata = .,       
-                              type = "response")) 
+resp_geeglm_ex %>% 
+  emmeans::emmeans(pairwise ~ treatment,
+                   at = list(centre = "1",
+                             sex = "male",
+                             age = 40,
+                             BL_status = "poor"),
+                   type = "response")
 ```
+
 
 A 40 year old man in poor condition at center 1 has a 15.8% change of being rated as being in "Good" respiratory condition if he was randomized to placebo.
 
-```{r}
-data.frame(centre = "1",
-           treatment = "treatment",
-           sex = "male",
-           age = 40,
-           BL_status = "poor") %>% 
-  dplyr::mutate(fit = predict(resp_geeglm_ex,
-                              newdata = .,       
-                              type = "response")) 
-```
+
 A 40 year old man in poor condition at center 1 has a 42.1% change of being rated as being in "Good" respiratory condition if he was randomized to placebo.
 
 The odds ratio for treatment is:
@@ -535,47 +527,16 @@ The odds ratio for treatment is:
 ```
 
 
-#### Expand Grid
-
-Makes a dataset with all combinations
-
-```{r}
-expand.grid(centre    = levels(data_long$centre),
-            treatment = levels(data_long$treatment),
-            sex       = levels(data_long$sex),
-            age       = c(20, 35, 50),    # full range of age
-            BL_status = levels(data_long$BL_status))
-```
+#### Quick
 
 
 
-#### Lots of Combinations
-
-```{r}
-expand.grid(centre    = levels(data_long$centre),
-            treatment = levels(data_long$treatment),
-            sex       = levels(data_long$sex),
-            age       = c(20, 35, 50),                     # choose some
-            BL_status = levels(data_long$BL_status)) %>% 
-  dplyr::mutate(fit = predict(resp_geeglm_ex,
-                              newdata = .,        # make predictions for all combinations
-                              type = "response")) 
-```
-
-
-
-### Marginal Plot to Visualize the Model
-
-
-
-```{r}
-resp_geeglm_ex %>% coef() %>% exp()
-```
 
 
 
 
 
+### Marginal Plot to Visualize the Model
 
 
 #### Quickest Version
@@ -594,9 +555,11 @@ interactions::interact_plot(model = resp_geeglm_ex,   # model name
                             pred = age,               # x-axis
                             modx = treatment,         # lines
                             mod2 = sex,               # panels
+                            data = data_long,
                             at = list(centre = "1",
                                       BL_status = "good"),  # hold constant
-                            type = "mean_subject")
+                            type = "mean_subject") +
+  theme_bw()
 ```
 
 
@@ -604,29 +567,48 @@ interactions::interact_plot(model = resp_geeglm_ex,   # model name
 
 #### Full Version
 
+
+
+Makes a dataset with all combinations
+
+
+```{r}
+resp_geeglm_ex %>% 
+  emmeans::emmeans(~ centre + treatment + sex + age + BL_status,
+                   at = list(age = c(20, 35, 50)),
+                   type = "response") %>% 
+  data.frame()
+```
+
+
+
 In order to include all **FIVE** variables, we must do it the LONG way...
 
 
 ```{r}
-expand.grid(centre    = levels(data_long$centre),
-            treatment = levels(data_long$treatment),
-            sex       = levels(data_long$sex),
-            age       = seq(from = 11, to = 68, by = 1),    # full range of age
-            BL_status = levels(data_long$BL_status)) %>% 
-  dplyr::mutate(fit = predict(resp_geeglm_ex,
-                              newdata = .,                 # make predictions for all combinations
-                              type = "response")) %>%      # ensure the predictions are probabilities
+resp_geeglm_ex %>% 
+  emmeans::emmeans(~ centre + treatment + sex + age + BL_status,
+                   at = list(age = seq(from = 11, to = 68, by = 1)),
+                   type = "response",
+                   level = .68) %>% 
+  data.frame() %>% 
   ggplot(aes(x = age,
-             y = fit,
-             color = fct_rev(sex),
-             linetype = fct_rev(treatment))) +
-  geom_line() +
+             y = prob,
+             group = interaction(sex, treatment))) +
+  geom_ribbon(aes(ymin = asymp.LCL,
+                  ymax = asymp.UCL,
+                  fill = fct_rev(sex)),
+              alpha = .3) +
+  geom_line(aes(color = fct_rev(sex),
+                linetype = fct_rev(treatment))) +
   theme_bw() + 
   facet_grid(centre ~ BL_status, labeller = label_both) +
   labs(x = "Age, years",
        y = "Predicted Probability of GOOD Respiratory Status",
        color = "Sex:",
-       linetype = "Assignment:")
+       fill = "Sex:",
+       linetype = "Assignment:") +
+  theme(legend.position = "bottom")
 ```
 
 
@@ -651,6 +633,9 @@ interactions::interact_plot(model = resp_geeglm_ex,
 
 This example is more preped for publication.
 
+
+
+
 ```{r}
 interactions::interact_plot(model = resp_geeglm_ex,
                             pred = age,
@@ -671,6 +656,37 @@ interactions::interact_plot(model = resp_geeglm_ex,
         legend.key.width = unit(1.5, "cm")) +
   labs(caption = "Note: Probibilities shown are specific to males at center 2")
 ```
+
+
+
+
+
+```{r}
+resp_geeglm_ex %>% 
+  emmeans::emmeans(~ centre + treatment + sex + age + BL_status,
+                   at = list(age = seq(from = 11, to = 68, by = 1),
+                             sex = "male",
+                             centre = "2"),
+                   type = "response",
+                   level = .68) %>% 
+  data.frame() %>% 
+  ggplot(aes(x = age,
+             y = prob,
+             group = interaction(sex, treatment))) +
+  geom_ribbon(aes(ymin = asymp.LCL,
+                  ymax = asymp.UCL),
+              alpha = .2) +
+  geom_line(aes(linetype = fct_rev(treatment))) +
+  theme_bw() + 
+  facet_grid(~ BL_status) +
+  labs(x = "Age, years",
+       y = "Predicted Probability of\nGOOD Respiratory Status",
+       color = "Sex:",
+       fill = "Sex:",
+       linetype = "Assignment:") +
+  theme(legend.position = "bottom")
+```
+
 
 
 ## Conclusion

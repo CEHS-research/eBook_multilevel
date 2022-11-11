@@ -46,7 +46,6 @@ library(performance)  # icc and r-squared functions **NEWER**
 library(interactions) # interaction plots **NEWER**
 
 library(HLMdiag)      # Diagnostic Tools for for MLM
-library(redres)       # Diagnosing MLM models
 library(sjstats)      # ICC calculations
 ```
 
@@ -1457,45 +1456,3 @@ As you look across the plot, left to right:
 -   BAD = any pattern or change in the spread
 
 This plot looks great!
-
-```{r}
-redres::plot_redres(pop_lmer_2_re, 
-                    type = "std_cond")
-```
-
-**Standardized residuals vs. a predictor's values**
-
-You are looking for the same things as above. Note: the vertical stripes are fine, as they just reflect the fact that the `extrav` variable was a whole number value, ranging from one to ten.
-
-```{r}
-redres::plot_redres(pop_lmer_2_re, 
-                    type = "std_cond", 
-                    xvar = "extrav")
-```
-
-**Normal Quantile plot of Residuals**
-
-As you look across the plot, along the diagonal:
-
--   GOOD: roughly a straight line
--   BAD: curvature (S-shaped)
-
-This plot looks great! The slight flare at the far ends is not too drastic.
-
-```{r}
-redres::plot_resqq(pop_lmer_2_re)
-```
-
-Our model had both random intercepts and random slopes (RIAS). The panel on the left is more the random intercepts and the right is of random slopes (for the `extrav` predictor).
-
-You are looking for the same things as above...and these are not too bad!
-
-```{r}
-redres::plot_ranef(pop_lmer_2_re)
-```
-
-To explor more plots, you can use the `shiny` app by running the code below:
-
-```{r, eval=FALSE}
-redres::launch_redres(pop_lmer_2_re)
-```

@@ -339,7 +339,7 @@ mod_geeglm_exc <- geepack::geeglm(count ~ drug*time,
 summary(mod_geeglm_exc)
 ```
 
-**Quick**
+#### Quick
 
 ```{r}
 interactions::interact_plot(model = mod_geeglm_exc,
@@ -349,23 +349,31 @@ interactions::interact_plot(model = mod_geeglm_exc,
 
 
 
-#### Predict over a manual grid of predictors
+#### More Polished
 
 ```{r}
-expand.grid(drug = levels(data_long$drug),
-            time = 0:1) %>% 
-  dplyr::mutate(fit = predict(mod_geeglm_exc,
-                              newdata = .,
-                              type = "response")) 
+mod_geeglm_exc %>% 
+  emmeans::emmeans(~ drug*time,
+                   type = "response")
 ```
 
 
 ```{r}
-expand.grid(drug = levels(data_long$drug),
-            time = 0:1) %>% 
-  dplyr::mutate(fit = predict(mod_geeglm_exc,
-                              newdata = .,
-                              type = "response")) %>% 
+mod_geeglm_exc %>% 
+  emmeans::emmeans(~ drug*time,
+                   type = "response") %>% 
+  data.frame()
+```
+
+
+
+
+```{r}
+mod_geeglm_exc %>% 
+  emmeans::emmeans(~ drug*time,
+                   type = "response",
+                   level = .68) %>% 
+  data.frame() %>% 
   dplyr::mutate(time_name = case_when(time == 0 ~ "Pre",
                                       time == 1 ~ "Post") %>% 
                   factor(levels = c("Pre", "Post"))) %>% 
@@ -374,11 +382,15 @@ expand.grid(drug = levels(data_long$drug),
                                        "Antibiotic B" = "B",
                                        "Placebo" = "C")) %>% 
   ggplot(aes(x = time_name,
-             y = fit,
+             y = rate,
              group = drug_name %>% fct_rev,
              color = drug_name %>% fct_rev)) +
-  geom_point() +
-  geom_line() +
+  geom_errorbar(aes(ymin = asymp.LCL,
+                    ymax = asymp.UCL),
+                width = .3,
+                position = position_dodge(width = .25)) +
+  geom_point(position = position_dodge(width = .25)) +
+  geom_line(position = position_dodge(width = .25)) +
   theme_bw() +
   labs(x = NULL,
        y = "Estimated Marginal Mean\nNumber of Leprosy Bacilli at Six Sites of the Body",
@@ -430,7 +442,7 @@ texreg::knitreg(list(extract_gee_exp(mod_gee_exc),
 
 ### Interpretation
  
-* The grand mean is 10.73 at pre-treatment. 
+* The grand mean is a count of 10.73 at pre-treatment. 
 
 * The mean count dropped by about 40% among those on antibiotics, but there was no decrease for those on placebo pills, exp(b) = 0.592, p < .05, 95% CI [0.476, 0.74].
 
@@ -453,46 +465,60 @@ mod_geeglm_exc2 <- geepack::geeglm(count ~ antibiotic:time,
 ```{r}
 interactions::interact_plot(model = mod_geeglm_exc2,
                             pred = time,
-                            modx = antibiotic)
+                            modx = antibiotic) +
+  theme_bw()
 ```
 
 
 
-#### Predict over a manual grid
+#### More Polished
 
-
-```{r}
-expand.grid(antibiotic = levels(data_remodel$antibiotic),
-            time = 0:1) %>% 
-  dplyr::mutate(fit = predict(mod_geeglm_exc2,
-                              newdata = .,
-                              type = "response"))
-```
 
 
 ```{r}
-expand.grid(antibiotic = levels(data_remodel$antibiotic),
-            time = 0:1) %>% 
-  dplyr::mutate(fit = predict(mod_geeglm_exc2,
-                              newdata = .,
-                              type = "response")) %>% 
+mod_geeglm_exc2 %>% 
+  emmeans::emmeans(~ antibiotic*time,
+                   type = "response",
+                   level = .68) %>% 
+  data.frame() %>% 
   dplyr::mutate(time_name = case_when(time == 0 ~ "Pre",
                                       time == 1 ~ "Post") %>% 
                   factor(levels = c("Pre", "Post"))) %>% 
   ggplot(aes(x = time_name,
-             y = fit,
-             group = antibiotic %>% fct_rev,
-             color = antibiotic %>% fct_rev)) +
-  geom_point() +
-  geom_line() +
+             y = rate,
+             group = antibiotic,
+             color = antibiotic)) +
+  geom_errorbar(aes(ymin = asymp.LCL,
+                    ymax = asymp.UCL),
+                width = .3,
+                position = position_dodge(width = .25)) +
+  geom_point(position = position_dodge(width = .25)) +
+  geom_line(position = position_dodge(width = .25)) +
   theme_bw() +
   labs(x = NULL,
        y = "Estimated Marginal Mean\nNumber of Leprosy Bacilli at Six Sites of the Body",
-       color = "Antibiotic") +
+       color = "Antibiotic A or B") +
   theme(legend.position = c(0, 0),
         legend.justification = c(-0.1, -0.1),
         legend.background = element_rect(color = "black"))
 ```
+
+
+```{r}
+mod_geeglm_exc2 %>% 
+  emmeans::emmeans(pairwise ~ time | antibiotic,
+                   adjust = "none")
+```
+
+```{r}
+mod_geeglm_exc2 %>% 
+  emmeans::emmeans(pairwise ~ time | antibiotic,
+                   type = "response",
+                   adjust = "none")
+```
+
+
+
 
 ## Conclusion
 

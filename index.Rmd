@@ -1,9 +1,9 @@
 --- 
 title: "Encyclopedia of Quantitative Methods in R, vol. 5: Multilevel Models"
-author: "Sarah Schwartz & Tyson Barrett"
+author: "Sarah Schwartz, PhD"
 date: "Last updated: `r Sys.Date()`"
 documentclass: book
-description: "RM Regression: ICCs, MLM/HLM, and GEEs."
+description: "Mulilevel & Marginal Modeling: ICCs, MLM/HLM, and GEEs."
 knit: "bookdown::render_book"
 cover-image: "EQM_v1_cover.png"
 github-repo: cehs-research/eBook_wrangle
@@ -11,7 +11,7 @@ site: bookdown::bookdown_site
 output:
   bookdown::gitbook:
     split_bib: false
-bibliography: [book.bib, packages.bib]
+bibliography: [mlm.bib, packages.bib]
 biblio-style: "apalike"
 link-citations: yes
 ---
@@ -37,7 +37,7 @@ library(kableExtra)
 
 ## Blocked Notes {-}
 
-Thoughout all the eBooks in this encyclopedia, several small secitons will be blocked out in the following ways:
+Thoughout all the eBooks in this encyclopedia, several small sections will be blocked out in the following ways:
 
 ```{block type='rmdconstruct', echo=TRUE}
 These blocks denote an area **UNDER CONSTRUCTION**, so check back often.  This massive undertaking started during the summer of 2018 and is far from complete.  The outline of seven volumes is given above despite any one being complete.  Feedback is welcome via either author's email.
@@ -85,20 +85,14 @@ This is what the output of the $R$ code above will look:
 
 
 ```{r, echo=FALSE}
-tribble( ~Sarah, ~Tyson,
+tribble( ~Sarah, 
       "![](images/common/Sarah_headshot.jpg){width=300px}",
-      "![](images/common/Tyson_headshot.jpg){width=300px}",
       "[www.SarahSchwartzStats.com](http://www.sarahschwartzstats.com/) ",
-      "[www.TysonBarrett.com](http://tysonbarrett.com/)",
       "Sarah.Schwartz@usu.edu",
-      "Tyson.Barrett@usu.edu",
       "[Statistical Consulting Studio](https://cehs.usu.edu/research/statstudio/index)",
-      "[Data Science and Discover Unit](https://cehs.usu.edu/research/dsdu/index)",
-      "![](images/common/StatStudioLogo_dark_small.png){width=300px}",
-      "![](images/common/dsdu_logo.PNG){width=300px}") %>% 
+      "![](images/common/StatStudioLogo_dark_small.png){width=300px}") %>% 
   data.frame() %>%
-  kableExtra::kable(col.names = c("Dr. Sarah Schwartz", 
-                                  "Dr. Tyson Barrett"),
+  kableExtra::kable(col.names = c("Dr. Sarah Schwartz"),
                     align = "c") %>% 
   kableExtra::row_spec(row = 0,
                        font_size = 20)
