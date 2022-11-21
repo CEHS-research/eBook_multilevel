@@ -28,10 +28,48 @@ Nezlek, J. B. (2012). Multilevel modeling for psychologists. In H. Cooper, P. M.
 ## GEE: Generalized Estimating Equations
 
 
+> The GEE method is an extension of the Generalized Linear Model (GLM) of Nelder and Wedderburn (1972) to enable correlated data be analyzed appropriately.  Repeated measures on an individual in a longitudinal study are likely to be correlated because of the continuity of the measurement over time (Burger et al., 2000). In analyzing longitudinal data using the GEE method, a working correlation structure is formulated to incorporate the possible correlations among the response observations measured at different occasions during follow-up for each individual. Formulation of the working correlation structure depends on the degree of correlation perceived among an individual’s response observations, resulting in the use of such common covariance matrix functions as the so-called independent, exchangeable, autoregressive, stationary, non stationary, and general unstructured model. Correctness of the specification of the working correlation structure is not so important in a GEE analysis because the resulting regression coefficient estimators are still consistent even when the working correlation structure is mis-specified to some extent (Liang and Zeger, 1986).
 
+Nelder, J. A., Wedderburn, R. W. M. (1972). Generalized linear models. J. Roy. Statist. Soc.,Ser. A 135:370–384.
+
+Burger, H. G., Dudley, E. C., Cui, J., Dennerstein, L., Hopper, J. L. (2000). A prospective longitudinal study of serum testosterone levels during and after the menopause transition. J. Clin. Endocrinol. Metabolism 85:2832–2838.
+
+Fitzmaurice, G. M., Laird, N. M., Ware, J. H. (2004). Applied Longitudinal Analysis. Hoboken, NJ: John Wiley & Sons.
+
+Hardin, J. W., Hilbe, J. M. (2003). Generalized Estimating Equations. Boca Raton: Chapman & Hall/CRC.
+
+Liang, K.-Y., Zeger, S. L. (1986). Longitudinal data analysis using generalized linear models. Biometrika 73:13–22.
+
+McCullagh, P., Nelder, J. A. (1989). Generalized Linear Models. 2nd ed. London: Chapman & Hall.
+
+
+### QIC: Comparing GEE Models
 
 
 
 
 ```{block type='rmdlink', echo=TRUE}
+The QIC involves using the quasi-likelihood constructed under the working independence model and the naive and robust covariance estimates of estimated regression coefficients.
+
+* QIC-U is asymptotic, not appropriate for selected an optimal correlation structure
 ```
+
+
+Cui, J., & Qian, G. (2007). Selection of working correlation structure and best model in GEE analyses of longitudinal data. Communications in statistics—Simulation and computation®, 36(5), 987-996. [Download PDF](https://www.tandfonline.com/doi/pdf/10.1080/03610910701539617)
+
+
+> We propose to choose the best correlation structure first and then choose the best subsets of covariates. The best correlation structure was selected based on the full model including all covariates. However, if we use only a subset of covariates to select the best correlation structure, we may end up with a different correlation structure. This is a dilemma as to choose the best correlation structure first or the best subset of covariates first. It seems that the full model contains most information to predict the outcome variable and is reasonable to use it to select the best correlation structure first (Hardin and Hilbe, 2003).
+
+
+Wedderburn, R. W. M. (1974). Quasi-likelihood functions, generalized liner models, and the Gauss-newton method. Biometrika 61:439–447.
+
+
+
+
+
+Pan, W. 2001. Akaike’s information criterion in generalized estimating equations. Biometrics 57:120-125. https://onlinelibrary.wiley.com/doi/abs/10.1111/j.0006-341X.2001.00120.x [Download PDF](https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.0006-341X.2001.00120.x)
+
+Burnham, K. P. and D. R. Anderson. 2002. Model selection and multimodel inference: a practical information-theoretic approach. Second edition. Springer Science and Business Media, Inc., New York. [Download PDF](https://cds.cern.ch/record/1608735/files/9780387953649_TOC.pdf)
+
+
+

@@ -411,6 +411,7 @@ plot_pred_glm <- Effect(c("gender", "age_center"),
        xlevels = list(age_center = seq(from = -6, to = 6, by = 0.25))) %>% 
    data.frame %>%
    mutate(age = age_center + 12) %>% 
+  dplyr::mutate(gender = forcats::fct_rev(gender)) %>% 
    ggplot(aes(x        = age,
               y        = fit,
               group    = gender,
@@ -423,9 +424,8 @@ plot_pred_glm <- Effect(c("gender", "age_center"),
              size = 1.5) +
    theme_bw() +
    labs(title    = "Generalized Linear Model: Model #2",
-        subtitle = "Predicted Probability of Obesity",
         x        = "Child's Age, years",
-        y        = "Probability",
+        y        = "Predicted Probability of Obesity",
         linetype = "Gender",
         fill     = "Gender",
         color    = "Gender") +
@@ -433,7 +433,7 @@ plot_pred_glm <- Effect(c("gender", "age_center"),
          legend.justification = c(-0.05, 1.05),
          legend.background = element_rect(color = "black"),
          legend.key.width = unit(2, "cm")) +
-  scale_x_continuous(breaks = seq(from = 6, to = 18, by = 2))
+  scale_x_continuous(breaks = seq(from = 6, to = 18, by = 3)) 
 
 plot_pred_glm 
 ```
@@ -545,32 +545,37 @@ interactions::interact_plot(model = fit_geeglm_2un,
 
 
 ```{r}
-plot_pred_gee <- expand.grid(gender = data_long$gender %>% levels,
-                             age_center = seq(from = -6, to = 6, by = .1)) %>% 
-   mutate(fit = predict(fit_geeglm_2un,
-                        newdata = .,
-                        type = "response")) %>%
+plot_pred_gee <- fit_geeglm_2un %>% 
+  emmeans::emmeans(~ gender*age_center,
+                   at = list(age_center = seq(from = -6, to = 6, by = .1)),
+                   type = "response",
+                   level = .685) %>% 
+  data.frame() %>% 
   mutate(gender = fct_rev(gender)) %>% 
-   mutate(age = age_center + 12) %>% 
-   ggplot(aes(x        = age,
-              y        = fit,
-              group    = gender,
-              linetype = gender,
-              color    = gender)) +
-   geom_line(size = 1.5) +
-   theme_bw() +
-   labs(title = "Generalized Estimating Equation: Model #2, unstructured",
-        subtitle = "Predicted Probability of Obesity",
-        x     = "Child's Age, years",
-        y     = "Probability",
-        linetype = "Gender",
-        color = "Gender") +
-   theme(legend.position = c(0, 1),
-         legend.justification = c(-0.05, 1.05),
-         legend.background = element_rect(color = "black"),
-         legend.key.width = unit(2, "cm")) +
-  scale_x_continuous(breaks = seq(from = 6, to = 18, by = 3))
-  
+  mutate(age = age_center + 12) %>% 
+  ggplot(aes(x        = age,
+             y        = prob,
+             group    = gender)) +
+  geom_ribbon(aes(ymin = asymp.LCL,
+                  ymax = asymp.UCL,
+                  fill = gender),
+              alpha = .2) +
+  geom_line(aes(linetype = gender,
+                color    = gender),
+            size = 1.5) +
+  theme_bw() +
+  labs(title = "Generalized Estimating Equation: Model #2, unstructured",
+       x     = "Child's Age, years",
+       y     = "Predicted Proportion with Obesity",
+       linetype = "Gender",
+       fill = "Gender",
+       color = "Gender") +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(-0.05, 1.05),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(2, "cm")) +
+  scale_x_continuous(breaks = seq(from = 6, to = 18, by = 3)) 
+
   
 plot_pred_gee
 ```
@@ -612,7 +617,9 @@ texreg::knitreg(list(extract_glmer_exp(fit_glmm_1),
 ```{r}
 interactions::interact_plot(model = fit_glmm_2,
                             pred = age_center,
-                            modx = gender)
+                            modx = gender,
+                            int.width = .685,
+                            interval = TRUE)
 ```
 
 
@@ -627,29 +634,36 @@ Effect(c("gender", "age_center"),fit_glmm_2) %>%
 
 
 ```{r}
-plot_pred_glmm <- Effect(c("gender", "age_center"), 
-       fit_glmm_2,
-       xlevels = list(age_center = seq(from = -6, to = 6, by = 0.25))) %>% 
-   data.frame %>%
-   mutate(age = age_center + 12) %>% 
-   ggplot(aes(x        = age,
-              y        = fit,
-              group    = gender,
-              linetype = gender,
-              color    = gender)) +
-   geom_line(size = 1.5) +
-   theme_bw() +
-   labs(title    = "Generalized Linear Mixed Models: Model #2",
-        subtitle = "Predicted Probability of Obesity",
-        x        = "Child's Age, years",
-        y        = "Probability",
-        linetype = "Gender",
-        color    = "Gender") +
-   theme(legend.position = c(0, 1),
-         legend.justification = c(-0.05, 1.05),
-         legend.background = element_rect(color = "black"),
-         legend.key.width = unit(2, "cm")) +
-  scale_x_continuous(breaks = seq(from = 6, to = 18, by = 3))
+plot_pred_glmm <- fit_glmm_2 %>% 
+  emmeans::emmeans(~ gender*age_center,
+                   at = list(age_center = seq(from = -6, to = 6, by = .1)),
+                   type = "response",
+                   level = .685) %>% 
+  data.frame() %>% 
+  mutate(gender = fct_rev(gender)) %>% 
+  mutate(age = age_center + 12) %>% 
+  ggplot(aes(x        = age,
+             y        = prob,
+             group    = gender)) +
+  geom_ribbon(aes(ymin = asymp.LCL,
+                  ymax = asymp.UCL,
+                  fill = gender),
+              alpha = .2) +
+  geom_line(aes(linetype = gender,
+                color    = gender),
+            size = 1.5) +
+  theme_bw() +
+  labs(title = "Generalized Linear Mixed Effects: Model #2, Random Interepts",
+       x     = "Child's Age, years",
+       y     = "Predicted Probability of Obesity",
+       linetype = "Gender",
+       fill = "Gender",
+       color = "Gender") +
+  theme(legend.position = c(0, 1),
+        legend.justification = c(-0.05, 1.05),
+        legend.background = element_rect(color = "black"),
+        legend.key.width = unit(2, "cm")) +
+  scale_x_continuous(breaks = seq(from = 6, to = 18, by = 3)) 
 
 plot_pred_glmm 
 ```
@@ -679,8 +693,28 @@ Website: https://patchwork.data-imaginist.com/index.html
 plot_pred_glm / plot_pred_gee / plot_pred_glmm
 ```
 
+```{r, fig.height=10, fig.width=7.5}
+(plot_pred_glm + theme(legend.position = "none")) / 
+  (plot_pred_gee + theme(legend.position = "none")) / 
+  plot_pred_glmm +
+  plot_annotation(tag_levels = "A") +
+  plot_layout(guides = "auto")  
+```
 
 
+
+```{r}
+data_long %>% 
+  dplyr::mutate(pred = predict(fit_glmm_2, re.form = ~ (1|id))) %>% 
+  dplyr::mutate(odds = exp(pred)) %>% 
+  dplyr::mutate(prob = odds/(1 + odds)) %>% 
+  ggplot(aes(x = age_curr,
+             y = prob,
+             group = id)) +
+  geom_line(aes(color = gender)) +
+  theme_bw()
+
+```
 
 
 
