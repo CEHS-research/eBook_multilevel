@@ -1,46 +1,132 @@
-# Citations & Learning Resources
-
-## Overview: Multilevel and Marginal Models
+# Citations for Writeup
 
 
 
-### John Nezlek
-
-John Nezlek is currently a professor at SWPS University of Social Sciences and Humanities in Poznań Poland and the Department of Psychological Sciences, College of William and Mary (Emeritus). He divides his time between Poland and the US. John does research in Personality Psychology, Psychometrics, and Social Psychology. Much of his research concerns daily experience. He recently received a grant to study vegetarianism as a social identity
-
-
-Nezlek, J. B. (2012). Multilevel modeling for psychologists. In H. Cooper, P. M. Camic, D. L. Long, A. T. Panter, D. Rindskopf, & K. J. Sher (Eds.), APA handbook of research methods in psychology, Vol. 3. Data analysis and research publication (pp. 219–241). American Psychological Association. [DOI: 10.1037/13621-011](https://doi.org/10.1037/13621-011)
+```{block type='rmdconstruct', echo=TRUE}
+This chapter is **UNDER CONSTRUCTION**, so check back often.  
+```
 
 
 
 
-* [Full PDF online](https://jbnezl.people.wm.edu/Reprints/2012-APA-Handbook-MLM.pdf)
+
+## MLM: Multilevel Modeling, *aka* Mixed Effects Regression
+
+### General MLM
+
+
+```{block type='rmdcitation', echo=TRUE}
+Fitzmaurice, G. M., Laird, N. M., Ware, J. H. (2004). **Applied Longitudinal Analysis.** Hoboken, NJ: John Wiley & Sons.
+
+Hox, J. J., Moerbeek, M., & Van de Schoot, R. (2017). **Multilevel analysis: Techniques and applications.** Routledge.
+
+Gelman, A., & Hill, J. (2006). **Data Analysis Using Regression and Multilevel/Hierarchical Models.** Cambridge University Press.
+
+Raudenbush, S. W., & Bryk, A. S. (2002). **Hierarchical Linear Models: Applications and Data Analysis Methods (Vol. 1).** Sage.
+
+Singer, J. D., Willett, J. B., & Willett, J. B. (2003). **Applied Longitudinal Data Analysis: Modeling Change and Event Occurrence.** Oxford University Press.
+
+Snijders, T. A. B., & Bosker, R. J. (2012). **Multilevel analysis: An introduction to basic and advanced multilevel modeling.** Los Angeles; London, SAGE.
+
+```
 
 
 
-## MLM: Multilevel Modeling *or* Mixed Effects Regression
+
+### Pairwise Differenes Effect Size (Standardized Mean Difference, SMD)
+
+
+
+There are a number of ways to calculate standardized mean difference (SMD) effect sizes and there really is not a universally accepted “right” way. Using *residual SD* and the *square root of the sum of variance components* from a mixed model for standardization are NOT traditional Cohen’s *d* statistics, so they should be referred to as standardized effect sizes. 
+
+**The important thing is to detail which method you are using and make sure to label it appropriately.**
+
+Probably the effect size calculation with the most academic support is taking the square root of the sum of all variance components in the model. This method was first discussed by Westfall, Judd, and Kenny (2014) and later included in a statistical tutorial on **Effect Sizes and Power Analysis in Mixed Effects Models** by Marc Brysbaert and Michael Stevens (2018).
+
+```{block type='rmdlightbulb', echo=TRUE}
+We can add interpretations to these SMD effects. There have been different propositions regarding the qualitative interpretation of effect sizes’.  The original interpretation given by **Cohen** suggests:  
+ 
+ * Small: < 0.5
+ * Moderate: 0.5 - 0.7
+ * Large: > 0.8
+
+ More recently **Hopkins** suggested a revised scale with threshold values at:  
+ 
+ * 0.2 small
+ * 0.6 moderate
+ * 1.2 large
+ * 2.0 very large
+ * 4.0 nearly perfect
+```
+
+
+
+```{block type='rmdcitation', echo=TRUE}
+Brysbaert, M., & Stevens, M. (2018). **Power analysis and effect size in mixed effects models: A tutorial.** Journal of cognition, 1(1).  https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6646942/ Links to an external site. 
+
+Luke, S. G. (2017). **Evaluating significance in linear mixed-effects models in R.** Behavior research methods, 49(4), 1494-1502.  https://link.springer.com/article/10.3758/s13428-016-0809-y#Sec3 Links to an external site. 
+
+Westfall, J., Kenny, D. A., & Judd, C. M. (2014). **Statistical power and optimal design in experiments in which samples of participants respond to samples of stimuli.** Journal of Experimental Psychology: General, 143(5), 2020. https://psycnet.apa.org/doiLanding?doi=10.1037%2Fxge0000014
+```
+
+
+#### Example Write-up for Methods-Analysis section:
+
+Follow-up pairwise comparisons utilizing Kenward-Rodger degrees of freedom (Luke, 2017) were made **without/with??** controlling for multiple comparisons. Corresponding effect sizes give Cohen’s d-like standardized mean differences (SMD) utilizing the standard deviation based on the sum of the MLM variance components (Brysbaert & Stevens, 2018).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## GLMM: Generalized Linear Multilevel Models *or* Generalized Mixed Effects Regression
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## GEE: Generalized Estimating Equations
 
 
-> The GEE method is an extension of the Generalized Linear Model (GLM) of Nelder and Wedderburn (1972) to enable correlated data be analyzed appropriately.  Repeated measures on an individual in a longitudinal study are likely to be correlated because of the continuity of the measurement over time (Burger et al., 2000). In analyzing longitudinal data using the GEE method, a working correlation structure is formulated to incorporate the possible correlations among the response observations measured at different occasions during follow-up for each individual. Formulation of the working correlation structure depends on the degree of correlation perceived among an individual’s response observations, resulting in the use of such common covariance matrix functions as the so-called independent, exchangeable, autoregressive, stationary, non stationary, and general unstructured model. Correctness of the specification of the working correlation structure is not so important in a GEE analysis because the resulting regression coefficient estimators are still consistent even when the working correlation structure is mis-specified to some extent (Liang and Zeger, 1986).
+```{block type='rmdcitation', echo=TRUE}
+Fitzmaurice, G. M., Laird, N. M., Ware, J. H. (2004). **Applied Longitudinal Analysis.** Hoboken, NJ: John Wiley & Sons.
 
-Nelder, J. A., Wedderburn, R. W. M. (1972). Generalized linear models. J. Roy. Statist. Soc.,Ser. A 135:370–384.
+Hardin, J. W., Hilbe, J. M. (2003). **Generalized Estimating Equations.** Boca Raton: Chapman & Hall/CRC.
 
-Burger, H. G., Dudley, E. C., Cui, J., Dennerstein, L., Hopper, J. L. (2000). A prospective longitudinal study of serum testosterone levels during and after the menopause transition. J. Clin. Endocrinol. Metabolism 85:2832–2838.
+Liang, K.-Y., Zeger, S. L. (1986). **Longitudinal data analysis using generalized linear models.** Biometrika 73:13–22.
 
-Fitzmaurice, G. M., Laird, N. M., Ware, J. H. (2004). Applied Longitudinal Analysis. Hoboken, NJ: John Wiley & Sons.
+McCullagh, P., Nelder, J. A. (1989). **Generalized Linear Models.** 2nd ed. London: Chapman & Hall.
 
-Hardin, J. W., Hilbe, J. M. (2003). Generalized Estimating Equations. Boca Raton: Chapman & Hall/CRC.
+Nelder, J. A., Wedderburn, R. W. M. (1972). **Generalized linear models.** J. Roy. Statist. Soc.,Ser. A 135:370–384.
+```
 
-Liang, K.-Y., Zeger, S. L. (1986). Longitudinal data analysis using generalized linear models. Biometrika 73:13–22.
+Burger, H. G., Dudley, E. C., Cui, J., Dennerstein, L., Hopper, J. L. (2000). **A prospective longitudinal study of serum testosterone levels during and after the menopause transition.** J. Clin. Endocrinol. Metabolism 85:2832–2838.
 
-McCullagh, P., Nelder, J. A. (1989). Generalized Linear Models. 2nd ed. London: Chapman & Hall.
 
 
 ### QIC: Comparing GEE Models
@@ -48,28 +134,26 @@ McCullagh, P., Nelder, J. A. (1989). Generalized Linear Models. 2nd ed. London: 
 
 
 
-```{block type='rmdlink', echo=TRUE}
+```{block type='rmdlightbulb', echo=TRUE}
 The QIC involves using the quasi-likelihood constructed under the working independence model and the naive and robust covariance estimates of estimated regression coefficients.
 
 * QIC-U is asymptotic, not appropriate for selected an optimal correlation structure
 ```
 
 
-Cui, J., & Qian, G. (2007). Selection of working correlation structure and best model in GEE analyses of longitudinal data. Communications in statistics—Simulation and computation®, 36(5), 987-996. [Download PDF](https://www.tandfonline.com/doi/pdf/10.1080/03610910701539617)
 
+```{block type='rmdcitation', echo=TRUE}
+Cui, J., & Qian, G. (2007). **Selection of working correlation structure and best model in GEE analyses of longitudinal data.** Communications in statistics—Simulation and computation®, 36(5), 987-996. [Download PDF](https://www.tandfonline.com/doi/pdf/10.1080/03610910701539617)
+```
 
 > We propose to choose the best correlation structure first and then choose the best subsets of covariates. The best correlation structure was selected based on the full model including all covariates. However, if we use only a subset of covariates to select the best correlation structure, we may end up with a different correlation structure. This is a dilemma as to choose the best correlation structure first or the best subset of covariates first. It seems that the full model contains most information to predict the outcome variable and is reasonable to use it to select the best correlation structure first (Hardin and Hilbe, 2003).
 
+```{block type='rmdcitation', echo=TRUE}
+Burnham, K. P. and D. R. Anderson. 2002. **Model selection and multimodel inference: a practical information-theoretic approach. Second edition.** Springer Science and Business Media, Inc., New York. [Download PDF](https://cds.cern.ch/record/1608735/files/9780387953649_TOC.pdf)
 
-Wedderburn, R. W. M. (1974). Quasi-likelihood functions, generalized liner models, and the Gauss-newton method. Biometrika 61:439–447.
+Pan, W. 2001. **Akaike’s information criterion in generalized estimating equations.** Biometrics 57:120-125. https://onlinelibrary.wiley.com/doi/abs/10.1111/j.0006-341X.2001.00120.x [Download PDF](https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.0006-341X.2001.00120.x)
 
-
-
-
-
-Pan, W. 2001. Akaike’s information criterion in generalized estimating equations. Biometrics 57:120-125. https://onlinelibrary.wiley.com/doi/abs/10.1111/j.0006-341X.2001.00120.x [Download PDF](https://onlinelibrary.wiley.com/doi/pdf/10.1111/j.0006-341X.2001.00120.x)
-
-Burnham, K. P. and D. R. Anderson. 2002. Model selection and multimodel inference: a practical information-theoretic approach. Second edition. Springer Science and Business Media, Inc., New York. [Download PDF](https://cds.cern.ch/record/1608735/files/9780387953649_TOC.pdf)
-
+Wedderburn, R. W. M. (1974). **Quasi-likelihood functions, generalized liner models, and the Gauss-newton method.** Biometrika 61:439–447.
+```
 
 

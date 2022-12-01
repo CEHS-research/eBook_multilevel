@@ -11,10 +11,6 @@ panderOptions('keep.line.breaks', TRUE)
 
 ```{r, warning=FALSE, error=FALSE, message=FALSE, results='hide'}
 library(tidyverse)    # all things tidy
-
-```{r}
-library(tidyverse)    # all things tidy
-
 library(pander)       # nice looking general tabulations
 library(furniture)    # nice table1() descriptions
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
@@ -43,7 +39,7 @@ Starting in chapter 4, [@hedeker2006] details analysis of a psychiatric study de
 
 Independent or predictor variables:  
 
-* `endog` Prepression Diagnosis 
+* `endog` Depression Diagnosis 
 + endogenous  
 + non-endogenous/reactive 
 
@@ -60,12 +56,7 @@ data_raw <- read.table("data/riesby.dat.txt") %>%
                 endog = "V5",
                 week  = "V4") %>%
   dplyr::select(-V3, -V6)
-
-```{r}
-data_raw <- read.table("data/RIESBY.DAT",                       # save the dataset as a new name
-                       header = TRUE)                          # de-select or delete some variables 
 ```
-
 
 
 
@@ -89,7 +80,6 @@ data_long <- data_raw %>%
   dplyr::mutate(hamd = as.numeric(hamd)) %>% 
   dplyr::select(id, week, endog, hamd) %>%                       # select the order of variables to include
   dplyr::arrange(id, week)                                       # sort observations  
-
 ```
 
 
@@ -251,8 +241,8 @@ data_long %>%
   geom_point() +
   geom_line(aes(group = id)) +   # join points that belong to the same "id"
   theme_bw() +
-  labs(x = "Weeks, post baseline",
-       y = "Hamilton Depression Score")
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Score (HD)") 
 ```
 
 ```{r}
@@ -263,8 +253,8 @@ data_long %>%
              color = endog)) +    # color points and lines by the "endog" variable
   geom_line(aes(group = id)) +
   theme_bw() +
-  labs(x = "Weeks, post baseline",
-       y = "Hamilton Depression Score")
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Score (HD)") 
 ```
 
 ```{r}
@@ -275,8 +265,8 @@ data_long %>%
   geom_line(aes(group = id)) +
   facet_grid( ~ endog) +           # side-by-side pandels by the "endog" variable
   theme_bw() +
-  labs(x = "Weeks, post baseline",
-       y = "Hamilton Depression Score")
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Score (HD)") 
 ```
 
 ```{r}
@@ -287,8 +277,8 @@ data_long %>%
   geom_boxplot() +                   # compare center and spread
   facet_grid( ~ endog) +  
   theme_bw() +
-  labs(x = "Weeks, post baseline",
-       y = "Hamilton Depression Score")          
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Score (HD)")         
 ```
 
 ```{r}
@@ -303,8 +293,8 @@ data_long %>%
                geom = "line") +
   facet_grid( ~ endog)   +  
   theme_bw() +
-  labs(x = "Weeks, post baseline",
-       y = "Hamilton Depression Score")          
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Score (HD)")          
 ```
 
 
@@ -323,8 +313,8 @@ data_long %>%
   theme(legend.position = "bottom",
         legend.key.width = unit(2, "cm")) +  
   theme_bw() +
-  labs(x = "Weeks, post baseline",
-       y = "Hamilton Depression Score")
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Score (HD)") 
 ```
 
 
@@ -341,8 +331,8 @@ data_long %>%
               se = FALSE,
               color = "hot pink")+  
   theme_bw() +
-  labs(x = "Weeks, post baseline",
-       y = "Hamilton Depression Score") 
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Score (HD)") 
 ```
 
 ```{r}
@@ -360,11 +350,10 @@ data_long %>%
   scale_color_manual(name = "Smoother Type: ",
                      values = c("Flexible" = "blue", 
                                 "Linear"   = "red")) +
-  theme_bw() +
-  theme(legend.position = "bottom")+  
-  theme_bw() +
-  labs(x = "Weeks, post baseline",
-       y = "Hamilton Depression Score") 
+  theme_bw() + 
+  theme(legend.position = "bottom") +
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Score (HD)") 
 ```
 
 ```{r}
@@ -382,8 +371,8 @@ data_long %>%
         legend.justification = c(1.1, 1.1),
         legend.background = element_rect(color = "black"),
         legend.key.width = unit(1.5, "cm")) +
-  labs(x = "Weeks After Baseline",
-       y = "Hamilton Depression Scale",
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Scale",
        linetype = "Type of Depression")
 ```
 
@@ -403,8 +392,8 @@ data_long %>%
         legend.justification = c(1.1, 1.1),
         legend.background = element_rect(color = "black"),
         legend.key.width = unit(2, "cm")) +
-  labs(x = "Weeks After Baseline",
-       y = "Hamilton Depression Scale",
+  labs(x = "Weeks Since Baseline",
+       y = "EsStimated Hamilton Depression Scale",
        linetype = "Type of Depression")
 ```
 
@@ -425,8 +414,8 @@ data_long %>%
         legend.justification = c(1.1, 1.1),
         legend.background = element_rect(color = "black"),
         legend.key.width = unit(1.5, "cm")) +
-  labs(x = "Weeks After Baseline",
-       y = "Hamilton Depression Scale",
+  labs(x = "Weeks Since Baseline",
+       y = "EStimated Hamilton Depression Scale",
        linetype = "Type of Depression")
 ```
 
@@ -540,7 +529,7 @@ fit_lmer_week_RI_reml <- lmerTest::lmer(hamd ~ week + (1|id),
 
 
 ```{r mlmRI, results='asis'}
-texreg::knitreg(fit_lmer_week_RI_reml, 
+texreg::screenreg(fit_lmer_week_RI_reml, 
                 single.row = TRUE,
                 caption = "MLM: Random Intercepts Null Model fit w/REML",
                 caption.above = TRUE,
@@ -574,8 +563,11 @@ With a bit more code we can plot not only the **marginal model** (fixed effects 
 
 ```{r}
 data_long %>% 
-  dplyr::mutate(pred_fixed = predict(fit_lmer_week_RI_reml, re.form = NA)) %>% # fixed effects only
-  dplyr::mutate(pred_wrand = predict(fit_lmer_week_RI_reml)) %>%               # fixed and random effects together
+  dplyr::mutate(pred_fixed = predict(fit_lmer_week_RI_reml, 
+                                     re.form = NA,           # fixed effects only
+                                     newdata = .)) %>% 
+  dplyr::mutate(pred_wrand = predict(fit_lmer_week_RI_reml,  # fixed and random effects both
+                                     newdata = .)) %>%              
   ggplot(aes(x = week,
              y = hamd,
              group = id)) +
@@ -602,7 +594,7 @@ data_long %>%
         legend.background = element_rect(color = "black"),
         legend.key.width = unit(1.5, "cm")) +
   labs(x = "Weeks Since Baseline",
-       y = "Hamilton Depression Scores")
+       y = "Estimated Hamilton Depression Score (HD)")
 ```
 
 Notice that in this model, all the BLUPs are parallel. That is because we are only letting the intercept vary from person-to-person while keeping the effect of time (slope) constant.
@@ -673,7 +665,7 @@ fit_lm_week_ml <- lm(hamd ~ week,
 
 
 ```{r olsvsmlm, results='asis'}
-texreg::knitreg(list(fit_lm_week_ml, fit_lmer_week_RI_reml),
+texreg::screenreg(list(fit_lm_week_ml, fit_lmer_week_RI_reml),
                 custom.model.names = c("Single-Level", "Multilevel"),
                 single.row = TRUE,
                 caption = "MLM: Longitudinal Null Models",
@@ -720,9 +712,8 @@ fit_lmer_week_RIAS_reml <- lmerTest::lmer(hamd ~ week + (week|id), #     MLM-RIA
 
 
 ```{r mlmRS, results='asis'}
-texreg::knitreg(list(fit_lmer_week_RI_reml, 
+texreg::screenreg(list(fit_lmer_week_RI_reml, 
                      fit_lmer_week_RIAS_reml),
-                single.row = TRUE,
                 custom.model.names = c("Random Intercepts",
                                        " And Random Slopes"),
                 single.row = TRUE,
@@ -777,8 +768,11 @@ Adding the random slopes didn't change the estimates for the fixed effects much.
 
 ```{r}
 data_long %>% 
-  dplyr::mutate(pred_fixed = predict(fit_lmer_week_RIAS_reml, re.form = NA)) %>% # fixed effects only
-  dplyr::mutate(pred_wrand = predict(fit_lmer_week_RIAS_reml)) %>%               # fixed and random effects together
+  dplyr::mutate(pred_fixed = predict(fit_lmer_week_RIAS_reml, 
+                                     re.form = NA,               # fixed effects only
+                                     newdata = .)) %>% 
+  dplyr::mutate(pred_wrand = predict(fit_lmer_week_RIAS_reml,    # fixed and random effects together
+                                     newdata = .)) %>%               
   ggplot(aes(x = week,
              y = hamd,
              group = id)) +
@@ -805,7 +799,7 @@ data_long %>%
         legend.background = element_rect(color = "black"),
         legend.key.width = unit(1.5, "cm")) +
   labs(x = "Weeks Since Baseline",
-       y = "Hamilton Depression Scores")
+       y = "Estimated Hamilton Depression Score")
 ```
 
 BLUPs are also refered to as **Empirical Bayes Estimates** and may be extracted from a model fit. In this cases there will be a specific intercept (`(Intercept)`) and time slope (`week`) for each individual or person (`id`).
@@ -876,7 +870,7 @@ fit_lmer_week_RIAS_reml_wc <- lme4::lmer(hamd ~ I(week-2.5) + (I(week-2.5)|id), 
 
 
 ```{r mlmwc, results='asis'}
-texreg::knitreg(list(fit_lmer_week_RIAS_reml, 
+texreg::screenreg(list(fit_lmer_week_RIAS_reml, 
                      fit_lmer_week_RIAS_reml_wc),
                 custom.model.names = c("Random Intercepts",
                                        " And Random Slopes"),
@@ -910,8 +904,11 @@ texreg::knitreg(list(fit_lmer_week_RIAS_reml,
 
 ```{r}
 data_long %>% 
-  dplyr::mutate(pred_fixed = predict(fit_lmer_week_RIAS_reml_wc, re.form = NA)) %>% # fixed effects only
-  dplyr::mutate(pred_wrand = predict(fit_lmer_week_RIAS_reml_wc)) %>%               # fixed and random effects together
+  dplyr::mutate(pred_fixed = predict(fit_lmer_week_RIAS_reml_wc, 
+                                     re.form = NA, 
+                                     newdata = .)) %>%               # fixed effects only
+  dplyr::mutate(pred_wrand = predict(fit_lmer_week_RIAS_reml_wc, 
+                                     newdata = .)) %>%               # fixed and random effects together
   ggplot(aes(x = week,
              y = hamd,
              group = id)) +
@@ -937,8 +934,8 @@ data_long %>%
         legend.justification = c(-0.1, -0.1),
         legend.background = element_rect(color = "black"),
         legend.key.width = unit(1.5, "cm")) +
-  labs(x = "Weeks Centered at Mid-study",
-       y = "Hamilton Depression Scores")
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Hamilton Depression Score (HD)")
 ```
 
 **Again, centering time doesn't change the interpretation at all, since there are no interactions.**
@@ -967,18 +964,19 @@ fit_lmer_wkdx_RIAS_ml <- lmerTest::lmer(hamd ~ week*endog + (week|id),
 interactions::interact_plot(fit_lmer_wkdx_RIAS_ml,
                             pred = week,
                             modx = endog,
+                            legend.main = "Type of Depression",
                             interval = TRUE,
                             main.title = "Hedeker's Table 4.7 on page 64") +
-  theme_bw()
+  theme_bw() +
+  labs(x = "Weeks Since Baseline",
+       y = "Estimated Marginal Mean\nHamilton Depression Scores (HD)") +
+  theme(legend.background = element_rect(color = "black"),
+        legend.position = c(0, 0),
+        legend.justification = c(-0.1, -0.1),
+        legend.key.width = unit(1.75, "cm"))
 ```
 
-```{r}
-interactions::interact_plot(fit_lmer_wkdx_RIAS_ml,
-                            pred = week,
-                            modx = endog,
-                            interval = TRUE,
-                   main.title = "Hedeker's Table 4.7 on page 64")
-```
+
 
 
 
@@ -1025,7 +1023,7 @@ fit_lmer_quad_RIAS_ml <- lme4::lmer(hamd ~ week + I(week^2) + (week+ I(week^2)|i
 
 
 ```{r mlmquad, results='asis'}
-texreg::knitreg(list(fit_lmer_week_RIAS_ml,
+texreg::screenreg(list(fit_lmer_week_RIAS_ml,
                      fit_lmer_quad_RIAS_ml),
                 custom.model.names = c("Linear Trend",
                                        "QUadratic Trend"),
@@ -1093,8 +1091,11 @@ fun_610 <- function(week){
 
 ```{r, fig.cap="Two Example BLUPS for two different participants"}
 data_long %>% 
-  dplyr::mutate(pred_fixed = predict(fit_lmer_quad_RIAS_ml, re.form = NA)) %>% # fixed effects only
-  dplyr::mutate(pred_wrand = predict(fit_lmer_quad_RIAS_ml)) %>%               # fixed and random effects together
+  dplyr::mutate(pred_fixed = predict(fit_lmer_quad_RIAS_ml, 
+                                     re.form = NA,
+                                     newdata = .)) %>% # fixed effects only
+  dplyr::mutate(pred_wrand = predict(fit_lmer_quad_RIAS_ml,
+                                     newdata = .)) %>%               # fixed and random effects together
   ggplot(aes(x = week,
              y = hamd,
              group = id)) +
@@ -1109,7 +1110,7 @@ data_long %>%
         legend.background = element_rect(color = "black"),
         legend.key.width = unit(1.5, "cm")) +
   labs(x = "Weeks Since Baseline",
-       y = "Hamilton Depression Scores",
+       y = "Estimated Hamilton Depression Scores (HD)",
        title = "Similar to Hedeker's Figure 5.3 on page 84",
        subtitle = "Marginal Mean show in thicker blue\nBLUPs for two of the participant in thinner black")
 ```
@@ -1118,14 +1119,16 @@ These two individuals have quite different curvatures and illustrated how this t
 
 ### Estimated Marginal Means and Emperical Bayes Plots
 
-### Estimated Marginal Means and Emperical Bayes Plots
 
 Note: although the BLUPs are shown for all participants, the predictions are just connects and are therefore slightly jagged and now smoother like the lines on the plot above.
 
 ```{r, fig.cap = "EStimated curvilinear trends"}
 data_long %>% 
-  dplyr::mutate(pred_fixed = predict(fit_lmer_quad_RIAS_ml, re.form = NA)) %>% # fixed effects only
-  dplyr::mutate(pred_wrand = predict(fit_lmer_quad_RIAS_ml)) %>%               # fixed and random effects together
+  dplyr::mutate(pred_fixed = predict(fit_lmer_quad_RIAS_ml, 
+                                     re.form = NA,
+                                     newdata = .)) %>% # fixed effects only
+  dplyr::mutate(pred_wrand = predict(fit_lmer_quad_RIAS_ml,
+                                     newdata = .)) %>%               # fixed and random effects together
   ggplot(aes(x = week,
              y = hamd,
              group = id)) +
@@ -1152,10 +1155,10 @@ data_long %>%
         legend.background = element_rect(color = "black"),
         legend.key.width = unit(1.5, "cm")) +
   labs(x = "Weeks Since Baseline",
-       y = "Hamilton Depression Scores",
+       y = "Estimated Hamilton Depression Scores",
        title = "Hedeker's Figure 5.4 on page 85")
 ```
 
-At the person-level, the curviture is very diverse (heterogeneous). Some individuals have accelerating downward tend while other have accelerating upward trends.
+At the person-level, the curvature is very diverse (heterogeneous). Some individuals have accelerating downward tend while other have accelerating upward trends.
 
 The improvement that the curvi-linear model provides in describing change across time is perhaps modest.
