@@ -674,6 +674,39 @@ deviance(pop_lm_0)  # returns the RSS, not deviance = -2LL
 -2 * logLik(pop_lm_0)  # this is how get deviance = -2LL
 ```
 
+
+
+
+
+
+
+
+
+```{r, include=FALSE}
+pop_lm_2  <- lm(popular ~ sex + extrav*texp, 
+                data = data_pop)
+summary(pop_lm_2)
+```
+
+```{r, include=FALSE}
+interactions::interact_plot(model = pop_lm_2,
+                            pred = extrav,
+                            modx = texp,
+                            mod2 = sex)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Multi-level Regression Analysis
 
 ### Intercept-only or Null Model
