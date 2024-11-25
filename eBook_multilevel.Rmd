@@ -965,33 +965,28 @@ Download/install a new GitHub package
 
 ```{r, eval=FALSE}
 install.packages("devtools")
-devtools::install_github("goodekat/redres")
+devtools::install_github("sarbearschwartz/apaSupp")
 ```
 
 Load/activate these packages
 
-```{r, message=FALSE, error=FALSE}
+```{r, message=FALSE, error=FALSE, warning=FALSE, results='asis'}
 library(tidyverse)
 library(haven)        # read in SPSS dataset
 
+library(apaSupp)
 library(furniture)    # nice table1() descriptives
-library(stargazer)    # display nice tables: summary & regression
 library(texreg)       # Convert Regression Output to LaTeX or HTML Tables
 
-library(gridExtra)    # place ggplots together as one plot
 library(psych)        # contains some useful functions, like headTail
 library(car)          # Companion to Applied Regression
 
-library(nlme)         # non-linear mixed-effects models
 library(lme4)         # Linear, generalized linear, & nonlinear mixed models
 library(lmerTest)     # Tests on lmer objects
-library(optimx)       # Different optimizers to solve mlm's
+library(glmmTMB)
 
 library(performance)  # icc and r-squared functions **NEWER**
 library(interactions) # interaction plots **NEWER**
-
-library(HLMdiag)      # Diagnostic Tools for for MLM
-library(sjstats)      # ICC calculations
 ```
 
 ## Background
@@ -1053,41 +1048,30 @@ Its a good idea to visually inspect the first few lines in the datast to get a s
 ```{r}
 data_pop %>%  
   psych::headTail(top = 25, bottom = 5) %>% 
-  pander::pander()
+  flextable::flextable() %>% 
+  apaSupp::theme_apa(caption = "Partial Data Printout")
 ```
 
-Visual inspection reveals that most of the variables are measurements at level 1 and apply to specific pupils (`extrav`, `sex`, `popular`, and `popteach`), while the teacher's years of experiene is a level 2 variable since it applies to the entire `class`. Notice how the `texp` variable is identical for all pupils in the same class. This is call **Disaggregated** data.
+Visual inspection reveals that most of the variables are measurements at level 1 and apply to specific pupils (`extrav`, `sex`, `popular`, and `popteach`), while the teacher's years of experience is a level 2 variable since it applies to the entire `class`. Notice how the `texp` variable is identical for all pupils in the same class. This is call **Disaggregated** data.
 
 ## Exploratory Data Analysis
 
 ### Summarize Descriptive Statistics
 
-#### The `stargazer` package
+#### The `apaSupp` package
 
 Most posters, journal articles, and reports start with a table of descriptive statistics. Since it tends to come first, this type of table is often refered to as *Table 1*. 
 
-The `stargazer()` function can be used to create such a table, but only for the entire dataset [@R-stargazer]. I haven't been able to find a way to get it to summarize subsamples and compare them in the standard format.  It is nice that this table includes the minimum and maximum, as well as the quartiles.
 
-```{r, eval=FALSE}
-# Knit to Website: type = "html" 
-# Knit to PDF:     type = "latex"
-# View on Screen:  type = "text"
 
-data_pop %>% 
-  dplyr::select(extrav, texp, popular) %>% 
-  data.frame() %>% 
-  stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
-                       header = FALSE,
-                       type = "text")
-```
 
 ```{r, echo=FALSE, results='asis'}
 data_pop %>% 
-  dplyr::select(extrav, texp, popular) %>% 
-  data.frame() %>% 
-  stargazer::stargazer(title  = "Descriptive statistics, aggregate over entire sample",
-                       header = FALSE,
-                       type = "html")
+  dplyr::select(sex,
+                "Teacher's Experience"  = texp, 
+                "Pupil's Extroversion"   = extrav, 
+                "Pupil's Popularity" = popular) %>% 
+  apaSupp::tab_desc(caption = "Descriptive statistics, aggregate over entire sample")
 ```
 
 
@@ -1096,37 +1080,18 @@ data_pop %>%
 
 Tyson Barrett's **furniture** package includes the extremely useful function `table1()` which simplifies the common task of creating a stratified, comparative table of descriptive statistics. Full documentation can be accessed by executing `?furniture::table1`.
 
+
 ```{r, eval = FALSE}
-# Knit to Website: output = "html" 
-# Knit to PDF:     output = "latex2"
-# View on Screen:  output = ""text", or "markdown", "html"
-
 data_pop %>% 
-  furniture::table1("Pupil's extroversion (10 pt)"   = extrav, 
-                    "Teacher's Experience (years)"  = texp, 
-                    "Popularity, Sociometric Score" = popular, 
-                    "Popularity, Teacher Evaluated" = popteach,
-                    splitby    = ~ sex,        # divide sample into columns by...
-                    total      = TRUE,         # include a total column
-                    test       = TRUE,         # test groups different?
-                    digits     = 2,            # 2 decimal places
-                    output     = "markdown",   # output for on screen/knitting
-                    caption    = "Compare genders on four main variables")  # title
+  dplyr::select(sex,
+                "Teacher Experience"  = texp, 
+                "Pupil Extroversion"   = extrav, 
+                "Pupil Popularity" = popular) %>% 
+  apaSupp::table1_apa(split = sex,
+                      caption    = "Compare genders on four main variables")
 ```
 
-```{r, echo=FALSE, results='asis'}
-data_pop %>% 
-  furniture::table1("Pupil's extroversion (10 pt)"   = extrav, 
-                     "Teacher's Experience (years)"  = texp, 
-                     "Popularity, Sociometric Score" = popular, 
-                     "Popularity, Teacher Evaluated" = popteach,
-                     splitby    = ~ sex,        # divide sample into columns by...
-                     total      = TRUE,         # include a total column
-                     test       = TRUE,         # test groups different?
-                    digits     = 2,            # 2 decimal places
-                     output     = "html",       # output for latex
-                     caption    = "Compare genders on four main variables")  # title
-```
+
 
 ### Visualizations of Raw Data
 
@@ -1179,53 +1144,30 @@ data_pop %>%
 
 The argument could be made that the extroversion score should be treated as an ordinal factor instead of as a truly continuous scale since the only valid values are the whole number 1 through 10 and there is no assurance that these category assignments represent a true ratio measurement scale. However, we must keep in mind that this was an observational study, ans as such, the number of pupils assignment each level of extroversion is not equal.
 
-```{r, results='asis'}
+```{r test14}
+1+1
+```
+
+
+```{r flextab2}
 # count the number of pupils in assigned each extroversion value, 1:10
-table <- data_pop %>% 
-  group_by(extrav) %>% 
-  summarise(count = n_distinct(id),
-            percent  = 100 * count / 2000)
-```
-
-```{r, eval = FALSE}
-# Knit to Website: type = "html" 
-# Knit to PDF:     type = "latex"
-# View on Screen:  type = "text"
-
-table %>% 
-  stargazer::stargazer(summary  = FALSE,
-                       rownames = FALSE,
-                       header   = FALSE,
-                       type     = "text",
-                       title    = "Distribution of extroversion in pupils")
-```
-
-```{r, echo = FALSE, results='asis'}
-table %>% 
-  stargazer::stargazer(summary  = FALSE,
-                       rownames = FALSE,
-                       header   = FALSE,
-                       type     = "html",
-                       title    = "Distribution of extroversion in pupils")
+data_pop %>%
+group_by(extrav) %>%
+summarise(count = n_distinct(id),
+percent  = 100 * count / 2000) %>%
+flextable::flextable() %>%
+apaSupp::theme_apa(caption = "Distribution of extroversion in pupils")
 ```
 
 
-```{r histostack, fig.cap="Disaggregate: pupil level only with extroversion treated as an continuous measure.", fig.height=8, fig.width=6}
-data_pop %>% 
-  ggplot(aes(popular)) +                     # y-axis variable
-  geom_histogram() +
-  theme_bw() +                                   # white background  
-  labs(#y    = "Extroversion (10 pt scale)",      # x-axis label
-       x    = "Popularity, Sociometric Score") + # y-axis label 
-  guides(size = FALSE)  +                        # don't include a legend
-  facet_grid(extrav~.)
-```
+
+
+
 
 
 ##### Boxplots
 
-Figure \@ref(fig:boxes) displays the same data as Figure \@ref(fig:scatter), but uses boxplots for the distribution of scores at each level of extroversion. On one extreme, the lowest extroversion score possible was a value of "one", but only `r table[1, "count"] %>% unlist` pupils or `r table[1, "percent"] %>% unlist`% of the 2000 pupils recieved this value. On the other extreme, the middle value of "five" was applied to `r table[5, "count"] %>% unlist` pupils or a wopping `r table[5, "percent"] %>% unlist`%. The option `varwidth=TRUE` in the `geom_boxplot()` function helps reflect such unbalanced sample sizes by allowing the width of the boxes to be proportional to the square-roots of the number of observations each box represents.
-
+Figure \@ref(fig:boxes) displays the same data as Figure \@ref(fig:scatter), but uses boxplots for the distribution of scores at each level of extroversion. 
 ```{r boxes, fig.cap="Disaggregate: pupil level only with extroversion treated as an ordinal factor.  The width of the boxes are proportional to the square-roots of the number of observations each box represents."}
 # Disaggregate: pupil (level 1) only, ignore level 2's existance
 # extroversion treated: ordinal factor
@@ -1247,6 +1189,10 @@ ggplot(data_pop,                        # dataset's name
 #### Scatterplots
 
 Up to this point, all investigation of this dataset has been only at the pupil level and any nesting or clustering within classes has been ignored. Plotting is a good was to start to get an idea of the class-to-class variability.
+
+```{r test17}
+1+1
+```
 
 ```{r scatter3x3, fig.cap="Illustration of the degree of class level variability in the association between extroversion and popularity. Each panel represents a class and each point a pupil in that class.  First nice classes shown."}
 # compare the first 9 classrooms becuase all of there are too many at once
@@ -1309,6 +1255,11 @@ data_pop %>%
   scale_x_continuous(breaks = seq(from = 0, to = 10, by = 2)) + # x-ticks
   scale_y_continuous(breaks = seq(from = 0, to = 10, by = 2))   # y-ticks
 ```
+
+```{r test21}
+1+1
+```
+
 
 ```{block type='rmdlink', echo=TRUE}
 A helpful resource for choosing colors to use in plots: [R color cheatsheet](https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/colorPaletteCheatsheet.pdf)
@@ -1545,15 +1496,7 @@ texreg::knitreg(list(pop_glm_0,
                 label = "wow")
 ```
 
-```{r lmtable, results='asis'}
-texreg::knitreg(list(pop_glm_0, 
-                     pop_glm_1),
-                custom.model.names = c("Null Model",
-                                       "With Predictors"),
-                caption            = "Single Level Models: ML with the `glm()` function",
-                caption.above      = TRUE,
-                single.row         = TRUE)
-```
+
 
 ```{block type='rmdlightbulb', echo=TRUE}
 When comparing the fit of two single-level models fit via the `lm()` function, the `anova()` function runs an F-test where the test statistic is the difference in RSS.
@@ -1637,7 +1580,23 @@ summary(pop_lm_2)
 interactions::interact_plot(model = pop_lm_2,
                             pred = extrav,
                             modx = texp,
-                            mod2 = sex)
+                            mod2 = sex) +
+  theme_bw()
+```
+
+
+
+```{r, include=FALSE}
+interactions::interact_plot(model = pop_lm_2,
+                            pred = extrav,
+                            modx = texp,
+                            modx.values = c(5, 15, 25),
+                            mod2 = sex,
+                            legend.main = "Teacher\nExperience",
+                            interval = TRUE) +
+  theme_bw() +
+  labs(x = "Pupil Extroversion",
+       y = "Estimated Mean Pupil Popularity")
 ```
 
 
@@ -1694,6 +1653,7 @@ $$
 \tag{Hox 2.8}
 $$
 ```
+
 
 #### Parameters
 
